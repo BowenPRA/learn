@@ -31,8 +31,8 @@ export function PackCard({ pack, rows, lang, big = false }) {
   const tone = subjectTone(subject)
   const title = lang === 'vn' ? pack.title_vn || pack.title : pack.title
   return (
-    <Link to={`/p/${pack.slug}`} className={`card group flex items-center gap-4 p-4 transition hover:border-pra-blue ${big ? 'sm:p-6' : ''}`}>
-      <div className="min-w-0 flex-1">
+    <Link to={`/p/${pack.slug}`} className={`card group flex flex-wrap items-center gap-x-4 gap-y-3 p-4 transition hover:border-pra-blue ${big ? 'sm:p-6' : ''}`}>
+      <div className="min-w-0 basis-full sm:basis-0 sm:flex-1">
         <p className="mb-1 flex flex-wrap items-center gap-2">
           <span className="rounded-full px-3 py-0.5 text-sm font-extrabold text-white" style={{ background: tone }}>{subjectName(subject, lang)}</span>
           {pack.due_on && (

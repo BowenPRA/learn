@@ -41,6 +41,13 @@ function Notes({ notes, lang }) {
   )
 }
 
+/** Width over height of an inline SVG (its viewBox), or 0. A wide figure (a number line) is drawn under the text, full width. */
+function svgAspect(svg) {
+  const m = /viewBox\s*=\s*["']\s*[-\d.]+[\s,]+[-\d.]+[\s,]+([\d.]+)[\s,]+([\d.]+)/i.exec(svg || '')
+  return m && Number(m[2]) > 0 ? Number(m[1]) / Number(m[2]) : 0
+}
+const WIDE = 2.2
+
 function Media({ obj, lang, assets, caption, big = false }) {
   const svg = sanitizeSvg(pick(obj, 'inlineSvg', lang))
   const img = assetSrc(obj?.image, assets)
@@ -48,7 +55,7 @@ function Media({ obj, lang, assets, caption, big = false }) {
   if (!svg && !img) return null
   return (
     <figure className="w-full">
-      <div className={`flex items-center justify-center rounded-2xl bg-white p-3 ${big ? 'min-h-[220px]' : ''}`}>
+      <div className={`flex items-center justify-center rounded-2xl bg-white p-3 ${big && svgAspect(svg) < WIDE ? 'min-h-[220px]' : ''}`}>
         {svg
           ? <div className="svg-fit w-full [&>svg]:max-h-[46vh]" dangerouslySetInnerHTML={{ __html: svg }} />
           : <img src={img} alt={alt} className="max-h-[46vh] w-auto rounded-xl" />}
@@ -139,6 +146,16 @@ function Statement({ slide, lang }) {
 
 function Split({ slide, lang, assets }) {
   const media = <Media obj={slide} lang={lang} assets={assets} caption={pick(slide, 'caption', lang)} big />
+  if (svgAspect(pick(slide, 'inlineSvg', lang)) >= WIDE) {
+    return (
+      <div>
+        <Title slide={slide} lang={lang} />
+        <Body slide={slide} lang={lang} />
+        <div className="mx-auto mt-5 max-w-3xl">{media}</div>
+        <div className="mt-4"><Notes notes={slide.notes} lang={lang} /></div>
+      </div>
+    )
+  }
   const ratio = { 40: 'md:grid-cols-[2fr_3fr]', 45: 'md:grid-cols-[9fr_11fr]', 50: 'md:grid-cols-2', 55: 'md:grid-cols-[11fr_9fr]', 60: 'md:grid-cols-[3fr_2fr]' }[slide.ratio] || 'md:grid-cols-2'
   return (
     <div className={`grid items-center gap-6 ${ratio}`}>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { CheckCircle2, HelpCircle, XCircle } from 'lucide-react'
 import { pick, useT } from '../lib/i18n.jsx'
 import { Inline } from './Rich.jsx'
@@ -22,6 +22,9 @@ export default function Check({ check, lang, solved, onSolved }) {
     }
   }
   const lastWrong = wrong.length > 0 && !right
+  const said = useRef(null)
+  // After an answer, bring the explanation (and the Next button under it) into view.
+  useEffect(() => { if (wrong.length || right) said.current?.scrollIntoView?.({ block: 'nearest', behavior: 'smooth' }) }, [wrong.length, right])
 
   return (
     <section className="rounded-3xl border-2 border-pra-blue-tint bg-pra-blue-pale p-4 sm:p-6" aria-live="polite">
@@ -50,7 +53,7 @@ export default function Check({ check, lang, solved, onSolved }) {
         })}
       </div>
       {(right || lastWrong) && (
-        <div className={`mt-4 rounded-2xl px-4 py-3 text-lg font-semibold ${right ? 'bg-pra-green-pale text-pra-green-dark' : 'bg-pra-coral-pale text-pra-coral-deep'}`}>
+        <div ref={said} className={`mt-4 scroll-mb-28 rounded-2xl px-4 py-3 text-lg font-semibold ${right ? 'bg-pra-green-pale text-pra-green-dark' : 'bg-pra-coral-pale text-pra-coral-deep'}`}>
           <p className="font-extrabold">{right ? t('right') : t('notQuite')}</p>
           {exp && <p className="mt-1"><Inline text={exp} /></p>}
         </div>

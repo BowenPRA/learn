@@ -110,7 +110,8 @@ function PracticeRun({ pack, part, row, assets }) {
         <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2">
           <CloseButton to={back} label={t('back')} />
           <div className="min-w-0 flex-1">
-            <p className="truncate text-base font-extrabold text-pra-ink">{pick(set, 'title', lang) || t('practice')}</p>
+            <p className="hidden truncate text-xs font-bold uppercase tracking-wider text-pra-ink-soft sm:block">{pick(pack.content, 'title', lang)}</p>
+            <p className="truncate text-base font-extrabold text-pra-ink">{pick(part.set, 'title', lang) || pick(part, 'title', lang) || t('practice')}</p>
             {pos.total > 0 && (
               <div className="mt-1 h-2 overflow-hidden rounded-full bg-pra-line">
                 <div className="h-full rounded-full bg-pra-violet transition-all" style={{ width: `${(pos.at / pos.total) * 100}%` }} />

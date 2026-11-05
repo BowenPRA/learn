@@ -20,8 +20,8 @@ export function NamedIcon({ name, ...props }) {
 
 export function Logo({ small = false }) {
   return (
-    <span className="flex items-center gap-2">
-      <img src="/logo.png" alt="" className={small ? 'h-8 w-auto' : 'h-10 w-auto'} />
+    <span className="flex items-center gap-2 whitespace-nowrap">
+      <img src="/logo.png" alt="" className={small ? 'h-7 w-auto sm:h-8' : 'h-9 w-auto sm:h-10'} />
       <span className={`font-extrabold tracking-tight text-pra-blue-ink ${small ? 'text-base' : 'text-lg'}`}>PRA <span className="text-pra-green-deep">Learn</span></span>
     </span>
   )
@@ -37,7 +37,7 @@ export function LangSwitch() {
   )
   return (
     <div className="flex items-center gap-1 rounded-2xl border-2 border-pra-line bg-white p-1" role="group" aria-label="Language">
-      <Languages className="ml-1 h-4 w-4 text-pra-ink-soft" aria-hidden />
+      <Languages className="ml-1 hidden h-4 w-4 text-pra-ink-soft sm:block" aria-hidden />
       {opt('en', 'EN')}
       {opt('vn', 'VI')}
     </div>
@@ -69,7 +69,7 @@ export function DemoBand() {
   return (
     <div className="no-print bg-pra-sun-pale px-4 py-1.5 text-center text-xs font-bold text-pra-sun-ink">
       {t('demoBand')}{' '}
-      {api.reset && <button type="button" className="underline" onClick={() => { api.reset(); window.location.reload() }}>Reset</button>}
+      {api.reset && <button type="button" className="underline" onClick={() => { api.reset(); window.location.reload() }}>{t('resetDemo')}</button>}
     </div>
   )
 }

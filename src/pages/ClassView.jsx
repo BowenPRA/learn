@@ -91,7 +91,7 @@ export default function ClassView() {
             return (
               <div key={p.id} className="card p-4 sm:p-5">
                 <div className="flex flex-wrap items-center gap-3">
-                  <div className="min-w-0 flex-1">
+                  <div className="min-w-0 basis-full md:basis-0 md:flex-1">
                     <span className={`mb-1 inline-block rounded-full px-3 py-0.5 text-xs font-extrabold uppercase tracking-wider ${STATUS_CLS[p.status]}`}>{t(`status_${p.status}`)}</span>
                     <h3 className="text-lg font-extrabold leading-snug text-pra-ink">{lang === 'vn' ? p.title_vn || p.title : p.title}</h3>
                   </div>
@@ -110,9 +110,9 @@ export default function ClassView() {
                       {part.kind === 'practice' ? <Pencil className="h-4 w-4" /> : <BookOpen className="h-4 w-4" />} {t('preview_')}: {t(part.kind)}
                     </Link>
                   ))}
-                  <button type="button" className="btn-ghost ml-auto" onClick={() => showMisses(p)} aria-expanded={open === p.id}>
+                  {p.status !== 'draft' && <button type="button" className="btn-ghost ml-auto" onClick={() => showMisses(p)} aria-expanded={open === p.id}>
                     {t('mostMissed')} {open === p.id ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                  </button>
+                  </button>}
                 </div>
                 {open === p.id && (
                   <div className="mt-3 rounded-2xl bg-pra-paper p-4">
@@ -130,7 +130,7 @@ export default function ClassView() {
         <div className="mb-3 flex flex-wrap items-center gap-3">
           <h2 className="mr-auto text-xl font-extrabold text-pra-ink">{t('whoDid')}</h2>
           {noLogin.length > 0
-            ? <button type="button" className="btn-primary" onClick={makeLogins} disabled={!!busy}>{busy === 'make' ? <Loader2 className="h-5 w-5 animate-spin" /> : <UserPlus className="h-5 w-5" />} {t('makeLoginsFor', { n: noLogin.length })}</button>
+            ? <button type="button" className="btn-primary" onClick={makeLogins} disabled={!!busy}>{busy === 'make' ? <Loader2 className="h-5 w-5 animate-spin" /> : <UserPlus className="h-5 w-5" />} {noLogin.length === 1 ? t('makeLoginFor1') : t('makeLoginsFor', { n: noLogin.length })}</button>
             : <span className="text-sm font-bold text-pra-ink-soft">{t('everyoneHasLogin')}</span>}
         </div>
         <div className="card overflow-x-auto">
@@ -180,7 +180,7 @@ export default function ClassView() {
             </tbody>
           </table>
         </div>
-        <p className="mt-2 flex items-center gap-2 text-sm font-semibold text-pra-ink-soft"><Printer className="h-4 w-4" /> {t('cardsNote')}</p>
+        <p className="mt-2 flex items-center gap-2 text-sm font-semibold text-pra-ink-soft"><Printer className="h-4 w-4 shrink-0" /> {t('cardsHow')}</p>
       </section>
     </main>
   )
