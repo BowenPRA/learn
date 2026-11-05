@@ -40,7 +40,7 @@ Contents
 | How staff sign in | Their Current login (email + password), same accounts. | 4 |
 | Who makes student logins | Office, head teachers, or a teacher of that class, through the Edge Function `learn-accounts` (service role). | 5 |
 | What a student account can read | Its own name, its class's published packs, its own progress. Nothing in `adm_*`. | 6 |
-| Before the first student login | Run `supabase/current-hardening.sql` (email-only staff checks get a role check, the teachers list stops being readable by every login). | 6 |
+| Before the first student login | Run `supabase/current-hardening.sql` (a student login can never pass an email-based staff check; the teachers list stops being readable by every login). | 6 |
 | Open sign-ups | Stay on for now because Teachers > Create login uses them; turn off once that button moves to an Edge Function. | 6.4 |
 | Lesson content | One JSON "pack" per lesson in `learn_packs`: review slides (classroom layouts, checks), practice sets (the step-practice schema), images in a private bucket. | 7 |
 | Publishing | The operator's script upserts the pack; no build or deploy. | 7.6 |
@@ -221,13 +221,13 @@ are changes to The Current's own files, for whoever works on it next.
 
 | # | Where | What a non-staff login can do | Sev. | Fix |
 |---|---|---|---|---|
-| 1 | `updates-2026-09-15.sql` `adm_is_head`, `adm_is_report_staff`, `adm_can_homeroom`, `adm_can_subject`, `adm_can_attendance`; `updates-2026-10-26-report-sent.sql` `adm_can_subject_in_report`; `updates-2026-10-16-newsletter.sql` `adm_newsletter_can_edit`; `updates-2026-10-21-ecas.sql` `adm_can_eca`; `updates-2026-11-05-lessons.sql` `adm_teaches`, `adm_lesson_mine` | Each grants staff rights to **any login whose email equals an active `adm_teachers` row**, whatever its role: `exists (select 1 from adm_teachers t where t.email = adm_email() and coalesce(t.active, true))`. Students cannot pass today (their emails are `@learn.pra.edu.vn`). But this one check guards students' birthdays, allergies, addresses, parents' contacts, reports, attendance, photos, incidents and transcripts, and a wrong row (a coach's gmail typed on the Teachers page, a reused mailbox) would hand all of it to whoever holds that address. | Medium (High impact if hit) | **(H)** Each helper's email part also needs `learn_staff_login()`: role is one of super_admin, head, admin, teacher or none (Create-login teachers have none), the email is not empty and not `@learn.pra.edu.vn`. A role of `student` (or any unknown role) never passes. Plus a CHECK on `adm_teachers.email` refusing `@learn.pra.edu.vn`. |
+| 1 | `updates-2026-09-15.sql` `adm_is_head`, `adm_is_report_staff`, `adm_can_homeroom`, `adm_can_subject`, `adm_can_attendance`; `updates-2026-10-26-report-sent.sql` `adm_can_subject_in_report`; `updates-2026-10-16-newsletter.sql` `adm_newsletter_can_edit`; `updates-2026-10-21-ecas.sql` `adm_can_eca`; `updates-2026-11-05-lessons.sql` `adm_teaches`, `adm_lesson_mine` | Each grants staff rights to **any login whose email equals an active `adm_teachers` row**, whatever its role: `exists (select 1 from adm_teachers t where t.email = adm_email() and coalesce(t.active, true))`. Students cannot pass today (their emails are `@learn.pra.edu.vn`). But this one check guards students' birthdays, allergies, addresses, parents' contacts, reports, attendance, photos, incidents and transcripts, and a wrong row (a coach's gmail typed on the Teachers page, a reused mailbox) would hand all of it to whoever holds that address. | Medium (High impact if hit) | **(H)** At the root: `adm_email()`, which every one of these checks uses, returns `''` for a login with role `student` or an `@learn.pra.edu.vn` address, so no student can match any Teachers row, whatever is typed there. No current login has that role or domain, so nobody else is affected. Plus a CHECK on `adm_teachers.email` refusing `@learn.pra.edu.vn` and blank addresses. Later (6.4): give every teacher login `role: 'teacher'` and require a staff role in these helpers, which also closes the open-sign-up case. |
 | 2 | `reports.sql:170` `create policy staff_read on adm_teachers for select to authenticated using (true)` | Any login reads every staff email, name, title, role, subjects and homeroom. | Medium | **(H)** `using (adm_is_report_staff() or adm_role() = 'triage')`. The Current's own lookup of the signed-in person still works: staff are report staff. |
 | 3 | `updates-2026-10-02-student-dates-onboarding.sql:115` `adm_enrollment_place`, reached through `adm_enroll_submit` (`grant execute ... to anon, authenticated`, `updates-2026-10-01-enrollment-schools-documents.sql:159`) | Anyone (signed in or not) sending the website enrollment form can fill blank fields on an existing Pending student when they know the child's name and birthday, attach a made-up child to a real family by giving a parent's email, and move that family's lead to "enrolled". Not new with student logins. | High (needs knowledge of the family) | In The Current: on the anonymous path, never touch existing rows. Lines 234, 237, 289 and 310 each gain `and adm_is_staff()` (form-only submissions then always make a new pending child and family, and the office's "Make student" links them). |
 | 4 | `updates-2026-10-22-mail.sql:435` `adm_mail_web_message`, `:333` `adm_mail_enrollment` | Anyone can make admin@ send a thank-you to any address (once per address per day) carrying their own text in the name fields; `adm_mail_paras` turns an https link in that text into a clickable link. A phishing route from PRA's real address. Not new. | Medium | In The Current: strip names to letters, spaces, `'.-` and 60 characters; skip the thank-you when a name contains `://` or `www.`. |
 | 5 | `updates-2026-09-30-website-forms.sql:122` (40 messages an hour), `updates-2026-10-01-enrollment-schools-documents.sql:56` (30 forms an hour), `updates-2026-09-30-enrollments.sql:134` policy `adm_enrollment_upload ... to anon, authenticated` (300 files an hour, 10 MB each) | One person can keep the site-wide limits full (real families refused), fill Leads and Students with junk, and grow storage by about 3 GB an hour. Not new. | Medium | A CAPTCHA (Cloudflare Turnstile) checked by an Edge Function that calls the form functions with the service key and hands out signed upload links; then revoke the anon grants and drop the anon upload policy. Short of that, lower the file limit. |
-| 6 | `updates-2026-10-21-ecas.sql:101` `adm_can_eca` | A login whose email is an activity's `teacher_email` can add or remove members and take that activity's register, with no staff check. Only matters if the office types an outsider's address. | Low | **(H)** covered by #1 (`learn_staff_login()` in front of the email match). |
-| 7 | `updates-2026-11-05-lessons.sql` (not yet run) `lessons_read`, `lessons_change`, `adm_lesson_add_update`, `adm_can_lesson_folder` accept `adm_lesson_mine()` (email only); `adm_lesson_next_number` is callable by every login | A non-staff login reaches a request only if someone sets its address as `teacher_email`. Any login can learn how many requests exist. | Low | Before that file is run: `(adm_is_report_staff() and adm_lesson_mine(...))` in those four places. Passed to the Lessons-tab agent. |
+| 6 | `updates-2026-10-21-ecas.sql:101` `adm_can_eca` | A login whose email is an activity's `teacher_email` can add or remove members and take that activity's register, with no staff check. Only matters if the office types an outsider's address. | Low | **(H)** covered by #1 for students. For strangers: add `adm_is_report_staff() and` in front of the email match. |
+| 7 | `updates-2026-11-05-lessons.sql` (not yet run) `lessons_read`, `lessons_change`, `adm_lesson_add_update`, `adm_can_lesson_folder` accept `adm_lesson_mine()` (email only); `adm_lesson_next_number` is callable by every login | A non-staff login reaches a request only if someone sets its address as `teacher_email`. Any login can learn how many requests exist. | Low | Before that file is run: `(adm_is_report_staff() and adm_lesson_mine(...))` in those four places. Students are already covered by #1; this is for strangers. Reported to the coordinating session for the Lessons-tab work. |
 | 8 | `updates-2026-10-16-newsletter.sql:271` `adm_newsletter_seen` (granted to anon) | Inflate view counts of published issues. | Low | Accept, or count once per browser. |
 | 9 | `updates-2026-10-22-mail.sql:543` `adm_newsletter_groups` (no revoke) | Read the parents_all@ / parents_ey@ group addresses (already in the public repo). Matters only if those Google Groups accept outside posts. | Low | **(H)** revoke from public, anon, authenticated. Check the groups are members-only. |
 | 10 | Yes/no helpers (`adm_is_head`, `adm_is_report_staff`, `adm_can_*`, `adm_newsletter_office`, ...) have no revoke, so anon can call them | Each answers only about the caller and says false for non-staff. | Low | **(H)** revoke from public and anon; keep authenticated (policies need it). |
@@ -321,9 +321,10 @@ pack and the operator runs with `npm run check:pack <file>` before publishing):
 - Every text field may have a `…Vn` twin; a missing twin falls back to English.
   `…Fr` twins are allowed and kept but the portal shows EN and VI only for now.
 - Text markup, as in the classroom decks: `**bold**`, `*italic*`, a line starting
-  with `>` is a "write this down" note, a blank line is a gap. `$…$` maths prints as
-  plain text for now (KaTeX can be added when a pack needs it; the validator warns
-  on `$$`).
+  with `>` is a "write this down" note, a blank line is a gap. `$…$` maths is drawn
+  with KaTeX (through the step engine's text renderer, which also gives slides the
+  `{{given}}` / `[[find]]` / `<<found>>` colours); `$$…$$` blocks are not (the
+  validator warns).
 - `id`s of checks and practice items are unique within their part and stay the
   same when a pack is re-published, so results carry over.
 - Size: at most 1.5 MB of JSON (inline SVG included).
@@ -362,11 +363,14 @@ them pick again. "Right first time" is what is scored.
 
 ### 7.3 Practice sets (from a problem bank)
 
-A practice part's `set` is exactly the step-practice schema being built on the
-Dashboard branch `feat/step-practice` (`src/stepPractice/model.js`), so the same
-problem bank feeds the Dashboard and the portal:
+A practice part's `set` is exactly the Dashboard's `unit.stepPractice` (the
+step-practice engine on branch `feat/step-practice`, `docs/step-practice.md`
+there), so the same problem bank feeds the Dashboard and the portal:
 
-- `set`: `{ signed?, items: [...] }`.
+- `set`: `{ title?, titleVn?, big?, signed?, items: [...] }`, passed unchanged
+  (after cleaning, below) as the `set` prop of the engine's `StepPracticeSet`.
+  `parts[i].id` is the progress key (`learn_progress.part`); item ids are the keys
+  inside `items`.
 - Each item: `{ id, level: focus | practice | challenge, prompt, promptVn,
   inlineSvg?, steps: [...] }`. Prompt markup: `{{−3 °C}}` a given number,
   `[[How many degrees did it rise?]]` the question, `<<3>>` an earlier answer.
@@ -379,10 +383,22 @@ problem bank feeds the Dashboard and the portal:
 - Figures must be inline SVG strings (the operator runs the figure helpers when
   building the pack), never function calls.
 
-The engine's core is written to be copied into another React + Tailwind app
-(`src/stepPractice/` plus `mathEquivalence.js`). Until it lands on its branch's
-main line, the portal's practice page shows the problems and says the step-by-step
-screen is coming (section 9).
+The engine's portable core is copied, unchanged, into `src/stepPractice/` (plus
+`src/utils/mathEquivalence.js`) from commit `0c18ffb4`; `src/stepPractice/SOURCE.md`
+says how to take later fixes. The portal's host is `src/pages/PracticePlayer.jsx`:
+
+- Before the set reaches the engine, every inline SVG (item `inlineSvg…`, option
+  `svg`) is cleaned like a slide's, and `"asset:<file>"` pictures become signed links.
+- The engine's `saved` blob (`{ id: 1 }` for items finished without help) is
+  rebuilt from the child's `learn_progress.items`, so they pick up where they
+  stopped on any device. It is fixed for the sitting (the engine's queue depends on it).
+- Each finished item (the engine's `onSave`) is saved through `learn_save` as
+  `{ ok: !helped, shown: helped, tries: helped ? 2 : 1 }`; `onFinish` ends the run
+  (`p_done`). For practice, `ok` therefore means "finished without help": a wrong
+  turn the child put right still counts, as in the engine's own blob.
+- The engine does not yet report which slip messages a child hit, so practice
+  `slips` stay empty. A small addition upstream (`resultOf` returning the slip keys)
+  would let "most missed" name the misconception for practice too.
 
 ### 7.4 Images
 
@@ -426,7 +442,7 @@ One `learn_progress` row per student, pack and part:
 
 | Field | Holds |
 |---|---|
-| `items` | The current run, by check or item id: `{ ok, tries, slips, hints, shown }`. `ok` = right the first time; `slips` = the ids of the slip messages the child hit (`"<step>:<n>"`); `hints` = hints opened; `shown` = used "Show me". |
+| `items` | The current run, by check or item id: `{ ok, tries, slips, hints, shown }`. `ok` = right the first time (review) or finished without help (practice, see 7.3); `slips` = the slip messages the child hit (review: none; practice: once the engine reports them); `hints` = hints opened; `shown` = used "Show me" or had a step filled in. |
 | `first_items`, `first_score` | The first finished run, kept for the teacher. |
 | `score`, `best_score`, `runs`, `done` | Latest score (right first time / items in the part, worked out in the database from the pack), best, finished runs, ever finished. |
 | `pack_version`, `started_at`, `finished_at`, `updated_at` | When. |
@@ -473,7 +489,7 @@ Hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 | `/#/` (signed in) | student | Home: hello and their name; **This week** (open packs, newest first, due dates); **My classes**. |
 | `/#/p/:slug` | student, staff | A pack: two big buttons, Review and Practice, each with its ring. |
 | `/#/p/:slug/review` | student, staff | Review player: one slide at a time, the check under it, big Next once answered. Staff can preview without saving. |
-| `/#/p/:slug/practice` | student, staff | Practice player. Until the step engine is copied in: the problems, read-only, and a note. |
+| `/#/p/:slug/practice` | student, staff | Practice player: the step engine (focus, practice, challenge levels; hints, Show me, the working to copy). |
 | `/#/me` | student | My results. |
 | `/#/t` (signed in) | staff | My classes (office: all), with how many packs and logins. |
 | `/#/t/:class` | staff | Class page (8.2), pack controls (open, hide, dates), login buttons. |
@@ -541,10 +557,11 @@ keys (demo data uses "Learner A" to "Learner L" and made-up usernames).
 - Results on the class page; Bowen reads `learn_request_results` for the request.
 
 **Phase 2, more classes**
-- Copy the step engine core in (replace the practice placeholder).
+- Carry later step-engine fixes over (`src/stepPractice/SOURCE.md`); report slip
+  keys from the engine so practice misses name the misconception.
 - The Current: a "PRA Learn logins" panel on the class and results on the Lessons
   request; Create login moved to an Edge Function; open sign-ups off.
-- KaTeX for packs with maths beyond Year 5.
+- `$$…$$` block maths on slides, for packs beyond Year 5.
 - The handbook chapter for The Current (how logins, cards and packs work).
 
 **Phase 3**
