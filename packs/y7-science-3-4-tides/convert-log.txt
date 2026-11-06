@@ -1,0 +1,43 @@
+Deck: content/y7-science/U03_4 (24 slides) from C:\Users\sbowe\code\wt-learn-y7 @ 031e3fb
+Pack: y7-science-3-4-tides -> C:\Users\sbowe\learn\packs\y7-science-3-4-tides
+
+01 hero
+02 compare: eyebrow "Today" -> "This lesson"
+  image -> asset s03-harbour-day.png
+03 showcase: widget HarbourClock dropped; eyebrow "Say it first" -> "Watch"
+04 statement + check c4: eyebrow "Back to the starter" -> "The starter"; check c4; reveal -> the check
+  image -> asset s05-holy-island.png
+05 split: widget TideFilm dropped
+  photo SVG -> asset s06-photo.jpg (fundy-high.jpg, fundy-low.jpg)
+06 showcase
+07 split + check c7: check c7
+08 statement + check c8: check c8; reveal -> the check
+  image -> asset s09-boat-strip.png
+09 showcase + check c9: widget BoatStory -> replaced by a question; check c9
+10 split
+11 statement + check c11: vote -> check (answer B, NO explanation found); eyebrow "Vote with one hand" -> "Choose"; check c11 (vote, edited in the overlay)
+12 split
+  image -> asset s13-spin-6pm.png
+13 showcase: widget SpinEarth dropped
+14 split
+15 split + check c15: widget HighOrLow -> replaced by a question; eyebrow "A game · everyone stands" -> "Think"; check c15
+16 split + check c16: check c16; reveal -> the check
+17 statement + check c17: vote -> check (answer B, NO explanation found); eyebrow "Vote with one hand" -> "Choose"; check c17 (vote, edited in the overlay)
+18 split
+  image -> asset s19-month.png
+19 showcase + check c19: widget LineThemUp -> replaced by a question; check c19
+  photo SVG -> asset s20-photo.jpg (harbour.jpg, venice.jpg, oystercatcher.jpg, rance.jpg)
+20 showcase
+21 split: reveal kept as "Show me" (not scored)
+22 split: reveal kept as "Show me" (not scored)
+23 stack: eyebrow "Before you leave" -> "Before you finish"
+24 hero + check c24: eyebrow "Exit question" -> "Last question"; check c24
+
+Review: 24 slides from 24, 10 check question(s). Practice parts: practice (12 items).
+Assets: 7 (s03-harbour-day.png, s05-holy-island.png, s06-photo.jpg, s09-boat-strip.png, s13-spin-6pm.png, s19-month.png, s20-photo.jpg). pack.json 79 kB.
+
+For the operator to look at:
+  - slide 11: the vote's check has no explanation; add exp in the overlay
+  - slide 17: the vote's check has no explanation; add exp in the overlay
+
+OK: y7-science-3-4-tides passes the portal's checks.

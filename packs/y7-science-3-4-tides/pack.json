@@ -1,0 +1,1729 @@
+{
+  "format": "pra-learn-pack/1",
+  "slug": "y7-science-3-4-tides",
+  "class_key": "science:Year 7",
+  "title": "3.4 Tides",
+  "teacher": "Mr. Bowen",
+  "unit": "Unit 3",
+  "langs": [
+    "en"
+  ],
+  "request_id": null,
+  "from": {
+    "deck": "classroom@031e3fb:content/y7-science/U03_4",
+    "bank": "new items by the operator; ideas from Dashboard Y7_SCI/U03_4 notes.js and assessment.js @ origin/main, and the deck’s plan.js"
+  },
+  "parts": [
+    {
+      "id": "review",
+      "kind": "review",
+      "title": "Review",
+      "titleVn": "Ôn bài",
+      "slides": [
+        {
+          "layout": "hero",
+          "icon": "Waves",
+          "brandFr": "Sciences 7e année",
+          "eyebrow": "3.4 · Forces and energy",
+          "eyebrowFr": "3.4 · Forces et énergie",
+          "title": "Tides",
+          "titleFr": "Les marées",
+          "card": {
+            "icon": "Waves",
+            "badge": "Starter",
+            "badgeFr": "Pour commencer",
+            "text": "At the beach, the sea goes **up** and **down**. How many times a day is the water at its **highest**? **Guess a number.** Then go on."
+          },
+          "subtitle": "Go back through the lesson. Answer each question to go on."
+        },
+        {
+          "layout": "compare",
+          "accent": "#0087a8",
+          "icon": "Target",
+          "eyebrow": "This lesson",
+          "eyebrowFr": "Aujourd’hui",
+          "title": "In This Lesson You Will…",
+          "text": "Find out why the sea goes **up** and **down** every day.",
+          "textFr": "Découvrir pourquoi la mer **monte** et **descend** chaque jour.",
+          "columns": [
+            {
+              "heading": "The sea",
+              "headingFr": "La mer",
+              "accent": "#1a5fa8",
+              "icon": "Waves",
+              "inlineSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 300\" class=\"w-full h-full\">\n    <rect x=\"0\" y=\"0\" width=\"480\" height=\"300\" rx=\"14\" fill=\"#ffffff\"/>\n    <rect x=\"0.75\" y=\"0.75\" width=\"478.5\" height=\"298.5\" rx=\"13\" fill=\"none\" stroke=\"#e2e8f0\" stroke-width=\"1.5\"/>\n    <rect x=\"40\" y=\"150\" width=\"320\" height=\"120\" rx=\"14\" fill=\"#cfe6f5\"/>\n    <path d=\"M 40 150 q 20 -14 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0\" fill=\"none\" stroke=\"#5b9bd5\" stroke-width=\"5\" stroke-linecap=\"round\"/>\n    <path d=\"M 60 200 q 20 -10 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0\" fill=\"none\" stroke=\"#5b9bd5\" stroke-width=\"4\" stroke-linecap=\"round\" opacity=\"0.6\"/>\n    <path d=\"M 150 124 h 110 l -15.4 26.4 h -79.2 Z\" fill=\"#d83a2e\" stroke=\"#2b2b2b\" stroke-width=\"3\" stroke-linejoin=\"round\"/>\n    <line x1=\"161\" y1=\"130.6\" x2=\"249\" y2=\"130.6\" stroke=\"#ffffff\" stroke-width=\"3\"/>\n    <line x1=\"420\" y1=\"160\" x2=\"420\" y2=\"94\" stroke=\"#c25e12\" stroke-width=\"6\" stroke-linecap=\"round\"/>\n    <path d=\"M 420 70 L 406.8 94 L 433.2 94 Z\" fill=\"#c25e12\"/><line x1=\"420\" y1=\"160\" x2=\"420\" y2=\"226\" stroke=\"#c25e12\" stroke-width=\"6\" stroke-linecap=\"round\"/>\n    <path d=\"M 420 250 L 433.2 226 L 406.8 226 Z\" fill=\"#c25e12\"/>\n  </svg>",
+              "caption": "See how high and low the sea goes.",
+              "captionFr": "Voir jusqu’où la mer monte et descend."
+            },
+            {
+              "heading": "The Moon",
+              "headingFr": "La Lune",
+              "accent": "#0087a8",
+              "icon": "Moon",
+              "inlineSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 300\" class=\"w-full h-full\">\n    <rect x=\"0\" y=\"0\" width=\"480\" height=\"300\" rx=\"14\" fill=\"#ffffff\"/>\n    <rect x=\"0.75\" y=\"0.75\" width=\"478.5\" height=\"298.5\" rx=\"13\" fill=\"none\" stroke=\"#e2e8f0\" stroke-width=\"1.5\"/>\n    <circle cx=\"240\" cy=\"150\" r=\"104\" fill=\"#d9dde3\" stroke=\"#2b2b2b\" stroke-width=\"3\"/>\n    <circle cx=\"203.6\" cy=\"118.8\" r=\"20.8\" fill=\"#c3c9d1\"/>\n    <circle cx=\"271.2\" cy=\"176\" r=\"27\" fill=\"#c3c9d1\"/>\n    <circle cx=\"279.5\" cy=\"108.4\" r=\"12.5\" fill=\"#c3c9d1\"/>\n  </svg>",
+              "caption": "Find out how the Moon pulls the sea.",
+              "captionFr": "Découvrir comment la Lune tire la mer."
+            },
+            {
+              "heading": "The Sun",
+              "headingFr": "Le Soleil",
+              "accent": "#c25e12",
+              "icon": "Sun",
+              "inlineSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 300\" class=\"w-full h-full\">\n    <rect x=\"0\" y=\"0\" width=\"480\" height=\"300\" rx=\"14\" fill=\"#ffffff\"/>\n    <rect x=\"0.75\" y=\"0.75\" width=\"478.5\" height=\"298.5\" rx=\"13\" fill=\"none\" stroke=\"#e2e8f0\" stroke-width=\"1.5\"/>\n    <line x1=\"338\" y1=\"150\" x2=\"350\" y2=\"150\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"324.9\" y1=\"199\" x2=\"335.3\" y2=\"205\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"289\" y1=\"234.9\" x2=\"295\" y2=\"245.3\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"240\" y1=\"248\" x2=\"240\" y2=\"260\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"191\" y1=\"234.9\" x2=\"185\" y2=\"245.3\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"155.1\" y1=\"199\" x2=\"144.7\" y2=\"205\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"142\" y1=\"150\" x2=\"130\" y2=\"150\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"155.1\" y1=\"101\" x2=\"144.7\" y2=\"95\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"191\" y1=\"65.1\" x2=\"185\" y2=\"54.7\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"240\" y1=\"52\" x2=\"240\" y2=\"40\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"289\" y1=\"65.1\" x2=\"295\" y2=\"54.7\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"324.9\" y1=\"101\" x2=\"335.3\" y2=\"95\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><circle cx=\"240\" cy=\"150\" r=\"92\" fill=\"#ffd45c\" stroke=\"#2b2b2b\" stroke-width=\"3\"/>\n  </svg>",
+              "caption": "Find out when the sea goes highest.",
+              "captionFr": "Trouver quand la mer monte le plus."
+            }
+          ]
+        },
+        {
+          "layout": "showcase",
+          "accent": "#1a5fa8",
+          "icon": "Waves",
+          "eyebrow": "One day",
+          "title": "Mr Bowen’s Harbour",
+          "titleFr": "Le port de M. Bowen",
+          "caption": "The depth every **3 hours**: 6, 4, 2, 4, 6, 4, 2, 4, 6 m. The tide **goes out**, then it **comes in**.",
+          "image": "asset:s03-harbour-day.png"
+        },
+        {
+          "layout": "statement",
+          "accent": "#5c2483",
+          "eyebrow": "The starter",
+          "eyebrowFr": "Retour au début",
+          "title": "How Many a Day?",
+          "titleFr": "Combien par jour ?",
+          "text": "How many times a day is Mr Bowen’s harbour at **high tide**?",
+          "textFr": "Combien de fois par jour le port de M. Bowen est-il à **marée haute** ?",
+          "check": {
+            "id": "c4",
+            "q": "Mr Bowen’s harbour: how many times a day is the water at **high tide**?",
+            "options": [
+              {
+                "val": "A",
+                "text": "Once"
+              },
+              {
+                "val": "B",
+                "text": "Twice"
+              },
+              {
+                "val": "C",
+                "text": "Four times"
+              }
+            ],
+            "correct": "B",
+            "exp": "Twice: at 6 a.m. and at 6 p.m. Low tide is twice too: at 12 noon and at midnight. High to low takes **6 hours**. High to high takes **12 hours**."
+          }
+        },
+        {
+          "layout": "split",
+          "accent": "#0087a8",
+          "icon": "Waves",
+          "eyebrow": "Key word",
+          "eyebrowFr": "Mot clé",
+          "title": "Tide",
+          "titleFr": "La marée",
+          "ratio": 45,
+          "content": "**high tide** · **low tide** · the **depth**\n\nThe two photos are from a film of one afternoon.",
+          "notes": [
+            {
+              "tone": "write",
+              "text": "**Tide:** the change in the **depth** of the sea during the day.",
+              "textFr": "**Marée (tide) :** le changement de **profondeur** de la mer pendant la journée."
+            },
+            {
+              "tone": "info",
+              "badge": false,
+              "text": "Holy Island, England: the sea covers this road **twice a day**.",
+              "textFr": "Holy Island, en Angleterre : la mer couvre cette route **deux fois par jour**."
+            }
+          ],
+          "image": "asset:s05-holy-island.png"
+        },
+        {
+          "layout": "showcase",
+          "accent": "#1a5fa8",
+          "icon": "ScanEye",
+          "eyebrow": "Real photos",
+          "title": "The Same Harbour, Six Hours Apart",
+          "titleFr": "Le même port, six heures plus tard",
+          "caption": "The Bay of Fundy, Canada: the **biggest** tides in the world. At low tide the boats sit on the mud. The **depth** of the water changed.",
+          "image": "asset:s06-photo.jpg"
+        },
+        {
+          "layout": "split",
+          "accent": "#0087a8",
+          "icon": "Ruler",
+          "eyebrow": "Key word",
+          "eyebrowFr": "Mot clé",
+          "title": "Tidal Range",
+          "titleFr": "Le marnage",
+          "ratio": 45,
+          "inlineSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 840 560\" class=\"w-full h-full\">\n    <rect x=\"0\" y=\"0\" width=\"840\" height=\"560\" rx=\"14\" fill=\"#ffffff\"/>\n    <rect x=\"0.75\" y=\"0.75\" width=\"838.5\" height=\"558.5\" rx=\"13\" fill=\"none\" stroke=\"#e2e8f0\" stroke-width=\"1.5\"/>\n    <rect x=\"40\" y=\"120\" width=\"150\" height=\"360\" fill=\"#cfc8bd\" stroke=\"#2b2b2b\" stroke-width=\"3\"/><line x1=\"40\" y1=\"154\" x2=\"190\" y2=\"154\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"100\" y1=\"120\" x2=\"100\" y2=\"154\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"160\" y1=\"120\" x2=\"160\" y2=\"154\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"40\" y1=\"188\" x2=\"190\" y2=\"188\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"70\" y1=\"154\" x2=\"70\" y2=\"188\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"130\" y1=\"154\" x2=\"130\" y2=\"188\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"40\" y1=\"222\" x2=\"190\" y2=\"222\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"100\" y1=\"188\" x2=\"100\" y2=\"222\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"160\" y1=\"188\" x2=\"160\" y2=\"222\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"40\" y1=\"256\" x2=\"190\" y2=\"256\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"70\" y1=\"222\" x2=\"70\" y2=\"256\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"130\" y1=\"222\" x2=\"130\" y2=\"256\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"40\" y1=\"290\" x2=\"190\" y2=\"290\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"100\" y1=\"256\" x2=\"100\" y2=\"290\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"160\" y1=\"256\" x2=\"160\" y2=\"290\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"40\" y1=\"324\" x2=\"190\" y2=\"324\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"70\" y1=\"290\" x2=\"70\" y2=\"324\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"130\" y1=\"290\" x2=\"130\" y2=\"324\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"40\" y1=\"358\" x2=\"190\" y2=\"358\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"100\" y1=\"324\" x2=\"100\" y2=\"358\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"160\" y1=\"324\" x2=\"160\" y2=\"358\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"40\" y1=\"392\" x2=\"190\" y2=\"392\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"70\" y1=\"358\" x2=\"70\" y2=\"392\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"130\" y1=\"358\" x2=\"130\" y2=\"392\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"40\" y1=\"426\" x2=\"190\" y2=\"426\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"100\" y1=\"392\" x2=\"100\" y2=\"426\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"160\" y1=\"392\" x2=\"160\" y2=\"426\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"40\" y1=\"460\" x2=\"190\" y2=\"460\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"70\" y1=\"426\" x2=\"70\" y2=\"460\" stroke=\"#a79f92\" stroke-width=\"2\"/><line x1=\"130\" y1=\"426\" x2=\"130\" y2=\"460\" stroke=\"#a79f92\" stroke-width=\"2\"/>\n    <rect x=\"190\" y=\"370\" width=\"610\" height=\"110\" fill=\"#cfe6f5\"/>\n    <line x1=\"190\" y1=\"370\" x2=\"800\" y2=\"370\" stroke=\"#5b9bd5\" stroke-width=\"4\"/>\n    <rect x=\"190\" y=\"480\" width=\"610\" height=\"40\" fill=\"#d9c7a3\"/>\n    <line x1=\"40\" y1=\"480\" x2=\"800\" y2=\"480\" stroke=\"#2b2b2b\" stroke-width=\"3\"/>\n    <line x1=\"190\" y1=\"150\" x2=\"800\" y2=\"150\" stroke=\"#1a5fa8\" stroke-width=\"4\" stroke-dasharray=\"14 10\"/>\n    <rect x=\"236\" y=\"96\" width=\"22\" height=\"384\" fill=\"#ffffff\" stroke=\"#2b2b2b\" stroke-width=\"2.5\"/>\n    <line x1=\"236\" y1=\"480\" x2=\"258\" y2=\"480\" stroke=\"#2b2b2b\" stroke-width=\"3\"/>\n    <line x1=\"236\" y1=\"425\" x2=\"250\" y2=\"425\" stroke=\"#2b2b2b\" stroke-width=\"2.5\"/>\n    <line x1=\"236\" y1=\"370\" x2=\"250\" y2=\"370\" stroke=\"#2b2b2b\" stroke-width=\"2.5\"/>\n    <line x1=\"236\" y1=\"315\" x2=\"250\" y2=\"315\" stroke=\"#2b2b2b\" stroke-width=\"2.5\"/>\n    <line x1=\"236\" y1=\"260\" x2=\"250\" y2=\"260\" stroke=\"#2b2b2b\" stroke-width=\"2.5\"/>\n    <line x1=\"236\" y1=\"205\" x2=\"250\" y2=\"205\" stroke=\"#2b2b2b\" stroke-width=\"2.5\"/>\n    <line x1=\"236\" y1=\"150\" x2=\"250\" y2=\"150\" stroke=\"#2b2b2b\" stroke-width=\"2.5\"/>\n    <rect x=\"264\" y=\"467\" width=\"46\" height=\"26\" rx=\"5\" fill=\"#ffffff\"/>\n    <rect x=\"264\" y=\"357\" width=\"46\" height=\"26\" rx=\"5\" fill=\"#ffffff\"/>\n    <rect x=\"264\" y=\"137\" width=\"46\" height=\"26\" rx=\"5\" fill=\"#ffffff\"/>\n    <text x=\"270\" y=\"487\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"20\" fill=\"#5b6770\">0 m</text>\n    <text x=\"270\" y=\"377\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"20\" fill=\"#5b6770\">2 m</text>\n    <text x=\"270\" y=\"267\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"20\" fill=\"#5b6770\">4 m</text>\n    <text x=\"270\" y=\"157\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"20\" fill=\"#5b6770\">6 m</text>\n    <path d=\"M 310 348 h 90 l -12.6 21.6 h -64.8 Z\" fill=\"#d83a2e\" stroke=\"#2b2b2b\" stroke-width=\"3\" stroke-linejoin=\"round\"/>\n    <line x1=\"319\" y1=\"353.4\" x2=\"391\" y2=\"353.4\" stroke=\"#ffffff\" stroke-width=\"3\"/>\n    <text x=\"790\" y=\"132\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"25\" font-weight=\"bold\" fill=\"#1a5fa8\" text-anchor=\"end\">high tide: 6 m deep</text>\n    <text x=\"790\" y=\"356\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"25\" font-weight=\"bold\" fill=\"#1a5fa8\" text-anchor=\"end\">low tide: 2 m deep</text>\n    <line x1=\"430\" y1=\"260\" x2=\"430\" y2=\"176\" stroke=\"#c25e12\" stroke-width=\"5\" stroke-linecap=\"round\"/>\n    <path d=\"M 430 156 L 419 176 L 441 176 Z\" fill=\"#c25e12\"/><line x1=\"430\" y1=\"260\" x2=\"430\" y2=\"344\" stroke=\"#c25e12\" stroke-width=\"5\" stroke-linecap=\"round\"/>\n    <path d=\"M 430 364 L 441 344 L 419 344 Z\" fill=\"#c25e12\"/>\n    <text x=\"452\" y=\"248\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"28\" font-weight=\"bold\" fill=\"#c25e12\">tidal range</text>\n    <text x=\"452\" y=\"286\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"26\" fill=\"#c25e12\">6 − 2 = 4 m</text>\n    <text x=\"115\" y=\"104\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"20\" fill=\"#5b6770\" text-anchor=\"middle\">harbour wall</text>\n  </svg>",
+          "content": "Mr Bowen’s harbour: 6 m − 2 m = **4 m**.",
+          "contentFr": "Le port de M. Bowen : 6 m − 2 m = **4 m**.",
+          "notes": [
+            {
+              "tone": "write",
+              "text": "**Tidal range:** the difference in depth between high tide and low tide.",
+              "textFr": "**Marnage (tidal range) :** la différence de profondeur entre la marée haute et la marée basse."
+            },
+            {
+              "tone": "info",
+              "badge": false,
+              "text": "The Bay of Fundy: **16.3 m**. The Mediterranean Sea: **less than 1 m**.",
+              "textFr": "La baie de Fundy : **16.3 m**. La mer Méditerranée : **moins de 1 m**."
+            }
+          ],
+          "check": {
+            "id": "c7",
+            "q": "What is the **tidal range**?",
+            "options": [
+              {
+                "val": "A",
+                "text": "The difference in depth between high tide and low tide"
+              },
+              {
+                "val": "B",
+                "text": "The depth of the water at high tide"
+              },
+              {
+                "val": "C",
+                "text": "The time from high tide to low tide"
+              }
+            ],
+            "correct": "A",
+            "exp": "The tidal range is a **difference**: high tide depth − low tide depth. At Mr Bowen’s harbour: 6 m − 2 m = 4 m. It is not the depth at high tide (6 m), and it is not a time."
+          }
+        },
+        {
+          "layout": "statement",
+          "accent": "#5c2483",
+          "eyebrow": "Think",
+          "title": "The Deepest Water",
+          "titleFr": "L’eau la plus profonde",
+          "text": "Average depth: **5.0 m**. Tidal range: **2.0 m**. What is the **maximum** depth?",
+          "textFr": "Profondeur moyenne : **5.0 m**. Marnage : **2.0 m**. Quelle est la profondeur **maximale** ?",
+          "check": {
+            "id": "c8",
+            "q": "The average depth of the water is **5.0 m**. The tidal range is **2.0 m**. What is the **maximum** depth?",
+            "options": [
+              {
+                "val": "A",
+                "text": "7.0 m"
+              },
+              {
+                "val": "B",
+                "text": "6.0 m"
+              },
+              {
+                "val": "C",
+                "text": "3.0 m"
+              }
+            ],
+            "correct": "B",
+            "exp": "The range is shared: the water goes **1.0 m above** the average and 1.0 m below. Maximum: 5.0 + 1.0 = 6.0 m. 7.0 m adds the whole range to the average."
+          }
+        },
+        {
+          "layout": "showcase",
+          "accent": "#1a5fa8",
+          "icon": "Anchor",
+          "eyebrow": "A story",
+          "title": "Mr Bowen’s Boat",
+          "titleFr": "Le bateau de M. Bowen",
+          "caption": "Read the four pictures. Where does the sea go? And why does it come back? The next slides tell you.",
+          "image": "asset:s09-boat-strip.png",
+          "check": {
+            "id": "c9",
+            "q": "At 6 a.m. it is high tide. Mr Bowen ties his boat to the wall with a short rope. Why is the boat hanging from the wall at 12 noon?",
+            "options": [
+              {
+                "val": "A",
+                "text": "It is low tide: the water is much lower"
+              },
+              {
+                "val": "B",
+                "text": "It is high tide: the water pushed the boat up"
+              },
+              {
+                "val": "C",
+                "text": "The tide is coming in"
+              }
+            ],
+            "correct": "A",
+            "exp": "From high tide to low tide takes about **6 hours**. 6 a.m. + 6 hours = 12 noon: low tide. The water went down, but the short rope did not. Sailors tie up with a **long** rope."
+          }
+        },
+        {
+          "layout": "split",
+          "accent": "#0087a8",
+          "icon": "Moon",
+          "eyebrow": "Key word",
+          "eyebrowFr": "Mot clé",
+          "title": "Tidal Force",
+          "titleFr": "La force de marée",
+          "ratio": 45,
+          "inlineSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 840 560\" class=\"w-full h-full\">\n    <rect x=\"0\" y=\"0\" width=\"840\" height=\"560\" rx=\"14\" fill=\"#ffffff\"/>\n    <rect x=\"0.75\" y=\"0.75\" width=\"838.5\" height=\"558.5\" rx=\"13\" fill=\"none\" stroke=\"#e2e8f0\" stroke-width=\"1.5\"/>\n    <ellipse cx=\"250\" cy=\"290\" rx=\"180\" ry=\"180\" fill=\"#cfe6f5\" stroke=\"#5b9bd5\" stroke-width=\"3\"/>\n    <circle cx=\"250\" cy=\"290\" r=\"145\" fill=\"#a8d08d\" stroke=\"#2b2b2b\" stroke-width=\"3\"/>\n    <circle cx=\"250\" cy=\"290\" r=\"6\" fill=\"#2b2b2b\"/>\n    <circle cx=\"745\" cy=\"290\" r=\"52\" fill=\"#d9dde3\" stroke=\"#2b2b2b\" stroke-width=\"3\"/>\n    <circle cx=\"726.8\" cy=\"274.4\" r=\"10.4\" fill=\"#c3c9d1\"/>\n    <circle cx=\"760.6\" cy=\"303\" r=\"13.5\" fill=\"#c3c9d1\"/>\n    <circle cx=\"764.8\" cy=\"269.2\" r=\"6.2\" fill=\"#c3c9d1\"/>\n    <line x1=\"452\" y1=\"290\" x2=\"642\" y2=\"290\" stroke=\"#d83a2e\" stroke-width=\"7\" stroke-linecap=\"round\"/>\n    <path d=\"M 668 290 L 642 275.7 L 642 304.3 Z\" fill=\"#d83a2e\"/>\n    <text x=\"556\" y=\"248\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"24\" font-weight=\"bold\" fill=\"#d83a2e\" text-anchor=\"middle\">the Moon's gravity</text>\n    <text x=\"556\" y=\"336\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"24\" font-weight=\"bold\" fill=\"#d83a2e\" text-anchor=\"middle\">pulls</text>\n    <text x=\"745\" y=\"378\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"24\" font-weight=\"bold\" fill=\"#2b2b2b\" text-anchor=\"middle\">Moon</text>\n    <line x1=\"130\" y1=\"66\" x2=\"173\" y2=\"145\" stroke=\"#c25e12\" stroke-width=\"2\"/><circle cx=\"173\" cy=\"145\" r=\"4.5\" fill=\"#c25e12\"/>\n    <text x=\"30\" y=\"56\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"25\" font-weight=\"bold\" fill=\"#c25e12\">water: moves easily</text>\n    <line x1=\"140\" y1=\"500\" x2=\"185\" y2=\"400\" stroke=\"#c25e12\" stroke-width=\"2\"/><circle cx=\"185\" cy=\"400\" r=\"4.5\" fill=\"#c25e12\"/>\n    <text x=\"30\" y=\"530\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"25\" font-weight=\"bold\" fill=\"#c25e12\">land: hardly moves</text>\n    <text x=\"560\" y=\"530\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"20\" fill=\"#5b6770\">not to scale</text>\n  </svg>",
+          "content": "Gravity keeps the **Moon** in orbit (3.3). But the Moon has gravity too: it pulls on the Earth.",
+          "contentFr": "La gravité garde la **Lune** en orbite (3.3). Mais la Lune a aussi une gravité : elle tire sur la Terre.",
+          "notes": [
+            {
+              "tone": "write",
+              "text": "**Tidal force:** the pull of the Moon’s gravity on the oceans.",
+              "textFr": "**Force de marée (tidal force) :** l’attraction de la gravité de la Lune sur les océans."
+            }
+          ]
+        },
+        {
+          "layout": "statement",
+          "accent": "#5c2483",
+          "icon": "Hand",
+          "eyebrow": "Choose",
+          "title": "How Many High Tides?",
+          "titleFr": "Combien de marées hautes ?",
+          "text": "The Moon pulls the oceans.",
+          "textFr": "La Lune tire les océans. Combien de **marées hautes** la Terre a-t-elle **en même temps** ?",
+          "check": {
+            "id": "c11",
+            "q": "The Moon pulls the oceans. How many **high tides** does the Earth have **at the same time**?",
+            "options": [
+              {
+                "val": "A",
+                "text": "One: only on the side facing the Moon"
+              },
+              {
+                "val": "B",
+                "text": "Two: on both sides"
+              }
+            ],
+            "correct": "B",
+            "exp": "**Two:** one on the side facing the Moon and one on the **far side**. The Moon pulls the near side most. The far side is left behind. So the Earth is stretched, and the water bulges on both sides."
+          }
+        },
+        {
+          "layout": "split",
+          "accent": "#0087a8",
+          "icon": "Users",
+          "eyebrow": "Answer: B",
+          "title": "The Earth Is Stretched",
+          "titleFr": "La Terre est étirée",
+          "ratio": 45,
+          "inlineSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 840 560\" class=\"w-full h-full\">\n    <rect x=\"0\" y=\"0\" width=\"840\" height=\"560\" rx=\"14\" fill=\"#ffffff\"/>\n    <rect x=\"0.75\" y=\"0.75\" width=\"838.5\" height=\"558.5\" rx=\"13\" fill=\"none\" stroke=\"#e2e8f0\" stroke-width=\"1.5\"/>\n    <text x=\"30\" y=\"46\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"24\" font-weight=\"bold\" fill=\"#2b2b2b\">1. Before</text>\n    <circle cx=\"120\" cy=\"96\" r=\"20\" fill=\"#cfe6f5\" stroke=\"#5b9bd5\" stroke-width=\"3\"/>\n    <circle cx=\"270\" cy=\"96\" r=\"20\" fill=\"#a8d08d\" stroke=\"#2b2b2b\" stroke-width=\"3\"/>\n    <circle cx=\"420\" cy=\"96\" r=\"20\" fill=\"#cfe6f5\" stroke=\"#5b9bd5\" stroke-width=\"3\"/>\n    <text x=\"120\" y=\"142\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"20\" fill=\"#5b6770\" text-anchor=\"middle\">far side</text>\n    <text x=\"270\" y=\"142\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"20\" fill=\"#5b6770\" text-anchor=\"middle\">middle</text>\n    <text x=\"420\" y=\"142\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"20\" fill=\"#5b6770\" text-anchor=\"middle\">near side</text>\n    <circle cx=\"745\" cy=\"160\" r=\"44\" fill=\"#d9dde3\" stroke=\"#2b2b2b\" stroke-width=\"3\"/>\n    <circle cx=\"729.6\" cy=\"146.8\" r=\"8.8\" fill=\"#c3c9d1\"/>\n    <circle cx=\"758.2\" cy=\"171\" r=\"11.4\" fill=\"#c3c9d1\"/>\n    <circle cx=\"761.7\" cy=\"142.4\" r=\"5.3\" fill=\"#c3c9d1\"/>\n    <line x1=\"30\" y1=\"168\" x2=\"660\" y2=\"168\" stroke=\"#e2e8f0\" stroke-width=\"2\"/>\n    <text x=\"30\" y=\"206\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"24\" font-weight=\"bold\" fill=\"#2b2b2b\">2. The Moon pulls</text>\n    <g fill=\"none\" stroke=\"#b8c4cf\" stroke-width=\"2.5\" stroke-dasharray=\"5 5\">\n      <circle cx=\"120\" cy=\"264\" r=\"20\"/><circle cx=\"270\" cy=\"264\" r=\"20\"/><circle cx=\"420\" cy=\"264\" r=\"20\"/>\n    </g>\n    <circle cx=\"170\" cy=\"264\" r=\"20\" fill=\"#cfe6f5\" stroke=\"#5b9bd5\" stroke-width=\"3\"/>\n    <circle cx=\"370\" cy=\"264\" r=\"20\" fill=\"#a8d08d\" stroke=\"#2b2b2b\" stroke-width=\"3\"/>\n    <circle cx=\"570\" cy=\"264\" r=\"20\" fill=\"#cfe6f5\" stroke=\"#5b9bd5\" stroke-width=\"3\"/>\n    <line x1=\"120\" y1=\"230\" x2=\"158\" y2=\"230\" stroke=\"#d83a2e\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n    <path d=\"M 172 230 L 158 222.3 L 158 237.7 Z\" fill=\"#d83a2e\"/>\n    <line x1=\"270\" y1=\"230\" x2=\"358\" y2=\"230\" stroke=\"#d83a2e\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n    <path d=\"M 372 230 L 358 222.3 L 358 237.7 Z\" fill=\"#d83a2e\"/>\n    <line x1=\"420\" y1=\"230\" x2=\"558\" y2=\"230\" stroke=\"#d83a2e\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n    <path d=\"M 572 230 L 558 222.3 L 558 237.7 Z\" fill=\"#d83a2e\"/>\n    <text x=\"145\" y=\"310\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"21\" font-weight=\"bold\" fill=\"#d83a2e\" text-anchor=\"middle\">1 step</text>\n    <text x=\"320\" y=\"310\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"21\" font-weight=\"bold\" fill=\"#d83a2e\" text-anchor=\"middle\">2 steps</text>\n    <text x=\"495\" y=\"310\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"21\" font-weight=\"bold\" fill=\"#d83a2e\" text-anchor=\"middle\">3 steps</text>\n    <text x=\"630\" y=\"256\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"23\" font-weight=\"bold\" fill=\"#c25e12\">further apart:</text>\n    <text x=\"630\" y=\"284\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"23\" font-weight=\"bold\" fill=\"#c25e12\">stretched!</text>\n    <line x1=\"30\" y1=\"332\" x2=\"810\" y2=\"332\" stroke=\"#e2e8f0\" stroke-width=\"2\"/>\n    <text x=\"30\" y=\"368\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"24\" font-weight=\"bold\" fill=\"#2b2b2b\">3. So the water makes 2 bulges</text>\n    <ellipse cx=\"350\" cy=\"462\" rx=\"165\" ry=\"78\" fill=\"#cfe6f5\" stroke=\"#5b9bd5\" stroke-width=\"3\"/>\n    <circle cx=\"350\" cy=\"462\" r=\"66\" fill=\"#a8d08d\" stroke=\"#2b2b2b\" stroke-width=\"3\"/>\n    <circle cx=\"350\" cy=\"462\" r=\"6\" fill=\"#2b2b2b\"/>\n    <line x1=\"187\" y1=\"462\" x2=\"158\" y2=\"462\" stroke=\"#1a5fa8\" stroke-width=\"5\" stroke-linecap=\"round\"/>\n    <path d=\"M 142 462 L 158 470.8 L 158 453.2 Z\" fill=\"#1a5fa8\"/>\n    <line x1=\"513\" y1=\"462\" x2=\"542\" y2=\"462\" stroke=\"#1a5fa8\" stroke-width=\"5\" stroke-linecap=\"round\"/>\n    <path d=\"M 558 462 L 542 453.2 L 542 470.8 Z\" fill=\"#1a5fa8\"/>\n    <circle cx=\"750\" cy=\"476\" r=\"30\" fill=\"#d9dde3\" stroke=\"#2b2b2b\" stroke-width=\"2.5\"/>\n    <circle cx=\"739.5\" cy=\"467\" r=\"6\" fill=\"#c3c9d1\"/>\n    <circle cx=\"759\" cy=\"483.5\" r=\"7.8\" fill=\"#c3c9d1\"/>\n    <circle cx=\"761.4\" cy=\"464\" r=\"3.6\" fill=\"#c3c9d1\"/>\n    <text x=\"138\" y=\"444\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"22\" font-weight=\"bold\" fill=\"#c25e12\" text-anchor=\"end\">high tide</text>\n    <text x=\"564\" y=\"444\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"22\" font-weight=\"bold\" fill=\"#c25e12\">high tide</text>\n  </svg>",
+          "content": "The **near** side moves most. The **far** side is left behind. So the water makes a bulge on **both** sides.",
+          "contentFr": "Le côté **proche** bouge le plus. Le côté **éloigné** reste en arrière. Donc l’eau fait une bosse des **deux** côtés.",
+          "notes": [
+            {
+              "tone": "info",
+              "badge": false,
+              "text": "Think of three runners in a line, facing the Moon. The Moon pulls. The near one moves **3 steps**, the middle one **2 steps**, the far one **1 step**. Now they are further apart: **stretched**."
+            }
+          ]
+        },
+        {
+          "layout": "showcase",
+          "accent": "#1a5fa8",
+          "icon": "RotateCcw",
+          "eyebrow": "A model",
+          "eyebrowFr": "Un modèle",
+          "title": "Spin the Earth",
+          "titleFr": "Fais tourner la Terre",
+          "caption": "At 6 a.m. the harbour faced the Moon: high tide. The Earth spins. At **6 p.m.** the harbour is on the **far side**: high tide again. The graph is the harbour’s graph.",
+          "image": "asset:s13-spin-6pm.png"
+        },
+        {
+          "layout": "split",
+          "accent": "#c25e12",
+          "icon": "Pencil",
+          "eyebrow": "Draw this",
+          "title": "Two High Tides a Day",
+          "titleFr": "Deux marées hautes par jour",
+          "ratio": 45,
+          "inlineSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 840 560\" class=\"w-full h-full\">\n    <rect x=\"0\" y=\"0\" width=\"840\" height=\"560\" rx=\"14\" fill=\"#ffffff\"/>\n    <rect x=\"0.75\" y=\"0.75\" width=\"838.5\" height=\"558.5\" rx=\"13\" fill=\"none\" stroke=\"#e2e8f0\" stroke-width=\"1.5\"/>\n    <ellipse cx=\"320\" cy=\"280\" rx=\"205\" ry=\"150\" fill=\"#cfe6f5\" stroke=\"#5b9bd5\" stroke-width=\"3\"/>\n    <circle cx=\"320\" cy=\"280\" r=\"128\" fill=\"#a8d08d\" stroke=\"#2b2b2b\" stroke-width=\"3\"/>\n    <circle cx=\"320\" cy=\"280\" r=\"6\" fill=\"#2b2b2b\"/>\n    <path d=\"M 233.4 230 A 100 100 0 0 0 233.4 330\" fill=\"none\" stroke=\"#1a5fa8\" stroke-width=\"5\" stroke-linecap=\"round\"/>\n    <line x1=\"228\" y1=\"320\" x2=\"229.9\" y2=\"323.2\" stroke=\"#1a5fa8\" stroke-width=\"5\" stroke-linecap=\"round\"/>\n    <path d=\"M 238 337 L 237.5 318.7 L 222.3 327.7 Z\" fill=\"#1a5fa8\"/>\n    <circle cx=\"760\" cy=\"280\" r=\"42\" fill=\"#d9dde3\" stroke=\"#2b2b2b\" stroke-width=\"3\"/>\n    <circle cx=\"745.3\" cy=\"267.4\" r=\"8.4\" fill=\"#c3c9d1\"/>\n    <circle cx=\"772.6\" cy=\"290.5\" r=\"10.9\" fill=\"#c3c9d1\"/>\n    <circle cx=\"776\" cy=\"263.2\" r=\"5\" fill=\"#c3c9d1\"/>\n    <line x1=\"548\" y1=\"280\" x2=\"678\" y2=\"280\" stroke=\"#d83a2e\" stroke-width=\"6\" stroke-linecap=\"round\"/>\n    <path d=\"M 700 280 L 678 267.9 L 678 292.1 Z\" fill=\"#d83a2e\"/>\n    <text x=\"624\" y=\"326\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"22\" font-weight=\"bold\" fill=\"#d83a2e\" text-anchor=\"middle\">pull of the</text>\n    <text x=\"624\" y=\"354\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"22\" font-weight=\"bold\" fill=\"#d83a2e\" text-anchor=\"middle\">Moon's gravity</text>\n    <text x=\"760\" y=\"222\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"22\" font-weight=\"bold\" fill=\"#2b2b2b\" text-anchor=\"middle\">Moon</text>\n    <line x1=\"80\" y1=\"168\" x2=\"118\" y2=\"262\" stroke=\"#c25e12\" stroke-width=\"2\"/><circle cx=\"118\" cy=\"262\" r=\"4.5\" fill=\"#c25e12\"/>\n    <text x=\"24\" y=\"156\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"25\" font-weight=\"bold\" fill=\"#c25e12\">high tide</text>\n    <line x1=\"560\" y1=\"206\" x2=\"520\" y2=\"262\" stroke=\"#c25e12\" stroke-width=\"2\"/><circle cx=\"520\" cy=\"262\" r=\"4.5\" fill=\"#c25e12\"/>\n    <text x=\"520\" y=\"194\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"25\" font-weight=\"bold\" fill=\"#c25e12\">high tide</text>\n    <line x1=\"470\" y1=\"76\" x2=\"330\" y2=\"132\" stroke=\"#c25e12\" stroke-width=\"2\"/><circle cx=\"330\" cy=\"132\" r=\"4.5\" fill=\"#c25e12\"/>\n    <text x=\"480\" y=\"72\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"25\" font-weight=\"bold\" fill=\"#c25e12\">low tide</text>\n    <line x1=\"470\" y1=\"490\" x2=\"330\" y2=\"428\" stroke=\"#c25e12\" stroke-width=\"2\"/><circle cx=\"330\" cy=\"428\" r=\"4.5\" fill=\"#c25e12\"/>\n    <text x=\"480\" y=\"500\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"25\" font-weight=\"bold\" fill=\"#c25e12\">low tide</text>\n    <line x1=\"110\" y1=\"470\" x2=\"222\" y2=\"300\" stroke=\"#c25e12\" stroke-width=\"2\"/><circle cx=\"222\" cy=\"300\" r=\"4.5\" fill=\"#c25e12\"/>\n    <text x=\"24\" y=\"500\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"25\" font-weight=\"bold\" fill=\"#c25e12\">the Earth spins</text>\n  </svg>",
+          "content": "Copy the drawing and its labels into your notebook: the Earth, seen from above the **North Pole**.",
+          "notes": [
+            {
+              "tone": "info",
+              "badge": false,
+              "text": "As the Earth **spins**, every coast passes through **2 high tides** and **2 low tides** a day.",
+              "textFr": "Quand la Terre **tourne**, chaque côte passe par **2 marées hautes** et **2 marées basses** par jour."
+            }
+          ]
+        },
+        {
+          "layout": "split",
+          "accent": "#4a8b23",
+          "icon": "Moon",
+          "eyebrow": "Think",
+          "title": "High Tide or Low Tide?",
+          "titleFr": "Marée haute ou marée basse ?",
+          "ratio": 50,
+          "inlineSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 320\" role=\"img\" aria-label=\"The Earth with the harbour on the side away from the Moon\">\n<rect x=\"0\" y=\"0\" width=\"600\" height=\"320\" rx=\"16\" fill=\"#ffffff\"/>\n<circle cx=\"220\" cy=\"160\" r=\"100\" fill=\"#a8d18d\" stroke=\"#2b2b2b\" stroke-width=\"4\"/>\n<path d=\"M175 105 q20 -15 35 5 q-10 25 -30 15 z M240 190 q25 -5 30 20 q-20 15 -35 -5 z M160 185 q15 10 5 30 q-20 -5 -5 -30 z\" fill=\"#7fb36a\"/>\n<circle cx=\"220\" cy=\"160\" r=\"5\" fill=\"#2b2b2b\"/>\n<circle cx=\"500\" cy=\"160\" r=\"36\" fill=\"#d9dde3\" stroke=\"#2b2b2b\" stroke-width=\"4\"/>\n<circle cx=\"490\" cy=\"150\" r=\"7\" fill=\"#bcc3cc\"/><circle cx=\"510\" cy=\"170\" r=\"9\" fill=\"#bcc3cc\"/>\n<text x=\"500\" y=\"232\" font-family=\"Inter, Segoe UI, sans-serif\" font-size=\"26\" font-weight=\"800\" fill=\"#2b2b2b\" text-anchor=\"middle\">Moon</text>\n<circle cx=\"120\" cy=\"160\" r=\"17\" fill=\"none\" stroke=\"#d63b2f\" stroke-width=\"4\" opacity=\"0.5\"/>\n<circle cx=\"120\" cy=\"160\" r=\"10\" fill=\"#d63b2f\" stroke=\"#ffffff\" stroke-width=\"3\"/>\n<text x=\"70\" y=\"118\" font-family=\"Inter, Segoe UI, sans-serif\" font-size=\"26\" font-weight=\"800\" fill=\"#b3261e\" text-anchor=\"middle\">harbour</text>\n<text x=\"590\" y=\"308\" font-family=\"Inter, Segoe UI, sans-serif\" font-size=\"20\" fill=\"#5b6770\" text-anchor=\"end\">not to scale</text>\n</svg>",
+          "content": "Look at the picture. Where is the harbour? Where is the Moon?\n\nIs it **high tide** or **low tide** at the harbour?",
+          "check": {
+            "id": "c15",
+            "q": "A harbour is on the side of the Earth **away from** the Moon. Is it high tide or low tide there?",
+            "options": [
+              {
+                "val": "A",
+                "text": "High tide: there is a bulge on the far side too"
+              },
+              {
+                "val": "B",
+                "text": "Low tide: the Moon pulls the water to the other side"
+              },
+              {
+                "val": "C",
+                "text": "No tide: the Moon’s pull does not reach it"
+              }
+            ],
+            "correct": "A",
+            "exp": "The Moon stretches the Earth, so the water bulges on **both** sides: facing the Moon and on the far side. Low tide is at right angles to the Moon (the top and the bottom of the picture)."
+          }
+        },
+        {
+          "layout": "split",
+          "accent": "#5c2483",
+          "icon": "Timer",
+          "eyebrow": "Think",
+          "title": "The Same Time Tomorrow?",
+          "titleFr": "À la même heure demain ?",
+          "ratio": 45,
+          "inlineSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 840 560\" class=\"w-full h-full\">\n    <rect x=\"0\" y=\"0\" width=\"840\" height=\"560\" rx=\"14\" fill=\"#ffffff\"/>\n    <rect x=\"0.75\" y=\"0.75\" width=\"838.5\" height=\"558.5\" rx=\"13\" fill=\"none\" stroke=\"#e2e8f0\" stroke-width=\"1.5\"/>\n    <line x1=\"300\" y1=\"290\" x2=\"636\" y2=\"290\" stroke=\"#5b6770\" stroke-width=\"2.5\" stroke-dasharray=\"8 8\"/>\n    <line x1=\"300\" y1=\"290\" x2=\"616\" y2=\"175\" stroke=\"#c25e12\" stroke-width=\"2.5\" stroke-dasharray=\"8 8\"/>\n    <circle cx=\"300\" cy=\"290\" r=\"90\" fill=\"#a8d08d\" stroke=\"#2b2b2b\" stroke-width=\"3\"/>\n    <circle cx=\"300\" cy=\"290\" r=\"6\" fill=\"#2b2b2b\"/>\n    <path d=\"M 420.7 257.6 A 125 125 0 1 0 420.7 322.4\" fill=\"none\" stroke=\"#1a5fa8\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n    <line x1=\"418\" y1=\"332\" x2=\"418.5\" y2=\"330.3\" stroke=\"#1a5fa8\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n    <path d=\"M 423 315 L 410 327.9 L 426.9 332.8 Z\" fill=\"#1a5fa8\"/>\n    <path d=\"M 449.9 284.8 A 150 150 0 0 0 441 238.7\" fill=\"none\" stroke=\"#c25e12\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n    <line x1=\"444.5\" y1=\"248.1\" x2=\"443.8\" y2=\"246.2\" stroke=\"#c25e12\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n    <path d=\"M 439 233.1 L 436.6 248.9 L 451 243.6 Z\" fill=\"#c25e12\"/>\n    <circle cx=\"390\" cy=\"290\" r=\"10\" fill=\"#d83a2e\" stroke=\"#ffffff\" stroke-width=\"3\"/>\n    <circle cx=\"670\" cy=\"290\" r=\"34\" fill=\"#d9dde3\" stroke=\"#2b2b2b\" stroke-width=\"2.5\"/>\n    <circle cx=\"658.1\" cy=\"279.8\" r=\"6.8\" fill=\"#c3c9d1\"/>\n    <circle cx=\"680.2\" cy=\"298.5\" r=\"8.8\" fill=\"#c3c9d1\"/>\n    <circle cx=\"682.9\" cy=\"276.4\" r=\"4.1\" fill=\"#c3c9d1\"/>\n    <circle cx=\"648\" cy=\"164\" r=\"34\" fill=\"#d9dde3\" stroke=\"#2b2b2b\" stroke-width=\"2.5\"/>\n    <circle cx=\"636.1\" cy=\"153.8\" r=\"6.8\" fill=\"#c3c9d1\"/>\n    <circle cx=\"658.2\" cy=\"172.5\" r=\"8.8\" fill=\"#c3c9d1\"/>\n    <circle cx=\"660.9\" cy=\"150.4\" r=\"4.1\" fill=\"#c3c9d1\"/>\n    <path d=\"M 667.2 244.9 A 370 370 0 0 0 660.5 206.8\" fill=\"none\" stroke=\"#c25e12\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n    <line x1=\"662.4\" y1=\"214.6\" x2=\"662.4\" y2=\"214.6\" stroke=\"#c25e12\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n    <path d=\"M 659 201 L 654.9 216.4 L 669.9 212.7 Z\" fill=\"#c25e12\"/>\n    <text x=\"670\" y=\"352\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"22\" font-weight=\"bold\" fill=\"#2b2b2b\" text-anchor=\"middle\">today</text>\n    <text x=\"648\" y=\"118\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"22\" font-weight=\"bold\" fill=\"#c25e12\" text-anchor=\"middle\">tomorrow</text>\n    <text x=\"702\" y=\"224\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"21\" font-weight=\"bold\" fill=\"#c25e12\">the Moon</text>\n    <text x=\"702\" y=\"250\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"21\" font-weight=\"bold\" fill=\"#c25e12\">moves on</text>\n    <line x1=\"150\" y1=\"128\" x2=\"212\" y2=\"202\" stroke=\"#c25e12\" stroke-width=\"2\"/><circle cx=\"212\" cy=\"202\" r=\"4.5\" fill=\"#c25e12\"/>\n    <text x=\"30\" y=\"116\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"23\" font-weight=\"bold\" fill=\"#1a5fa8\">1 turn: 24 hours</text>\n    <text x=\"466\" y=\"272\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"22\" font-weight=\"bold\" fill=\"#c25e12\">a little more</text>\n    <line x1=\"445\" y1=\"410\" x2=\"394\" y2=\"302\" stroke=\"#c25e12\" stroke-width=\"2\"/><circle cx=\"394\" cy=\"302\" r=\"4.5\" fill=\"#c25e12\"/>\n    <text x=\"450\" y=\"432\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"22\" font-weight=\"bold\" fill=\"#c25e12\">the harbour</text>\n    <text x=\"30\" y=\"528\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"21\" fill=\"#5b6770\">The Moon goes round the Earth once in 29 days.</text>\n    <text x=\"810\" y=\"528\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"19\" fill=\"#5b6770\" text-anchor=\"end\">not to scale</text>\n  </svg>",
+          "content": "High tide is at **6 a.m.** today. But the Moon moves on a little every day. Is high tide at 6 a.m. **tomorrow**?",
+          "contentFr": "La marée haute est à **6 h** aujourd’hui. Mais la Lune avance un peu chaque jour. La marée haute sera-t-elle à 6 h **demain** ?",
+          "check": {
+            "id": "c16",
+            "q": "High tide is at **6 a.m.** today. When is high tide **tomorrow**?",
+            "options": [
+              {
+                "val": "A",
+                "text": "At 6 a.m. again"
+              },
+              {
+                "val": "B",
+                "text": "At about 6:50 a.m."
+              },
+              {
+                "val": "C",
+                "text": "At about 5:10 a.m."
+              }
+            ],
+            "correct": "B",
+            "exp": "About **50 minutes later**. The Moon moves on a little every day. After one turn, the Earth must turn a little more to face the Moon again: 24 hours ÷ 29 ≈ 50 minutes."
+          }
+        },
+        {
+          "layout": "statement",
+          "accent": "#5c2483",
+          "icon": "Hand",
+          "eyebrow": "Choose",
+          "title": "The Sun or the Moon?",
+          "titleFr": "Le Soleil ou la Lune ?",
+          "text": "The Sun has the **strongest gravity** in the Solar System.",
+          "textFr": "Le Soleil a la **gravité la plus forte** du système solaire. Lequel fait les **plus grandes** marées ?",
+          "check": {
+            "id": "c17",
+            "q": "The Sun has the **strongest gravity** in the Solar System. Which makes **bigger** tides: the Sun or the Moon?",
+            "options": [
+              {
+                "val": "A",
+                "text": "The Sun"
+              },
+              {
+                "val": "B",
+                "text": "The Moon"
+              }
+            ],
+            "correct": "B",
+            "exp": "**The Moon.** The Sun **pulls** the Earth harder, but it is 390 times further away, so it **stretches** the Earth less. Tides come from the stretch."
+          }
+        },
+        {
+          "layout": "split",
+          "accent": "#0087a8",
+          "icon": "Sun",
+          "eyebrow": "Answer: B · the Moon",
+          "eyebrowFr": "Réponse : B · la Lune",
+          "title": "Pull and Stretch",
+          "titleFr": "Tirer et étirer",
+          "ratio": 45,
+          "inlineSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 840 560\" class=\"w-full h-full\">\n    <rect x=\"0\" y=\"0\" width=\"840\" height=\"560\" rx=\"14\" fill=\"#ffffff\"/>\n    <rect x=\"0.75\" y=\"0.75\" width=\"838.5\" height=\"558.5\" rx=\"13\" fill=\"none\" stroke=\"#e2e8f0\" stroke-width=\"1.5\"/>\n    <text x=\"30\" y=\"52\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"25\" font-weight=\"bold\" fill=\"#2b2b2b\">1. The PULL on the whole Earth</text>\n    <text x=\"150\" y=\"111\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"22\" fill=\"#5b6770\" text-anchor=\"end\">the Moon</text>\n    <rect x=\"166\" y=\"91\" width=\"6\" height=\"26\" rx=\"6\" fill=\"#0087a8\"/>\n    <text x=\"150\" y=\"161\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"22\" fill=\"#5b6770\" text-anchor=\"end\">the Sun</text>\n    <rect x=\"166\" y=\"141\" width=\"520\" height=\"26\" rx=\"6\" fill=\"#e8a317\"/>\n    <text x=\"700\" y=\"162\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"22\" font-weight=\"bold\" fill=\"#2b2b2b\">× 180</text>\n    <text x=\"166\" y=\"214\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"24\" font-weight=\"bold\" fill=\"#c25e12\">The Sun pulls much harder.</text>\n    <line x1=\"30\" y1=\"246\" x2=\"810\" y2=\"246\" stroke=\"#e2e8f0\" stroke-width=\"2\"/>\n    <text x=\"30\" y=\"294\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"25\" font-weight=\"bold\" fill=\"#2b2b2b\">2. The STRETCH (tidal force)</text>\n    <text x=\"150\" y=\"351\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"22\" fill=\"#5b6770\" text-anchor=\"end\">the Moon</text>\n    <rect x=\"166\" y=\"331\" width=\"400\" height=\"26\" rx=\"6\" fill=\"#0087a8\"/>\n    <text x=\"150\" y=\"401\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"22\" fill=\"#5b6770\" text-anchor=\"end\">the Sun</text>\n    <rect x=\"166\" y=\"381\" width=\"184\" height=\"26\" rx=\"6\" fill=\"#e8a317\"/>\n    <text x=\"366\" y=\"402\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"22\" font-weight=\"bold\" fill=\"#2b2b2b\">about half</text>\n    <text x=\"166\" y=\"454\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"24\" font-weight=\"bold\" fill=\"#c25e12\">The Moon stretches more.</text>\n    <rect x=\"166\" y=\"484\" width=\"508\" height=\"54\" rx=\"12\" fill=\"#0087a8\"/>\n    <text x=\"420\" y=\"520\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"25\" font-weight=\"bold\" fill=\"#ffffff\" text-anchor=\"middle\">Tides come from the stretch.</text>\n  </svg>",
+          "content": "The Sun **pulls** the Earth harder. But it is **390 times** further away, so it **stretches** the Earth less.",
+          "contentFr": "Le Soleil **tire** plus fort sur la Terre. Mais il est **390 fois** plus loin, donc il l’**étire** moins.",
+          "notes": [
+            {
+              "tone": "info",
+              "badge": false,
+              "text": "The Sun’s tidal force is about **half** the Moon’s.",
+              "textFr": "La force de marée du Soleil est environ la **moitié** de celle de la Lune."
+            }
+          ]
+        },
+        {
+          "layout": "showcase",
+          "accent": "#c25e12",
+          "icon": "Sun",
+          "eyebrow": "A model · one month",
+          "eyebrowFr": "Un modèle · un mois",
+          "title": "Line Them Up",
+          "titleFr": "Aligne-les",
+          "caption": "The model played for a whole month. Every dot is one day’s **tidal range**. In the picture it is **day 15**: the Moon is on the far side of the Earth.",
+          "image": "asset:s19-month.png",
+          "check": {
+            "id": "c19",
+            "q": "When are the tides **biggest**?",
+            "options": [
+              {
+                "val": "A",
+                "text": "At full moon and new moon"
+              },
+              {
+                "val": "B",
+                "text": "At half moon"
+              },
+              {
+                "val": "C",
+                "text": "Only at full moon"
+              }
+            ],
+            "correct": "A",
+            "exp": "The tides are biggest when the Sun, the Moon and the Earth are in a **line**: at **new moon** (day 0) and **full moon** (day 15). At half moon they are at right angles, and the range is only 2 m."
+          }
+        },
+        {
+          "layout": "showcase",
+          "accent": "#4a8b23",
+          "icon": "Anchor",
+          "eyebrow": "Effects of tides",
+          "title": "What Tides Do",
+          "titleFr": "Ce que font les marées",
+          "caption": "Which one happened to Mr Bowen’s boat? **Harbours:** at low tide the water is not deep enough for boats.",
+          "image": "asset:s20-photo.jpg"
+        },
+        {
+          "layout": "split",
+          "accent": "#0087a8",
+          "icon": "Building2",
+          "eyebrow": "Key word",
+          "eyebrowFr": "Mot clé",
+          "title": "Earth Tide",
+          "titleFr": "La marée terrestre",
+          "ratio": 45,
+          "inlineSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 840 560\" class=\"w-full h-full\">\n    <rect x=\"0\" y=\"0\" width=\"840\" height=\"560\" rx=\"14\" fill=\"#ffffff\"/>\n    <rect x=\"0.75\" y=\"0.75\" width=\"838.5\" height=\"558.5\" rx=\"13\" fill=\"none\" stroke=\"#e2e8f0\" stroke-width=\"1.5\"/>\n    <g fill=\"none\" stroke=\"#1a5fa8\" stroke-width=\"3\" stroke-dasharray=\"12 9\">\n      <path d=\"M 60 300 H 620\"/>\n      <rect x=\"100\" y=\"150\" width=\"90\" height=\"150\"/>\n      <rect x=\"210\" y=\"90\" width=\"110\" height=\"210\"/>\n      <rect x=\"340\" y=\"190\" width=\"80\" height=\"110\"/>\n      <path d=\"M 440 300 v -80 l 60 -50 l 60 50 v 80\"/>\n    </g>\n    <rect x=\"60\" y=\"360\" width=\"560\" height=\"140\" fill=\"#d9c7a3\" stroke=\"#2b2b2b\" stroke-width=\"3\"/>\n    <rect x=\"100\" y=\"210\" width=\"90\" height=\"150\" fill=\"#eef1f4\" stroke=\"#2b2b2b\" stroke-width=\"3\"/>\n    <rect x=\"210\" y=\"150\" width=\"110\" height=\"210\" fill=\"#e3e8ee\" stroke=\"#2b2b2b\" stroke-width=\"3\"/>\n    <rect x=\"340\" y=\"250\" width=\"80\" height=\"110\" fill=\"#eef1f4\" stroke=\"#2b2b2b\" stroke-width=\"3\"/>\n    <path d=\"M 440 360 v -80 l 60 -50 l 60 50 v 80 z\" fill=\"#f4e3d3\" stroke=\"#2b2b2b\" stroke-width=\"3\" stroke-linejoin=\"round\"/>\n    <rect x=\"120\" y=\"236\" width=\"20\" height=\"24\" fill=\"#9ec5e8\"/><rect x=\"150\" y=\"236\" width=\"20\" height=\"24\" fill=\"#9ec5e8\"/>\n    <rect x=\"232\" y=\"176\" width=\"22\" height=\"26\" fill=\"#9ec5e8\"/><rect x=\"276\" y=\"176\" width=\"22\" height=\"26\" fill=\"#9ec5e8\"/>\n    <rect x=\"232\" y=\"228\" width=\"22\" height=\"26\" fill=\"#9ec5e8\"/><rect x=\"276\" y=\"228\" width=\"22\" height=\"26\" fill=\"#9ec5e8\"/>\n    <line x1=\"690\" y1=\"330\" x2=\"690\" y2=\"314\" stroke=\"#c25e12\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n    <path d=\"M 690 300 L 682.3 314 L 697.7 314 Z\" fill=\"#c25e12\"/><line x1=\"690\" y1=\"330\" x2=\"690\" y2=\"346\" stroke=\"#c25e12\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n    <path d=\"M 690 360 L 697.7 346 L 682.3 346 Z\" fill=\"#c25e12\"/>\n    <text x=\"714\" y=\"324\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"25\" font-weight=\"bold\" fill=\"#c25e12\">about</text>\n    <text x=\"714\" y=\"354\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"25\" font-weight=\"bold\" fill=\"#c25e12\">30 cm</text>\n    <line x1=\"700\" y1=\"470\" x2=\"600\" y2=\"430\" stroke=\"#c25e12\" stroke-width=\"2\"/><circle cx=\"600\" cy=\"430\" r=\"4.5\" fill=\"#c25e12\"/>\n    <text x=\"640\" y=\"500\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"25\" font-weight=\"bold\" fill=\"#c25e12\">the ground</text>\n    <text x=\"440\" y=\"60\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"25\" font-weight=\"bold\" fill=\"#1a5fa8\">dashed: the same city,</text>\n    <text x=\"440\" y=\"92\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"25\" font-weight=\"bold\" fill=\"#1a5fa8\">6 hours later</text>\n    <text x=\"60\" y=\"540\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"20\" fill=\"#5b6770\">not to scale: the real rise is too small to draw</text>\n  </svg>",
+          "content": "The **land** has tides too. Hanoi goes up and down about **30 cm**, twice a day.",
+          "contentFr": "La **terre** aussi a des marées. Hanoi monte et descend d’environ **30 cm**, deux fois par jour.",
+          "notes": [
+            {
+              "tone": "write",
+              "text": "**Earth tide:** the land going up and down because of tidal forces.",
+              "textFr": "**Marée terrestre (earth tide) :** la terre qui monte et descend à cause des forces de marée."
+            }
+          ],
+          "reveal": {
+            "prompt": "Why don’t we feel it?",
+            "promptFr": "Pourquoi ne le sent-on pas ?",
+            "label": "Answer",
+            "labelFr": "Réponse",
+            "answer": "Everything goes up **together**: the ground, the buildings and you. Scientists study it to help predict **earthquakes** and **volcanoes**.",
+            "answerFr": "Tout monte **ensemble** : le sol, les bâtiments et toi. Les scientifiques l’étudient pour aider à prévoir les **séismes** et les **volcans**."
+          }
+        },
+        {
+          "layout": "split",
+          "accent": "#c25e12",
+          "icon": "Waves",
+          "eyebrow": "Put it together",
+          "eyebrowFr": "En résumé",
+          "title": "The Moon Pulls, the Earth Spins",
+          "titleFr": "La Lune tire, la Terre tourne",
+          "ratio": 50,
+          "inlineSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 840 800\" class=\"w-full h-full\">\n    <rect x=\"0\" y=\"0\" width=\"840\" height=\"800\" rx=\"14\" fill=\"#ffffff\"/>\n    <rect x=\"0.75\" y=\"0.75\" width=\"838.5\" height=\"798.5\" rx=\"13\" fill=\"none\" stroke=\"#e2e8f0\" stroke-width=\"1.5\"/>\n    <rect x=\"24\" y=\"20\" width=\"792\" height=\"220\" rx=\"18\" fill=\"#e8f1fa\"/>\n    <rect x=\"44\" y=\"120\" width=\"140\" height=\"80\" rx=\"10\" fill=\"#cfe6f5\"/>\n    <path d=\"M 44 120 q 17.5 -12 35 0 t 35 0 t 35 0 t 35 0\" fill=\"none\" stroke=\"#5b9bd5\" stroke-width=\"5\" stroke-linecap=\"round\"/>\n    <line x1=\"114\" y1=\"72\" x2=\"114\" y2=\"54\" stroke=\"#c25e12\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n    <path d=\"M 114 40 L 106.3 54 L 121.7 54 Z\" fill=\"#c25e12\"/><line x1=\"114\" y1=\"72\" x2=\"114\" y2=\"90\" stroke=\"#c25e12\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n    <path d=\"M 114 104 L 121.7 90 L 106.3 90 Z\" fill=\"#c25e12\"/>\n    <text x=\"220\" y=\"95\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"36\" font-weight=\"bold\" fill=\"#2b2b2b\">The sea</text>\n    <text x=\"220\" y=\"140\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"29\" fill=\"#2b2b2b\">goes up and down twice a day</text>\n    <text x=\"220\" y=\"182\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"27\" font-weight=\"bold\" fill=\"#c25e12\">tides</text>\n\n    <rect x=\"24\" y=\"256\" width=\"792\" height=\"220\" rx=\"18\" fill=\"#e2f2f6\"/>\n    <circle cx=\"110\" cy=\"366\" r=\"58\" fill=\"#d9dde3\" stroke=\"#2b2b2b\" stroke-width=\"3\"/>\n    <circle cx=\"89.7\" cy=\"348.6\" r=\"11.6\" fill=\"#c3c9d1\"/>\n    <circle cx=\"127.4\" cy=\"380.5\" r=\"15.1\" fill=\"#c3c9d1\"/>\n    <circle cx=\"132\" cy=\"342.8\" r=\"7\" fill=\"#c3c9d1\"/>\n    <text x=\"220\" y=\"331\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"36\" font-weight=\"bold\" fill=\"#2b2b2b\">The Moon</text>\n    <text x=\"220\" y=\"376\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"29\" fill=\"#2b2b2b\">pulls the oceans into 2 bulges</text>\n    <text x=\"220\" y=\"418\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"27\" font-weight=\"bold\" fill=\"#c25e12\">tidal force</text>\n\n    <rect x=\"24\" y=\"492\" width=\"792\" height=\"220\" rx=\"18\" fill=\"#fdf1e3\"/>\n    <line x1=\"162\" y1=\"602\" x2=\"174\" y2=\"602\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"155\" y1=\"628\" x2=\"165.4\" y2=\"634\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"136\" y1=\"647\" x2=\"142\" y2=\"657.4\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"110\" y1=\"654\" x2=\"110\" y2=\"666\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"84\" y1=\"647\" x2=\"78\" y2=\"657.4\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"65\" y1=\"628\" x2=\"54.6\" y2=\"634\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"58\" y1=\"602\" x2=\"46\" y2=\"602\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"65\" y1=\"576\" x2=\"54.6\" y2=\"570\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"84\" y1=\"557\" x2=\"78\" y2=\"546.6\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"110\" y1=\"550\" x2=\"110\" y2=\"538\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"136\" y1=\"557\" x2=\"142\" y2=\"546.6\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><line x1=\"155\" y1=\"576\" x2=\"165.4\" y2=\"570\" stroke=\"#e8a317\" stroke-width=\"4\" stroke-linecap=\"round\"/><circle cx=\"110\" cy=\"602\" r=\"46\" fill=\"#ffd45c\" stroke=\"#2b2b2b\" stroke-width=\"3\"/>\n    <text x=\"220\" y=\"567\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"36\" font-weight=\"bold\" fill=\"#2b2b2b\">The Sun</text>\n    <text x=\"220\" y=\"612\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"29\" fill=\"#2b2b2b\">in line with the Moon: bigger tides</text>\n    <text x=\"220\" y=\"654\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"27\" font-weight=\"bold\" fill=\"#c25e12\">full moon and new moon</text>\n\n    <rect x=\"24\" y=\"728\" width=\"792\" height=\"56\" rx=\"14\" fill=\"#0087a8\"/>\n    <text x=\"420\" y=\"767\" font-family=\"Inter, 'Segoe UI', system-ui, sans-serif\" font-size=\"28\" font-weight=\"bold\" fill=\"#ffffff\" text-anchor=\"middle\">The Moon pulls. The Earth spins. The Sun helps.</text>\n  </svg>",
+          "notes": [
+            {
+              "tone": "write",
+              "text": "The **Moon’s tidal force** pulls the oceans into **2 bulges**. The Earth **spins** through them: **2 high tides** a day. Tides are **biggest** when the Sun, the Moon and the Earth are in a **line**: at **full moon** and **new moon**.",
+              "textFr": "La **force de marée de la Lune** tire les océans en **2 bosses**. La Terre **tourne** à travers elles : **2 marées hautes** par jour. Les marées sont les **plus grandes** quand le Soleil, la Lune et la Terre sont **alignés** : à la **pleine lune** et à la **nouvelle lune**."
+            }
+          ],
+          "reveal": {
+            "label": "Who worked it out?",
+            "labelFr": "Qui l’a découvert ?",
+            "answer": "In **330 BCE**, a Greek sailor from **Marseille** saw that the tides follow the Moon. In **1687**, Newton explained why: **gravity**.",
+            "answerFr": "En **330 av. J.-C.**, un marin grec de **Marseille** a vu que les marées suivent la Lune. En **1687**, Newton a expliqué pourquoi : la **gravité**."
+          }
+        },
+        {
+          "layout": "stack",
+          "variant": "checklist",
+          "accent": "#0087a8",
+          "icon": "CheckCircle2",
+          "columns": 2,
+          "eyebrow": "Before you finish",
+          "eyebrowFr": "Avant de partir",
+          "title": "Can You Do These?",
+          "titleFr": "Sais-tu faire ceci ?",
+          "content": "> Check your notebook: **5 written panels** and **1 drawing**.",
+          "contentFr": "> Vérifie ton cahier : **5 encadrés recopiés** et **1 dessin**.",
+          "items": [
+            {
+              "text": "Explain what a **tide** and the **tidal range** are.",
+              "textFr": "Expliquer ce que sont la **marée** et le **marnage**."
+            },
+            {
+              "text": "Explain how the Moon’s **tidal force** gives **2 high tides** a day.",
+              "textFr": "Expliquer comment la **force de marée** de la Lune donne **2 marées hautes** par jour."
+            },
+            {
+              "text": "Explain why the **biggest** tides come at **full moon** and **new moon**.",
+              "textFr": "Expliquer pourquoi les **plus grandes** marées arrivent à la **pleine lune** et à la **nouvelle lune**."
+            },
+            {
+              "text": "Give **effects** of tides on the **sea** and on the **land**.",
+              "textFr": "Donner des **effets** des marées sur la **mer** et sur la **terre**."
+            }
+          ]
+        },
+        {
+          "layout": "hero",
+          "icon": "Target",
+          "brandFr": "Sciences 7e année",
+          "eyebrow": "Last question",
+          "title": "A Full Moon",
+          "titleFr": "Une pleine lune",
+          "subtitle": "It is a **full moon**. High tide is at **7 a.m.** When is the **next** high tide? Will the tides be **big** or **small**?",
+          "reveal": {
+            "label": "Big or small?",
+            "answer": "**Big:** at full moon, the Sun, the Moon and the Earth are in a line."
+          },
+          "check": {
+            "id": "c24",
+            "q": "High tide is at **7 a.m.** When is the **next** high tide?",
+            "options": [
+              {
+                "val": "A",
+                "text": "At about 1 p.m."
+              },
+              {
+                "val": "B",
+                "text": "At about 7 p.m."
+              },
+              {
+                "val": "C",
+                "text": "At 7 a.m. tomorrow"
+              }
+            ],
+            "correct": "B",
+            "exp": "High to high takes about **12 hours**: 7 a.m. + 12 hours = 7 p.m. 1 p.m. is 6 hours later: that is low tide."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "practice",
+      "id": "practice",
+      "title": "Practice: tide times, depths and the Moon",
+      "set": {
+        "title": "Tides: step by step",
+        "items": [
+          {
+            "id": "tf1",
+            "level": "focus",
+            "prompt": "Pip measures the depth of the water at the harbour every 3 hours. [[What is the tidal range?]]",
+            "table": {
+              "head": [
+                "Time",
+                "Depth (m)"
+              ],
+              "caption": "Pip’s harbour, one day",
+              "rows": [
+                [
+                  "3 a.m.",
+                  "5.0"
+                ],
+                [
+                  "6 a.m.",
+                  "3.5"
+                ],
+                [
+                  "9 a.m.",
+                  "2.0"
+                ],
+                [
+                  "12 noon",
+                  "3.5"
+                ],
+                [
+                  "3 p.m.",
+                  "5.0"
+                ],
+                [
+                  "6 p.m.",
+                  "3.5"
+                ],
+                [
+                  "9 p.m.",
+                  "2.0"
+                ]
+              ]
+            },
+            "steps": [
+              {
+                "title": "Find the depth at high tide",
+                "input": {
+                  "type": "number",
+                  "before": "High tide:",
+                  "after": "m",
+                  "answer": "5"
+                },
+                "hint": "High tide is the deepest water. Find the biggest number.",
+                "slips": [
+                  {
+                    "value": "3.5",
+                    "msg": "3.5 m is not the deepest. Find the biggest number in the table."
+                  }
+                ]
+              },
+              {
+                "title": "Find the depth at low tide",
+                "input": {
+                  "type": "number",
+                  "before": "Low tide:",
+                  "after": "m",
+                  "answer": "2"
+                },
+                "hint": "Low tide is the shallowest water. Find the smallest number."
+              },
+              {
+                "title": "Subtract to find the range",
+                "input": {
+                  "type": "number",
+                  "before": "<<5.0>> − <<2.0>> =",
+                  "after": "m",
+                  "answer": "3"
+                },
+                "line": "Tidal range: 5.0 m − 2.0 m = @ m",
+                "hint": "Tidal range = high tide depth − low tide depth.",
+                "why": "The tidal range is the difference between high tide and low tide.",
+                "slips": [
+                  {
+                    "value": "7",
+                    "msg": "7 m adds the depths. The range is a difference: subtract."
+                  },
+                  {
+                    "value": "5",
+                    "step": 1,
+                    "msg": "5 m is the depth at high tide. Now take away the low tide depth."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "tf2",
+            "level": "focus",
+            "prompt": "Look at Pip’s table. [[How many hours is it from one high tide to the next?]]",
+            "table": {
+              "head": [
+                "Time",
+                "Depth (m)"
+              ],
+              "caption": "Pip’s harbour, one day",
+              "rows": [
+                [
+                  "3 a.m.",
+                  "5.0"
+                ],
+                [
+                  "6 a.m.",
+                  "3.5"
+                ],
+                [
+                  "9 a.m.",
+                  "2.0"
+                ],
+                [
+                  "12 noon",
+                  "3.5"
+                ],
+                [
+                  "3 p.m.",
+                  "5.0"
+                ],
+                [
+                  "6 p.m.",
+                  "3.5"
+                ],
+                [
+                  "9 p.m.",
+                  "2.0"
+                ]
+              ]
+            },
+            "steps": [
+              {
+                "title": "When is the first high tide?",
+                "input": {
+                  "type": "choice",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "3 a.m."
+                    },
+                    {
+                      "id": "b",
+                      "text": "9 a.m."
+                    },
+                    {
+                      "id": "c",
+                      "text": "12 noon"
+                    }
+                  ],
+                  "answer": "a"
+                },
+                "line": "First high tide: 3 a.m. (5.0 m).",
+                "hint": "High tide is the deepest water: 5.0 m.",
+                "slips": [
+                  {
+                    "value": "b",
+                    "msg": "9 a.m. has the smallest depth, 2.0 m. That is low tide."
+                  }
+                ]
+              },
+              {
+                "title": "When is the next high tide?",
+                "input": {
+                  "type": "choice",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "9 a.m."
+                    },
+                    {
+                      "id": "b",
+                      "text": "3 p.m."
+                    },
+                    {
+                      "id": "c",
+                      "text": "9 p.m."
+                    }
+                  ],
+                  "answer": "b"
+                },
+                "line": "Next high tide: 3 p.m. (5.0 m).",
+                "hint": "Find 5.0 m again, lower in the table.",
+                "slips": [
+                  {
+                    "value": "a",
+                    "msg": "9 a.m. is low tide (2.0 m). Find the next 5.0 m."
+                  }
+                ]
+              },
+              {
+                "title": "Count the hours between them",
+                "input": {
+                  "type": "number",
+                  "before": "From 3 a.m. to 3 p.m. is",
+                  "after": "hours",
+                  "answer": "12"
+                },
+                "line": "High tide to high tide: @ hours.",
+                "hint": "Count on from 3 a.m.: 6 a.m., 9 a.m., 12 noon, 3 p.m. Each row is 3 hours.",
+                "why": "High to high is about 12 hours, so there are two high tides a day.",
+                "slips": [
+                  {
+                    "value": "6",
+                    "msg": "6 hours is high tide to low tide. Count on to the next high tide."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "tf3",
+            "level": "focus",
+            "prompt": "The key words of the lesson. [[Choose the right meaning for each word.]]",
+            "steps": [
+              {
+                "title": "What is a tide?",
+                "input": {
+                  "type": "choice",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "The change in the depth of the sea during the day"
+                    },
+                    {
+                      "id": "b",
+                      "text": "A big wave in a storm"
+                    },
+                    {
+                      "id": "c",
+                      "text": "The wind on the sea"
+                    }
+                  ],
+                  "answer": "a"
+                },
+                "line": "Tide: the change in the depth of the sea during the day.",
+                "hint": "Think of the road to Holy Island: dry, then under the sea.",
+                "slips": [
+                  {
+                    "value": "b",
+                    "msg": "A wave comes and goes in seconds. A tide is a slow change in depth over hours."
+                  }
+                ]
+              },
+              {
+                "title": "What is low tide?",
+                "input": {
+                  "type": "choice",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "The deepest water"
+                    },
+                    {
+                      "id": "b",
+                      "text": "The shallowest water"
+                    },
+                    {
+                      "id": "c",
+                      "text": "The water coming in"
+                    }
+                  ],
+                  "answer": "b"
+                },
+                "line": "Low tide: the shallowest water.",
+                "hint": "Low means the water is down.",
+                "slips": [
+                  {
+                    "value": "a",
+                    "msg": "The deepest water is high tide. Low tide is the shallowest."
+                  }
+                ]
+              },
+              {
+                "title": "What is tidal force?",
+                "input": {
+                  "type": "choice",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "The pull of the wind on the oceans"
+                    },
+                    {
+                      "id": "b",
+                      "text": "The pull of the Moon’s gravity on the oceans"
+                    },
+                    {
+                      "id": "c",
+                      "text": "The spin of the Earth"
+                    }
+                  ],
+                  "answer": "b"
+                },
+                "line": "Tidal force: the pull of the Moon’s gravity on the oceans.",
+                "hint": "What is pulling the sea? Something big in the sky.",
+                "why": "The Moon’s gravity pulls the oceans into two bulges.",
+                "slips": [
+                  {
+                    "value": "c",
+                    "msg": "The Earth spins through the bulges, but the pull comes from the Moon’s gravity."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "tf4",
+            "level": "focus",
+            "prompt": "This is the Earth from above the North Pole. The harbour is at the top. [[Is it high tide or low tide at the harbour?]]",
+            "inlineSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 320\" role=\"img\" aria-label=\"The Earth with the harbour at the top, at right angles to the Moon\">\n<rect x=\"0\" y=\"0\" width=\"600\" height=\"320\" rx=\"16\" fill=\"#ffffff\"/>\n<circle cx=\"220\" cy=\"160\" r=\"100\" fill=\"#a8d18d\" stroke=\"#2b2b2b\" stroke-width=\"4\"/>\n<path d=\"M175 105 q20 -15 35 5 q-10 25 -30 15 z M240 190 q25 -5 30 20 q-20 15 -35 -5 z M160 185 q15 10 5 30 q-20 -5 -5 -30 z\" fill=\"#7fb36a\"/>\n<circle cx=\"220\" cy=\"160\" r=\"5\" fill=\"#2b2b2b\"/>\n<circle cx=\"500\" cy=\"160\" r=\"36\" fill=\"#d9dde3\" stroke=\"#2b2b2b\" stroke-width=\"4\"/>\n<circle cx=\"490\" cy=\"150\" r=\"7\" fill=\"#bcc3cc\"/><circle cx=\"510\" cy=\"170\" r=\"9\" fill=\"#bcc3cc\"/>\n<text x=\"500\" y=\"232\" font-family=\"Inter, Segoe UI, sans-serif\" font-size=\"26\" font-weight=\"800\" fill=\"#2b2b2b\" text-anchor=\"middle\">Moon</text>\n<circle cx=\"220\" cy=\"60\" r=\"17\" fill=\"none\" stroke=\"#d63b2f\" stroke-width=\"4\" opacity=\"0.5\"/>\n<circle cx=\"220\" cy=\"60\" r=\"10\" fill=\"#d63b2f\" stroke=\"#ffffff\" stroke-width=\"3\"/>\n<text x=\"236\" y=\"40\" font-family=\"Inter, Segoe UI, sans-serif\" font-size=\"26\" font-weight=\"800\" fill=\"#b3261e\" text-anchor=\"start\">harbour</text>\n<text x=\"590\" y=\"308\" font-family=\"Inter, Segoe UI, sans-serif\" font-size=\"20\" fill=\"#5b6770\" text-anchor=\"end\">not to scale</text>\n</svg>",
+            "steps": [
+              {
+                "title": "Where are the two bulges of water?",
+                "input": {
+                  "type": "choice",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "Facing the Moon and on the far side"
+                    },
+                    {
+                      "id": "b",
+                      "text": "Only on the side facing the Moon"
+                    },
+                    {
+                      "id": "c",
+                      "text": "At the top and the bottom"
+                    }
+                  ],
+                  "answer": "a"
+                },
+                "line": "The bulges: facing the Moon and on the far side.",
+                "hint": "The Moon stretches the Earth along the line to the Moon.",
+                "slips": [
+                  {
+                    "value": "b",
+                    "msg": "The far side is left behind, so there is a bulge there too."
+                  }
+                ]
+              },
+              {
+                "title": "Is the harbour in a bulge?",
+                "input": {
+                  "type": "choice",
+                  "options": [
+                    {
+                      "id": "yes",
+                      "text": "Yes"
+                    },
+                    {
+                      "id": "no",
+                      "text": "No: it is at right angles to the Moon"
+                    }
+                  ],
+                  "answer": "no"
+                },
+                "line": "The harbour is at right angles to the Moon.",
+                "hint": "Is the harbour on the line from the Earth to the Moon?"
+              },
+              {
+                "title": "High tide or low tide?",
+                "input": {
+                  "type": "choice",
+                  "options": [
+                    {
+                      "id": "high",
+                      "text": "High tide"
+                    },
+                    {
+                      "id": "low",
+                      "text": "Low tide"
+                    }
+                  ],
+                  "answer": "low"
+                },
+                "line": "At the top: @.",
+                "hint": "No bulge means the water is shallow.",
+                "why": "High tide is in line with the Moon. Low tide is at right angles to it.",
+                "slips": [
+                  {
+                    "value": "high",
+                    "step": 1,
+                    "msg": "The bulges are on the line to the Moon. The top is at right angles: low tide."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "tp1",
+            "level": "practice",
+            "prompt": "At a harbour the average depth is {{7.0 m}}. The tidal range is {{3.0 m}}. [[What is the maximum depth?]]",
+            "steps": [
+              {
+                "title": "When is the water deepest?",
+                "input": {
+                  "type": "choice",
+                  "options": [
+                    {
+                      "id": "high",
+                      "text": "High tide"
+                    },
+                    {
+                      "id": "low",
+                      "text": "Low tide"
+                    }
+                  ],
+                  "answer": "high"
+                },
+                "line": "The maximum depth is at high tide.",
+                "hint": "Maximum means the biggest depth.",
+                "slips": [
+                  {
+                    "value": "low",
+                    "msg": "Low tide is the shallowest water. The maximum is at high tide."
+                  }
+                ]
+              },
+              {
+                "key": true,
+                "title": "How far above the average?",
+                "input": {
+                  "type": "number",
+                  "before": "Half of {{3.0}} =",
+                  "after": "m",
+                  "answer": "1.5"
+                },
+                "hint": "The range is shared: half above the average, half below.",
+                "slips": [
+                  {
+                    "value": "3",
+                    "msg": "The water does not go the whole range above the average. Half is above, half is below."
+                  }
+                ]
+              },
+              {
+                "title": "Add it to the average",
+                "input": {
+                  "type": "number",
+                  "before": "{{7.0}} + <<1.5>> =",
+                  "after": "m",
+                  "answer": "8.5"
+                },
+                "line": "Maximum depth: 7.0 + 1.5 = @ m",
+                "hint": "The maximum is above the average, so add.",
+                "why": "Half the range above the average: 7.0 + 1.5 = 8.5 m.",
+                "slips": [
+                  {
+                    "value": "10",
+                    "step": 1,
+                    "msg": "10 m adds the whole range. Only half of it is above the average."
+                  },
+                  {
+                    "value": "5.5",
+                    "msg": "5.5 m is below the average: that is low tide. The maximum is 7.0 + 1.5."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "tp2",
+            "level": "practice",
+            "prompt": "High tide at a harbour is at {{2 a.m.}} [[When is the next low tide?]]",
+            "steps": [
+              {
+                "key": true,
+                "title": "How long from high to low?",
+                "input": {
+                  "type": "number",
+                  "before": "High tide to low tide:",
+                  "after": "hours",
+                  "answer": "6"
+                },
+                "hint": "High to high is 12 hours. Low tide comes halfway.",
+                "slips": [
+                  {
+                    "value": "12",
+                    "msg": "12 hours is high tide to the next high tide. Low tide comes halfway."
+                  }
+                ]
+              },
+              {
+                "title": "Add the hours to 2 a.m.",
+                "input": {
+                  "type": "number",
+                  "before": "2 + <<6>> =",
+                  "answer": "8"
+                },
+                "hint": "Count on 6 hours from 2 a.m."
+              },
+              {
+                "title": "Choose the time",
+                "input": {
+                  "type": "choice",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "8 a.m."
+                    },
+                    {
+                      "id": "b",
+                      "text": "2 p.m."
+                    },
+                    {
+                      "id": "c",
+                      "text": "3 a.m."
+                    }
+                  ],
+                  "answer": "a"
+                },
+                "line": "Next low tide: about @.",
+                "hint": "2 a.m. + 6 hours.",
+                "why": "A quarter turn of the Earth takes 6 hours: from high tide to low tide.",
+                "slips": [
+                  {
+                    "value": "b",
+                    "step": 1,
+                    "msg": "2 p.m. is 12 hours later: the next high tide."
+                  },
+                  {
+                    "value": "c",
+                    "step": 1,
+                    "msg": "One hour is too short. High to low takes about 6 hours."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "tp3",
+            "level": "practice",
+            "prompt": "Today high tide is at {{9:00 a.m.}} [[When is high tide tomorrow morning?]]",
+            "steps": [
+              {
+                "key": true,
+                "title": "Same time, earlier or later?",
+                "input": {
+                  "type": "choice",
+                  "options": [
+                    {
+                      "id": "same",
+                      "text": "At the same time"
+                    },
+                    {
+                      "id": "later",
+                      "text": "A little later"
+                    },
+                    {
+                      "id": "earlier",
+                      "text": "A little earlier"
+                    }
+                  ],
+                  "answer": "later"
+                },
+                "line": "Tomorrow high tide is a little later.",
+                "hint": "The Moon moves on a little every day. The Earth must turn a little more.",
+                "slips": [
+                  {
+                    "value": "same",
+                    "msg": "The Moon moves on every day, so the Earth must turn a little more to face it again."
+                  }
+                ]
+              },
+              {
+                "title": "How many minutes later?",
+                "input": {
+                  "type": "number",
+                  "before": "About",
+                  "after": "minutes later",
+                  "answer": "50"
+                },
+                "hint": "24 hours ÷ 29 days is about this many minutes."
+              },
+              {
+                "title": "Choose the time",
+                "input": {
+                  "type": "choice",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "9:00 a.m."
+                    },
+                    {
+                      "id": "b",
+                      "text": "9:50 a.m."
+                    },
+                    {
+                      "id": "c",
+                      "text": "8:10 a.m."
+                    }
+                  ],
+                  "answer": "b"
+                },
+                "line": "High tide tomorrow: about @.",
+                "hint": "9:00 a.m. + 50 minutes.",
+                "slips": [
+                  {
+                    "value": "a",
+                    "step": 1,
+                    "msg": "9:00 a.m. is the same time. High tide comes about 50 minutes later each day."
+                  },
+                  {
+                    "value": "c",
+                    "step": 1,
+                    "msg": "8:10 a.m. is 50 minutes earlier. It comes later, not earlier."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "tp4",
+            "level": "practice",
+            "prompt": "Pip writes the tidal range at the harbour once a week. [[On which days are the Sun, the Moon and the Earth in a line?]]",
+            "table": {
+              "head": [
+                "Day",
+                "The Moon",
+                "Tidal range (m)"
+              ],
+              "caption": "Pip’s harbour, one month",
+              "rows": [
+                [
+                  "Day 1",
+                  "new moon",
+                  "5.6"
+                ],
+                [
+                  "Day 8",
+                  "half moon",
+                  "2.4"
+                ],
+                [
+                  "Day 15",
+                  "full moon",
+                  "5.8"
+                ],
+                [
+                  "Day 22",
+                  "half moon",
+                  "2.2"
+                ]
+              ]
+            },
+            "steps": [
+              {
+                "title": "Find the biggest tidal range",
+                "input": {
+                  "type": "number",
+                  "before": "Biggest:",
+                  "after": "m",
+                  "answer": "5.8"
+                },
+                "hint": "Look down the last column for the biggest number."
+              },
+              {
+                "key": true,
+                "title": "Which days have big ranges?",
+                "input": {
+                  "type": "multi",
+                  "options": [
+                    {
+                      "id": "d1",
+                      "text": "Day 1"
+                    },
+                    {
+                      "id": "d8",
+                      "text": "Day 8"
+                    },
+                    {
+                      "id": "d15",
+                      "text": "Day 15"
+                    },
+                    {
+                      "id": "d22",
+                      "text": "Day 22"
+                    }
+                  ],
+                  "answer": [
+                    "d1",
+                    "d15"
+                  ]
+                },
+                "line": "Big ranges: day 1 (5.6 m) and day 15 (5.8 m).",
+                "hint": "Two days have ranges over 5 m.",
+                "slips": [
+                  {
+                    "value": [
+                      "d15"
+                    ],
+                    "msg": "Day 1 has a big range too: 5.6 m. There are two big days."
+                  }
+                ]
+              },
+              {
+                "title": "What is the Moon like then?",
+                "input": {
+                  "type": "choice",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "New moon and full moon"
+                    },
+                    {
+                      "id": "b",
+                      "text": "Half moon"
+                    },
+                    {
+                      "id": "c",
+                      "text": "Only full moon"
+                    }
+                  ],
+                  "answer": "a"
+                },
+                "line": "In a line: at @.",
+                "hint": "Read the Moon column for day 1 and day 15.",
+                "why": "The tides are biggest when the Sun, the Moon and the Earth are in a line: new moon and full moon.",
+                "slips": [
+                  {
+                    "value": "b",
+                    "step": 2,
+                    "msg": "At half moon the ranges are small (2.4 m and 2.2 m). They are at right angles then."
+                  },
+                  {
+                    "value": "c",
+                    "step": 2,
+                    "msg": "Day 1 is a new moon, and its range is big too. New moon and full moon."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "tc1",
+            "level": "challenge",
+            "prompt": "At a river mouth the average depth is {{4.0 m}}. The tidal range is {{2.6 m}}. [[How deep is the water at low tide?]]",
+            "steps": [
+              {
+                "title": "How far below the average?",
+                "input": {
+                  "type": "number",
+                  "before": "Half of {{2.6}} =",
+                  "after": "m",
+                  "answer": "1.3"
+                },
+                "hint": "The range is shared: half above the average, half below."
+              },
+              {
+                "title": "Take it away from the average",
+                "input": {
+                  "type": "number",
+                  "before": "{{4.0}} − <<1.3>> =",
+                  "after": "m",
+                  "answer": "2.7"
+                },
+                "line": "Low tide depth: 4.0 − 1.3 = @ m",
+                "hint": "Low tide is below the average, so subtract.",
+                "slips": [
+                  {
+                    "value": "1.4",
+                    "step": 1,
+                    "msg": "1.4 m takes away the whole range. Only half of it is below the average: 1.3 m."
+                  },
+                  {
+                    "value": "5.3",
+                    "step": 2,
+                    "msg": "5.3 m is above the average: that is high tide. Low tide is 4.0 − 1.3."
+                  },
+                  {
+                    "value": "6.6",
+                    "step": 1,
+                    "msg": "6.6 m adds the whole range. Low tide is below the average, by half the range."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "tc2",
+            "level": "challenge",
+            "prompt": "Tonight high tide is at {{11:30 p.m.}} [[When is high tide tomorrow night?]]",
+            "steps": [
+              {
+                "title": "How much later each day?",
+                "input": {
+                  "type": "number",
+                  "before": "About",
+                  "after": "minutes later",
+                  "answer": "50"
+                },
+                "hint": "High tide comes a little later every day."
+              },
+              {
+                "title": "Count on past midnight",
+                "input": {
+                  "type": "number",
+                  "before": "11:30 p.m. to midnight is",
+                  "after": "minutes",
+                  "answer": "30"
+                },
+                "hint": "How many minutes from 11:30 to 12:00?"
+              },
+              {
+                "title": "Choose the time",
+                "input": {
+                  "type": "choice",
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": "12:20 a.m."
+                    },
+                    {
+                      "id": "b",
+                      "text": "11:30 p.m."
+                    },
+                    {
+                      "id": "c",
+                      "text": "10:40 p.m."
+                    },
+                    {
+                      "id": "d",
+                      "text": "12:50 a.m."
+                    }
+                  ],
+                  "answer": "a"
+                },
+                "line": "High tide tomorrow night: about @ (after midnight).",
+                "hint": "30 minutes gets to midnight. Then 20 more.",
+                "why": "50 minutes = 30 to midnight + 20 more: 12:20 a.m.",
+                "slips": [
+                  {
+                    "value": "b",
+                    "step": 1,
+                    "msg": "11:30 p.m. is the same time. High tide is about 50 minutes later each day."
+                  },
+                  {
+                    "value": "c",
+                    "step": 1,
+                    "msg": "10:40 p.m. is 50 minutes earlier. It comes later, not earlier."
+                  },
+                  {
+                    "value": "d",
+                    "step": 2,
+                    "msg": "12:50 a.m. adds 50 minutes to midnight. 30 of the 50 minutes get you to midnight."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "tc3",
+            "level": "challenge",
+            "prompt": "At harbour A, high tide is {{8.2 m}} deep and low tide is {{1.4 m}}. At harbour B, high tide is {{3.1 m}} and low tide is {{2.3 m}}. [[How much bigger is the tidal range at harbour A?]]",
+            "table": {
+              "head": [
+                "Harbour",
+                "High tide (m)",
+                "Low tide (m)"
+              ],
+              "rows": [
+                [
+                  "A",
+                  "{{8.2}}",
+                  "{{1.4}}"
+                ],
+                [
+                  "B",
+                  "{{3.1}}",
+                  "{{2.3}}"
+                ]
+              ]
+            },
+            "steps": [
+              {
+                "title": "Find the range at harbour A",
+                "input": {
+                  "type": "number",
+                  "before": "8.2 − 1.4 =",
+                  "after": "m",
+                  "answer": "6.8"
+                },
+                "hint": "Range = high tide depth − low tide depth."
+              },
+              {
+                "title": "Find the range at harbour B",
+                "input": {
+                  "type": "number",
+                  "before": "3.1 − 2.3 =",
+                  "after": "m",
+                  "answer": "0.8"
+                },
+                "hint": "Do the same for harbour B."
+              },
+              {
+                "title": "Find the difference between the ranges",
+                "input": {
+                  "type": "number",
+                  "before": "<<6.8>> − <<0.8>> =",
+                  "after": "m",
+                  "answer": "6"
+                },
+                "line": "Harbour A’s range is @ m bigger (6.8 m and 0.8 m).",
+                "hint": "Subtract the smaller range from the bigger one.",
+                "slips": [
+                  {
+                    "value": "5.1",
+                    "step": 1,
+                    "msg": "5.1 m compares the high tides only (8.2 − 3.1). Find each tidal range first."
+                  },
+                  {
+                    "value": "0.9",
+                    "step": 1,
+                    "msg": "0.9 m compares the low tides only (2.3 − 1.4). Find each tidal range first."
+                  },
+                  {
+                    "value": "7.6",
+                    "step": 2,
+                    "msg": "7.6 m adds the two ranges. How much bigger means subtract."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "tc4",
+            "level": "challenge",
+            "prompt": "At 6 a.m. the harbour faces the Moon. It is high tide. The Earth spins once in 24 hours. [[What is the tide at the harbour 12 hours later, at 6 p.m.?]]",
+            "inlineSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 320\" role=\"img\" aria-label=\"The Earth with the harbour facing the Moon\">\n<rect x=\"0\" y=\"0\" width=\"600\" height=\"320\" rx=\"16\" fill=\"#ffffff\"/>\n<circle cx=\"220\" cy=\"160\" r=\"100\" fill=\"#a8d18d\" stroke=\"#2b2b2b\" stroke-width=\"4\"/>\n<path d=\"M175 105 q20 -15 35 5 q-10 25 -30 15 z M240 190 q25 -5 30 20 q-20 15 -35 -5 z M160 185 q15 10 5 30 q-20 -5 -5 -30 z\" fill=\"#7fb36a\"/>\n<circle cx=\"220\" cy=\"160\" r=\"5\" fill=\"#2b2b2b\"/>\n<circle cx=\"500\" cy=\"160\" r=\"36\" fill=\"#d9dde3\" stroke=\"#2b2b2b\" stroke-width=\"4\"/>\n<circle cx=\"490\" cy=\"150\" r=\"7\" fill=\"#bcc3cc\"/><circle cx=\"510\" cy=\"170\" r=\"9\" fill=\"#bcc3cc\"/>\n<text x=\"500\" y=\"232\" font-family=\"Inter, Segoe UI, sans-serif\" font-size=\"26\" font-weight=\"800\" fill=\"#2b2b2b\" text-anchor=\"middle\">Moon</text>\n<circle cx=\"320\" cy=\"160\" r=\"17\" fill=\"none\" stroke=\"#d63b2f\" stroke-width=\"4\" opacity=\"0.5\"/>\n<circle cx=\"320\" cy=\"160\" r=\"10\" fill=\"#d63b2f\" stroke=\"#ffffff\" stroke-width=\"3\"/>\n<text x=\"336\" y=\"128\" font-family=\"Inter, Segoe UI, sans-serif\" font-size=\"26\" font-weight=\"800\" fill=\"#b3261e\" text-anchor=\"start\">harbour</text>\n<text x=\"590\" y=\"308\" font-family=\"Inter, Segoe UI, sans-serif\" font-size=\"20\" fill=\"#5b6770\" text-anchor=\"end\">not to scale</text>\n</svg>",
+            "steps": [
+              {
+                "title": "How much does the Earth turn?",
+                "input": {
+                  "type": "choice",
+                  "options": [
+                    {
+                      "id": "q",
+                      "text": "A quarter turn"
+                    },
+                    {
+                      "id": "h",
+                      "text": "Half a turn"
+                    },
+                    {
+                      "id": "w",
+                      "text": "A whole turn"
+                    }
+                  ],
+                  "answer": "h"
+                },
+                "line": "12 hours is half a turn.",
+                "hint": "24 hours is one whole turn.",
+                "slips": [
+                  {
+                    "value": "q",
+                    "msg": "A quarter turn is 6 hours. 12 hours is half of 24."
+                  }
+                ]
+              },
+              {
+                "title": "Where is the harbour now?",
+                "input": {
+                  "type": "choice",
+                  "options": [
+                    {
+                      "id": "far",
+                      "text": "On the far side, away from the Moon"
+                    },
+                    {
+                      "id": "top",
+                      "text": "At right angles to the Moon"
+                    },
+                    {
+                      "id": "near",
+                      "text": "Facing the Moon"
+                    }
+                  ],
+                  "answer": "far"
+                },
+                "line": "At 6 p.m. the harbour is on the far side.",
+                "hint": "Half a turn takes it to the other side of the Earth."
+              },
+              {
+                "title": "High tide or low tide?",
+                "input": {
+                  "type": "choice",
+                  "options": [
+                    {
+                      "id": "high",
+                      "text": "High tide"
+                    },
+                    {
+                      "id": "low",
+                      "text": "Low tide"
+                    }
+                  ],
+                  "answer": "high"
+                },
+                "line": "At 6 p.m.: @.",
+                "hint": "Is there a bulge on the far side?",
+                "why": "There is a bulge on the far side too, so it is high tide again: two high tides a day.",
+                "slips": [
+                  {
+                    "value": "low",
+                    "step": 2,
+                    "msg": "The far side has a bulge too: the Earth is stretched. So it is high tide."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "assets": {
+    "s03-harbour-day.png": {
+      "alt": "Mr Bowen’s harbour: a wall with a tide board and a boat on the water, and a graph of the water depth from 6 a.m. to 6 a.m. the next morning. The dots go 6, 4, 2, 4, 6, 4, 2, 4, 6 metres, joined by a wavy line. A box says: High to high: 12 hours.",
+      "from": "slide 3: s03-harbour-day.png"
+    },
+    "s05-holy-island.png": {
+      "alt": "Two photos of the road to Holy Island, England, from a car. Left: the road is dry, with mud and weed beside it. Right, later the same day: the sea covers the road and the mud.",
+      "from": "slide 5: s05-holy-island.png"
+    },
+    "s06-photo.jpg": {
+      "alt": "Two photos of the same harbour in the Bay of Fundy, Canada. High tide: the fishing boats float on deep water. Low tide, 6 hours later: the same boats sit on the mud.",
+      "credit": "Photos: Dylan Kereluk, from White Rock, Canada (CC BY 2.0); Dylan Kereluk, from White Rock, Canada (CC BY 2.0), Wikimedia Commons",
+      "credits": [
+        {
+          "file": "fundy-high.jpg",
+          "title": "Hall's Harbour, Bay of Fundy, Nova Scotia, at high tide",
+          "artist": "Dylan Kereluk, from White Rock, Canada",
+          "license": "CC BY 2.0",
+          "url": "https://commons.wikimedia.org/wiki/File:Bay_of_Fundy_-_Tide_In.jpg"
+        },
+        {
+          "file": "fundy-low.jpg",
+          "title": "Hall's Harbour, Bay of Fundy, Nova Scotia, at low tide",
+          "artist": "Dylan Kereluk, from White Rock, Canada",
+          "license": "CC BY 2.0",
+          "url": "https://commons.wikimedia.org/wiki/File:Bay_of_Fundy_-_Tide_Out.jpg"
+        }
+      ],
+      "from": "slide 6: an SVG with 2 photo(s), drawn to JPEG",
+      "w": 1120,
+      "h": 440
+    },
+    "s09-boat-strip.png": {
+      "alt": "A story in four pictures. 1: 6 a.m. Mr Bowen ties up his boat. Very tight. 2: 12 noon. He comes back. His boat is hanging from the wall. 3: He climbs down to look and falls asleep on the mud. 4: 6 p.m. The sea comes back. He is now very wet.",
+      "from": "slide 9: s09-boat-strip.png"
+    },
+    "s13-spin-6pm.png": {
+      "alt": "The Earth from above the North Pole, with the water stretched into two bulges: high tide on the side facing the Moon and on the far side, low tide at the top and bottom. Mr Bowen’s harbour (red) is on the far side. Time: 6:00 p.m. Water at the harbour: 6.0 m, HIGH TIDE. The graph goes from 6 m at 6 a.m. down to 2 m at 12 noon and back up to 6 m at 6 p.m.",
+      "from": "slide 13: s13-spin-6pm.png"
+    },
+    "s19-month.png": {
+      "alt": "A model of one month. Left: the Sun far away on the right, the Earth with its water stretched into bulges, and the Moon on the far side of the Earth, all in a line. A green box says: Sun, Moon and Earth in a line: the BIGGEST tides! Right: full moon, day 14, tidal range 6.0 m, and a graph of the tidal range for the whole month: 6 m on day 0, 2 m near day 7, 6 m near day 15, 2 m near day 22, 6 m on day 29.",
+      "from": "slide 19: s19-month.png"
+    },
+    "s20-photo.jpg": {
+      "alt": "Four photos. Harbours: boats stuck on the sand at low tide. Coastal floods: St Mark’s Square in Venice, Italy, under water at a high tide with strong wind. Food: a black and white bird with an orange beak that eats shellfish at low tide. Electricity: a tidal power station in France, where moving water turns turbines.",
+      "credit": "Photos: Philip Halling (CC BY-SA 2.0); Javier Valero Iglesias (CC BY-SA 2.0); Andreas Trepte, www.photo-natur.de (CC BY-SA 2.5); Dani 7C3 (Wikimedia Commons) (CC BY 2.5), Wikimedia Commons",
+      "credits": [
+        {
+          "file": "harbour.jpg",
+          "title": "Low tide in Clovelly Harbour, Devon: boats sitting on the sand by the harbour wall",
+          "artist": "Philip Halling",
+          "license": "CC BY-SA 2.0",
+          "url": "https://commons.wikimedia.org/wiki/File:Low_tide_in_Clovelly_Harbour_-_geograph.org.uk_-_420671.jpg"
+        },
+        {
+          "file": "venice.jpg",
+          "title": "St Mark's Square, Venice, flooded by acqua alta (a high tide pushed in by the wind)",
+          "artist": "Javier Valero Iglesias",
+          "license": "CC BY-SA 2.0",
+          "url": "https://commons.wikimedia.org/wiki/File:Plaza_de_San_Marcos_con_%27acqua_alta%27._St_Mark%27s_Square_whith_%27acqua_alta%27.jpg"
+        },
+        {
+          "file": "oystercatcher.jpg",
+          "title": "Eurasian oystercatcher at the water's edge (it feeds on shellfish when the tide is out)",
+          "artist": "Andreas Trepte, www.photo-natur.de",
+          "license": "CC BY-SA 2.5",
+          "url": "https://commons.wikimedia.org/wiki/File:Haematopus_ostralegus_He.jpg"
+        },
+        {
+          "file": "rance.jpg",
+          "title": "The Rance tidal power station near Saint-Malo, France (1966): the tide flows through its turbines",
+          "artist": "Dani 7C3 (Wikimedia Commons)",
+          "license": "CC BY 2.5",
+          "url": "https://commons.wikimedia.org/wiki/File:Rance_tidal_power_plant.JPG"
+        }
+      ],
+      "from": "slide 20: an SVG with 4 photo(s), drawn to JPEG",
+      "w": 1120,
+      "h": 440
+    }
+  }
+}
