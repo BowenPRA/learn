@@ -428,7 +428,7 @@ for (const job of jobs) {
   delete assets[job.file]
   for (const s of out) {
     if (s.image === `asset:${job.file}`) delete s.image
-    for (const c of [...(Array.isArray(s.columns) ? s.columns : []), ...(Array.isArray(s.items) ? s.items : [])]) if (c?.image === `asset:${job.file}`) delete c.image
+    for (const c of [...(s.columns || []), ...(s.items || [])]) if (c?.image === `asset:${job.file}`) delete c.image
   }
 }
 // old pictures from an earlier run
