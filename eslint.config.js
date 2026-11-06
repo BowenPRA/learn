@@ -5,7 +5,8 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist', 'shots']),
+  // classroom/src and classroom/content are copies of BowenPRA/classroom, linted there.
+  globalIgnores(['dist', 'shots', 'classroom/src', 'classroom/content', 'classroom/tailwind.config.js']),
   {
     files: ['**/*.{js,jsx}'],
     extends: [js.configs.recommended, reactHooks.configs.flat.recommended, reactRefresh.configs.vite],

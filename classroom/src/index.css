@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+/* The deck fills the visible viewport. 100vh overshoots on a phone, where the
+   address bar is counted; dvh tracks what is actually visible, and the vh line
+   is the fallback for browsers without it. No rubber-band pull-to-refresh
+   mid-lesson either. */
+.app-screen {
+  height: 100vh;
+  height: 100dvh;
+  overscroll-behavior-y: none;
+}
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* A course's own colour on the home, course and homework pages. The page sets
+   --accent to the course's hex; the text shades are darkened for a white
+   background and lightened for a dark one, because the brand colours are too
+   pale to read as small type on either. */
+.accent-bg {
+  background-color: var(--accent);
+}
+.accent-text {
+  color: color-mix(in srgb, var(--accent) 65%, black);
+}
+.dark .accent-text {
+  color: color-mix(in srgb, var(--accent) 60%, white);
+}
+.accent-solid {
+  background-color: color-mix(in srgb, var(--accent) 62%, black);
+  color: white;
+}
+.accent-tint {
+  background-color: color-mix(in srgb, var(--accent) 11%, transparent);
+}
+.dark .accent-tint {
+  background-color: color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.accent-glow {
+  background: radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 60%);
+}
+.dark .accent-glow {
+  background: radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%);
+}
+
+/* Thin, theme-aware scrollbar used inside scrolling slide panels. */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(148, 163, 184, 0.3);
+  border-radius: 10px;
+}
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(71, 85, 105, 0.4);
+}
+
+/* "That guess was wrong" nudge, used by the Word Wall tiles. Kept here because
+   tailwindcss-animate has no shake and a keyframe cannot live in a class list. */
+@keyframes wall-shake {
+  10%,
+  90% {
+    transform: translate3d(-3px, 0, 0);
+  }
+  20%,
+  80% {
+    transform: translate3d(5px, 0, 0);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-7px, 0, 0);
+  }
+  40%,
+  60% {
+    transform: translate3d(7px, 0, 0);
+  }
+}
+
+/* The phone remote's countdown (TimerBadge, DeckChrome.jsx) sits at the top
+   centre of the slide. On a title slide that is where the "Year 7 …" pill and
+   the date sit, so they step aside (keeping their space) while it runs. */
+[data-timer='on'] .hero-top {
+  visibility: hidden;
+}

@@ -1,0 +1,65 @@
+[
+  {
+    "file": "fundy-high.jpg",
+    "name": "Bay of Fundy - Tide In.jpg",
+    "title": "Hall's Harbour, Bay of Fundy, Nova Scotia, at high tide",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Bay_of_Fundy_-_Tide_In.jpg",
+    "license": "CC BY 2.0",
+    "artist": "Dylan Kereluk, from White Rock, Canada",
+    "usage": "TIDE_PHOTOS (slide 6), left half; the 960 px Commons thumbnail, re-encoded at quality 80. The same view as fundy-low.jpg."
+  },
+  {
+    "file": "fundy-low.jpg",
+    "name": "Bay of Fundy - Tide Out.jpg",
+    "title": "Hall's Harbour, Bay of Fundy, Nova Scotia, at low tide",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Bay_of_Fundy_-_Tide_Out.jpg",
+    "license": "CC BY 2.0",
+    "artist": "Dylan Kereluk, from White Rock, Canada",
+    "usage": "TIDE_PHOTOS (slide 6), right half; the 960 px Commons thumbnail, re-encoded at quality 80. Stands in for the book's pair on page 98 (same place, six hours apart)."
+  },
+  {
+    "file": "holyisland.webm",
+    "name": "Holy Island Tide - Time Lapse.webm",
+    "title": "The tide coming in over the causeway to Holy Island (Lindisfarne), England: a time-lapse",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Holy_Island_Tide_-_Time_Lapse.webm",
+    "license": "CC BY 3.0",
+    "artist": "Gregory Keenan",
+    "usage": "TideFilm (slide 5). Black side bars cropped (1632x1080 from x=144), scaled to 960 px, sound removed, re-encoded as VP9 WebM (23 s, about 2.2 MB). Plays muted and loops."
+  },
+  {
+    "file": "harbour.jpg",
+    "name": "Low tide in Clovelly Harbour - geograph.org.uk - 420671.jpg",
+    "title": "Low tide in Clovelly Harbour, Devon: boats sitting on the sand by the harbour wall",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Low_tide_in_Clovelly_Harbour_-_geograph.org.uk_-_420671.jpg",
+    "license": "CC BY-SA 2.0",
+    "artist": "Philip Halling",
+    "usage": "EFFECTS (slide 21), 'harbours' tile; the 640 px original, re-encoded at quality 80."
+  },
+  {
+    "file": "venice.jpg",
+    "name": "Plaza de San Marcos con 'acqua alta'. St Mark's Square whith 'acqua alta'.jpg",
+    "title": "St Mark's Square, Venice, flooded by acqua alta (a high tide pushed in by the wind)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Plaza_de_San_Marcos_con_%27acqua_alta%27._St_Mark%27s_Square_whith_%27acqua_alta%27.jpg",
+    "license": "CC BY-SA 2.0",
+    "artist": "Javier Valero Iglesias",
+    "usage": "EFFECTS (slide 21), 'floods' tile; the 960 px Commons thumbnail, re-encoded at quality 80."
+  },
+  {
+    "file": "oystercatcher.jpg",
+    "name": "Haematopus ostralegus He.jpg",
+    "title": "Eurasian oystercatcher at the water's edge (it feeds on shellfish when the tide is out)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Haematopus_ostralegus_He.jpg",
+    "license": "CC BY-SA 2.5",
+    "artist": "Andreas Trepte, www.photo-natur.de",
+    "usage": "EFFECTS (slide 21), 'food' tile; the 960 px Commons thumbnail, re-encoded at quality 80."
+  },
+  {
+    "file": "rance.jpg",
+    "name": "Rance tidal power plant.JPG",
+    "title": "The Rance tidal power station near Saint-Malo, France (1966): the tide flows through its turbines",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Rance_tidal_power_plant.JPG",
+    "license": "CC BY 2.5",
+    "artist": "Dani 7C3 (Wikimedia Commons)",
+    "usage": "EFFECTS (slide 21), 'electricity' tile; the 960 px Commons thumbnail, re-encoded at quality 80."
+  }
+]

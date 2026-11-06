@@ -49,6 +49,8 @@ const S = {
   upNext: ['Up next', 'Làm tiếp theo'],
   thisWeek: ['This week', 'Tuần này'],
   myClasses: ['My classes', 'Lớp của em'],
+  classLessons: ['Lessons from class', 'Bài học trên lớp'],
+  classLessonSub: ['The whole lesson, as in class', 'Cả bài học, như trên lớp'],
   myResults: ['My results', 'Kết quả của em'],
   nothingYet: ['Nothing here yet. Your teacher will open a lesson for you.', 'Chưa có bài nào. Thầy cô sẽ mở bài cho em.'],
   due: ['Due {date}', 'Hạn {date}'],

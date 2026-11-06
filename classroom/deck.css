@@ -1,0 +1,4 @@
+/* The classroom page's styles: the classroom's own index.css (copied unchanged by the
+   sync), built with the classroom's Tailwind theme (tailwind.deck.js), never PRA Learn's. */
+@import './src/index.css';
+@config './tailwind.deck.js';

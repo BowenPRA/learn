@@ -512,6 +512,7 @@ Hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 | `/#/p/:slug` | student, staff | A pack: two big buttons, Review and Practice, each with its ring. |
 | `/#/p/:slug/review` | student, staff | Review player: one slide at a time, the check under it, big Next once answered. Staff can preview without saving. |
 | `/#/p/:slug/practice` | student, staff | Practice player: the step engine (focus, practice, challenge levels; hints, Show me, the working to copy). |
+| `/classroom/#/lesson/:course/:slug` | student, staff | One of Mr. Bowen's classroom decks exactly as taught (6 Nov 2026): its own page, the classroom's player and lesson copied unchanged by `npm run sync:classroom`. Listed under "Lessons from class" on the home pages (`src/data/classroomLessons.js`; a student sees their year group's). See `classroom/README.md`. |
 | `/#/me` | student | My results. |
 | `/#/t` (signed in) | staff | My classes (office: all), with how many packs and logins. |
 | `/#/t/:class` | staff | Class page (8.2), pack controls (open, hide, dates), login buttons. |

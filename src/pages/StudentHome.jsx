@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { AlertCircle, ArrowRight, CalendarDays, CheckCircle2, ChevronRight, Hourglass, Star, Trophy } from 'lucide-react'
+import { AlertCircle, ArrowRight, CalendarDays, CheckCircle2, ChevronRight, Hourglass, Presentation, Star, Trophy } from 'lucide-react'
 import { Loading, Notice, SubjectTile } from '../components/ui.jsx'
+import { ClassroomLessonList, classroomLessonsFor } from '../components/ClassroomLessons.jsx'
 import Pip from '../components/Pip.jsx'
 import { PackCard, nextPart, packDone, packStars, partLabels, partPath, partState, todayIso, weekEndIso } from '../components/packs.jsx'
 import { api } from '../lib/api.js'
@@ -60,6 +61,8 @@ export default function StudentHome() {
   const week = open.filter((p) => !late.includes(p) && (p.due_on ? p.due_on <= sunday : data.now - Date.parse(p.published_at || 0) < WEEK))
   const later = open.filter((p) => !late.includes(p) && !week.includes(p))
   const classes = [...new Set(data.packs.map((p) => p.class_key))]
+  // Mr. Bowen's classroom decks for this year group (src/data/classroomLessons.js).
+  const fromClass = classroomLessonsFor(me)
   const list = (packs, opts = {}) => (
     <div className="space-y-3">{packs.map((p) => <PackCard key={p.id} pack={p} rows={rows[p.id]} lang={lang} {...opts} />)}</div>
   )
@@ -137,6 +140,13 @@ export default function StudentHome() {
               <p className="text-lg font-semibold text-pra-ink-soft">{t('nothingYet')}</p>
             </div>
           )}
+        </section>
+      )}
+
+      {fromClass.length > 0 && (
+        <section className="mb-8" aria-labelledby="h-class">
+          <Head id="h-class" icon={Presentation} tone="#2196E3">{t('classLessons')}</Head>
+          <ClassroomLessonList lessons={fromClass} lang={lang} />
         </section>
       )}
 

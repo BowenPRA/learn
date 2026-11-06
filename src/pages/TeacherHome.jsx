@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronRight, KeyRound, Layers, Users } from 'lucide-react'
 import { Loading, Notice } from '../components/ui.jsx'
+import { ClassroomLessonList, classroomLessonsFor } from '../components/ClassroomLessons.jsx'
 import { api } from '../lib/api.js'
 import { useAuth } from '../lib/auth.jsx'
 import { useT } from '../lib/i18n.jsx'
@@ -52,6 +53,11 @@ export default function TeacherHome() {
           </div>
         </section>
       ))}
+      {/* Mr. Bowen's classroom decks, as the students see them (src/data/classroomLessons.js). */}
+      <section className="mb-6 mt-10">
+        <h2 className="mb-2 text-sm font-extrabold uppercase tracking-widest text-pra-ink-soft">{t('classLessons')}</h2>
+        <ClassroomLessonList lessons={classroomLessonsFor(me)} lang={lang} />
+      </section>
     </main>
   )
 }
