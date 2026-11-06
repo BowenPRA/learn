@@ -532,6 +532,21 @@ Office has no separate pages yet: the same class pages for every class.
   "trường"; written as a Vietnamese member of staff would say it. Staff must read
   it before it goes live.
 - Never "school", "report card" or "grades" anywhere.
+- **The look since 6 November 2026** (Bowen: "the standards mixed with a bit of the look
+  of The Current, more polished and more engaging"): the rules above, plus The Current's
+  cards (white, a thin line, a soft shadow: `.card`, `shadow-soft`, `.card-link` lifts on
+  hover), keys that press into a darker edge (`.btn-primary`, `.btn-green`, `.btn-white`),
+  The Current's logo sky and lime for glows only (`pra-sky`, `pra-lime`), and the website's
+  palm frond (`public/frond.svg`, `.frond` mask) as decoration. **Pip the otter**, the
+  classroom decks' story character (`src/components/pip/storyCharacter.js`, a copy of the
+  classroom file; `Pip.jsx`), is the mascot: waving on the sign-in page and the home page,
+  cheering on the finish screen, calm on an empty home. Pip is "Pip" or "they". The
+  student home opens with a blue welcome card: a greeting for the time of day, one line
+  about what is waiting, the child's own stars and parts done (never compared with
+  anyone), and ONE big button to the next part of the most urgent lesson. Lesson cards
+  carry the subject's icon tile and a ring; on a lesson page the next part is marked "Up
+  next"; review buttons are blue, practice buttons green. Motion is gentle and stops
+  under prefers-reduced-motion (`motion-safe:`).
 
 ## 11. Domain and hosting
 
