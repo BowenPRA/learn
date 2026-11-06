@@ -8,6 +8,7 @@ import PACK_Y5_BELOW_ZERO from '../../../packs/y5-math-u5-below-zero/pack.json'
 import { partIds, partSummary, partsOf, scoreOf } from '../../pack/model.js'
 import { slipsByKey } from '../../stepPractice/model.js'
 import { codeFor, usernameFor } from '../../../supabase/functions/learn-accounts/lib.js'
+import { isLearnClass } from '../../data/subjects.js'
 import { problem } from '../problem.js'
 
 const KEY = 'learn-demo-v5'
@@ -203,7 +204,9 @@ export const demo = {
     return [
       { class_key: 'math:Year 5', packs: db.packs.length, students: db.students.length, logins },
       { class_key: 'english:Year 7', packs: 0, students: 9, logins: 0 },
-    ]
+      { class_key: 'wellbeing:Year 7', packs: 0, students: 9, logins: 0 }, // hidden: not a PRA Learn area
+      { class_key: 'math:Kindergarten', packs: 0, students: 8, logins: 0 }, // hidden: below Year 1
+    ].filter((c) => isLearnClass(c.class_key))
   },
 
   async classOverview(classKey) {

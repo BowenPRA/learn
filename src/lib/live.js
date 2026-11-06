@@ -3,6 +3,7 @@
 // same shape in the demo backend (demo/backend.js).
 import { supabase, setSharedDevice } from './supabase.js'
 import { CODE_LENGTH, LOGIN_DOMAIN, PASSWORD_SUFFIX, USERNAME_RE, foldName } from '../../supabase/functions/learn-accounts/lib.js'
+import { isLearnClass } from '../data/subjects.js'
 
 const PACK_FIELDS = 'id, slug, class_key, title, title_vn, content, status, opens_on, due_on, version, published_at, request_id'
 import { problem } from './problem.js'
@@ -62,7 +63,7 @@ export const live = {
       return info ? { kind: 'student', ...info } : { kind: 'none' }
     }
     const [classes, name] = await Promise.all([supabase.rpc('learn_my_classes'), supabase.rpc('learn_who')])
-    const list = must(classes) || []
+    const list = (must(classes) || []).filter((c) => isLearnClass(c.class_key))
     return list.length ? { kind: 'staff', name: must(name) || '', classes: list } : { kind: 'none' }
   },
 
@@ -87,7 +88,8 @@ export const live = {
     return must(await supabase.rpc('learn_save', { p_pack: packId, p_part: part, p_items: items, p_done: !!done }))
   },
 
-  async classes() { return must(await supabase.rpc('learn_my_classes')) || [] },
+  /** The staff member's classes in PRA Learn's learning areas only (LEARN_SUBJECTS). */
+  async classes() { return (must(await supabase.rpc('learn_my_classes')) || []).filter((c) => isLearnClass(c.class_key)) },
   async classOverview(classKey) { return must(await supabase.rpc('learn_class_overview', { p_class: classKey })) },
   async misses(packId) { return must(await supabase.rpc('learn_pack_misses', { p_pack: packId })) || [] },
 

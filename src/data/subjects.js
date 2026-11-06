@@ -20,6 +20,19 @@ const NAMES = {
 // One accent per subject for icons and rings (small accents only, never page colours).
 const TONE = { math: '#116DFF', english: '#7C5CFF', science: '#48971D', history: '#F5A623' }
 
+// The classes PRA Learn is for (Bowen, 6 November 2026): English, Maths, Science and
+// Technology, from Year 1 up (Year 1 to Year 9 and Upper Secondary). Every other class
+// (Wellbeing, Movement, Cooking…, and all of Nursery and Kindergarten) is not listed
+// anywhere in PRA Learn. The Current's Lessons tab uses the same rule (admin
+// src/lib/lessons.js isLessonClass): change both together.
+export const LEARN_SUBJECTS = ['english', 'math', 'science', 'technology']
+const YEAR_ONE_UP = /^(Year\s*([1-9]|1[0-3])|Upper Secondary)$/i
+/** Whether a class key ('math:Year 7') is one of PRA Learn's classes: a learning area above, Year 1 or older. */
+export const isLearnClass = (key) => {
+  const [subject, group = ''] = String(key || '').split(':')
+  return LEARN_SUBJECTS.includes(subject) && YEAR_ONE_UP.test(group.trim())
+}
+
 export const splitClass = (key) => {
   const i = String(key || '').indexOf(':')
   return i < 0 ? [String(key || ''), ''] : [key.slice(0, i), key.slice(i + 1)]

@@ -1,4 +1,5 @@
-import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { HashRouter, Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
+import { isLearnClass } from './data/subjects.js'
 import { AuthProvider, useAuth } from './lib/auth.jsx'
 import { LangProvider, useT } from './lib/i18n.jsx'
 import { DemoBand, Loading, Notice, TopBar } from './components/ui.jsx'
@@ -33,6 +34,12 @@ function Shell({ children, players = false }) {
   )
 }
 
+// A class page or its cards, only for PRA Learn's learning areas; any other class goes home.
+function LearnClassOnly({ children }) {
+  const { classKey } = useParams()
+  return isLearnClass(decodeURIComponent(classKey || '')) ? children : <Navigate to="/" replace />
+}
+
 function Routed() {
   const { loading, session, me, error, signOut } = useAuth()
   const { t } = useT()
@@ -59,8 +66,8 @@ function Routed() {
         <Route path="/p/:slug/review" element={<ReviewPlayer />} />
         <Route path="/p/:slug/practice" element={<PracticePlayer />} />
         <Route path="/me" element={student ? <MyResults /> : <Navigate to="/" replace />} />
-        <Route path="/t/:classKey" element={student ? <Navigate to="/" replace /> : <ClassView />} />
-        <Route path="/t/:classKey/cards" element={student ? <Navigate to="/" replace /> : <LoginCards />} />
+        <Route path="/t/:classKey" element={student ? <Navigate to="/" replace /> : <LearnClassOnly><ClassView /></LearnClassOnly>} />
+        <Route path="/t/:classKey/cards" element={student ? <Navigate to="/" replace /> : <LearnClassOnly><LoginCards /></LearnClassOnly>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Shell>
