@@ -1,0 +1,4 @@
+/* The unit page's styles: the Dashboard's own index.css (copied unchanged by the sync),
+   built with the Dashboard's Tailwind theme (tailwind.unit.js), never PRA Learn's. */
+@import './src/index.css';
+@config './tailwind.unit.js';

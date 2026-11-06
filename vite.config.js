@@ -7,17 +7,19 @@ import { fileURLToPath } from 'node:url'
 // that file is there. Without VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY
 // in .env the app runs in demo mode with sample data; `npm run deploy` refuses
 // to build without them (scripts/check-env.mjs), so the live site never does.
-// The classroom page draws its icons with the classroom's own lucide-react (an alias
-// package pinned to the classroom's version), since newer versions redraw some icons
-// (the tick in CheckCircle2, Leaf, PenTool, Soup). PRA Learn's pages keep theirs.
-const CLASSROOM_DIR = fileURLToPath(new URL('./classroom/', import.meta.url)).replace(/\\/g, '/').toLowerCase()
+// The classroom and unit pages draw their icons with their own repo's lucide-react (alias
+// packages pinned to the classroom's and the Dashboard's versions), since newer versions
+// redraw some icons (the tick in CheckCircle2, Leaf, PenTool, Soup). PRA Learn's pages keep theirs.
+const dirOf = (p) => fileURLToPath(new URL(p, import.meta.url)).replace(/\\/g, '/').toLowerCase()
+const ICON_PACKAGES = [[dirOf('./classroom/'), 'lucide-react-classroom'], [dirOf('./unit/'), 'lucide-react-dashboard']]
 const classroomIcons = {
   name: 'classroom-icons',
   enforce: 'pre',
   resolveId(source, importer, options) {
     if (source !== 'lucide-react' || !importer) return null
-    if (!importer.replace(/\\/g, '/').toLowerCase().startsWith(CLASSROOM_DIR)) return null
-    return this.resolve('lucide-react-classroom', importer, { ...options, skipSelf: true })
+    const from = importer.replace(/\\/g, '/').toLowerCase()
+    const hit = ICON_PACKAGES.find(([dir]) => from.startsWith(dir))
+    return hit ? this.resolve(hit[1], importer, { ...options, skipSelf: true }) : null
   },
 }
 
@@ -33,6 +35,8 @@ export default defineConfig({
       input: {
         main: fileURLToPath(new URL('./index.html', import.meta.url)),
         classroom: fileURLToPath(new URL('./classroom/index.html', import.meta.url)),
+        // Units: the Dashboard idea, streamlined (unit/README.md), at /unit/.
+        unit: fileURLToPath(new URL('./unit/index.html', import.meta.url)),
       },
       output: {
         manualChunks(id) {

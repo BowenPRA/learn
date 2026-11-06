@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { AlertCircle, ArrowRight, CalendarDays, CheckCircle2, ChevronRight, Hourglass, Presentation, Star, Trophy } from 'lucide-react'
+import { AlertCircle, ArrowRight, CalendarDays, CheckCircle2, ChevronRight, Hourglass, Presentation, Sparkles, Star, Trophy, Zap } from 'lucide-react'
 import { Loading, Notice, SubjectTile } from '../components/ui.jsx'
 import { ClassroomLessonList, classroomLessonsFor, classroomLink, classroomTitle } from '../components/ClassroomLessons.jsx'
+import { UnitList, totalXP, unitsFor, useUnitProgress } from '../components/UnitCards.jsx'
+import { UNIT_PARTS, nextPartOf, unitHref, unitKey, unitXP } from '../data/units.js'
 import Pip from '../components/Pip.jsx'
 import { PackCard, nextPart, packDone, packStars, partLabels, partPath, partState, todayIso, weekEndIso } from '../components/packs.jsx'
 import { api } from '../lib/api.js'
@@ -43,11 +45,12 @@ export default function StudentHome() {
   const { me } = useAuth()
   const [data, setData] = useState(null)
   const [err, setErr] = useState('')
+  const unitProgress = useUnitProgress()
   useEffect(() => {
     api.myPacks().then((d) => setData({ ...d, now: Date.now() })).catch((e) => setErr(e.code === 'offline' ? t('offline') : e.message))
   }, [t])
   if (err) return <div className="mx-auto max-w-3xl p-4"><Notice tone="bad">{err}</Notice></div>
-  if (!data) return <Loading />
+  if (!data || !unitProgress) return <Loading />
 
   const rows = byPack(data.progress)
   // Late (due before today, not finished) first, then due in the next 7 days, then the rest;
@@ -62,8 +65,13 @@ export default function StudentHome() {
   const later = open.filter((p) => !late.includes(p) && !week.includes(p))
   // The classroom decks for this year group, newest first (src/data/classroomLessons.js).
   const fromClass = classroomLessonsFor(me)
-  const classes = [...new Set([...data.packs.map((p) => p.class_key), ...fromClass.map((l) => l.classKey)])]
-  const teacherOf = (k) => data.packs.find((p) => p.class_key === k)?.content?.teacher || fromClass.find((l) => l.classKey === k)?.teacher
+  // The units for this year group, newest first (src/data/units.js), and the XP in them.
+  const units = unitsFor(me)
+  const xpAll = totalXP(units, unitProgress)
+  const unitOpen = [...units].reverse().find((u) => !unitXP(unitProgress[unitKey(u)]).done)
+  const unitNext = unitOpen && (nextPartOf(unitProgress[unitKey(unitOpen)]) || UNIT_PARTS[0])
+  const classes = [...new Set([...data.packs.map((p) => p.class_key), ...units.map((u) => u.classKey), ...fromClass.map((l) => l.classKey)])]
+  const teacherOf = (k) => data.packs.find((p) => p.class_key === k)?.content?.teacher || units.find((u) => u.classKey === k)?.teacher || fromClass.find((l) => l.classKey === k)?.teacher
   const list = (packs, opts = {}) => (
     <div className="space-y-3">{packs.map((p) => <PackCard key={p.id} pack={p} rows={rows[p.id]} lang={lang} {...opts} />)}</div>
   )
@@ -77,7 +85,7 @@ export default function StudentHome() {
     ? t(late.length === 1 ? 'heroLate1' : 'heroLateN', { n: late.length })
     : week.length
       ? t(week.length === 1 ? 'heroWeek1' : 'heroWeekN', { n: week.length })
-      : open.length ? t('heroLater') : data.packs.length ? t('allCaughtUp') : fromClass.length ? t('heroClass') : t('nothingYet')
+      : open.length ? t('heroLater') : unitOpen ? t('heroUnit') : data.packs.length ? t('allCaughtUp') : fromClass.length ? t('heroClass') : t('nothingYet')
   const stars = data.packs.reduce((sum, p) => sum + packStars(p.content, rows[p.id]).got, 0)
   const partsAll = data.packs.reduce((sum, p) => sum + partsOf(p.content).length, 0)
   const partsDone = data.packs.reduce((sum, p) => sum + partsOf(p.content).filter((x) => rows[p.id]?.[x.id]?.done).length, 0)
@@ -86,9 +94,11 @@ export default function StudentHome() {
   const started = part && partState(first.content, part.id, rows[first.id]?.[part.id]).state === 'started'
   const partName = part && partLabels(first.content, t)[part.id]
   const firstTitle = first && (lang === 'vn' ? first.title_vn || first.title : first.title)
-  const mood = late.length ? 'surprised' : !data.packs.length && !fromClass.length ? 'calm' : 'happy'
-  // With nothing to do in a pack, the big button opens the newest lesson from class.
-  const deck = !part && fromClass[0]
+  const mood = late.length ? 'surprised' : !data.packs.length && !fromClass.length && !units.length ? 'calm' : 'happy'
+  // With nothing to do in a pack, the big button opens the next part of the oldest
+  // unfinished unit; with no unit either, the newest lesson from class.
+  const unitBtn = !part && unitOpen
+  const deck = !part && !unitBtn && fromClass[0]
 
   return (
     <main className="mx-auto max-w-5xl px-4 pb-16 pt-6">
@@ -104,8 +114,9 @@ export default function StudentHome() {
             <p className="pr-20 text-sm font-extrabold uppercase tracking-[0.16em] text-white/80 sm:pr-0">{greeting}</p>
             <h1 id="h-hello" className="mt-1 break-words pr-20 text-3xl font-black leading-tight sm:pr-0 sm:text-5xl">{me?.name || ''}!</h1>
             <p className="mt-2 max-w-xl pr-16 text-base font-semibold text-white/90 sm:pr-0 sm:text-lg">{summary}</p>
-            {(stars > 0 || partsDone > 0) && (
+            {(stars > 0 || partsDone > 0 || xpAll > 0) && (
               <div className="mt-4 flex flex-wrap gap-2.5">
+                {xpAll > 0 && <Stat icon={Zap} value={xpAll} label="XP" iconClass="fill-pra-sun text-pra-sun" />}
                 <Stat icon={Star} value={stars} label={t('starsTotal')} iconClass="fill-pra-sun text-pra-sun" />
                 <Stat icon={CheckCircle2} value={`${partsDone}/${partsAll}`} label={t('partsDone')} iconClass="text-pra-lime" />
               </div>
@@ -124,6 +135,17 @@ export default function StudentHome() {
               <ArrowRight className="h-6 w-6" strokeWidth={3} />
             </span>
           </Link>
+        )}
+        {unitBtn && (
+          <a href={unitHref(unitOpen, window.location.search, unitNext.id)} className="btn-white btn-big mt-5 w-full justify-between gap-3 text-left sm:w-auto sm:min-w-[22rem]">
+            <span className="min-w-0">
+              <span className="block truncate text-lg font-extrabold">{t(unitProgress[unitKey(unitOpen)]?.[unitNext.id] ? 'continuePart' : 'startPart', { part: lang === 'vn' ? unitNext.titleVn : unitNext.title })}</span>
+              <span className="block truncate text-sm font-semibold text-pra-ink-soft">{unitOpen.label} {lang === 'vn' ? unitOpen.titleVn || unitOpen.title : unitOpen.title}</span>
+            </span>
+            <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pra-blue text-white">
+              <ArrowRight className="h-6 w-6" strokeWidth={3} />
+            </span>
+          </a>
         )}
         {deck && (
           <a href={classroomLink(deck)} className="btn-white btn-big mt-5 w-full justify-between gap-3 text-left sm:w-auto sm:min-w-[22rem]">
@@ -145,7 +167,7 @@ export default function StudentHome() {
         </section>
       )}
 
-      {(week.length > 0 || (!open.length && !done.length && !fromClass.length)) && (
+      {(week.length > 0 || (!open.length && !done.length && !fromClass.length && !units.length)) && (
         <section className="mb-8" aria-labelledby="h-week">
           <Head id="h-week" icon={CalendarDays} tone="#116DFF">{t('thisWeek')}</Head>
           {week.length ? list(week) : (
@@ -154,6 +176,14 @@ export default function StudentHome() {
               <p className="text-lg font-semibold text-pra-ink-soft">{t('nothingYet')}</p>
             </div>
           )}
+        </section>
+      )}
+
+      {units.length > 0 && (
+        <section className="mb-8" aria-labelledby="h-units">
+          <Head id="h-units" icon={Sparkles} tone="#F5A623">{t('units')}</Head>
+          <p className="-mt-1 mb-3 font-semibold text-pra-ink-soft">{t('unitsHint')}</p>
+          <UnitList units={units} progress={unitProgress} lang={lang} />
         </section>
       )}
 

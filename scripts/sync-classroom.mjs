@@ -19,11 +19,11 @@
 //
 // PRA Learn's own files in classroom/ (index.html, main.jsx, deck.css, tailwind.deck.js,
 // README.md) are never touched.
-import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { CLASSROOM_LESSONS } from '../src/data/classroomLessons.js'
+import { addCredits, collect, lucideProblem, missingPackages, openRepo, writeAll } from './lib/copy-from-repo.mjs'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const OUT = path.join(ROOT, 'classroom')
@@ -34,68 +34,24 @@ const opt = (name, fallback) => {
 }
 const repo = path.resolve(opt('--repo', process.env.CLASSROOM_REPO || path.join(ROOT, '..', 'code', 'classroom')))
 const ref = opt('--ref', 'origin/main')
-
-const git = (...args) => execFileSync('git', ['-C', repo, ...args], { maxBuffer: 1 << 28 })
-const commit = git('rev-parse', `${ref}^{commit}`).toString().trim()
-const tree = new Set(git('ls-tree', '-r', '--name-only', commit).toString().split('\n').filter(Boolean))
-const read = (file) => git('show', `${commit}:${file}`)
+const src = openRepo(repo, ref)
+const { commit } = src
 
 const PLAYER = ['src/components/Deck.jsx', 'src/remote/DeckRemote.jsx', 'content/registry.js', 'src/index.css', 'tailwind.config.js']
 const LESSONS = CLASSROOM_LESSONS.map((l) => `content/${l.course}/${l.slug}/index.js`)
 
-const IMPORT = /(?:import|export)\s[^'"]*?from\s*['"]([^'"]+)['"]|import\s*\(\s*['"]([^'"]+)['"]\s*\)|import\s+['"]([^'"]+)['"]/g
-const RESOLVE = ['', '.js', '.jsx', '/index.js']
-
-const files = new Map() // path -> Buffer
-const bare = new Map() // package -> first importer
-const problems = []
-
-function walk(file) {
-  if (files.has(file)) return
-  if (!tree.has(file)) { problems.push(`not in ${commit.slice(0, 7)}: ${file}`); return }
-  const body = read(file)
-  files.set(file, body)
-  if (!/\.(js|jsx|mjs|css)$/.test(file)) return
-  const src = body.toString('utf8')
-  for (const m of src.matchAll(IMPORT)) {
-    const spec = m[1] || m[2] || m[3]
-    if (!spec.startsWith('.')) {
-      const pkg = spec.split('/').slice(0, spec.startsWith('@') ? 2 : 1).join('/')
-      if (!bare.has(pkg)) bare.set(pkg, file)
-      continue
-    }
-    const base = path.posix.normalize(path.posix.join(path.posix.dirname(file), spec.split('?')[0]))
-    const hit = RESOLVE.map((ext) => base + ext).find((p) => tree.has(p))
-    if (hit) walk(hit)
-    else problems.push(`${file} imports ${spec}, which is not in the classroom repo`)
-  }
-}
-
+const { files, bare, problems } = collect(src, [...PLAYER, ...LESSONS])
 for (const lesson of LESSONS) {
-  if (!tree.has(lesson)) problems.push(`no lesson at ${lesson} (check src/data/classroomLessons.js)`)
+  if (!src.has(lesson)) problems.push(`no lesson at ${lesson} (check src/data/classroomLessons.js)`)
 }
-;[...PLAYER, ...LESSONS].forEach(walk)
-
-// The picture credits travel with the pictures.
-for (const file of [...files.keys()]) {
-  const credits = path.posix.join(path.posix.dirname(file), 'CREDITS.json')
-  if (/\.(jpe?g|png|webp|gif|svg|webm|mp4)$/i.test(file) && tree.has(credits) && !files.has(credits)) files.set(credits, read(credits))
-}
+addCredits(src, files)
 
 const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'))
-const have = { ...pkg.dependencies, ...pkg.devDependencies }
-for (const [name, from] of bare) {
-  if (!have[name]) problems.push(`package ${name} (imported by ${from}) is not in PRA Learn's package.json`)
-}
-
+problems.push(...missingPackages(bare, pkg))
 // The classroom page draws icons with lucide-react-classroom (vite.config.js), which
 // must be the classroom's own lucide-react version or some icons are drawn differently.
-const lock = JSON.parse(read('package-lock.json').toString('utf8'))
-const lucide = lock.packages?.['node_modules/lucide-react']?.version
-const pinned = String(pkg.dependencies?.['lucide-react-classroom'] || '').replace(/^npm:lucide-react@/, '')
-if (lucide && pinned !== lucide) {
-  problems.push(`the classroom uses lucide-react ${lucide}; run: npm install lucide-react-classroom@npm:lucide-react@${lucide} (and pin it without ^)`)
-}
+const lucide = lucideProblem(src, pkg, 'lucide-react-classroom')
+if (lucide) problems.push(lucide)
 
 // The home pages show each lesson's title and subtitle from src/data/classroomLessons.js;
 // say so when the deck's own meta has changed since (a warning, not a stop).
@@ -115,12 +71,7 @@ if (problems.length) {
   process.exit(1)
 }
 
-for (const dir of ['src', 'content']) fs.rmSync(path.join(OUT, dir), { recursive: true, force: true })
-for (const [file, body] of files) {
-  const dest = path.join(OUT, ...file.split('/'))
-  fs.mkdirSync(path.dirname(dest), { recursive: true })
-  fs.writeFileSync(dest, body)
-}
+writeAll(OUT, ['src', 'content'], files)
 const listed = [...files.keys()].sort()
 fs.writeFileSync(path.join(OUT, 'SOURCE.json'), JSON.stringify({
   repo: 'BowenPRA/classroom',

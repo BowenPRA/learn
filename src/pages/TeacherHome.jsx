@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronRight, KeyRound, Layers, Presentation, Users } from 'lucide-react'
+import { ChevronRight, KeyRound, Layers, Presentation, Sparkles, Users } from 'lucide-react'
 import { Loading, Notice } from '../components/ui.jsx'
 import { ClassroomLessonList, classroomLessonsFor } from '../components/ClassroomLessons.jsx'
+import { UnitList, unitsFor } from '../components/UnitCards.jsx'
 import { api } from '../lib/api.js'
 import { useAuth } from '../lib/auth.jsx'
 import { useT } from '../lib/i18n.jsx'
@@ -19,6 +20,7 @@ export default function TeacherHome() {
   if (!classes) return <Loading />
 
   const decks = classroomLessonsFor(me)
+  const units = unitsFor(me)
   const fromClass = (key) => decks.filter((l) => l.classKey === key).length
   const groups = new Map()
   for (const c of classes) {
@@ -58,6 +60,19 @@ export default function TeacherHome() {
           </div>
         </section>
       ))}
+      {/* The units (src/data/units.js): staff open them as a student would, nothing saved for them. */}
+      {units.length > 0 && (
+        <section className="mb-6 mt-10" aria-labelledby="h-units">
+          <h2 id="h-units" className="mb-1 flex items-center gap-2.5 text-xl font-extrabold text-pra-ink">
+            <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-pra-sun-pale">
+              <Sparkles className="h-5 w-5 text-pra-sun-deep" strokeWidth={2.6} aria-hidden />
+            </span>
+            {t('units')}
+          </h2>
+          <p className="mb-3 max-w-3xl font-semibold text-pra-ink-soft">{t('unitsStaffHint')}</p>
+          <UnitList units={units} progress={{}} lang={lang} showClass />
+        </section>
+      )}
       {/* The classroom decks, as the students see them (src/data/classroomLessons.js). */}
       {decks.length > 0 && (
         <section className="mb-6 mt-10" aria-labelledby="h-class">

@@ -12,6 +12,7 @@
     "check:pack": "node scripts/check-pack.mjs",
     "check:env": "node scripts/check-env.mjs",
     "sync:classroom": "node scripts/sync-classroom.mjs",
+    "sync:dashboard": "node scripts/sync-dashboard.mjs",
     "predeploy": "node scripts/check-env.mjs && vite build --mode production",
     "deploy": "gh-pages -d dist -r https://BowenPRA@github.com/BowenPRA/learn.git"
   },
@@ -20,6 +21,7 @@
     "katex": "^0.17.0",
     "lucide-react": "^1.14.0",
     "lucide-react-classroom": "npm:lucide-react@1.28.0",
+    "lucide-react-dashboard": "npm:lucide-react@1.14.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-router-dom": "^7.15.0",
