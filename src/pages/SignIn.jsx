@@ -4,8 +4,8 @@ import { DemoBand, LangSwitch, Logo, Notice } from '../components/ui.jsx'
 import { DEMO, api } from '../lib/api.js'
 import { useT } from '../lib/i18n.jsx'
 
-// Two empty boxes for a child (username + PIN from the login card) or an email and
-// password for staff. Never a list of names: anyone can open this page.
+// Two empty boxes for a child (their name and secret code, as on the old Dashboard)
+// or an email and password for staff. Never a list of names: anyone can open this page.
 export default function SignIn() {
   const { t } = useT()
   const [who, setWho] = useState('student')
@@ -55,19 +55,19 @@ export default function SignIn() {
                 <label className="block">
                   <span className="mb-2 flex items-center gap-2 text-base font-extrabold text-pra-ink"><User className="h-5 w-5 text-pra-blue" strokeWidth={2.5} /> {t('username')}</span>
                   <input className="field text-2xl" value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username"
-                    autoCapitalize="none" autoCorrect="off" spellCheck={false} placeholder="otter27" disabled={busy} />
+                    autoCapitalize="none" autoCorrect="off" spellCheck={false} placeholder={t('namePlaceholder')} disabled={busy} />
                 </label>
                 <label className="block">
                   <span className="mb-2 flex items-center gap-2 text-base font-extrabold text-pra-ink"><KeyRound className="h-5 w-5 text-pra-blue" strokeWidth={2.5} /> {t('pin')}</span>
                   <input className="field text-3xl tracking-[0.5em]" value={pin} onChange={(e) => setPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                    type="password" inputMode="numeric" pattern="[0-9]*" autoComplete="current-password" placeholder="••••" disabled={busy} />
+                    type="password" inputMode="numeric" pattern="[0-9]*" autoComplete="current-password" placeholder="000" disabled={busy} />
                 </label>
                 <label className="flex min-h-[44px] cursor-pointer items-center gap-3 text-base font-bold text-pra-ink-soft">
                   <input type="checkbox" className="h-6 w-6 accent-pra-blue" checked={shared} onChange={(e) => setShared(e.target.checked)} />
                   {t('shared')}
                 </label>
                 {err && <Notice tone="bad">{err}</Notice>}
-                <button className="btn-primary btn-big w-full" disabled={busy || !username.trim() || pin.length < 4}>
+                <button className="btn-primary btn-big w-full" disabled={busy || !username.trim() || pin.length < 3}>
                   {busy ? <Loader2 className="h-6 w-6 animate-spin" /> : t('go')}
                 </button>
                 <p className="text-center text-sm font-semibold text-pra-ink-soft">{t('cardHint')}</p>

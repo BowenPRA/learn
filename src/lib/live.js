@@ -2,7 +2,7 @@
 // the learn_* functions in supabase/learn-schema.sql. Every method here has the
 // same shape in the demo backend (demo/backend.js).
 import { supabase, setSharedDevice } from './supabase.js'
-import { LOGIN_DOMAIN, PASSWORD_SUFFIX } from '../../supabase/functions/learn-accounts/lib.js'
+import { CODE_LENGTH, LOGIN_DOMAIN, PASSWORD_SUFFIX, USERNAME_RE, foldName } from '../../supabase/functions/learn-accounts/lib.js'
 
 const PACK_FIELDS = 'id, slug, class_key, title, title_vn, content, status, opens_on, due_on, version, published_at, request_id'
 import { problem } from './problem.js'
@@ -24,11 +24,11 @@ export const live = {
     return () => data.subscription.unsubscribe()
   },
 
-  /** Username + PIN from the login card. */
+  /** Nickname + secret code (the student number, 3 digits), as on the old Dashboard. */
   async signInStudent(username, pin, shared) {
-    const u = String(username || '').toLowerCase().replace(/\s+/g, '')
+    const u = foldName(username)
     const p = String(pin || '').replace(/\D/g, '')
-    if (!/^[a-z]{3,10}[0-9]{2}$/.test(u) || p.length < 4) throw problem('wrong')
+    if (!USERNAME_RE.test(u) || p.length < CODE_LENGTH) throw problem('wrong')
     setSharedDevice(!!shared)
     const { data, error } = await supabase.auth.signInWithPassword({ email: `${u}@${LOGIN_DOMAIN}`, password: `${p}${PASSWORD_SUFFIX}` })
     if (error) throw problem(error.status === 400 ? 'wrong' : 'offline', error.message)

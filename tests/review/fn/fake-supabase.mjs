@@ -38,6 +38,7 @@ function table(claims, role, name) {
     insert(row) { op = 'insert'; body = row; return q },
     update(row) { op = 'update'; body = row; return q },
     eq(col, v) { params.push(v); where.push(`${col} = $${params.length}`); return q },
+    in(col, v) { params.push(v); where.push(`${col} = any($${params.length})`); return q },
     maybeSingle() { single = true; return q },
     then(res, rej) { return exec().then(res, rej) },
   }

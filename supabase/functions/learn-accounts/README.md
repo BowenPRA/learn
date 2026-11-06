@@ -2,7 +2,9 @@
 
 Makes student logins for a class, resets a PIN, blocks and unblocks a login. It
 runs in The Current's Supabase project because only the service role can make a
-login, and that key must never reach a browser. **Not deployed yet.**
+login, and that key must never reach a browser. **Deployed 6 November 2026** through the
+dashboard editor (index.ts + lib.js, checked byte for byte). Verify JWT must be OFF: the
+project signs logins with ES256 keys, so the legacy-secret check refuses every caller.
 
 Who may call it: someone signed in (The Current or PRA Learn) who is office, a head
 teacher, or a teacher of that class. It asks the database as the caller
@@ -13,14 +15,17 @@ as the row level security. Anyone else gets 403.
 |---|---|
 | `{ "action": "make", "class_key": "math:Year 5" }` | `{ made: [{ student_id, name, username, pin }], failed: [...] }`: logins for every enrolled student of the class who has none |
 | `{ "action": "make", "class_key": "math:Year 5", "student_ids": ["…"] }` | the same, for the listed students only (at most 60) |
-| `{ "action": "reset", "student_id": "…" }` | `{ student_id, username, pin, signed_out, sessions_ended }`: a new PIN, same username; every device already signed in is signed out |
+| `{ "action": "reset", "student_id": "…" }` | `{ student_id, username, pin, signed_out, sessions_ended }`: the secret code set back to the student number, same login name; every device already signed in is signed out |
 | `{ "action": "disable", "student_id": "…" }` | `{ student_id, active: false, signed_out, sessions_ended }`: blocked, signed out on every device, no access to packs at once |
 | `{ "action": "enable", "student_id": "…" }` | `{ student_id, active: true }` |
 
-PINs come back once, for the login cards. They are never stored readably and never
-logged (the function logs counts only).
+Logins work like the old Dashboard's (6 November 2026): the login name is the
+student's nickname folded to plain letters (else the first name), the secret code
+(`pin` in the reply) is the student number padded to 3 digits. Two nicknames that
+fold the same: the second student is reported in `failed` with what to do. Codes are
+never logged (the function logs counts only).
 
-A login is `<username>@learn.pra.edu.vn` with the password `<PIN>-learn`,
+A login is `<username>@learn.pra.edu.vn` with the password `<code>-learn`,
 `email_confirm: true` (no email is sent) and `app_metadata: { role: 'student',
 student_id }`. No name is stored in the auth tables.
 

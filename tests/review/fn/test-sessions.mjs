@@ -74,9 +74,9 @@ await signIn(staffId)
 const sessionsOf = (uid) => n(`select count(*) n from auth.sessions where user_id = $1`, [uid])
 const tokensOf = (uid) => n(`select count(*) n from auth.refresh_tokens where user_id = $1`, [String(uid)])
 
-// Reset PIN
+// Reset code
 r = await call(DAVID, { action: 'reset', student_id: ID.s5a })
-ok('reset: a new PIN comes back', r.status === 200 && /^\d{4}$/.test(r.body.pin), JSON.stringify(r.body))
+ok('reset: the code comes back', r.status === 200 && /^\d{3,}$/.test(r.body.pin), JSON.stringify(r.body))
 ok('reset: reply says signed out, 2 sessions ended, no warning', r.body.signed_out === true && r.body.sessions_ended === 2 && !r.body.warning, JSON.stringify(r.body))
 ok('reset: the student has no sessions left', await sessionsOf(anh) === 0)
 ok('reset: no refresh tokens left (incl. one with no session)', await tokensOf(anh) === 0)
@@ -119,16 +119,16 @@ ok('service role cannot sign out a staff login with it', !x.ok && /Only a PRA Le
 x = await asRole('service_role', { role: 'service_role' }, `select learn_end_sessions($1) n`, [other])
 ok('service role signs out a student login', x.ok && x.rows[0].n === 2, x.err || JSON.stringify(x.rows))
 
-// If Supabase refuses the delete (or the tables are elsewhere), the PIN still comes back, with a warning.
+// If Supabase refuses the delete (or the tables are elsewhere), the code still comes back, with a warning.
 await state.db.exec(`alter table auth.sessions rename to sessions_hidden`)
 r = await call(DAVID, { action: 'reset', student_id: ID.s5a })
-ok('sign-out fails: the PIN still comes back, signed_out false, a warning', r.status === 200 && /^\d{4}$/.test(r.body.pin)
+ok('sign-out fails: the code still comes back, signed_out false, a warning', r.status === 200 && /^\d{3,}$/.test(r.body.pin)
   && r.body.signed_out === false && /not signed out/.test(r.body.warning), JSON.stringify(r.body))
 r = await call(DAVID, { action: 'disable', student_id: ID.s5a })
 ok('sign-out fails on disable: still blocked, with a warning', r.status === 200 && r.body.active === false && r.body.signed_out === false && /not signed out/.test(r.body.warning), JSON.stringify(r.body))
 await state.db.exec(`alter table auth.sessions_hidden rename to sessions`)
 
-ok('nothing logged holds a PIN, a user id or an error text', !/\d{4}-learn/.test(logs.join('\n')) && !logs.join('\n').includes(anh)
+ok('nothing logged holds a code, a user id or an error text', !/\d{3,}-learn/.test(logs.join('\n')) && !logs.join('\n').includes(anh)
   && !/relation|does not exist/.test(logs.join('\n')), logs.join(' | '))
 
 realLog(`\n${pass} passed, ${fail} failed`)

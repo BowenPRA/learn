@@ -6,8 +6,8 @@ import { CARDS_KEY } from '../lib/cards.js'
 import { useT } from '../lib/i18n.jsx'
 import { className } from '../data/subjects.js'
 
-// The login cards for the logins just made or reset: name, username, PIN and the
-// address. The PINs exist only here, once; "Done" forgets them.
+// The login cards for the logins just made or reset: name, login name, secret code
+// (the student number) and the address. "Done" forgets them.
 export default function LoginCards() {
   const { classKey: raw } = useParams()
   const classKey = decodeURIComponent(raw)
@@ -28,7 +28,7 @@ export default function LoginCards() {
         <Link to={back} className="btn-ghost -ml-3 mb-2"><ArrowLeft className="h-5 w-5" /> {className(classKey, lang)}</Link>
         <h1 className="mb-2 text-3xl font-extrabold text-pra-ink">{t('cardsTitle')}</h1>
         {cards.length ? <Notice>{t('cardsNote')}</Notice> : <Notice tone="bad">{t('cardsEmpty')}</Notice>}
-        {stillIn && <div className="mt-3"><Notice tone="bad">{lang === 'vn' ? 'Đã đặt mã PIN mới, nhưng thiết bị cũ có thể vẫn đăng nhập thêm tối đa một giờ.' : 'New PIN set, but the old device may stay signed in for up to an hour.'}</Notice></div>}
+        {stillIn && <div className="mt-3"><Notice tone="bad">{lang === 'vn' ? 'Đã đặt lại mã, nhưng thiết bị cũ có thể vẫn đăng nhập thêm tối đa một giờ.' : 'Code reset, but the old device may stay signed in for up to an hour.'}</Notice></div>}
         {cards.length > 0 && (
           <div className="mt-4 flex flex-wrap gap-3">
             <button type="button" className="btn-primary" onClick={() => window.print()}><Printer className="h-5 w-5" /> {t('print')}</button>
@@ -46,9 +46,9 @@ export default function LoginCards() {
             </div>
             <p className="mb-3 text-2xl font-extrabold text-pra-ink">{c.name}</p>
             <dl className="grid grid-cols-[auto_1fr] items-baseline gap-x-4 gap-y-2">
-              <dt className="text-sm font-bold text-pra-ink-soft">Username · Tên đăng nhập</dt>
+              <dt className="text-sm font-bold text-pra-ink-soft">Name · Tên</dt>
               <dd className="font-mono text-2xl font-extrabold tracking-wide text-pra-blue-ink">{c.username}</dd>
-              <dt className="text-sm font-bold text-pra-ink-soft">PIN · Mã PIN</dt>
+              <dt className="text-sm font-bold text-pra-ink-soft">Secret code · Mã bí mật</dt>
               <dd className="font-mono text-3xl font-extrabold tracking-[0.3em] text-pra-ink">{c.pin}</dd>
             </dl>
             <p className="mt-3 border-t-2 border-pra-line pt-2 text-sm font-bold text-pra-ink-soft">{t('goTo')}: <span className="text-pra-blue">learn.pra.edu.vn</span></p>

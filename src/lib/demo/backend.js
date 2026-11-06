@@ -7,10 +7,10 @@ import { PACK_Y5_NEGATIVES, PACK_Y5_ORDERING, PACK_Y5_WORDS } from './packY5Nega
 import PACK_Y5_BELOW_ZERO from '../../../packs/y5-math-u5-below-zero/pack.json'
 import { partIds, partSummary, partsOf, scoreOf } from '../../pack/model.js'
 import { slipsByKey } from '../../stepPractice/model.js'
-import { makePin, makeUsername } from '../../../supabase/functions/learn-accounts/lib.js'
+import { codeFor, usernameFor } from '../../../supabase/functions/learn-accounts/lib.js'
 import { problem } from '../problem.js'
 
-const KEY = 'learn-demo-v4'
+const KEY = 'learn-demo-v5'
 const WHO = 'learn-demo-who'
 const ME = 'demo-s-A'
 const DAY = 86400000
@@ -24,7 +24,8 @@ const CONTENT = { 'demo-p-ord': PACK_Y5_ORDERING, 'demo-p-neg': PACK_Y5_NEGATIVE
 // A pack's pictures: in demo mode they are served from the repo (Vite gives each a link).
 const ASSET_URLS = Object.fromEntries(Object.entries(import.meta.glob('../../../packs/*/assets/*', { eager: true, query: '?url', import: 'default' }))
   .map(([path, url]) => { const [, slug, file] = /packs\/([^/]+)\/assets\/(.+)$/.exec(path); return [`${slug}/${file}`, url] }))
-const USERNAMES = ['otter27', 'mango43', 'rocket58', 'panda36', 'kiwi72', 'comet49', 'lemon83', 'turtle65', 'seal24', 'kite97', 'robin38', null]
+// Logins as on the old Dashboard: the nickname and the student number (here S0901 to S0912).
+const USERNAMES = ['learnera', 'learnerb', 'learnerc', 'learnerd', 'learnere', 'learnerf', 'learnerg', 'learnerh', 'learneri', 'learnerj', 'learnerk', null]
 
 /** The slip keys of one practice item, as the step engine reports them. */
 function slipKeysOf(content, partId, itemId) {
@@ -42,7 +43,7 @@ function rng(seed) {
 function seed() {
   const r = rng(20261105)
   const students = 'ABCDEFGHIJKL'.split('').map((c, i) => ({
-    id: `demo-s-${c}`, name: `Learner ${c}`, full_name: `Learner ${c}`, username: USERNAMES[i],
+    id: `demo-s-${c}`, name: `Learner ${c}`, full_name: `Learner ${c}`, student_code: `S09${String(i + 1).padStart(2, '0')}`, username: USERNAMES[i],
     login: USERNAMES[i] ? (c === 'K' ? 'off' : 'on') : 'none',
     last_seen: USERNAMES[i] && c !== 'K' ? iso(Date.now() - (1 + Math.floor(r() * 70)) * 3600000) : null,
   }))
@@ -130,7 +131,7 @@ export const demo = {
 
   async signInStudent(username, pin) {
     load()
-    if (String(username).trim().toLowerCase() !== 'otter27' || String(pin).trim() !== '4821') throw problem('wrong')
+    if (usernameFor({ nickname: username }) !== 'learnera' || String(pin).trim() !== '901') throw problem('wrong')
     try { sessionStorage.setItem(WHO, 'student') } catch { /* ignore */ }
     tell()
   },
@@ -151,7 +152,7 @@ export const demo = {
   async me(session) {
     if (!session) return null
     load()
-    if (who() === 'student') return { kind: 'student', student_id: ME, name: 'Learner A', year_group: 'Year 5', username: 'otter27' }
+    if (who() === 'student') return { kind: 'student', student_id: ME, name: 'Learner A', year_group: 'Year 5', username: 'learnera' }
     return { kind: 'staff', name: 'Mr. David', classes: await this.classes() }
   },
 
@@ -251,17 +252,19 @@ export const demo = {
     if (body.action === 'make') {
       const made = []
       for (const s of db.students.filter((x) => !x.username && (!body.student_ids || body.student_ids.includes(x.id)))) {
-        s.username = makeUsername(taken)
+        const username = usernameFor(s)
+        if (taken.has(username)) continue
+        s.username = username
         taken.add(s.username)
         s.login = 'on'
-        made.push({ student_id: s.id, name: s.name, username: s.username, pin: makePin() })
+        made.push({ student_id: s.id, name: s.name, username: s.username, pin: codeFor(s.student_code) })
       }
       persist()
       return wait({ made, failed: [] })
     }
     const s = db.students.find((x) => x.id === body.student_id)
     if (!s?.username) throw problem('server', 'This student has no login yet. Make one first.')
-    if (body.action === 'reset') return wait({ student_id: s.id, username: s.username, pin: makePin() })
+    if (body.action === 'reset') return wait({ student_id: s.id, username: s.username, pin: codeFor(s.student_code) })
     s.login = body.action === 'disable' ? 'off' : 'on'
     persist()
     return wait({ student_id: s.id, active: s.login === 'on' })

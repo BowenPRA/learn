@@ -1,42 +1,46 @@
 // The learn-accounts Edge Function's network-free parts (supabase/functions/learn-accounts/lib.js).
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { WORDS, makeUsername, makePin, easyPin, parseRequest, toMake, loginEmail, passwordFor, corsFor, MAX_MAKE } from '../supabase/functions/learn-accounts/lib.js'
+import { USERNAME_RE, foldName, usernameFor, codeFor, parseRequest, toMake, loginEmail, passwordFor, corsFor, MAX_MAKE } from '../supabase/functions/learn-accounts/lib.js'
 
-const USERNAME_RE = /^[a-z]{3,10}[2-9]{2}$/ // the database allows [0-9]; the function uses 2-9 only
-
-test('usernames: a word and two digits, unique, in the database\'s shape', () => {
-  const taken = new Set()
-  for (let i = 0; i < 2000; i += 1) {
-    const u = makeUsername(taken)
-    assert.match(u, USERNAME_RE)
-    assert.ok(!taken.has(u))
-    taken.add(u)
-  }
-  for (const w of WORDS) assert.match(w, /^[a-z]{3,8}$/, w)
-  assert.equal(new Set(WORDS).size, WORDS.length, 'no word twice')
+// Logins as on the old Dashboard (Bowen, 6 November 2026): nickname + student number.
+test('login names: the nickname folded to plain lower-case letters and digits', () => {
+  assert.equal(foldName('Nấm'), 'nam')
+  assert.equal(foldName('Maïron'), 'mairon')
+  assert.equal(foldName('Đức'), 'duc')
+  assert.equal(foldName('Anh Thư'), 'anhthu')
+  assert.equal(foldName('  GB '), 'gb')
+  assert.equal(foldName('Mary-Jane O\'Neil'), 'maryjaneoneil')
+  assert.equal(foldName(null), '')
+  // The sign-in page folds what the child types the same way, so these all reach one login.
+  for (const typed of ['Nam', 'nam', 'Nấm', ' NAM ', 'Nấm']) assert.equal(foldName(typed), 'nam')
 })
 
-test('usernames: gives up rather than loop forever when every name is taken', () => {
-  const always = () => 0
-  const taken = new Set([makeUsername(new Set(), always)])
-  assert.throws(() => makeUsername(taken, always), /free username/)
+test('login names: nickname first, then first name, then full name; the database\'s shape', () => {
+  assert.equal(usernameFor({ nickname: 'Goku', first_name: 'Minh', full_name: 'Tran Minh' }), 'goku')
+  assert.equal(usernameFor({ nickname: '  ', first_name: 'Khôi', full_name: 'Le Khoi' }), 'khoi')
+  assert.equal(usernameFor({ nickname: null, first_name: null, full_name: 'Learner A' }), 'learnera')
+  assert.equal(usernameFor(null), '')
+  for (const ok of ['su', 'goku', 'penelope', 'learner12']) assert.match(ok, USERNAME_RE)
+  for (const bad of ['', 'a', 'x'.repeat(21), 'Goku', 'an na']) assert.doesNotMatch(bad, USERNAME_RE)
 })
 
-test('PINs: four digits, never easy', () => {
-  for (let i = 0; i < 5000; i += 1) {
-    const p = makePin()
-    assert.match(p, /^\d{4}$/)
-    assert.ok(!easyPin(p), p)
-  }
-  for (const p of ['0000', '7777', '1234', '4321', '7890', '0987', '1212', '9090']) assert.ok(easyPin(p), p)
-  for (const p of ['4821', '1203', '5592']) assert.ok(!easyPin(p), p)
-  assert.match(makePin(6), /^\d{6}$/)
+test('secret codes: the student number padded to 3 digits', () => {
+  assert.equal(codeFor('S0006'), '006')
+  assert.equal(codeFor('S0024'), '024')
+  assert.equal(codeFor('S0140'), '140')
+  assert.equal(codeFor('s0024'), '024')
+  assert.equal(codeFor('BLE0055'), '055')
+  assert.equal(codeFor('S1203'), '1203')
+  assert.equal(codeFor(''), null)
+  assert.equal(codeFor(null), null)
+  assert.equal(codeFor('PAL'), null)
 })
 
 test('the login email and password', () => {
-  assert.equal(loginEmail('otter27'), 'otter27@learn.pra.edu.vn')
-  assert.ok(passwordFor('4821').length >= 6, 'Supabase wants 6 characters or more')
+  assert.equal(loginEmail('goku'), 'goku@learn.pra.edu.vn')
+  assert.equal(passwordFor('024'), '024-learn')
+  assert.ok(passwordFor('006').length >= 6, 'Supabase wants 6 characters or more')
 })
 
 test('requests are checked before anything happens', () => {

@@ -1,68 +1,42 @@
-// The parts of learn-accounts that need no network: usernames, PINs, the login
-// email and password, and reading a request. Plain JavaScript so the Edge Function
-// (Deno) and the tests (Node, tests/accounts.test.mjs) share one copy.
+// The parts of learn-accounts that need no network: the login name, the secret
+// code, the login email and password, and reading a request. Plain JavaScript so
+// the Edge Function (Deno), the sign-in page and the tests (Node,
+// tests/accounts.test.mjs) share one copy.
+//
+// Logins work like the old Dashboard's (Bowen, 6 November 2026): a student types
+// their nickname (accents, spaces and punctuation ignored: a nickname typed with or
+// without its accents is the same login) and a secret code, their PRA student number padded to 3 digits
+// (S0024 -> 024).
 
 export const LOGIN_DOMAIN = 'learn.pra.edu.vn'
-export const PIN_LENGTH = 4
+export const CODE_LENGTH = 3
 export const PASSWORD_SUFFIX = '-learn' // public; only there because Supabase wants 6 characters or more
 export const MAX_MAKE = 60
+// The login name: lower-case letters and digits, 2 to 20 of them. The database
+// checks the same rule (learn_accounts_username_check).
+export const USERNAME_RE = /^[a-z0-9]{2,20}$/
 
-// Easy English nouns a child of 8 can read and spell: animals, fruit, weather,
-// space, things at home. 3 to 8 letters, no names, nothing that reads as a word
-// for a person.
-export const WORDS = [
-  'ant', 'bat', 'bear', 'bee', 'bird', 'cat', 'crab', 'cow', 'deer', 'dog', 'duck', 'eagle', 'eel', 'fish', 'fox',
-  'frog', 'goat', 'goose', 'hen', 'horse', 'koala', 'lamb', 'lion', 'llama', 'mole', 'moose', 'moth', 'mouse', 'newt',
-  'otter', 'owl', 'panda', 'parrot', 'pig', 'pony', 'puffin', 'rabbit', 'robin', 'seal', 'shark', 'sheep', 'snail',
-  'squid', 'swan', 'tiger', 'toad', 'turtle', 'whale', 'wolf', 'yak', 'zebra', 'gecko', 'lizard', 'beetle', 'camel',
-  'apple', 'banana', 'cherry', 'coconut', 'grape', 'guava', 'kiwi', 'lemon', 'lime', 'mango', 'melon', 'olive',
-  'orange', 'papaya', 'peach', 'pear', 'plum', 'lychee', 'carrot', 'pepper', 'potato', 'tomato', 'pumpkin', 'bean',
-  'cloud', 'rain', 'snow', 'storm', 'wind', 'sun', 'moon', 'star', 'comet', 'planet', 'rocket', 'meteor', 'orbit',
-  'river', 'ocean', 'island', 'forest', 'hill', 'lake', 'leaf', 'tree', 'flower', 'seed', 'shell', 'stone', 'sand',
-  'kite', 'drum', 'bell', 'boat', 'bus', 'train', 'bike', 'ship', 'lamp', 'clock', 'cup', 'spoon', 'brush', 'pencil',
-  'paper', 'book', 'chair', 'table', 'window', 'door', 'key', 'box', 'ball', 'button', 'candle', 'basket', 'ladder',
-  'bridge', 'castle', 'tower', 'garden', 'lantern', 'paddle', 'anchor', 'compass', 'magnet', 'robot', 'violin', 'piano',
-]
-// 2 to 9 only: no 0 to mistake for O, no 1 to mistake for l.
-const DIGITS = '23456789'
-
-/** A random whole number from 0 to n - 1, from the platform's secure random source. */
-export function randomBelow(n) {
-  const max = Math.floor(0x100000000 / n) * n
-  const buf = new Uint32Array(1)
-  for (;;) {
-    globalThis.crypto.getRandomValues(buf)
-    if (buf[0] < max) return buf[0] % n
-  }
+/** Lower-case ASCII letters and digits only: accents dropped, d-stroke -> d, spaces and punctuation gone ('Anh Thu' -> 'anhthu'). */
+export function foldName(text) {
+  return String(text || '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[\u0111\u0110]/g, 'd')
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '')
 }
 
-/** 'otter27': a word and two digits, not in `taken` (a Set of usernames already used). */
-export function makeUsername(taken = new Set(), rand = randomBelow) {
-  for (let i = 0; i < 200; i += 1) {
-    const name = WORDS[rand(WORDS.length)] + DIGITS[rand(DIGITS.length)] + DIGITS[rand(DIGITS.length)]
-    if (!taken.has(name)) return name
-  }
-  throw new Error('Could not find a free username.')
+/** The login name for a student row: the nickname, else the first name, else the full name. */
+export function usernameFor(student) {
+  const s = student || {}
+  const from = [s.nickname, s.first_name, s.full_name, s.name].find((x) => String(x || '').trim())
+  return foldName(from)
 }
 
-/** Whether a PIN is too easy to guess: one digit repeated, a run up or down, or a pair repeated (1212). */
-export function easyPin(pin) {
-  const d = [...pin].map(Number)
-  if (d.every((x) => x === d[0])) return true
-  const up = d.every((x, i) => i === 0 || x === (d[i - 1] + 1) % 10)
-  const down = d.every((x, i) => i === 0 || x === (d[i - 1] + 9) % 10)
-  if (up || down) return true
-  if (d.length === 4 && d[0] === d[2] && d[1] === d[3]) return true
-  return false
-}
-
-/** A random PIN of `length` digits that is not easy to guess. */
-export function makePin(length = PIN_LENGTH, rand = randomBelow) {
-  for (;;) {
-    let pin = ''
-    for (let i = 0; i < length; i += 1) pin += String(rand(10))
-    if (!easyPin(pin)) return pin
-  }
+/** The secret code from a student number: 'S0024' -> '024', 'S0140' -> '140', 'S1203' -> '1203'. Null without digits. */
+export function codeFor(studentCode) {
+  const digits = String(studentCode || '').replace(/\D/g, '')
+  if (!digits) return null
+  return String(Number(digits)).padStart(CODE_LENGTH, '0')
 }
 
 export const loginEmail = (username) => `${username}@${LOGIN_DOMAIN}`

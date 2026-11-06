@@ -20,7 +20,7 @@ npm run dev          # http://localhost:5201/  (demo mode: sample data, no login
 Without a `.env` the portal runs in **demo mode**: a made-up Year 5 class ("Learner
 A" to "Learner L"), Mr. David as the teacher, and one lesson on adding and
 subtracting with negative numbers. "Try as a student" / "Try as Mr. David" on the
-sign-in page. The demo username is `otter27`, PIN `4821`. Nothing leaves the browser.
+sign-in page. The demo student signs in as `Learner A`, secret code `901`. Nothing leaves the browser.
 With The Current's Supabase settings in `.env` (see `.env.example`) it talks to the
 real database; `?demo` in the address still opens the demo.
 

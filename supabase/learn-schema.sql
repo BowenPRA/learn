@@ -1,5 +1,5 @@
 -- PRA Learn (learn.pra.edu.vn): student logins, lesson packs and progress.
--- NOT RUN YET. Run once in The Current's Supabase project > SQL Editor, AFTER
+-- RUN 6 November 2026 in The Current's Supabase project (SQL Editor), AFTER
 -- current-hardening.sql. Safe to run again. Design: docs/DESIGN.md.
 --
 -- Three tables, beside The Current's adm_* tables:
@@ -30,7 +30,7 @@
 create table if not exists learn_accounts (
   user_id uuid primary key,                     -- auth.users.id
   student_id uuid not null unique references adm_students(id) on delete cascade,
-  username text not null unique,                -- 'otter27': a word and two digits, never a name
+  username text not null unique,                -- the nickname, folded: 'goku', 'nam' (lib.js foldName; changed 6 Nov 2026)
   extra_classes text[] not null default '{}',   -- classes outside the student's own year group: 'math:Year 6'
   active boolean not null default true,         -- false = blocked by the learn-accounts function
   created_at timestamptz not null default now(),
@@ -40,7 +40,7 @@ create table if not exists learn_accounts (
   updated_at timestamptz
 );
 alter table learn_accounts drop constraint if exists learn_accounts_username_check;
-alter table learn_accounts add constraint learn_accounts_username_check check (username ~ '^[a-z]{3,10}[0-9]{2}$');
+alter table learn_accounts add constraint learn_accounts_username_check check (username ~ '^[a-z0-9]{2,20}$');
 alter table learn_accounts drop constraint if exists learn_accounts_classes_check;
 alter table learn_accounts add constraint learn_accounts_classes_check check (cardinality(extra_classes) <= 20);
 -- Deferrable, so the test at the end can use a made-up user and roll it back

@@ -36,7 +36,7 @@ Contents
 | Question | Decision | Section |
 |---|---|---|
 | Where accounts and data live | The Current's Supabase project. Portal tables are `learn_*` beside the `adm_*` ones. | 2 |
-| How students sign in | A username such as `otter27` and a 4-digit PIN, printed on a login card by the teacher. No class list on the sign-in page. | 3 |
+| How students sign in | Since 6 Nov 2026, as on the old Dashboard: the nickname (folded: `goku`) and a 3-digit secret code, the student number (S0024 -> `024`), printed on a login card by the teacher. No class list on the sign-in page. | 3 |
 | How staff sign in | Their Current login (email + password), same accounts. | 4 |
 | Who makes student logins | Office, head teachers, or a teacher of that class, through the Edge Function `learn-accounts` (service role). | 5 |
 | What a student account can read | Its own name, its class's published packs, its own progress. Nothing in `adm_*`. | 6 |
@@ -91,6 +91,19 @@ A separate Postgres schema would be tidier but needs "Exposed schemas" changed i
 the Supabase dashboard; not worth it.
 
 ## 3. Student sign-in
+
+> **Changed 6 November 2026 (Bowen):** logins now work like the old Dashboard's. The
+> login name is the student's nickname folded to plain lower-case letters and digits
+> (`foldName` in `supabase/functions/learn-accounts/lib.js`: no accents, spaces or
+> punctuation; else the first name), and the secret code is the student number
+> padded to 3 digits (`codeFor`: S0024 -> 024). Password `<code>-learn`, email
+> `<name>@learn.pra.edu.vn`, as before. A clash (two nicknames that fold the same)
+> is reported, not renamed. Reset sets the code back to the student number and signs
+> the login out. The trade-off below still holds: the code is the student number,
+> on invoices and in the student's Google address, so anyone who knows a child's
+> nickname and number can sign in as them; a student login reaches only that
+> student's own packs and progress. The rest of this section describes the first
+> design (random word + digits, 4-digit PIN) and is kept for the reasoning.
 
 PRA's younger learners are 8 to 12 and are learning English, so the sign-in screen
 has two boxes, big type, an icon on each, and almost no words.
@@ -583,9 +596,10 @@ keys (demo data uses "Learner A" to "Learner L" and made-up usernames).
 Each was decided as written so the work could go on; any can be changed.
 
 1. **The Current's project** for PRA Learn (2.2), rather than a separate project.
-2. **Usernames** are a word and two digits, not the student code (`s0024`). The code
-   is easier for staff but makes usernames guessable.
-3. **PIN length** 4. Six is one setting.
+2. **Usernames** were a word and two digits. Changed 6 Nov 2026 (Bowen): the nickname,
+   as on the old Dashboard (section 3).
+3. **Secret code**: was a random 4-digit PIN. Changed 6 Nov 2026 (Bowen): the student
+   number padded to 3 digits.
 4. **Who makes logins**: office, head teachers and the class's teachers.
 5. **Name shown to the child**: nickname if set, else first name.
 6. **Pending (trial) students** can have logins.

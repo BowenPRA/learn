@@ -4,6 +4,7 @@
 import { makeDb, read } from '../current.mjs'
 import { SEED, ID } from '../seed.mjs'
 import { state, fakeJwt } from './fake-supabase.mjs'
+import { codeFor, usernameFor } from '../../../supabase/functions/learn-accounts/lib.js'
 
 let pass = 0, fail = 0
 const ok = (label, cond, extra = '') => { cond ? pass++ : fail++; console.log(`${cond ? 'ok  ' : 'FAIL'} ${label}${extra ? ' — ' + extra : ''}`) }
@@ -64,15 +65,18 @@ ok('nothing was made by refused calls', await count(`select count(*) n from lear
 r = await call(DAVID, { action: 'make', class_key: 'math:Year 5' })
 const made = r.body.made || []
 ok('the class\'s teacher makes logins for every enrolled Year 5 student (Pending included, Inactive not)', r.status === 200 && made.length === 4 && r.body.failed.length === 0, JSON.stringify(r.body).slice(0, 200))
-ok('usernames are unique and fit the database rule', new Set(made.map((m) => m.username)).size === made.length && made.every((m) => /^[a-z]{3,10}[0-9]{2}$/.test(m.username)))
-ok('PINs are 4 digits', made.every((m) => /^\d{4}$/.test(m.pin)))
+const roster = new Map((await state.db.query(`select id, nickname, first_name, full_name, student_code from adm_students`)).rows.map((x) => [x.id, x]))
+ok('login names are the folded nickname (else first name), unique, in the database\'s shape',
+  new Set(made.map((m) => m.username)).size === made.length && made.every((m) => /^[a-z0-9]{2,20}$/.test(m.username) && m.username === usernameFor(roster.get(m.student_id))),
+  made.map((m) => m.username).join(' '))
+ok('secret codes are the student numbers padded to 3 digits', made.every((m) => m.pin === codeFor(roster.get(m.student_id).student_code)), made.map((m) => m.pin).join(' '))
 const users = (await state.db.query(`select u.id, u.email, u.raw_app_meta_data m, a.username, a.student_id from auth.users u join learn_accounts a on a.user_id = u.id`)).rows
-ok('each login: <username>@learn.pra.edu.vn, role student, its student id, PIN + "-learn" as password, email confirmed',
+ok('each login: <username>@learn.pra.edu.vn, role student, its student id, code + "-learn" as password, email confirmed',
   users.length === 4 && users.every((u) => u.email === `${u.username}@learn.pra.edu.vn` && u.m.role === 'student' && u.m.student_id === u.student_id
     && state.passwords.get(u.id).password === made.find((m) => m.username === u.username).pin + '-learn' && state.passwords.get(u.id).email_confirm === true))
 ok('learn_accounts.created_by is a name, not an email', (await state.db.query(`select distinct created_by from learn_accounts`)).rows.every((x) => x.created_by === 'Mr. David'))
 const allLogs = () => logs.join('\n')
-ok('nothing logged holds a PIN or a username', made.every((m) => !allLogs().includes(m.pin + '-learn') && !new RegExp(`\\b${m.pin}\\b`).test(allLogs()) && !allLogs().includes(m.username)), allLogs())
+ok('nothing logged holds a code or a login name', made.every((m) => !allLogs().includes(m.pin + '-learn') && !new RegExp(`\\b${m.pin}\\b`).test(allLogs()) && !allLogs().includes(m.username)), allLogs())
 
 r = await call(DAVID, { action: 'make', class_key: 'math:Year 5' })
 ok('calling make again makes nothing new', r.status === 200 && r.body.made.length === 0 && await count(`select count(*) n from learn_accounts`) === 4)
@@ -84,25 +88,29 @@ const [a, b] = await Promise.all([call(OFFICE, { action: 'make', class_key: 'eng
 const y7 = await count(`select count(*) n from learn_accounts where student_id = '${ID.s7}'`)
 const orphans = await count(`select count(*) n from auth.users u where u.email like '%@learn.pra.edu.vn' and not exists (select 1 from learn_accounts a where a.user_id = u.id)`)
 ok('two make calls at once: one login for the student, no orphan auth user', y7 === 1 && orphans === 0, `logins ${y7}, orphans ${orphans}`)
-ok('two make calls at once: the second reports the student as already done, not a raw database error',
-  [a, b].every((x) => x.status === 200) && [...a.body.failed, ...b.body.failed].every((f) => !/duplicate key|violates/.test(f.reason)),
+ok('two make calls at once: the second reports nothing wrong (the student has a login)',
+  [a, b].every((x) => x.status === 200) && [...a.body.failed, ...b.body.failed].length === 0,
   JSON.stringify([a.body.failed, b.body.failed]))
 
-// A username already taken in auth (an orphan from a crash): the function picks another.
-let calls = 0
-const realRandom = crypto.getRandomValues.bind(crypto)
-crypto.getRandomValues = (buf) => { if (calls < 3) { calls++; buf.fill(0); return buf } return realRandom(buf) }
-await state.db.exec(`insert into auth.users (id, email) values ('${crypto.randomUUID()}', 'ant22@learn.pra.edu.vn')`)
+// A login name already taken in auth (an orphan from a crash): reported, nothing made.
+await state.db.exec(`insert into auth.users (id, email) values ('${crypto.randomUUID()}', 'quocbao@learn.pra.edu.vn')`)
 r = await call(OFFICE, { action: 'make', class_key: 'english:Upper Secondary' })
-crypto.getRandomValues = realRandom
-ok('a username whose address is already in auth is skipped for another', r.status === 200 && r.body.made.length === 1 && r.body.made[0].username !== 'ant22', JSON.stringify(r.body))
+ok('a login name whose address is already in auth is reported, not made', r.status === 200 && r.body.made.length === 0 && r.body.failed.length === 1 && /already a login name/.test(r.body.failed[0].reason), JSON.stringify(r.body))
+ok('... and leaves no orphan of its own', await count(`select count(*) n from auth.users u where u.email like '%@learn.pra.edu.vn' and not exists (select 1 from learn_accounts a where a.user_id = u.id)`) === 1)
+
+// Two students whose nicknames fold to the same login name: the first gets it, the second is reported.
+await state.db.exec(`insert into adm_students (full_name, nickname, level, status, active, student_code) values
+  ('Zz Four A', 'B${'é'} Na', 'Year 4', 'active', true, 'S0041'), ('Zz Four B', 'Be Na', 'Year 4', 'active', true, 'S0042')`)
+r = await call(OFFICE, { action: 'make', class_key: 'english:Year 4' })
+ok('same login name twice: one made, one reported with what to do', r.status === 200 && r.body.made.length === 1 && r.body.made[0].username === 'bena'
+  && ['041', '042'].includes(r.body.made[0].pin) && r.body.failed.length === 1 && /different nickname/.test(r.body.failed[0].reason), JSON.stringify(r.body))
 
 // reset / disable / enable
 const anh = made.find((m) => m.student_id === ID.s5a)
 r = await call(KIU, { action: 'reset', student_id: ID.s5a })
-ok('reset by a teacher of the student\'s year group (Kiu, Year 5 English)', r.status === 200 && r.body.username === anh.username && /^\d{4}$/.test(r.body.pin), JSON.stringify(r.body))
+ok('reset by a teacher of the student\'s year group (Kiu, Year 5 English): the code is the student number again', r.status === 200 && r.body.username === anh.username && r.body.pin === anh.pin, JSON.stringify(r.body))
 const uid = (await state.db.query(`select user_id from learn_accounts where student_id = $1`, [ID.s5a])).rows[0].user_id
-ok('the new PIN is the password', state.passwords.get(uid).password === r.body.pin + '-learn')
+ok('reset sets the password back to the code', state.passwords.get(uid).password === r.body.pin + '-learn')
 r = await call(STRANGER, { action: 'reset', student_id: ID.s5a })
 ok('reset by a stranger: 403', r.status === 403)
 r = await call(who(`${anh.username}@learn.pra.edu.vn`, 'student', uid), { action: 'reset', student_id: ID.s5a })
@@ -119,7 +127,7 @@ r = await call(DAVID, { action: 'make', class_key: "math:Year 5'; drop table x" 
 ok('a bad class key: 400', r.status === 400)
 r = await call(DAVID, { action: 'make', class_key: 'math:Year 5' }, { origin: 'https://evil.example' })
 ok('CORS never echoes another site', r.cors === 'https://learn.pra.edu.vn')
-ok('nothing logged across all calls holds a PIN', !/\d{4}-learn/.test(allLogs()))
+ok('nothing logged across all calls holds a code', !/\d{3,}-learn/.test(allLogs()))
 
 console.log(`\n${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)
