@@ -1,0 +1,36 @@
+Deck: content/y5-math/U05_L3 (25 slides) from C:\Users\sbowe\code\wt-y5eng @ b90a8d0+changes
+Pack: y5-math-u5-below-zero -> C:\Users\sbowe\learn\packs\y5-math-u5-below-zero
+
+01 hero
+02 compare: eyebrow "Today" -> "This lesson"
+03 showcase: widget LiftStepper -> still s03-lift-stepper.png; eyebrow "Say it first" -> "Watch"
+04 statement + check c4: eyebrow "Back to the starter" -> "The starter"; check c4; reveal -> the check
+  photo SVG -> asset s05-photo.jpg (lift-minus.jpg, lift-b3.jpg)
+05 showcase + check c5: check c5
+  photo SVG -> asset s06-photo.jpg (sapa-snow.jpg)
+06 split
+07 showcase + check c6: widget NightStory -> replaced by a question; check c6
+08 statement + check c7: vote -> check (answer A, explanation from the next slide); eyebrow "Vote with one hand" -> "Choose"; check c7 (vote, edited in the overlay)
+09 split
+10 split + check c9: eyebrow "Whiteboards" -> "Your turn"; check c9
+11 statement + check c10: check c10; reveal -> the check
+12 split: eyebrow "Talk to your partner" -> "Think"; reveal kept as "Show me" (not scored)
+13 split
+14 callout + check c13: widget UpOrDown -> replaced by a question; eyebrow "A game · everyone stands" -> "Think"; check c13
+15 compare
+16 statement + check c15: vote -> check (answer B, explanation from the next slide); eyebrow "Vote with one hand" -> "Choose"; check c15 (vote, edited in the overlay)
+17 split
+18 split + check c17: widget TableReveal -> replaced by a question; eyebrow "Whiteboards · read the table" -> "Read the table"; check c17
+19 callout: eyebrow "Whiteboards" -> "Your turn"; reveal kept as "Show me" (not scored)
+20 statement + check c19: eyebrow "Talk to your partner" -> "Think"; check c19; reveal -> the check
+21 callout: eyebrow "Whiteboards" -> "Your turn"; reveal kept as "Show me" (not scored)
+22 callout: eyebrow "Talk to your partner" -> "Think"; reveal kept as "Show me" (not scored)
+23 split: eyebrow "Whiteboards" -> "Your turn"; reveal kept as "Show me" (not scored)
+24 stack: eyebrow "Before you leave" -> "Before you finish"
+25 hero + check c25: eyebrow "Exit question" -> "Last question"; check c25
+  widget LiftStepper -> s03-lift-stepper.png (611x240)
+
+Review: 25 slides from 25, 11 check question(s). Practice parts: practice (12 items), words (9 items).
+Assets: 3 (s03-lift-stepper.png, s05-photo.jpg, s06-photo.jpg). pack.json 178 kB.
+
+OK: y5-math-u5-below-zero passes the portal's checks.

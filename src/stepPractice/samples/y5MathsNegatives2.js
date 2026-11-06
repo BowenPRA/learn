@@ -89,15 +89,15 @@ export const practice = [
   },
   {
     id: 'p4', level: 'practice',
-    prompt: 'The table shows the temperature in three cities one night in January. [[How much warmer was Hà Nội than Moscow?]]',
-    promptVn: 'Bảng cho biết nhiệt độ ở ba thành phố vào một đêm tháng Một. [[Hà Nội ấm hơn Moscow bao nhiêu độ?]]',
-    table: { head: ['City', 'Temperature'], headVn: ['Thành phố', 'Nhiệt độ'], rows: [['Hà Nội', '{{9 °C}}'], ['London', '{{2 °C}}'], ['Moscow', '{{−6 °C}}']] },
+    prompt: 'The table shows the temperature in three cities one night in January. [[How much warmer was Hà Nội than Seoul?]]',
+    promptVn: 'Bảng cho biết nhiệt độ ở ba thành phố vào một đêm tháng Một. [[Hà Nội ấm hơn Seoul bao nhiêu độ?]]',
+    table: { head: ['City', 'Temperature'], headVn: ['Thành phố', 'Nhiệt độ'], rows: [['Hà Nội', '{{9 °C}}'], ['Tokyo', '{{2 °C}}'], ['Seoul', '{{−6 °C}}']] },
     steps: [
       {
         key: true,
         title: 'Which two temperatures do you need?', titleVn: 'Em cần hai nhiệt độ nào?',
         input: { type: 'choice', options: [{ id: 'a', text: '9 °C and −6 °C', textVn: '9 °C và −6 °C' }, { id: 'b', text: '9 °C and 2 °C', textVn: '9 °C và 2 °C' }, { id: 'c', text: '2 °C and −6 °C', textVn: '2 °C và −6 °C' }], answer: 'a' },
-        hint: 'Find Hà Nội and Moscow in the table.', hintVn: 'Tìm Hà Nội và Moscow trong bảng.',
+        hint: 'Find Hà Nội and Seoul in the table.', hintVn: 'Tìm Hà Nội và Seoul trong bảng.',
       },
       {
         title: 'From −6 up to 0', titleVn: 'Từ −6 lên 0',
@@ -116,7 +116,7 @@ export const practice = [
         hint: 'Add the part below zero and the part above zero.', hintVn: 'Cộng phần dưới 0 với phần trên 0.',
         slips: [
           { value: '3', step: 2, msg: '9 − 6 = 3 counts −6 as 6 above zero. It is 6 below, so count up to 0 first.', msgVn: '9 − 6 = 3 là coi −6 như trên 0 sáu độ. −6 ở dưới 0, nên em đếm lên 0 trước.' },
-          { value: '7', step: 1, msg: '9 − 2 = 7 uses London. The question is about Moscow.', msgVn: '9 − 2 = 7 là dùng London. Câu hỏi hỏi về Moscow.' },
+          { value: '7', step: 1, msg: '9 − 2 = 7 uses Tokyo. The question is about Seoul.', msgVn: '9 − 2 = 7 là dùng Tokyo. Câu hỏi hỏi về Seoul.' },
         ],
       },
     ],
