@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { ArrowLeft, BookOpen, ChevronDown, ChevronUp, EyeOff, KeyRound, Loader2, Lock, Pencil, Printer, Send, Unlock, UserPlus } from 'lucide-react'
+import { ArrowLeft, BookOpen, ChevronDown, ChevronUp, EyeOff, KeyRound, Loader2, Lock, Pencil, Presentation, Printer, Send, Unlock, UserPlus } from 'lucide-react'
 import { Loading, Notice, Stars } from '../components/ui.jsx'
+import { ClassroomLessonList, classroomLessonsFor } from '../components/ClassroomLessons.jsx'
 import { api } from '../lib/api.js'
 import { pick, shortDate, useT } from '../lib/i18n.jsx'
 import { className } from '../data/subjects.js'
@@ -79,6 +80,7 @@ export default function ClassView() {
   const noLogin = data.students.filter((s) => s.login === 'none')
   const rowOf = (sid, pid, part) => data.progress.find((g) => g.student_id === sid && g.pack_id === pid && g.part === part)
   const shown = data.packs.filter((p) => p.status !== 'draft')
+  const decks = classroomLessonsFor(null, classKey)
   const L = (en, vn) => (lang === 'vn' ? vn : en)
   const needs = needsOf(data)
   const order = [...data.students].sort((a, b) => (a.login === 'on') !== (b.login === 'on') ? (a.login === 'on' ? -1 : 1)
@@ -95,7 +97,7 @@ export default function ClassView() {
       {/* Lessons */}
       <section className="mb-8">
         <h2 className="mb-3 text-xl font-extrabold text-pra-ink">{t('lessons')}</h2>
-        {!data.packs.length && <div className="card p-5 font-semibold text-pra-ink-soft">{t('noLessons')}</div>}
+        {!data.packs.length && !decks.length && <div className="card p-5 font-semibold text-pra-ink-soft">{t('noLessons')}</div>}
         <div className="space-y-3">
           {data.packs.map((p) => {
             const m = misses[p.id]
@@ -135,6 +137,16 @@ export default function ClassView() {
             )
           })}
         </div>
+        {/* This class's classroom decks (src/data/classroomLessons.js): always open, nothing to set. */}
+        {decks.length > 0 && (
+          <div className={data.packs.length ? 'mt-6' : ''}>
+            <h3 className="mb-1 flex items-center gap-2 text-lg font-extrabold text-pra-ink">
+              <Presentation className="h-5 w-5 text-pra-sky" strokeWidth={2.6} aria-hidden /> {t('classLessons')}
+            </h3>
+            <p className="mb-3 font-semibold text-pra-ink-soft">{t('classLessonsClassHint')}</p>
+            <ClassroomLessonList lessons={decks} lang={lang} />
+          </div>
+        )}
       </section>
 
       {/* Who did what */}

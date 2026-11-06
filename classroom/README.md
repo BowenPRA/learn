@@ -20,6 +20,17 @@ Icons come from `lucide-react-classroom`, an alias pinned to the classroom's
 lucide-react version (`vite.config.js` points this folder's imports at it): newer
 versions draw some icons differently.
 
+## Where people find them
+
+- **Students**: "Lessons from class" on their home page, newest first, for their year
+  group (the class key's year group against the student's level). With no review
+  pack waiting, the welcome card's big button opens the newest one. Their class also
+  appears under "My classes".
+- **Staff**: "Lessons from class" at the foot of My classes (every lesson, with its
+  class), "N from class" on that class's card, and the class page lists its own under
+  Lessons ("always open, nothing to set"). Lessons from class have no due dates,
+  hiding or results: they are always open.
+
 ## Adding a lesson, or picking up changes
 
 1. Add the lesson to `src/data/classroomLessons.js` (course folder, lesson folder,

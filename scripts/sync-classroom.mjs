@@ -97,6 +97,19 @@ if (lucide && pinned !== lucide) {
   problems.push(`the classroom uses lucide-react ${lucide}; run: npm install lucide-react-classroom@npm:lucide-react@${lucide} (and pin it without ^)`)
 }
 
+// The home pages show each lesson's title and subtitle from src/data/classroomLessons.js;
+// say so when the deck's own meta has changed since (a warning, not a stop).
+const drift = []
+for (const l of CLASSROOM_LESSONS) {
+  const file = `content/${l.course}/${l.slug}/index.js`
+  if (!files.has(file)) continue
+  const src = files.get(file).toString('utf8')
+  for (const key of ['title', 'subtitle']) {
+    const m = new RegExp(`\\n\\s*${key}:\\s*'((?:[^'\\\\]|\\\\.)*)'`).exec(src)
+    if (m && m[1].replace(/\\'/g, "'") !== l[key]) drift.push(`${l.course}/${l.slug} ${key} is now '${m[1]}' in the classroom`)
+  }
+}
+
 if (problems.length) {
   console.error('Not synced:\n  ' + problems.join('\n  '))
   process.exit(1)
@@ -119,3 +132,4 @@ fs.writeFileSync(path.join(OUT, 'SOURCE.json'), JSON.stringify({
 
 console.log(`Copied ${listed.length} files from BowenPRA/classroom ${commit.slice(0, 7)} (${ref}) into classroom/:`)
 for (const l of CLASSROOM_LESSONS) console.log(`  ${l.unit} ${l.title}  ->  /classroom/#/lesson/${l.course}/${l.slug}`)
+if (drift.length) console.log(`\nUpdate src/data/classroomLessons.js to match:\n  ${drift.join('\n  ')}`)

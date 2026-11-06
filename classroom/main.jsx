@@ -43,6 +43,9 @@ function LessonView() {
   const listed = CLASSROOM_LESSONS.some((l) => l.course === courseId && l.slug === slug)
   const course = getCourse(courseId)
   const lesson = getLesson(courseId, slug)
+  // The browser tab names the lesson: "Tides · PRA Learn".
+  const title = listed && lesson ? lesson.title : ''
+  useEffect(() => { if (title) document.title = `${title} · PRA Learn` }, [title])
   if (!listed || !course || !lesson) return <ToLearn />
   // The deck as it is, without the teacher's lesson plan button and the old Dashboard link.
   return <Deck key={`${courseId}/${slug}`} lesson={{ ...lesson, plan: null, dashboard: null }} course={course} />

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AlertCircle, ArrowRight, CalendarDays, CheckCircle2, ChevronRight, Hourglass, Presentation, Star, Trophy } from 'lucide-react'
 import { Loading, Notice, SubjectTile } from '../components/ui.jsx'
-import { ClassroomLessonList, classroomLessonsFor } from '../components/ClassroomLessons.jsx'
+import { ClassroomLessonList, classroomLessonsFor, classroomLink, classroomTitle } from '../components/ClassroomLessons.jsx'
 import Pip from '../components/Pip.jsx'
 import { PackCard, nextPart, packDone, packStars, partLabels, partPath, partState, todayIso, weekEndIso } from '../components/packs.jsx'
 import { api } from '../lib/api.js'
@@ -60,9 +60,10 @@ export default function StudentHome() {
   const late = open.filter((p) => p.due_on && p.due_on < today)
   const week = open.filter((p) => !late.includes(p) && (p.due_on ? p.due_on <= sunday : data.now - Date.parse(p.published_at || 0) < WEEK))
   const later = open.filter((p) => !late.includes(p) && !week.includes(p))
-  const classes = [...new Set(data.packs.map((p) => p.class_key))]
-  // Mr. Bowen's classroom decks for this year group (src/data/classroomLessons.js).
+  // The classroom decks for this year group, newest first (src/data/classroomLessons.js).
   const fromClass = classroomLessonsFor(me)
+  const classes = [...new Set([...data.packs.map((p) => p.class_key), ...fromClass.map((l) => l.classKey)])]
+  const teacherOf = (k) => data.packs.find((p) => p.class_key === k)?.content?.teacher || fromClass.find((l) => l.classKey === k)?.teacher
   const list = (packs, opts = {}) => (
     <div className="space-y-3">{packs.map((p) => <PackCard key={p.id} pack={p} rows={rows[p.id]} lang={lang} {...opts} />)}</div>
   )
@@ -76,7 +77,7 @@ export default function StudentHome() {
     ? t(late.length === 1 ? 'heroLate1' : 'heroLateN', { n: late.length })
     : week.length
       ? t(week.length === 1 ? 'heroWeek1' : 'heroWeekN', { n: week.length })
-      : open.length ? t('heroLater') : data.packs.length ? t('allCaughtUp') : t('nothingYet')
+      : open.length ? t('heroLater') : data.packs.length ? t('allCaughtUp') : fromClass.length ? t('heroClass') : t('nothingYet')
   const stars = data.packs.reduce((sum, p) => sum + packStars(p.content, rows[p.id]).got, 0)
   const partsAll = data.packs.reduce((sum, p) => sum + partsOf(p.content).length, 0)
   const partsDone = data.packs.reduce((sum, p) => sum + partsOf(p.content).filter((x) => rows[p.id]?.[x.id]?.done).length, 0)
@@ -85,7 +86,9 @@ export default function StudentHome() {
   const started = part && partState(first.content, part.id, rows[first.id]?.[part.id]).state === 'started'
   const partName = part && partLabels(first.content, t)[part.id]
   const firstTitle = first && (lang === 'vn' ? first.title_vn || first.title : first.title)
-  const mood = late.length ? 'surprised' : !data.packs.length ? 'calm' : 'happy'
+  const mood = late.length ? 'surprised' : !data.packs.length && !fromClass.length ? 'calm' : 'happy'
+  // With nothing to do in a pack, the big button opens the newest lesson from class.
+  const deck = !part && fromClass[0]
 
   return (
     <main className="mx-auto max-w-5xl px-4 pb-16 pt-6">
@@ -122,6 +125,17 @@ export default function StudentHome() {
             </span>
           </Link>
         )}
+        {deck && (
+          <a href={classroomLink(deck)} className="btn-white btn-big mt-5 w-full justify-between gap-3 text-left sm:w-auto sm:min-w-[22rem]">
+            <span className="min-w-0">
+              <span className="block truncate text-lg font-extrabold">{t('openLesson', { title: classroomTitle(deck, lang) })}</span>
+              <span className="block truncate text-sm font-semibold text-pra-ink-soft">{deck.unit} · {subjectName(splitClass(deck.classKey)[0], lang)}{deck.teacher ? ` · ${deck.teacher}` : ''}</span>
+            </span>
+            <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pra-blue text-white">
+              <Presentation className="h-5 w-5" strokeWidth={2.6} />
+            </span>
+          </a>
+        )}
       </section>
 
       {late.length > 0 && (
@@ -131,7 +145,7 @@ export default function StudentHome() {
         </section>
       )}
 
-      {(week.length > 0 || (!open.length && !done.length)) && (
+      {(week.length > 0 || (!open.length && !done.length && !fromClass.length)) && (
         <section className="mb-8" aria-labelledby="h-week">
           <Head id="h-week" icon={CalendarDays} tone="#116DFF">{t('thisWeek')}</Head>
           {week.length ? list(week) : (
@@ -146,6 +160,7 @@ export default function StudentHome() {
       {fromClass.length > 0 && (
         <section className="mb-8" aria-labelledby="h-class">
           <Head id="h-class" icon={Presentation} tone="#2196E3">{t('classLessons')}</Head>
+          <p className="-mt-1 mb-3 font-semibold text-pra-ink-soft">{t('classLessonsHint')}</p>
           <ClassroomLessonList lessons={fromClass} lang={lang} />
         </section>
       )}
@@ -164,14 +179,14 @@ export default function StudentHome() {
         </section>
       )}
 
-      {data.packs.length > 0 && (
+      {classes.length > 0 && (
         <section className="grid gap-4 sm:grid-cols-2">
           <div className="card p-5">
             <h2 className="mb-3 text-lg font-extrabold text-pra-ink">{t('myClasses')}</h2>
             <ul className="space-y-2">
               {classes.map((k) => {
                 const [s, yg] = splitClass(k)
-                const teacher = data.packs.find((p) => p.class_key === k)?.content?.teacher
+                const teacher = teacherOf(k)
                 return (
                   <li key={k} className="flex items-center gap-3">
                     <SubjectTile subject={s} tone={subjectTone(s)} size="h-10 w-10" icon="h-5 w-5" />
