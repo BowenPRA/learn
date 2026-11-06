@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronRight, Trophy } from 'lucide-react'
 import { Loading, Notice } from '../components/ui.jsx'
-import { PackCard } from '../components/packs.jsx'
+import { PackCard, packDone, todayIso, weekEndIso } from '../components/packs.jsx'
 import { api } from '../lib/api.js'
 import { useT } from '../lib/i18n.jsx'
 import { useAuth } from '../lib/auth.jsx'
-import { byPack, partsOf } from '../pack/model.js'
+import { byPack } from '../pack/model.js'
 import { splitClass, subjectName, subjectTone } from '../data/subjects.js'
 
 const WEEK = 7 * 86400000
@@ -23,29 +23,52 @@ export default function StudentHome() {
   if (!data) return <Loading />
 
   const rows = byPack(data.progress)
-  const allDone = (p) => partsOf(p.content).every((part) => rows[p.id]?.[part.id]?.done)
-  // This week: open packs not finished, or published in the last 7 days.
-  const recent = data.packs.filter((p) => !allDone(p) || data.now - Date.parse(p.published_at || 0) < WEEK)
-  const older = data.packs.filter((p) => !recent.includes(p))
+  // Late (due before today, not finished) first, then due in the next 7 days, then the rest;
+  // finished packs go to Done. Worked out from today's date in this browser.
+  const today = todayIso(new Date(data.now))
+  const sunday = weekEndIso(new Date(data.now))
+  const byDue = (a, b) => String(a.due_on || '9999').localeCompare(String(b.due_on || '9999'))
+  const done = data.packs.filter((p) => packDone(p.content, rows[p.id]))
+  const open = data.packs.filter((p) => !done.includes(p)).sort(byDue)
+  const late = open.filter((p) => p.due_on && p.due_on < today)
+  const week = open.filter((p) => !late.includes(p) && (p.due_on ? p.due_on <= sunday : data.now - Date.parse(p.published_at || 0) < WEEK))
+  const later = open.filter((p) => !late.includes(p) && !week.includes(p))
   const classes = [...new Set(data.packs.map((p) => p.class_key))]
+  const list = (packs, opts = {}) => (
+    <div className="space-y-3">{packs.map((p) => <PackCard key={p.id} pack={p} rows={rows[p.id]} lang={lang} {...opts} />)}</div>
+  )
 
   return (
     <main className="mx-auto max-w-4xl px-4 pb-16 pt-6">
-      <h1 className="mb-6 text-3xl font-extrabold text-pra-ink sm:text-4xl">{t('hello', { name: me?.name || '' })}</h1>
+      <h1 className="mb-6 break-words text-3xl font-extrabold text-pra-ink sm:text-4xl">{t('hello', { name: me?.name || '' })}</h1>
 
-      <section className="mb-8">
-        <h2 className="mb-3 text-xl font-extrabold text-pra-ink">{t('thisWeek')}</h2>
-        {recent.length ? (
-          <div className="space-y-3">{recent.map((p) => <PackCard key={p.id} pack={p} rows={rows[p.id]} lang={lang} big />)}</div>
-        ) : (
-          <div className="card p-6 text-lg font-semibold text-pra-ink-soft">{t('nothingYet')}</div>
-        )}
-      </section>
+      {late.length > 0 && (
+        <section className="mb-8" aria-labelledby="h-late">
+          <h2 id="h-late" className="mb-3 text-xl font-extrabold text-[#A8321F]">{t('lateHead')}</h2>
+          {list(late, { late: true })}
+        </section>
+      )}
 
-      {older.length > 0 && (
-        <section className="mb-8">
-          <h2 className="mb-3 text-xl font-extrabold text-pra-ink">{t('lessons')}</h2>
-          <div className="space-y-3">{older.map((p) => <PackCard key={p.id} pack={p} rows={rows[p.id]} lang={lang} />)}</div>
+      {(week.length > 0 || !open.length) && (
+        <section className="mb-8" aria-labelledby="h-week">
+          <h2 id="h-week" className="mb-3 text-xl font-extrabold text-pra-ink">{t('thisWeek')}</h2>
+          {week.length ? list(week) : (
+            <div className="card p-6 text-lg font-semibold text-pra-ink-soft">{data.packs.length ? t('allCaughtUp') : t('nothingYet')}</div>
+          )}
+        </section>
+      )}
+
+      {later.length > 0 && (
+        <section className="mb-8" aria-labelledby="h-later">
+          <h2 id="h-later" className="mb-3 text-xl font-extrabold text-pra-ink">{t('comingUp')}</h2>
+          {list(later)}
+        </section>
+      )}
+
+      {done.length > 0 && (
+        <section className="mb-8" aria-labelledby="h-done">
+          <h2 id="h-done" className="mb-3 text-xl font-extrabold text-pra-green-dark">{t('doneList')}</h2>
+          {list(done, { done: true })}
         </section>
       )}
 

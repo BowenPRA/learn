@@ -2,11 +2,15 @@
 // No real student is in here: the class is "Learner A" to "Learner L" with made-up
 // usernames. Mr. David is the teacher, as in the pilot.
 import { PACK_Y5_NEGATIVES, PACK_Y5_ORDERING, PACK_Y5_WORDS } from './packY5Negatives.js'
-import { partIds, partSummary, scoreOf } from '../../pack/model.js'
+// Mr. David's real lesson, made by scripts/deck-to-pack.mjs from the classroom deck
+// (packs/y5-math-u5-below-zero: overlay.mjs is the input, pack.json + assets/ the output).
+import PACK_Y5_BELOW_ZERO from '../../../packs/y5-math-u5-below-zero/pack.json'
+import { partIds, partSummary, partsOf, scoreOf } from '../../pack/model.js'
+import { slipsByKey } from '../../stepPractice/model.js'
 import { makePin, makeUsername } from '../../../supabase/functions/learn-accounts/lib.js'
 import { problem } from '../problem.js'
 
-const KEY = 'learn-demo-v2'
+const KEY = 'learn-demo-v4'
 const WHO = 'learn-demo-who'
 const ME = 'demo-s-A'
 const DAY = 86400000
@@ -16,8 +20,18 @@ const dayIso = (offset) => {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
 
-const CONTENT = { 'demo-p-ord': PACK_Y5_ORDERING, 'demo-p-neg': PACK_Y5_NEGATIVES, 'demo-p-words': PACK_Y5_WORDS }
+const CONTENT = { 'demo-p-ord': PACK_Y5_ORDERING, 'demo-p-neg': PACK_Y5_NEGATIVES, 'demo-p-zero': PACK_Y5_BELOW_ZERO, 'demo-p-words': PACK_Y5_WORDS }
+// A pack's pictures: in demo mode they are served from the repo (Vite gives each a link).
+const ASSET_URLS = Object.fromEntries(Object.entries(import.meta.glob('../../../packs/*/assets/*', { eager: true, query: '?url', import: 'default' }))
+  .map(([path, url]) => { const [, slug, file] = /packs\/([^/]+)\/assets\/(.+)$/.exec(path); return [`${slug}/${file}`, url] }))
 const USERNAMES = ['otter27', 'mango43', 'rocket58', 'panda36', 'kiwi72', 'comet49', 'lemon83', 'turtle65', 'seal24', 'kite97', 'robin38', null]
+
+/** The slip keys of one practice item, as the step engine reports them. */
+function slipKeysOf(content, partId, itemId) {
+  const part = partsOf(content).find((p) => p.id === partId)
+  if (part?.kind !== 'practice') return []
+  return Object.keys(slipsByKey(part.set?.items?.find((it) => it.id === itemId)))
+}
 
 // A small fixed random source, so the demo class looks the same every time.
 function rng(seed) {
@@ -34,11 +48,12 @@ function seed() {
   }))
   const packs = [
     { id: 'demo-p-ord', status: 'published', opens_on: null, due_on: dayIso(-6), published_at: iso(Date.now() - 9 * DAY), version: 1 },
-    { id: 'demo-p-neg', status: 'published', opens_on: null, due_on: dayIso(4), published_at: iso(Date.now() - 1 * DAY), version: 1 },
+    { id: 'demo-p-neg', status: 'published', opens_on: null, due_on: dayIso(-1), published_at: iso(Date.now() - 4 * DAY), version: 1 },
+    { id: 'demo-p-zero', status: 'published', opens_on: null, due_on: dayIso(4), published_at: iso(Date.now() - 1 * DAY), version: 1 },
     { id: 'demo-p-words', status: 'draft', opens_on: null, due_on: null, published_at: null, version: 1 },
   ]
   // How hard each question was for this made-up class (chance of a wrong first answer).
-  const hard = { o1: 0.1, o2: 0.35, o3: 0.05, c1: 0.05, c2: 0.2, c3: 0.4, c4: 0.6, c5: 0.3, c6: 0.35 }
+  const hard = { o1: 0.1, o2: 0.35, o3: 0.05, c1: 0.05, c2: 0.2, c3: 0.4, c4: 0.6, c5: 0.3, c6: 0.35, c7: 0.45, c9: 0.3, c10: 0.2, c13: 0.5, c15: 0.55, c17: 0.35, c19: 0.25, c23: 0.3 }
   const progress = []
   const run = (sid, packId, part, howFar, skill) => {
     const content = CONTENT[packId]
@@ -48,6 +63,14 @@ function seed() {
     for (const id of ids.slice(0, n)) {
       const miss = r() < (hard[id] ?? 0.3) * (1.4 - skill)
       const item = { ok: !miss, tries: miss ? 2 : 1, hints: miss && r() < 0.5 ? 1 : 0, shown: part === 'practice' && miss, slips: [] }
+      // Practice: most misses come from a slip the item names (the first one most often),
+      // and now and then a clean finish had a wrong turn on the way.
+      const keys = slipKeysOf(content, part, id)
+      if (keys.length && (miss ? r() < 0.85 : r() < 0.15)) {
+        item.slips.push(r() < 0.55 ? keys[0] : keys[Math.floor(r() * keys.length)])
+        if (miss && keys.length > 1 && r() < 0.2) item.slips = [...new Set([...item.slips, keys[Math.floor(r() * keys.length)]])]
+        if (!miss) item.tries = 2
+      }
       items[id] = item
     }
     const done = n === ids.length
@@ -66,6 +89,16 @@ function seed() {
   run('demo-s-B', 'demo-p-neg', 'practice', 1, skills.B)
   run('demo-s-C', 'demo-p-neg', 'practice', 1, skills.C)
   run('demo-s-E', 'demo-p-neg', 'practice', 0.4, skills.E)
+  // Mr. David's lesson, opened yesterday: some of the class has started.
+  for (const c of 'BCDEF') run(`demo-s-${c}`, 'demo-p-zero', 'review', 1, skills[c])
+  run('demo-s-G', 'demo-p-zero', 'review', 0.4, skills.G)
+  for (const c of 'BCE') run(`demo-s-${c}`, 'demo-p-zero', 'practice', c === 'E' ? 0.5 : 1, skills[c])
+  run('demo-s-B', 'demo-p-zero', 'words', 1, skills.B)
+  run('demo-s-C', 'demo-p-zero', 'words', 0.6, skills.C)
+  // More of the class on the practice parts, so the teacher's "Common slips" has something to say.
+  for (const c of 'DFGIJ') run(`demo-s-${c}`, 'demo-p-neg', 'practice', c === 'J' ? 0.5 : 1, skills[c])
+  for (const c of 'DFH') run(`demo-s-${c}`, 'demo-p-zero', 'practice', c === 'H' ? 0.6 : 1, skills[c])
+  for (const c of 'EF') run(`demo-s-${c}`, 'demo-p-zero', 'words', 1, skills[c])
   return { students, packs, progress }
 }
 
@@ -190,10 +223,13 @@ export const demo = {
     for (const g of db.progress.filter((x) => x.pack_id === packId)) {
       for (const [id, v] of Object.entries(g.first_items || g.items || {})) {
         const k = `${g.part}|${id}`
-        const m = by.get(k) || { part: g.part, id, asked: 0, wrong_first: 0, slips: {} }
+        const m = by.get(k) || { part: g.part, id, asked: 0, wrong_first: 0, slips: {}, slip_who: {} }
         m.asked += 1
         if (!v.ok) m.wrong_first += 1
-        for (const s of v.slips || []) m.slips[s] = (m.slips[s] || 0) + 1
+        for (const s of v.slips || []) {
+          m.slips[s] = (m.slips[s] || 0) + 1
+          m.slip_who[s] = [...(m.slip_who[s] || []), g.student_id]
+        }
         by.set(k, m)
       }
     }
@@ -231,5 +267,8 @@ export const demo = {
     return wait({ student_id: s.id, active: s.login === 'on' })
   },
 
-  async assetUrls() { return {} },
+  async assetUrls(packId, files) {
+    const slug = CONTENT[packId]?.slug
+    return Object.fromEntries((files || []).map((f) => [f, ASSET_URLS[`${slug}/${f}`]]).filter(([, u]) => u))
+  },
 }

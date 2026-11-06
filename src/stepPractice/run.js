@@ -12,13 +12,17 @@
 //   fresh    the step whose line was written last
 //   helped   a step was filled in (Show me, or a second wrong answer)
 //   slipped  a wrong answer was given at least once
+//   slips    keys of the slips hit, in order, each once (slipKey in model.js)
+//   shows    { [step]: Show me presses }
+//   hints    hints opened
+//   wrong    wrong answers given (nudges are not counted)
 // }
 
-import { askedSteps, markStep, findSlip, slipTarget } from './model.js';
+import { askedSteps, markStep, findSlip, slipTarget, slipKey } from './model.js';
 
 export function initRun(item) {
   const visible = askedSteps(item);
-  return { visible, at: visible[0], status: {}, tries: {}, msg: null, look: null, lines: [], fresh: null, helped: false, slipped: false, hintOpen: false };
+  return { visible, at: visible[0], status: {}, tries: {}, msg: null, look: null, lines: [], fresh: null, helped: false, slipped: false, hintOpen: false, slips: [], shows: {}, hints: 0, wrong: 0 };
 }
 
 const notYetSeen = (s, j) => !s.status[j];
@@ -49,6 +53,8 @@ export function submit(state, item, resp) {
 
   const slip = findSlip(step, resp);
   const target = slipTarget(item, slip);
+  const key = slip ? slipKey(step, i, slip) : null;
+  state = { ...state, wrong: (state.wrong || 0) + 1, slips: key && !(state.slips || []).includes(key) ? [...(state.slips || []), key] : (state.slips || []) };
   const hidden = item.steps.map((_, j) => j).filter((j) => j < i && !state.visible.includes(j) && notYetSeen(state, j));
   const tries = (state.tries[i] || 0) + 1;
 
@@ -73,10 +79,11 @@ export function submit(state, item, resp) {
 }
 
 /** Show me: fill the step in and move on. */
-export const showMe = (state, item) => (state.at == null ? state : complete(state, item, state.at, 'shown'));
+export const showMe = (state, item) => (state.at == null ? state
+  : complete({ ...state, shows: { ...state.shows, [state.at]: ((state.shows || {})[state.at] || 0) + 1 } }, item, state.at, 'shown'));
 
 /** Open the hint of the step in hand. */
-export const openHint = (state) => ({ ...state, hintOpen: true });
+export const openHint = (state) => (state.hintOpen ? state : { ...state, hintOpen: true, hints: (state.hints || 0) + 1 });
 
 /** The pills: [{ key, label, state }]. */
 export function pillsOf(state, item, answerWord, lang) {
@@ -89,5 +96,12 @@ export function pillsOf(state, item, answerWord, lang) {
   }).map((p) => (p.key === state.look ? { ...p, state: 'look' } : p));
 }
 
-/** The item's result once finished: score 1 clean (even after a wrong turn put right), 0.5 helped. */
-export const resultOf = (state) => ({ helped: state.helped, slipped: state.slipped, score: state.helped ? 0.5 : 1 });
+/**
+ * The item's result once finished: score 1 clean (even after a wrong turn put right), 0.5 helped.
+ * Also what a teacher may see: the slip keys hit, Show me presses per step, hints opened,
+ * wrong answers. Nothing the child typed.
+ */
+export const resultOf = (state) => ({
+  helped: state.helped, slipped: state.slipped, score: state.helped ? 0.5 : 1,
+  slips: [...(state.slips || [])], shows: { ...(state.shows || {}) }, hints: state.hints || 0, wrong: state.wrong || 0,
+});

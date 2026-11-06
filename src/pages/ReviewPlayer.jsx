@@ -1,14 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, Home, Pencil } from 'lucide-react'
-import { CloseButton, LangSwitch, Loading, Notice, Stars } from '../components/ui.jsx'
+import { CloseButton, LangSwitch, Loading, Notice } from '../components/ui.jsx'
+import DoneScreen from '../components/DoneScreen.jsx'
+import { ListenButton, stopSpeaking } from '../components/Listen.jsx'
+import { nextPart, partLabels, partPath } from '../components/packs.jsx'
 import Slide from '../pack/Slide.jsx'
 import Check from '../pack/Check.jsx'
 import { api } from '../lib/api.js'
 import { useAuth } from '../lib/auth.jsx'
 import { useT } from '../lib/i18n.jsx'
 import { usePack } from '../lib/usePack.js'
-import { partsOf, scoreOf, starsFor } from '../pack/model.js'
+import { contentLang, partsOf, scoreOf, starsFor } from '../pack/model.js'
 
 // The guided review: the lesson's slides one at a time, with the check question
 // under each; Next opens once it is answered. Only the first answer to each
@@ -21,13 +24,14 @@ export default function ReviewPlayer() {
   if (error) return <div className="mx-auto max-w-3xl p-4"><Notice tone="bad">{t(error === 'offline' ? 'offline' : 'notOpen')}</Notice></div>
   const part = partsOf(pack.content).find((p) => p.kind === 'review')
   if (!part) return <div className="mx-auto max-w-3xl p-4"><Notice tone="bad">{t('notOpen')}</Notice></div>
-  return <ReviewRun pack={pack} part={part} row={progress.find((g) => g.part === part.id)} assets={assets} />
+  return <ReviewRun pack={pack} part={part} row={progress.find((g) => g.part === part.id)} progress={progress} assets={assets} />
 }
 
-function ReviewRun({ pack, part, row, assets }) {
-  const { t, lang } = useT()
+function ReviewRun({ pack, part, row, progress, assets }) {
+  const { t, lang: uiLang } = useT()
+  const lang = contentLang(pack.content, uiLang)
+  const oneLang = Array.isArray(pack.content.langs) && pack.content.langs.length === 1
   const { me } = useAuth()
-  const navigate = useNavigate()
   const student = me?.kind === 'student'
   const slides = part.slides
   const resume = row?.run_open ? row.items || {} : {}
@@ -40,10 +44,21 @@ function ReviewRun({ pack, part, row, assets }) {
   const slide = slides[at]
   const answered = !slide.check || !!items[slide.check.id]
   const isLast = at === slides.length - 1
-  const hasPractice = partsOf(pack.content).some((p) => p.kind === 'practice')
   const back = `/p/${pack.slug}`
 
-  useEffect(() => { top.current?.scrollIntoView?.({ block: 'start' }) }, [at, finished])
+  useEffect(() => { stopSpeaking(); top.current?.scrollIntoView?.({ block: 'start' }) }, [at, finished])
+
+  // Arrow keys move between slides (Right only once the question is answered).
+  useEffect(() => {
+    if (finished) return undefined
+    const onKey = (e) => {
+      if (e.altKey || e.ctrlKey || e.metaKey || /^(INPUT|TEXTAREA|SELECT)$/.test(e.target?.tagName)) return
+      if (e.key === 'ArrowRight') document.getElementById('review-next')?.click()
+      if (e.key === 'ArrowLeft') document.getElementById('review-back')?.click()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [finished])
 
   const save = async (next, done) => {
     if (!student) return
@@ -64,17 +79,18 @@ function ReviewRun({ pack, part, row, assets }) {
     const score = scoreOf(pack.content, part.id, items)
     const total = slides.filter((s) => s.check).length
     const right = Object.values(items).filter((v) => v.ok).length
+    const rows = { ...Object.fromEntries((progress || []).map((g) => [g.part, g])), [part.id]: { done: true } }
+    const next = nextPart(pack.content, rows)
+    const label = next ? partLabels(pack.content, t)[next.id] : ''
     return (
-      <div ref={top} className="mx-auto flex min-h-[80vh] max-w-xl flex-col items-center justify-center gap-5 px-4 py-10 text-center">
-        <Stars n={starsFor(score)} size="h-14 w-14" label={t('stars', { n: starsFor(score) })} />
-        <h1 className="text-3xl font-extrabold text-pra-ink sm:text-4xl">{t('reviewDone')}</h1>
-        <p className="text-xl font-bold text-pra-ink-soft">{t('rightFirst', { n: right, total })}</p>
-        {!student && <Notice>{t('preview')}</Notice>}
-        {saveFailed && <Notice tone="bad">{t('notSaved')}</Notice>}
-        <div className="mt-2 flex w-full flex-col gap-3 sm:flex-row">
-          {hasPractice && <button type="button" className="btn-green btn-big flex-1" onClick={() => navigate(`/p/${pack.slug}/practice`)}><Pencil className="h-6 w-6" /> {t('nowPractise')}</button>}
-          <Link to={student ? '/' : back} className="btn-soft btn-big flex-1"><Home className="h-6 w-6" /> {t('home')}</Link>
-        </div>
+      <div ref={top}>
+        <DoneScreen stars={starsFor(score)} title={next ? t('reviewDone') : t('packDone')} whole={!next}
+          line={total ? t('rightFirst', { n: right, total }) : ''}
+          notices={[!student && { text: t('preview') }, saveFailed && { tone: 'bad', text: t('notSaved') }]}
+          actions={[
+            next && { to: partPath(pack.slug, next), main: true, icon: <Pencil className="h-6 w-6" />, label: t('next_', { part: label }) },
+            { to: student ? '/' : back, main: !next, icon: <Home className="h-6 w-6" />, label: t('home') },
+          ]} />
       </div>
     )
   }
@@ -90,24 +106,26 @@ function ReviewRun({ pack, part, row, assets }) {
             </div>
             <span className="text-sm font-extrabold tabular-nums text-pra-ink-soft">{at + 1} / {slides.length}</span>
           </div>
-          <LangSwitch />
+          {!oneLang && <LangSwitch />}
         </div>
       </header>
 
       <main className="mx-auto w-full max-w-5xl flex-1 space-y-4 px-4 py-5">
         {!student && <Notice>{t('preview')}</Notice>}
-        <div className="card p-4 sm:p-8"><Slide key={at} slide={slide} lang={lang} assets={assets} /></div>
+        <div className="card p-4 sm:p-8"><Slide key={at} slide={slide} lang={lang} assets={assets} meta={pack.content.assets} /></div>
         {slide.check && <Check key={`${at}:${slide.check.id}`} check={slide.check} lang={lang} solved={!!items[slide.check.id]} onSolved={solved} />}
         {saveFailed && <Notice tone="bad">{t('notSaved')}</Notice>}
       </main>
 
       <footer className="sticky bottom-0 z-20 border-t-2 border-pra-line bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-5xl items-center gap-3 px-4 py-3">
-          <button type="button" className="btn-soft h-14 w-14 p-0" onClick={() => setAt(Math.max(0, at - 1))} disabled={at === 0} aria-label={t('back')}>
+        {!answered && <p className="mx-auto max-w-5xl px-4 pt-2 text-center text-sm font-bold text-pra-ink-soft" role="status">{t('answerFirst')}</p>}
+        <div className="mx-auto flex max-w-5xl items-center gap-2 px-4 py-3 sm:gap-3">
+          <button id="review-back" type="button" className="btn-soft h-14 w-14 shrink-0 p-0" onClick={() => setAt(Math.max(0, at - 1))} disabled={at === 0} aria-label={t('back')}>
             <ChevronLeft className="h-7 w-7" strokeWidth={2.5} />
           </button>
-          <p className="flex-1 text-center text-sm font-bold text-pra-ink-soft">{!answered ? t('answerFirst') : ''}</p>
-          <button type="button" className="btn-primary btn-big min-w-[150px]" onClick={goNext} disabled={!answered}>
+          {/* Listen reads this slide's title and main text in English. */}
+          <div className="flex flex-1 justify-center"><ListenButton key={at} text={slideWords(slide)} className="min-h-[56px] px-4" /></div>
+          <button id="review-next" type="button" className="btn-primary btn-big min-w-[132px] shrink-0 px-5 sm:min-w-[150px]" onClick={goNext} disabled={!answered}>
             {isLast ? t('done') : t('next')} <ChevronRight className="h-6 w-6" strokeWidth={2.5} />
           </button>
         </div>
@@ -116,3 +134,15 @@ function ReviewRun({ pack, part, row, assets }) {
   )
 }
 
+/** A slide's title and main text in English, for Listen (notes and pictures are left out). */
+function slideWords(slide) {
+  const en = (o, k) => (o ? o[k] ?? o[`${k}En`] : undefined)
+  return [
+    en(slide, 'title'), en(slide, 'objective') || en(slide, 'subtitle'), en(slide, 'text'), en(slide, 'sub'), en(slide, 'content'),
+    en(slide, 'example'), en(slide.card, 'text'),
+    ...(Array.isArray(slide.steps) ? slide.steps.map((x) => en(x, 'text')) : []),
+    ...(Array.isArray(slide.columns) ? slide.columns.flatMap((c) => [en(c, 'heading'), en(c, 'content')]) : []),
+    ...(Array.isArray(slide.items) ? slide.items.map((x) => (typeof x === 'string' ? x : [en(x, 'term'), en(x, 'text')].filter(Boolean).join(': '))) : []),
+    en(slide, 'caption'),
+  ].filter((x) => typeof x === 'string' && x.trim())
+}

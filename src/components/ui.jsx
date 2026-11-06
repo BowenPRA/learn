@@ -5,6 +5,10 @@ import {
   GraduationCap, Languages, Lightbulb, Loader2, LogOut, Pencil, Scale, Sparkles, Star, Target, Thermometer, TrendingDown,
   TrendingUp, Users, X, Zap,
 } from 'lucide-react'
+// The icons the classroom decks use most (README "icon"), so a converted deck keeps its icons.
+import {
+  AlertTriangle, ArrowLeftRight, Atom, Beaker, Box, Boxes, Circle, Coffee, Coins, Divide, Droplet, Droplets, Equal, Flame, Gauge, Globe, Grid3x3, Hammer, Hand, HelpCircle, Home, Layers, LayoutGrid, Leaf, ListChecks, MapPin, MessageSquare, Microscope, Minus, Move, PenLine, Plus, Repeat, RotateCcw, Ruler, ScanEye, Search, ShieldCheck, Sigma, Snowflake, Square, Sun, Table, Telescope, Timer, Triangle, Trophy, Waves, Wind,
+} from 'lucide-react'
 import { useT } from '../lib/i18n.jsx'
 import { DEMO, api } from '../lib/api.js'
 
@@ -12,6 +16,7 @@ import { DEMO, api } from '../lib/api.js'
 const ICONS = {
   ArrowLeft, ArrowRight, BookOpen, Building2, Calculator, CheckCircle2, CircleDot, Eye, FlaskConical, Footprints, Globe2,
   GraduationCap, Lightbulb, Pencil, Scale, Sparkles, Star, Target, Thermometer, TrendingDown, TrendingUp, Users, Zap,
+  AlertTriangle, ArrowLeftRight, Atom, Beaker, Box, Boxes, Circle, Coffee, Coins, Divide, Droplet, Droplets, Equal, Flame, Gauge, Globe, Grid3x3, Hammer, Hand, HelpCircle, Home, Layers, LayoutGrid, Leaf, ListChecks, MapPin, MessageSquare, Microscope, Minus, Move, PenLine, Plus, Repeat, RotateCcw, Ruler, ScanEye, Search, ShieldCheck, Sigma, Snowflake, Square, Sun, Table, Telescope, Timer, Triangle, Trophy, Waves, Wind,
 }
 /** A lucide icon by its name (a slide's `icon`). */
 export function NamedIcon({ name, ...props }) {

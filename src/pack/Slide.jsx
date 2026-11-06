@@ -48,19 +48,21 @@ function svgAspect(svg) {
 }
 const WIDE = 2.2
 
-function Media({ obj, lang, assets, caption, big = false }) {
+function Media({ obj, lang, assets, meta, caption, big = false }) {
   const svg = sanitizeSvg(pick(obj, 'inlineSvg', lang))
   const img = assetSrc(obj?.image, assets)
-  const alt = obj?.image ? (assets?.[`${obj.image}`.slice(6)]?.alt || obj.alt || '') : ''
+  const info = typeof obj?.image === 'string' ? meta?.[obj.image.slice(6)] : null
+  const alt = obj?.image ? (pick(info, 'alt', lang) || obj.alt || '') : ''
   if (!svg && !img) return null
   return (
     <figure className="w-full">
-      <div className={`flex items-center justify-center rounded-2xl bg-white p-3 ${big && svgAspect(svg) < WIDE ? 'min-h-[220px]' : ''}`}>
+      <div className={`flex items-center justify-center rounded-2xl bg-white p-3 ${big && svg && svgAspect(svg) < WIDE ? 'min-h-[220px]' : ''}`}>
         {svg
           ? <div className="svg-fit w-full [&>svg]:max-h-[46vh]" dangerouslySetInnerHTML={{ __html: svg }} />
           : <img src={img} alt={alt} className="max-h-[46vh] w-auto rounded-xl" />}
       </div>
       {caption && <figcaption className="mt-2 text-center text-sm font-semibold text-pra-ink-soft"><Inline text={caption} /></figcaption>}
+      {img && info?.credit && <p className="mt-1 text-center text-[11px] font-medium leading-snug text-slate-400">{info.credit}</p>}
     </figure>
   )
 }
@@ -127,6 +129,7 @@ function Hero({ slide, lang }) {
           <p className="text-lg font-semibold"><Inline text={pick(card, 'text', lang)} /></p>
         </div>
       )}
+      {slide.reveal && <div className="mt-6 max-w-xl text-left"><Reveal key={pick(slide.reveal, 'answer', lang)} reveal={slide.reveal} lang={lang} /></div>}
     </div>
   )
 }
@@ -140,36 +143,43 @@ function Statement({ slide, lang }) {
       {pick(slide, 'label', lang) && <span className="mb-3 rounded-full px-3 py-1 text-sm font-extrabold text-white" style={{ background: accent }}>{pick(slide, 'label', lang)}</span>}
       <p className="text-3xl font-extrabold leading-tight text-pra-ink sm:text-5xl"><Inline text={pick(slide, 'text', lang)} /></p>
       {pick(slide, 'sub', lang) && <p className="mt-4 text-lg font-semibold text-pra-ink-soft sm:text-xl"><Inline text={pick(slide, 'sub', lang)} /></p>}
+      {Array.isArray(slide.notes) && slide.notes.length > 0 && <div className="mt-5 w-full max-w-2xl text-left"><Notes notes={slide.notes} lang={lang} /></div>}
+      {slide.reveal && <div className="mt-5 w-full max-w-2xl text-left"><Reveal key={pick(slide.reveal, 'answer', lang)} reveal={slide.reveal} lang={lang} /></div>}
     </div>
   )
 }
 
-function Split({ slide, lang, assets }) {
-  const media = <Media obj={slide} lang={lang} assets={assets} caption={pick(slide, 'caption', lang)} big />
+function Split({ slide, lang, assets, meta }) {
+  const media = <Media obj={slide} lang={lang} assets={assets} meta={meta} caption={pick(slide, 'caption', lang)} big />
   if (svgAspect(pick(slide, 'inlineSvg', lang)) >= WIDE) {
     return (
       <div>
         <Title slide={slide} lang={lang} />
         <Body slide={slide} lang={lang} />
         <div className="mx-auto mt-5 max-w-3xl">{media}</div>
-        <div className="mt-4"><Notes notes={slide.notes} lang={lang} /></div>
+        <div className="mt-4 space-y-4"><Notes notes={slide.notes} lang={lang} /><Reveal key={pick(slide.reveal, 'answer', lang)} reveal={slide.reveal} lang={lang} /></div>
       </div>
     )
   }
   const ratio = { 40: 'md:grid-cols-[2fr_3fr]', 45: 'md:grid-cols-[9fr_11fr]', 50: 'md:grid-cols-2', 55: 'md:grid-cols-[11fr_9fr]', 60: 'md:grid-cols-[3fr_2fr]' }[slide.ratio] || 'md:grid-cols-2'
+  // The Show me box comes after the picture, so on a phone a child reads the table or
+  // drawing before the answers.
   return (
-    <div className={`grid items-center gap-6 ${ratio}`}>
-      <div className={slide.side === 'left' ? 'md:order-2' : ''}>
-        <Title slide={slide} lang={lang} />
-        <Body slide={slide} lang={lang} />
-        <div className="mt-4"><Notes notes={slide.notes} lang={lang} /></div>
+    <div>
+      <div className={`grid items-center gap-6 ${ratio}`}>
+        <div className={slide.side === 'left' ? 'md:order-2' : ''}>
+          <Title slide={slide} lang={lang} />
+          <Body slide={slide} lang={lang} />
+          <div className="mt-4"><Notes notes={slide.notes} lang={lang} /></div>
+        </div>
+        <div className={slide.side === 'left' ? 'md:order-1' : ''}>{media}</div>
       </div>
-      <div className={slide.side === 'left' ? 'md:order-1' : ''}>{media}</div>
+      {slide.reveal && <div className="mt-5"><Reveal key={pick(slide.reveal, 'answer', lang)} reveal={slide.reveal} lang={lang} /></div>}
     </div>
   )
 }
 
-function Steps({ slide, lang, assets }) {
+function Steps({ slide, lang, assets, meta }) {
   const accent = slide.accent || '#116DFF'
   const steps = Array.isArray(slide.steps) ? slide.steps : []
   const hasMedia = Boolean(slide.inlineSvg || slide.image)
@@ -186,8 +196,9 @@ function Steps({ slide, lang, assets }) {
             </li>
           ))}
         </ol>
+        {slide.reveal && <div className="mt-4"><Reveal key={pick(slide.reveal, 'answer', lang)} reveal={slide.reveal} lang={lang} /></div>}
       </div>
-      {hasMedia && <Media obj={slide} lang={lang} assets={assets} />}
+      {hasMedia && <Media obj={slide} lang={lang} assets={assets} meta={meta} />}
     </div>
   )
 }
@@ -227,7 +238,7 @@ function Callout({ slide, lang }) {
   )
 }
 
-function Compare({ slide, lang, assets }) {
+function Compare({ slide, lang, assets, meta }) {
   const cols = Array.isArray(slide.columns) ? slide.columns : []
   return (
     <div>
@@ -243,7 +254,7 @@ function Compare({ slide, lang, assets }) {
               </div>
               <div className="space-y-3 p-4 text-lg font-semibold">
                 <Rich text={pick(c, 'content', lang)} />
-                <Media obj={c} lang={lang} assets={assets} caption={pick(c, 'caption', lang)} />
+                <Media obj={c} lang={lang} assets={assets} meta={meta} caption={pick(c, 'caption', lang)} />
                 <Notes notes={c.notes} lang={lang} />
               </div>
             </div>
@@ -254,16 +265,16 @@ function Compare({ slide, lang, assets }) {
   )
 }
 
-function Showcase({ slide, lang, assets }) {
+function Showcase({ slide, lang, assets, meta }) {
   return (
     <div>
       <Title slide={slide} lang={lang} />
-      <Media obj={slide} lang={lang} assets={assets} caption={pick(slide, 'caption', lang)} big />
+      <Media obj={slide} lang={lang} assets={assets} meta={meta} caption={pick(slide, 'caption', lang)} big />
     </div>
   )
 }
 
-function Gallery({ slide, lang, assets }) {
+function Gallery({ slide, lang, assets, meta }) {
   const items = Array.isArray(slide.items) ? slide.items : []
   const cols = { 2: 'sm:grid-cols-2', 3: 'sm:grid-cols-2 md:grid-cols-3', 4: 'sm:grid-cols-2 md:grid-cols-4' }[slide.columns] || 'sm:grid-cols-2 md:grid-cols-3'
   return (
@@ -273,7 +284,7 @@ function Gallery({ slide, lang, assets }) {
       <div className={`mt-4 grid gap-4 ${cols}`}>
         {items.map((it, i) => (
           <div key={i} className="rounded-2xl border-2 border-pra-line bg-white p-3 text-center">
-            <Media obj={it} lang={lang} assets={assets} />
+            <Media obj={it} lang={lang} assets={assets} meta={meta} />
             <p className="mt-2 text-lg font-extrabold text-pra-ink"><Inline text={pick(it, 'term', lang)} /></p>
             {pick(it, 'text', lang) && <p className="text-base font-semibold text-pra-ink-soft"><Inline text={pick(it, 'text', lang)} /></p>}
           </div>
@@ -284,17 +295,17 @@ function Gallery({ slide, lang, assets }) {
 }
 
 /** One slide of a review. */
-export default function Slide({ slide, lang, assets }) {
+export default function Slide({ slide, lang, assets, meta }) {
   switch (slide?.layout) {
     case 'hero': return <Hero slide={slide} lang={lang} />
     case 'statement': return <Statement slide={slide} lang={lang} />
-    case 'split': return <Split slide={slide} lang={lang} assets={assets} />
-    case 'steps': return <Steps slide={slide} lang={lang} assets={assets} />
+    case 'split': return <Split slide={slide} lang={lang} assets={assets} meta={meta} />
+    case 'steps': return <Steps slide={slide} lang={lang} assets={assets} meta={meta} />
     case 'stack': return <Stack slide={slide} lang={lang} />
     case 'callout': return <Callout slide={slide} lang={lang} />
-    case 'compare': return <Compare slide={slide} lang={lang} assets={assets} />
-    case 'showcase': return <Showcase slide={slide} lang={lang} assets={assets} />
-    case 'gallery': return <Gallery slide={slide} lang={lang} assets={assets} />
+    case 'compare': return <Compare slide={slide} lang={lang} assets={assets} meta={meta} />
+    case 'showcase': return <Showcase slide={slide} lang={lang} assets={assets} meta={meta} />
+    case 'gallery': return <Gallery slide={slide} lang={lang} assets={assets} meta={meta} />
     default: return <p className="rounded-2xl border-2 border-pra-coral p-4 font-bold text-pra-coral-deep">This slide has no layout the portal knows ({String(slide?.layout)}).</p>
   }
 }

@@ -198,6 +198,26 @@ export function slipTarget(item, slip) {
   return i >= 0 && i < item.steps.length ? i : null;
 }
 
+/** What a slip key may look like (PRA Learn's learn_save keeps only keys of this shape). */
+export const SLIP_KEY = /^[A-Za-z0-9_.:-]{1,40}$/;
+
+/**
+ * The key a slip is reported by: its own `key` when it has one, else "s<step>.<slip>"
+ * counted from 1 ("s2.1" = the first slip on step 2). Never what the child typed.
+ */
+export function slipKey(step, i, slip) {
+  if (slip?.key != null && SLIP_KEY.test(String(slip.key))) return String(slip.key);
+  const n = (step?.slips || []).indexOf(slip);
+  return `s${i + 1}.${n + 1}`;
+}
+
+/** Every slip of an item by its key: { key: { step, slip } } (a teacher page reads the message from here). */
+export function slipsByKey(item) {
+  const out = {};
+  (item?.steps || []).forEach((st, i) => (st.slips || []).forEach((sl) => { out[slipKey(st, i, sl)] = { step: i, slip: sl }; }));
+  return out;
+}
+
 /* ------------------------------------------------------------------ what a finished step shows */
 
 const optText = (o, lang) => txt(o, 'text', lang) || o.alt || o.id;

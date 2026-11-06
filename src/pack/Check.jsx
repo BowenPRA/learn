@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { CheckCircle2, HelpCircle, XCircle } from 'lucide-react'
 import { pick, useT } from '../lib/i18n.jsx'
 import { Inline } from './Rich.jsx'
+import { ListenButton } from '../components/Listen.jsx'
 
 // The question a review slide asks (the Dashboard's check shape). A child picks an
 // answer; a right one shows why and lets them go on; a wrong one is crossed out,
@@ -28,7 +29,11 @@ export default function Check({ check, lang, solved, onSolved }) {
 
   return (
     <section className="rounded-3xl border-2 border-pra-blue-tint bg-pra-blue-pale p-4 sm:p-6" aria-live="polite">
-      <p className="eyebrow mb-2 flex items-center gap-2 text-pra-blue"><HelpCircle className="h-4 w-4" strokeWidth={3} /> {t('quickCheck')}</p>
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+        <p className="eyebrow flex items-center gap-2 text-pra-blue"><HelpCircle className="h-4 w-4" strokeWidth={3} /> {t('quickCheck')}</p>
+        {/* Read aloud in English: the question, then each answer with its letter. */}
+        <ListenButton text={[check.q ?? check.qEn, ...(check.options || []).map((o) => `${o.val}: ${o.text ?? o.textEn ?? ''}`)]} />
+      </div>
       <p className="mb-4 text-xl font-extrabold leading-snug text-pra-ink sm:text-2xl"><Inline text={pick(check, 'q', lang)} /></p>
       <div className="grid gap-3 sm:grid-cols-2">
         {(check.options || []).map((o) => {
@@ -54,7 +59,10 @@ export default function Check({ check, lang, solved, onSolved }) {
       </div>
       {(right || lastWrong) && (
         <div ref={said} className={`mt-4 scroll-mb-28 rounded-2xl px-4 py-3 text-lg font-semibold ${right ? 'bg-pra-green-pale text-pra-green-dark' : 'bg-pra-coral-pale text-pra-coral-deep'}`}>
-          <p className="font-extrabold">{right ? t('right') : t('notQuite')}</p>
+          <div className="flex flex-wrap items-start justify-between gap-2">
+            <p className="font-extrabold">{right ? t('right') : t('notQuite')}</p>
+            <ListenButton key={`${right}:${wrong.length}`} text={check.exp ?? check.expEn} />
+          </div>
           {exp && <p className="mt-1"><Inline text={exp} /></p>}
         </div>
       )}

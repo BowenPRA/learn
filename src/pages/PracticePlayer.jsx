@@ -1,13 +1,16 @@
 import { useMemo, useRef, useState } from 'react'
-import { Link, useParams, useSearchParams } from 'react-router-dom'
-import { BookOpen, Home } from 'lucide-react'
+import { useParams, useSearchParams } from 'react-router-dom'
+import { Home, Pencil } from 'lucide-react'
+import DoneScreen from '../components/DoneScreen.jsx'
+import { nextPart, partLabels, partPath } from '../components/packs.jsx'
 import StepPracticeSet from '../stepPractice/StepPracticeSet.jsx'
-import { CloseButton, LangSwitch, Loading, Notice, Stars } from '../components/ui.jsx'
+import { SLIP_KEY } from '../stepPractice/model.js'
+import { CloseButton, LangSwitch, Loading, Notice } from '../components/ui.jsx'
 import { api } from '../lib/api.js'
 import { useAuth } from '../lib/auth.jsx'
 import { pick, useT } from '../lib/i18n.jsx'
 import { usePack } from '../lib/usePack.js'
-import { assetSrc, partOf, partsOf, scoreOf, starsFor } from '../pack/model.js'
+import { assetSrc, contentLang, partOf, partsOf, scoreOf, starsFor } from '../pack/model.js'
 import { sanitizeSvg } from '../pack/sanitizeSvg.js'
 
 // Step-by-step practice: the host around the step engine (src/stepPractice, copied
@@ -18,6 +21,9 @@ import { sanitizeSvg } from '../pack/sanitizeSvg.js'
 //   engine result        progress item
 //   finished, no help    { ok: true,  shown: false }   (a wrong turn put right still counts, as in the engine)
 //   needed help          { ok: false, shown: true }    (Show me, or a step filled in after two wrong answers)
+// and on every row: tries (wrong answers + 1), hints opened, and slips: the keys of
+// the slip rules the child's wrong answers matched ('s2.1', or a slip's own `key`), so
+// the class page can name the misconception. Never what the child typed.
 // The engine's `saved` blob ({ id: 1 } for items done without help) is rebuilt from
 // those rows, so a child picks up where they stopped, on any device.
 
@@ -54,11 +60,13 @@ export default function PracticePlayer() {
   const asked = search.get('part')
   const part = asked ? partOf(pack.content, asked) : partsOf(pack.content).find((p) => p.kind === 'practice')
   if (!part || part.kind !== 'practice') return <div className="mx-auto max-w-3xl p-4"><Notice tone="bad">{t('notOpen')}</Notice></div>
-  return <PracticeRun key={part.id} pack={pack} part={part} row={progress.find((g) => g.part === part.id)} assets={assets} />
+  return <PracticeRun key={part.id} pack={pack} part={part} row={progress.find((g) => g.part === part.id)} progress={progress} assets={assets} />
 }
 
-function PracticeRun({ pack, part, row, assets }) {
-  const { t, lang } = useT()
+function PracticeRun({ pack, part, row, progress, assets }) {
+  const { t, lang: uiLang } = useT()
+  const lang = contentLang(pack.content, uiLang)
+  const oneLang = Array.isArray(pack.content.langs) && pack.content.langs.length === 1
   const { me } = useAuth()
   const student = me?.kind === 'student'
   const set = useMemo(() => cleanSet(part, assets), [part, assets])
@@ -73,7 +81,13 @@ function PracticeRun({ pack, part, row, assets }) {
   const back = `/p/${pack.slug}`
 
   const mergeIn = (summary) => {
-    const fresh = Object.fromEntries((summary.items || []).map(({ itemId, correct }) => [itemId, { ok: !!correct, tries: correct ? 1 : 2, hints: 0, shown: !correct, slips: [] }]))
+    const fresh = Object.fromEntries((summary.items || []).map(({ itemId, correct, slips, shows, hints, wrong }) => [itemId, {
+      ok: !!correct,
+      tries: Math.min(99, (wrong ?? (correct ? 0 : 1)) + 1),
+      hints: hints || 0,
+      shown: !correct || Object.keys(shows || {}).length > 0,
+      slips: (slips || []).filter((k) => SLIP_KEY.test(k)).slice(0, 10),
+    }]))
     merged.current = { ...stored, ...fresh }
     return merged.current
   }
@@ -85,22 +99,21 @@ function PracticeRun({ pack, part, row, assets }) {
   const onFinish = (summary) => {
     const items = mergeIn(summary)
     save(items, true)
-    setFinished({ score: scoreOf(pack.content, part.id, items), done: summary.done, total: summary.total })
+    setFinished({ score: scoreOf(pack.content, part.id, items), right: Object.values(items).filter((v) => v?.ok).length, total: summary.total })
   }
 
   if (finished) {
-    const stars = starsFor(finished.score)
+    const rows = { ...Object.fromEntries((progress || []).map((g) => [g.part, g])), [part.id]: { done: true } }
+    const next = nextPart(pack.content, rows)
+    const label = next ? partLabels(pack.content, t)[next.id] : ''
     return (
-      <div className="mx-auto flex min-h-[80vh] max-w-xl flex-col items-center justify-center gap-5 px-4 py-10 text-center">
-        <Stars n={stars} size="h-14 w-14" label={t('stars', { n: stars })} />
-        <h1 className="text-3xl font-extrabold text-pra-ink sm:text-4xl">{t('practiceDone')}</h1>
-        {!student && <Notice>{t('preview')}</Notice>}
-        {saveFailed && <Notice tone="bad">{t('notSaved')}</Notice>}
-        <div className="mt-2 flex w-full flex-col gap-3 sm:flex-row">
-          <Link to={back} className="btn-soft btn-big flex-1"><BookOpen className="h-6 w-6" /> {pick(pack.content, 'title', lang)}</Link>
-          <Link to={student ? '/' : `/t/${encodeURIComponent(pack.class_key)}`} className="btn-primary btn-big flex-1"><Home className="h-6 w-6" /> {t('home')}</Link>
-        </div>
-      </div>
+      <DoneScreen stars={starsFor(finished.score)} title={next ? t('practiceDone') : t('packDone')} whole={!next}
+        line={finished.total ? t('rightFirst', { n: finished.right, total: finished.total }) : ''}
+        notices={[!student && { text: t('preview') }, saveFailed && { tone: 'bad', text: t('notSaved') }]}
+        actions={[
+          next && { to: partPath(pack.slug, next), main: true, icon: <Pencil className="h-6 w-6" />, label: t('next_', { part: label }) },
+          { to: student ? '/' : `/t/${encodeURIComponent(pack.class_key)}`, main: !next, icon: <Home className="h-6 w-6" />, label: t('home') },
+        ]} />
     )
   }
 
@@ -118,7 +131,7 @@ function PracticeRun({ pack, part, row, assets }) {
               </div>
             )}
           </div>
-          <LangSwitch />
+          {!oneLang && <LangSwitch />}
         </div>
       </header>
       {(!student || saveFailed) && (

@@ -11,8 +11,10 @@
 //
 // POST { action: 'make', class_key: 'math:Year 5', student_ids?: [uuid] }
 //   -> { made: [{ student_id, name, username, pin }], failed: [{ student_id, name, reason }] }
-// POST { action: 'reset', student_id }    -> { student_id, username, pin }
-// POST { action: 'disable', student_id }  -> { student_id, active: false }
+// POST { action: 'reset', student_id }    -> { student_id, username, pin, signed_out, sessions_ended }
+// POST { action: 'disable', student_id }  -> { student_id, active: false, signed_out, sessions_ended }
+//   reset and disable also sign the login out on every device (learn_end_sessions);
+//   if that step fails, signed_out is false and a `warning` says what to do.
 // POST { action: 'enable', student_id }   -> { student_id, active: true }
 //
 // PINs are returned once, for the login cards, and never stored readably or logged.
@@ -68,8 +70,9 @@ Deno.serve(async (req) => {
       const failed: unknown[] = []
       for (const s of todo) {
         let done = false
+        let already = false
         let reason = ''
-        for (let attempt = 0; attempt < 5 && !done; attempt += 1) {
+        for (let attempt = 0; attempt < 5 && !done && !already; attempt += 1) {
           const username = makeUsername(taken)
           taken.add(username)
           const pin = makePin()
@@ -89,13 +92,18 @@ Deno.serve(async (req) => {
           })
           if (rowError) {
             await admin.auth.admin.deleteUser(created.user.id)        // leave no login without its row
+            // 23505 = already there. A call running at the same moment made this student's
+            // login first (its cards have the PIN): not a failure. A username taken the
+            // same way: try another.
+            if (rowError.code === '23505' && /student_id/.test(rowError.message)) { already = true; break }
+            if (rowError.code === '23505' && /username/.test(rowError.message)) { reason = 'username taken'; continue }
             reason = rowError.message
             break
           }
           made.push({ student_id: s.student_id, name: s.name, username, pin })
           done = true
         }
-        if (!done) failed.push({ student_id: s.student_id, name: s.name, reason })
+        if (!done && !already) failed.push({ student_id: s.student_id, name: s.name, reason })
       }
       console.log(`learn-accounts make: ${made.length} made, ${failed.length} failed`)
       return reply({ made, failed })
@@ -110,6 +118,18 @@ Deno.serve(async (req) => {
     if (accError) throw new Problem(`Could not read the login: ${accError.message}`, 500)
     if (!acc) throw new Problem('This student has no login yet. Make one first.', 404)
 
+    // Sign the login out on every device already signed in (learn_end_sessions in
+    // learn-schema.sql, service role only: it deletes the login's sessions and refresh
+    // tokens). A failure here does not undo the PIN or the block; the reply says so.
+    const endSessions = async () => {
+      const { data, error } = await admin.rpc('learn_end_sessions', { p_user: acc.user_id })
+      if (error) {
+        console.log(`learn-accounts ${body.action}: sign-out failed`)
+        return { signed_out: false, sessions_ended: 0 }
+      }
+      return { signed_out: true, sessions_ended: Number(data) || 0 }
+    }
+
     if (body.action === 'reset') {
       const pin = makePin()
       const { error: e1 } = await admin.auth.admin.updateUserById(acc.user_id, { password: passwordFor(pin) })
@@ -118,8 +138,12 @@ Deno.serve(async (req) => {
         .update({ pin_set_at: new Date().toISOString(), pin_set_by: by, updated_at: new Date().toISOString() })
         .eq('student_id', body.studentId)
       if (e2) throw new Problem(`The PIN changed but was not noted: ${e2.message}`, 500)
-      console.log('learn-accounts reset: 1')
-      return reply({ student_id: body.studentId, username: acc.username, pin })
+      const out = await endSessions()
+      console.log(`learn-accounts reset: 1, sessions ended: ${out.sessions_ended}`)
+      return reply({
+        student_id: body.studentId, username: acc.username, pin, ...out,
+        ...(out.signed_out ? {} : { warning: 'The new PIN works, but devices already signed in were not signed out. Try Reset PIN again.' }),
+      })
     }
 
     const active = body.action === 'enable'
@@ -130,8 +154,18 @@ Deno.serve(async (req) => {
     const { error: e4 } = await admin.from('learn_accounts')
       .update({ active, updated_at: new Date().toISOString() }).eq('student_id', body.studentId)
     if (e4) throw new Problem(`The login changed but was not noted: ${e4.message}`, 500)
-    console.log(`learn-accounts ${body.action}: 1`)
-    return reply({ student_id: body.studentId, active })
+    if (active) {
+      console.log('learn-accounts enable: 1')
+      return reply({ student_id: body.studentId, active })
+    }
+    // Disable: also end the open sessions, so enabling the login later does not let an
+    // old device back in.
+    const out = await endSessions()
+    console.log(`learn-accounts disable: 1, sessions ended: ${out.sessions_ended}`)
+    return reply({
+      student_id: body.studentId, active, ...out,
+      ...(out.signed_out ? {} : { warning: 'Blocked, but devices already signed in were not signed out: they could get back in if this login is enabled again. Try Disable again.' }),
+    })
   } catch (e) {
     const status = e instanceof Problem ? e.status : 500
     return reply({ error: e instanceof Error ? e.message : String(e) }, status)

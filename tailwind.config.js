@@ -20,8 +20,8 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Poppins', '"Be Vietnam Pro"', 'system-ui', '-apple-system', '"Segoe UI"', 'sans-serif'],
-        vi: ['"Be Vietnam Pro"', 'system-ui', '-apple-system', '"Segoe UI"', 'sans-serif'],
+        sans: ['"PRA Minus"', 'Poppins', '"Be Vietnam Pro"', 'system-ui', '-apple-system', '"Segoe UI"', 'sans-serif'],
+        vi: ['"PRA Minus"', '"Be Vietnam Pro"', 'system-ui', '-apple-system', '"Segoe UI"', 'sans-serif'],
       },
     },
   },

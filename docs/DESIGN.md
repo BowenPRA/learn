@@ -219,6 +219,15 @@ data; **Medium** = staff names and emails, internal data, or spam; **Low** = tid
 Fixes marked **(H)** are in `supabase/current-hardening.sql` (not run). The others
 are changes to The Current's own files, for whoever works on it next.
 
+> **Review, 5 Nov 2026** (`REVIEW-SECURITY.md`, tests in `tests/review/`): all three
+> SQL files are a go. #3 is fixed differently from the table's suggestion, in
+> `C:\Users\sbowe\admin\supabase\updates-2026-11-05-enrollment-guard.sql`: forms that
+> match anything known wait as "No student yet" for the office's one click. #7 is fixed
+> in the lessons file. The hardening keeps `adm_newsletter_groups` for authenticated
+> (#9) and leaves `adm_newsletter_office()` callable by anon (#10). Practice slips are
+> stored only when key-shaped (6.3 / 8.1). Still open: #1 needs teacher logins to carry
+> a role; #4, #5 and #6 unchanged.
+
 | # | Where | What a non-staff login can do | Sev. | Fix |
 |---|---|---|---|---|
 | 1 | `updates-2026-09-15.sql` `adm_is_head`, `adm_is_report_staff`, `adm_can_homeroom`, `adm_can_subject`, `adm_can_attendance`; `updates-2026-10-26-report-sent.sql` `adm_can_subject_in_report`; `updates-2026-10-16-newsletter.sql` `adm_newsletter_can_edit`; `updates-2026-10-21-ecas.sql` `adm_can_eca`; `updates-2026-11-05-lessons.sql` `adm_teaches`, `adm_lesson_mine` | Each grants staff rights to **any login whose email equals an active `adm_teachers` row**, whatever its role: `exists (select 1 from adm_teachers t where t.email = adm_email() and coalesce(t.active, true))`. Students cannot pass today (their emails are `@learn.pra.edu.vn`). But this one check guards students' birthdays, allergies, addresses, parents' contacts, reports, attendance, photos, incidents and transcripts, and a wrong row (a coach's gmail typed on the Teachers page, a reused mailbox) would hand all of it to whoever holds that address. | Medium (High impact if hit) | **(H)** At the root: `adm_email()`, which every one of these checks uses, returns `''` for a login with role `student` or an `@learn.pra.edu.vn` address, so no student can match any Teachers row, whatever is typed there. No current login has that role or domain, so nobody else is affected. Plus a CHECK on `adm_teachers.email` refusing `@learn.pra.edu.vn` and blank addresses. Later (6.4): give every teacher login `role: 'teacher'` and require a staff role in these helpers, which also closes the open-sign-up case. |

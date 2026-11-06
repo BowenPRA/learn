@@ -353,8 +353,12 @@ begin
       'tries', case when jsonb_typeof(v -> 'tries') = 'number' then least(greatest((v ->> 'tries')::numeric, 0), 99)::int else 0 end,
       'hints', case when jsonb_typeof(v -> 'hints') = 'number' then least(greatest((v ->> 'hints')::numeric, 0), 99)::int else 0 end,
       'shown', coalesce(v -> 'shown' = 'true'::jsonb, false),
+      -- Slip keys only ('c2:1', 'neg-sign'): a value that is not key-shaped is dropped, so
+      -- nothing a child types (or sends by hand) reaches the teacher's "common misses".
       'slips', case when jsonb_typeof(v -> 'slips') = 'array'
-                    then coalesce((select jsonb_agg(left(t.s, 40)) from (select jsonb_array_elements_text(v -> 'slips') s limit 10) t), '[]'::jsonb)
+                    then coalesce((select jsonb_agg(t.s) from (
+                                     select x.s from jsonb_array_elements_text(v -> 'slips') x(s)
+                                      where x.s ~ '^[A-Za-z0-9_.:-]{1,40}$' limit 10) t), '[]'::jsonb)
                     else '[]'::jsonb end));
     if v -> 'ok' = 'true'::jsonb then right_first := right_first + 1; end if;
   end loop;
@@ -462,7 +466,10 @@ end $$;
 
 -- Common misses on a pack: for each part, each check or item with how many children
 -- answered it in their first finished run (or their current run, if not finished),
--- how many got it wrong the first time, and the slip messages they hit.
+-- how many got it wrong the first time, the slip keys they hit (slips: { key: count })
+-- and which children hit each one (slip_who: { key: [student_id, ...] }), so the class
+-- page can say "4 children added instead of subtracting" and name them. Slip keys are
+-- what learn_save kept: key-shaped only, never what a child typed.
 create or replace function learn_pack_misses(p_pack uuid) returns jsonb
 language plpgsql stable security definer set search_path = public as $$
 declare
@@ -472,18 +479,26 @@ begin
     raise exception 'Your account cannot see the results of this lesson.';
   end if;
   return coalesce((
-    select jsonb_agg(jsonb_build_object('part', q.part, 'id', q.id, 'asked', q.asked, 'wrong_first', q.wrong_first, 'slips', q.slips)
+    select jsonb_agg(jsonb_build_object('part', q.part, 'id', q.id, 'asked', q.asked, 'wrong_first', q.wrong_first,
+                                        'slips', q.slips, 'slip_who', q.slip_who)
                      order by q.part, q.wrong_first desc, q.id)
       from (
         select g.part, e.key as id, count(*) as asked,
                count(*) filter (where not coalesce(e.value -> 'ok' = 'true'::jsonb, false)) as wrong_first,
                coalesce((select jsonb_object_agg(sl.s, sl.n) from (
-                  select x.s, count(*) as n
+                  select x.s, count(distinct g2.student_id) as n
                     from learn_progress g2
                     cross join lateral jsonb_each(coalesce(g2.first_items, g2.items)) e2
                     cross join lateral jsonb_array_elements_text(case when jsonb_typeof(e2.value -> 'slips') = 'array' then e2.value -> 'slips' else '[]'::jsonb end) x(s)
                    where g2.pack_id = p_pack and g2.part = g.part and e2.key = e.key
-                   group by x.s) sl), '{}'::jsonb) as slips
+                   group by x.s) sl), '{}'::jsonb) as slips,
+               coalesce((select jsonb_object_agg(sw.s, sw.who) from (
+                  select x.s, jsonb_agg(distinct g2.student_id) as who
+                    from learn_progress g2
+                    cross join lateral jsonb_each(coalesce(g2.first_items, g2.items)) e2
+                    cross join lateral jsonb_array_elements_text(case when jsonb_typeof(e2.value -> 'slips') = 'array' then e2.value -> 'slips' else '[]'::jsonb end) x(s)
+                   where g2.pack_id = p_pack and g2.part = g.part and e2.key = e.key
+                   group by x.s) sw), '{}'::jsonb) as slip_who
           from learn_progress g
           cross join lateral jsonb_each(coalesce(g.first_items, g.items)) e
          where g.pack_id = p_pack
@@ -756,3 +771,41 @@ end $$;
 
 select 'PRA Learn is set up: ' || (select count(*) from learn_packs) || ' packs, '
     || (select count(*) from learn_accounts) || ' student logins.' as result;
+
+-- ================================================================
+-- 9. Signing a student login out everywhere (security review 5 Nov 2026, finding 8)
+-- ================================================================
+-- Called by the learn-accounts function (service role only) after it resets a PIN or
+-- blocks a login, so a device that is already signed in is signed out. Supabase's admin
+-- API can only sign a user out with that user's own token, so this deletes the login's
+-- rows in Supabase's auth tables instead: its refresh tokens and its sessions. With them
+-- gone the device cannot refresh; the access token it holds still works until it expires
+-- (one hour by default), and for a blocked login learn_accounts.active already shuts it
+-- out at once.
+-- Assumes Supabase's auth schema as of November 2026: auth.sessions (id uuid, user_id
+-- uuid) and auth.refresh_tokens (user_id varchar holding the user's id as text,
+-- session_id referencing auth.sessions), and that the role running this file (postgres)
+-- may delete from both. Only a PRA Learn student login (a learn_accounts row) can be
+-- signed out here, never a staff login. Returns the number of sessions ended.
+create or replace function learn_end_sessions(p_user uuid) returns integer
+language plpgsql volatile security definer set search_path = '' as $$
+declare
+  n integer := 0;
+begin
+  if p_user is null or not exists (select 1 from public.learn_accounts a where a.user_id = p_user) then
+    raise exception 'Only a PRA Learn student login can be signed out here.';
+  end if;
+  delete from auth.refresh_tokens where user_id = p_user::text;
+  delete from auth.sessions where user_id = p_user;
+  get diagnostics n = row_count;
+  return n;
+end $$;
+
+revoke all on function learn_end_sessions(uuid) from public, anon, authenticated;
+grant execute on function learn_end_sessions(uuid) to service_role;
+
+-- The SQL Editor shows the last result only, so this repeats the line above.
+select 'PRA Learn is set up: ' || (select count(*) from learn_packs) || ' packs, '
+    || (select count(*) from learn_accounts) || ' student logins. Sign-out: auth.sessions '
+    || case when to_regclass('auth.sessions') is null then 'NOT FOUND' else 'found' end || ', auth.refresh_tokens '
+    || case when to_regclass('auth.refresh_tokens') is null then 'NOT FOUND' else 'found' end || '.' as result;

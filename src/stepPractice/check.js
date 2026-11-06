@@ -3,7 +3,7 @@
 // with "warning:" are advice, the rest fail `npm run validate`.
 
 import { compileExpr } from './equivalence.js';
-import { LEVELS, INPUT_TYPES, askedSteps, markStep, findSlip, slipTarget, slipResponse, gapParts, tapTargets, wordsOf, shownOrder } from './model.js';
+import { LEVELS, INPUT_TYPES, askedSteps, markStep, findSlip, slipTarget, slipResponse, gapParts, tapTargets, wordsOf, shownOrder, slipKey, SLIP_KEY } from './model.js';
 
 const words = (s) => String(s || '').trim().split(/\s+/).filter(Boolean).length;
 const dollarsOdd = (s) => typeof s === 'string' && (s.replace(/\\\$/g, '').match(/\$/g) || []).length % 2 === 1;
@@ -111,6 +111,13 @@ export function checkStepPractice(cfg, opt = {}) {
     }
     const steps = item.steps || [];
     if (!steps.length || steps.length > 8) { out.push(`${at}: needs 1–8 steps`); continue; }
+    const skeys = new Set();
+    steps.forEach((s, i) => (s.slips || []).forEach((sl) => {
+      if (sl.key != null && !SLIP_KEY.test(String(sl.key))) out.push(`${at} step ${i + 1}: slip key "${sl.key}" may use only letters, digits and . : _ - (40 at most)`);
+      const k = slipKey(s, i, sl);
+      if (skeys.has(k)) out.push(`${at} step ${i + 1}: slip key "${k}" repeated in this item`);
+      skeys.add(k);
+    }));
     const sids = steps.map((s) => s.id).filter(Boolean);
     if (new Set(sids).size !== sids.length) out.push(`${at}: step ids repeated`);
     steps.forEach((s, i) => {

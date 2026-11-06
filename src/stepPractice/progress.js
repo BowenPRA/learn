@@ -9,7 +9,12 @@ export function queueOf(items, saved = {}) {
   return left.length ? left : items;
 }
 
-/** { score (0–10), blob, items: [{ itemId, correct }], done, total } after this sitting's results. */
+/**
+ * { score (0–10), blob, items, done, total } after this sitting's results.
+ * items: one per item finished this sitting —
+ *   { itemId, correct, slips: ['s2.1', …], shows: { s3: 1 }, hints, wrong }
+ * slips are slip keys (model.js slipKey), shows counts Show me per step ("s<n>", from 1).
+ */
 export function summaryOf(items, saved = {}, results = {}) {
   const blob = {};
   let points = 0;
@@ -22,8 +27,15 @@ export function summaryOf(items, saved = {}, results = {}) {
   return {
     score: total ? Math.round((points / total) * 10) : 0,
     blob,
-    items: items.filter((it) => results[it.id]).map((it) => ({ itemId: it.id, correct: !results[it.id].helped })),
+    items: items.filter((it) => results[it.id]).map((it) => itemReport(it.id, results[it.id])),
     done: Object.keys(blob).length + items.filter((it) => results[it.id]?.helped && !blob[it.id]).length,
     total,
   };
+}
+
+/** One finished item as the host hears it. */
+function itemReport(itemId, r) {
+  const shows = {};
+  for (const [i, n] of Object.entries(r.shows || {})) if (n > 0) shows[`s${Number(i) + 1}`] = n;
+  return { itemId, correct: !r.helped, slips: [...(r.slips || [])], shows, hints: r.hints || 0, wrong: r.wrong || 0 };
 }

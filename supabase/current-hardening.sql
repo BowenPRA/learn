@@ -68,6 +68,10 @@ create policy staff_read on adm_teachers for select to authenticated
 -- Each helper answers only about the caller, but none needs to be reachable by
 -- anon. Policies run them as the signed-in user, so authenticated keeps them.
 -- A helper from a file that was never run is skipped.
+-- adm_newsletter_office() stays callable by anon on purpose: the newsletter-build
+-- Edge Function asks it as the caller, and a caller with no login must keep getting
+-- its 403 "Only office accounts" (a revoke would turn that into a 503 saying the
+-- database is not set up). It says false for anyone who is not office.
 do $$
 declare
   f text;
@@ -75,7 +79,7 @@ begin
   foreach f in array array[
     'adm_role()', 'adm_email()', 'adm_is_staff()', 'adm_is_head()', 'adm_is_report_staff()',
     'adm_can_homeroom(text)', 'adm_can_subject(text, text)', 'adm_can_subject_in_report(text, uuid)',
-    'adm_can_attendance(text)', 'adm_can_travel(uuid)', 'adm_newsletter_office()',
+    'adm_can_attendance(text)', 'adm_can_travel(uuid)',
     'adm_newsletter_can_edit(text, jsonb)', 'adm_newsletter_groups(text)', 'adm_can_eca(uuid)',
     'adm_can_signature(text)', 'adm_can_send_lang()', 'adm_can_upper_secondary()',
     'adm_can_incident(text, text, uuid[])', 'adm_can_incident_folder(text)',
@@ -146,4 +150,6 @@ exception when others then
   end if;
 end $$;
 
-select 'Hardening is in place: student logins pass no staff check, and the teachers list is staff only.' as result;
+select 'Hardening is in place: student logins pass no staff check, and the teachers list is staff only.'
+    || coalesce(' ' || nullif((select count(*) from adm_teachers where trim(email) = '' or lower(email) like '%@learn.pra.edu.vn'), 0)
+                 || ' Teachers row(s) have a blank or @learn.pra.edu.vn address: give them a real address (or "no login") on the Teachers page, or they cannot be saved again.', '') as result;

@@ -6,6 +6,7 @@ import { api } from '../lib/api.js'
 import { pick, useT } from '../lib/i18n.jsx'
 import { byPack, partIds, partsOf, starsFor } from '../pack/model.js'
 import { splitClass, subjectName, subjectTone } from '../data/subjects.js'
+import { partLabels } from '../components/packs.jsx'
 
 // A child's own results: stars per part, no class ranking.
 export default function MyResults() {
@@ -25,6 +26,7 @@ export default function MyResults() {
       <ul className="space-y-3">
         {data.packs.map((p) => {
           const [subject] = splitClass(p.class_key)
+          const labels = partLabels(p.content, t)
           return (
             <li key={p.id} className="card p-4 sm:p-5">
               <Link to={`/p/${p.slug}`} className="mb-3 block">
@@ -40,7 +42,7 @@ export default function MyResults() {
                   return (
                     <div key={part.id} className="flex items-center gap-3 rounded-2xl bg-pra-paper px-4 py-3">
                       <Icon className="h-6 w-6 text-pra-ink-soft" />
-                      <span className="flex-1 font-bold text-pra-ink">{pick(part, 'title', lang) || t(part.kind)}</span>
+                      <span className="min-w-0 flex-1 font-bold text-pra-ink">{labels[part.id]}</span>
                       {g?.done
                         ? <span className="flex flex-col items-end"><Stars n={starsFor(g.best_score ?? g.score)} size="h-5 w-5" label={t('stars', { n: starsFor(g.best_score ?? g.score) })} /><span className="text-xs font-bold text-pra-ink-soft">{t('rightFirst', { n: right, total })}</span></span>
                         : <span className="text-sm font-bold text-pra-ink-soft">{g ? t('started') : t('notDone')}</span>}

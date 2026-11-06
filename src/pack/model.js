@@ -39,6 +39,12 @@ export const assetSrc = (value, urls) => {
   return null // only pack assets are allowed; outside links are not drawn
 }
 
+/** The language a pack's content is shown in: the child's choice when the pack has it, else the pack's first language. */
+export const contentLang = (content, lang) => {
+  const langs = Array.isArray(content?.langs) && content.langs.length ? content.langs : ['en', 'vn']
+  return langs.includes(lang) ? lang : langs[0]
+}
+
 /** Progress rows as { [pack_id]: { [part]: row } }. */
 export const byPack = (progress) => {
   const out = {}

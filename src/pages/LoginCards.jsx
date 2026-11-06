@@ -13,11 +13,11 @@ export default function LoginCards() {
   const classKey = decodeURIComponent(raw)
   const { t, lang } = useT()
   const navigate = useNavigate()
-  const [cards] = useState(() => {
+  const [{ cards, stillIn }] = useState(() => {
     try {
       const got = JSON.parse(sessionStorage.getItem(CARDS_KEY) || 'null')
-      return got?.class_key === classKey ? got.cards || [] : []
-    } catch { return [] }
+      return got?.class_key === classKey ? { cards: got.cards || [], stillIn: !!got.still_in } : { cards: [], stillIn: false }
+    } catch { return { cards: [], stillIn: false } }
   })
   const back = `/t/${encodeURIComponent(classKey)}`
   const done = () => { try { sessionStorage.removeItem(CARDS_KEY) } catch { /* ignore */ } navigate(back) }
@@ -28,6 +28,7 @@ export default function LoginCards() {
         <Link to={back} className="btn-ghost -ml-3 mb-2"><ArrowLeft className="h-5 w-5" /> {className(classKey, lang)}</Link>
         <h1 className="mb-2 text-3xl font-extrabold text-pra-ink">{t('cardsTitle')}</h1>
         {cards.length ? <Notice>{t('cardsNote')}</Notice> : <Notice tone="bad">{t('cardsEmpty')}</Notice>}
+        {stillIn && <div className="mt-3"><Notice tone="bad">{lang === 'vn' ? 'Đã đặt mã PIN mới, nhưng thiết bị cũ có thể vẫn đăng nhập thêm tối đa một giờ.' : 'New PIN set, but the old device may stay signed in for up to an hour.'}</Notice></div>}
         {cards.length > 0 && (
           <div className="mt-4 flex flex-wrap gap-3">
             <button type="button" className="btn-primary" onClick={() => window.print()}><Printer className="h-5 w-5" /> {t('print')}</button>

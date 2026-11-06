@@ -184,6 +184,14 @@ test('learn_save scores right-first-time and keeps runs', async () => {
   })
 })
 
+test('learn_save keeps only key-shaped slips, never free text', async () => {
+  await as(student('cat'), async (q) => {
+    const [r] = await q(`select (learn_save($1, 'practice', $2, false)).*`, [ids.mathsOpen,
+      JSON.stringify({ p1: { ok: false, slips: ['neg-sign', 'c2:1', 'my teacher is <b>mean</b>', 'see www.example.com now', 'x'.repeat(41), 7] } })])
+    assert.deepEqual(r.items.p1.slips, ['neg-sign', 'c2:1', '7'])
+  })
+})
+
 test('a student cannot use the staff functions', async () => {
   await as(student('ana'), async (q) => {
     await fails(q(`select learn_class_overview('math:Year 5')`), /does not teach/)

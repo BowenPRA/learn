@@ -64,7 +64,7 @@ let visit = 0
 async function go(hash, who = null, lang = 'en') {
   await send('Page.navigate', { url: `${BASE}?v=${++visit}#/__blank` })
   await sleep(300)
-  await js(`(() => { sessionStorage.clear(); localStorage.removeItem('learn-demo-v2'); ${who ? `sessionStorage.setItem('learn-demo-who', '${who}');` : ''} localStorage.setItem('learn-lang', '${lang}'); return 1 })()`)
+  await js(`(() => { sessionStorage.clear(); localStorage.removeItem('learn-demo-v3'); ${who ? `sessionStorage.setItem('learn-demo-who', '${who}');` : ''} localStorage.setItem('learn-lang', '${lang}'); return 1 })()`)
   await send('Page.navigate', { url: `${BASE}?v=${++visit}#${hash}` })
   await settle()
 }

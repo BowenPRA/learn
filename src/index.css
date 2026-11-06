@@ -11,7 +11,7 @@
     font-weight: 500;
   }
   /* Vietnamese reads better in Be Vietnam Pro (Poppins has no Vietnamese letters). */
-  :lang(vi) body, .lang-vi { font-family: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif; }
+  :lang(vi) body, .lang-vi { font-family: "PRA Minus", "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif; }
   button { -webkit-tap-highlight-color: transparent; }
   :focus-visible { outline: 3px solid #116DFF; outline-offset: 2px; }
 }
