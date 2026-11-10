@@ -58,7 +58,7 @@ export const UNITS = [
     ],
   },
   {
-    track: 'Y7_MATH', unit: 'U05_3', classKey: 'maths:Year 7', label: '5.3', teacher: 'Mr. Bowen',
+    track: 'Y7_MATH', unit: 'U05_3', classKey: 'math:Year 7', label: '5.3', teacher: 'Mr. Bowen',
     title: 'Drawing Lines and Quadrilaterals', titleFr: 'Tracer des droites et des quadrilatères',
     subtitle: 'Measure and draw angles with a protractor, then draw a quadrilateral from a sketch and check it.',
     subtitleFr: 'Mesure et trace des angles au rapporteur, puis trace un quadrilatère d’après un croquis et vérifie-le.',
