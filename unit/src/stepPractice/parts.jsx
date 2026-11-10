@@ -107,11 +107,11 @@ export function CheckButton({ onClick, disabled, lang, big = false }) {
 }
 
 /** The figure of an item: an inline SVG, a picture, or a small table. */
-export function Figure({ item, lang, big = false }) {
+export function Figure({ item, lang, big = false, roomy = false }) {
   const t = item.table;
   return (
     <>
-      {item.inlineSvg && <div className="w-full flex justify-center text-slate-800 rounded-xl dark:bg-white dark:p-2 [&>svg]:max-w-full [&>svg]:h-auto [&>svg]:max-h-[38vh]" dangerouslySetInnerHTML={{ __html: txt(item, 'inlineSvg', lang) }} />}
+      {item.inlineSvg && <div className={`w-full flex justify-center text-slate-800 rounded-xl dark:bg-white dark:p-2 [&>svg]:max-w-full [&>svg]:h-auto ${roomy ? '[&>svg]:w-full [&>svg]:max-h-[70vh]' : '[&>svg]:max-h-[38vh]'}`} dangerouslySetInnerHTML={{ __html: txt(item, 'inlineSvg', lang) }} />}
       {item.image && <img src={item.image} alt={item.alt || ''} className="max-h-[38vh] mx-auto rounded-xl" />}
       {t && (
         <div className="overflow-x-auto">
@@ -133,7 +133,7 @@ export function Figure({ item, lang, big = false }) {
 }
 
 /** The left card: level, question, figure, and the 1-2-3 strip when this level is new. */
-export function QuestionCard({ item, lang, prompt, how, done, doneText, big = false }) {
+export function QuestionCard({ item, lang, prompt, how, done, doneText, big = false, roomy = false }) {
   const t = words(lang);
   const ink = LEVEL_INK[item.level];
   const Icon = LEVEL_ICON[item.level];
@@ -146,7 +146,7 @@ export function QuestionCard({ item, lang, prompt, how, done, doneText, big = fa
       </div>
       <div className="px-4 py-3 flex flex-col gap-3">
         <p className={`font-bold text-slate-800 dark:text-slate-100 leading-snug ${big ? 'text-2xl sm:text-3xl' : 'text-lg sm:text-xl'}`}><StepText text={prompt} done={done} /></p>
-        {(item.inlineSvg || item.image || item.table) && <Figure item={item} lang={lang} big={big} />}
+        {(item.inlineSvg || item.image || item.table) && <Figure item={item} lang={lang} big={big} roomy={roomy} />}
         {how && <div className="pt-2 border-t border-slate-100 dark:border-slate-700"><HowItWorks steps={how} ink={ink} big={big} /></div>}
       </div>
     </div>

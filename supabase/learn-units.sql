@@ -1,27 +1,40 @@
--- PRA Learn units: a student's progress part by part (src/data/units.js,
--- src/lib/unitProgress.js). Run once in The Current's Supabase project (SQL editor),
--- after supabase/learn-schema.sql, before units go live. Safe to run again.
+-- PRA Learn units: a student's progress, task by task (src/data/units.js,
+-- src/lib/unitProgress.js). Run in The Current's Supabase project (SQL editor), after
+-- supabase/learn-schema.sql. Safe to run again, and safe on a database that ran the
+-- first version of this file (6 November 2026): nothing already saved is changed or lost.
 --
--- One row per student, unit and part. XP is not stored: the site works it out from
--- `best` (0..1) and `bonus`, so changing a part's XP never needs a migration.
--- Students write only through learn_unit_save (their own rows, scores 0..1, a bonus
--- once earned is kept); staff read the rows of the classes they can teach.
+-- One row per student, unit and task. XP is not stored: the site works it out from
+-- `best` (0..1), so changing a task's XP never needs a migration. Students write only
+-- through learn_unit_save (their own rows, scores 0..1); staff read the rows of the
+-- classes they can teach.
+--
+-- A task is saved under its id in the `part` column. The first version allowed five
+-- fixed names (lesson, words, practice, workbook, quiz). Since 10 November 2026 a unit
+-- names its own tasks, so the rule is on the shape of the id instead: lower-case
+-- letters, digits and underscores, starting with a letter, 40 characters at most. The
+-- five old names fit it. The `bonus` column is from the first version; nothing uses it.
 
 create table if not exists learn_unit_progress (
   student_id uuid not null references adm_students(id) on delete cascade,
   unit_key text not null,                          -- '<TRACK>/<UNIT>', e.g. 'Y7_SCI/U03_4'
   class_key text not null,                         -- the unit's class, e.g. 'science:Year 7'
-  part text not null check (part in ('lesson', 'words', 'practice', 'workbook', 'quiz')),
+  part text not null,                              -- the task's id, e.g. 'lesson', 'protractor'
   best numeric(5, 4) not null default 0 check (best between 0 and 1),
   last numeric(5, 4) check (last between 0 and 1),
   runs integer not null default 0,                 -- finished runs
-  bonus boolean not null default false,            -- the part's bonus, once earned
+  bonus boolean not null default false,            -- not used any more
   saved jsonb,                                     -- the task's own resume blob
   started_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   primary key (student_id, unit_key, part)
 );
 create index if not exists learn_unit_progress_class on learn_unit_progress (class_key);
+
+-- The rule on a task's id. Dropped first, so a table made by the first version loses
+-- its list of five names, and running this file again changes nothing.
+alter table learn_unit_progress drop constraint if exists learn_unit_progress_part_check;
+alter table learn_unit_progress add constraint learn_unit_progress_part_check
+  check (part ~ '^[a-z][a-z0-9_]{0,39}$');
 
 alter table learn_unit_progress enable row level security;
 revoke all on learn_unit_progress from public, anon, authenticated;
@@ -33,7 +46,7 @@ drop policy if exists staff_read on learn_unit_progress;
 create policy staff_read on learn_unit_progress for select to authenticated
   using (learn_can_teach(class_key) or learn_is_operator());
 
--- Save one part for the signed-in student. A staff login (previewing a unit) saves
+-- Save one task for the signed-in student. A staff login (previewing a unit) saves
 -- nothing and gets null back. The class is the unit's (p_class), checked against the
 -- student's own classes, so a student cannot write progress for another class's unit.
 create or replace function learn_unit_save(
@@ -48,7 +61,7 @@ declare
 begin
   if me is null then return null; end if;
   if p_unit !~ '^[A-Z0-9_]+/[A-Za-z0-9_]+$' then raise exception 'Not a unit: %', p_unit; end if;
-  if p_part not in ('lesson', 'words', 'practice', 'workbook', 'quiz') then raise exception 'Not a part: %', p_part; end if;
+  if p_part is null or p_part !~ '^[a-z][a-z0-9_]{0,39}$' then raise exception 'Not a task: %', p_part; end if;
   if p_class is null or not learn_in_class(p_class) then raise exception 'This unit is not for your class.'; end if;
   if p_saved is not null and length(p_saved::text) > 200000 then raise exception 'Saved work is too large.'; end if;
   insert into learn_unit_progress as u (student_id, unit_key, class_key, part, best, last, runs, bonus, saved)

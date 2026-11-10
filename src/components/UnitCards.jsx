@@ -1,19 +1,20 @@
 /* eslint-disable react-refresh/only-export-components */
 import { useEffect, useState } from 'react'
-import { Check, ChevronRight, Sparkles } from 'lucide-react'
+import { Check, ChevronRight } from 'lucide-react'
 import { SubjectTile } from './ui.jsx'
 import { DEMO } from '../lib/api.js'
 import { loadAllUnits } from '../lib/unitProgress.js'
-import { UNITS, UNIT_PARTS, nextPartOf, unitHref, unitKey, unitXP } from '../data/units.js'
+import { UNITS, nextTaskOf, taskDone, taskTitle, unitHref, unitKey, unitXP } from '../data/units.js'
 import { className, splitClass, subjectName, subjectTone } from '../data/subjects.js'
 
 const norm = (s) => String(s || '').trim().replace(/\s+/g, ' ').toLowerCase()
 
 /** The units someone sees, newest first: a student, their year group's; staff and the demo, all. */
 export function unitsFor(me) {
+  const shown = UNITS.filter((u) => !u.hidden)
   const list = !DEMO && me?.kind === 'student'
-    ? UNITS.filter((u) => norm(splitClass(u.classKey)[1]) === norm(me.year_group))
-    : UNITS
+    ? shown.filter((u) => norm(splitClass(u.classKey)[1]) === norm(me.year_group))
+    : shown
   return [...list].reverse()
 }
 
@@ -45,14 +46,14 @@ function XPRing({ xp, done, tone }) {
   )
 }
 
-/** One unit: its XP, the parts done, what is up next. Opens the unit page (unit/index.html). */
+/** One unit: its XP, the tasks done, what is up next. Opens the unit page (unit/index.html). */
 function UnitCard({ unit, records, lang, showClass }) {
   const [subject] = splitClass(unit.classKey)
   const tone = subjectTone(subject)
-  const sum = unitXP(records)
-  const next = nextPartOf(records)
+  const sum = unitXP(unit, records)
+  const next = nextTaskOf(unit, records)?.task
   const title = lang === 'vn' ? unit.titleVn || unit.title : unit.title
-  const partName = (p) => (lang === 'vn' ? p.titleVn : p.title)
+  const partName = (p) => taskTitle(p, lang)
   return (
     <a href={unitHref(unit, window.location.search)}
       className="card card-link group relative flex items-center gap-3 overflow-hidden p-4 sm:gap-5 sm:p-5">
@@ -64,13 +65,12 @@ function UnitCard({ unit, records, lang, showClass }) {
             {showClass ? className(unit.classKey, lang) : subjectName(subject, lang)}
           </span>
           <span className="chip bg-pra-paper font-extrabold text-pra-ink-soft ring-1 ring-inset ring-pra-line">{unit.label}</span>
-          {sum.bonus > 0 && <span className="chip bg-pra-sun-pale text-pra-sun-ink"><Sparkles className="h-4 w-4" /> +{sum.bonus}</span>}
         </p>
         <h3 className="break-words text-lg font-extrabold leading-snug text-pra-ink sm:text-xl">{title}</h3>
         <div className="mt-2 flex flex-wrap items-center gap-1.5">
-          {UNIT_PARTS.map((p) => {
+          {unit.tasks.map((p) => {
             const r = records?.[p.id]
-            const state = r?.runs ? 'done' : r ? 'started' : 'new'
+            const state = taskDone(r) ? 'done' : r ? 'started' : 'new'
             return (
               <span key={p.id} title={partName(p)}
                 className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-extrabold ${state === 'done' ? 'bg-pra-green-pale text-pra-green-dark' : state === 'started' ? 'bg-pra-blue-pale text-pra-blue-deep' : next?.id === p.id ? 'bg-white text-pra-blue ring-2 ring-inset ring-pra-blue' : 'bg-pra-paper text-pra-ink-soft'}`}>
@@ -95,5 +95,5 @@ export function UnitList({ units, progress, lang, showClass = false }) {
   )
 }
 
-/** XP across all of someone's units (core + bonus). */
-export const totalXP = (units, progress) => units.reduce((s, u) => s + unitXP(progress?.[unitKey(u)] || {}).total, 0)
+/** XP across all of someone's units. */
+export const totalXP = (units, progress) => units.reduce((s, u) => s + unitXP(u, progress?.[unitKey(u)] || {}).xp, 0)

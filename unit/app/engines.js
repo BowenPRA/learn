@@ -1,7 +1,7 @@
-// The Dashboard tasks a unit page plays, as the Dashboard's task registry describes them
-// (BowenPRA/Dashboard src/tasks/taskRegistry.js): the scale each reports its score on
-// (`nativeMax`) and what it is handed. Copied entry by entry, so each task gets exactly
-// what it gets on the Dashboard. A new unit's main task adds one line to ENGINES.
+// The tasks a unit page can play that are their own screens: the lesson deck, the quiz,
+// and each interactive task (`engine` in src/data/units.js). Every one is handed
+// { pool, savedData, onProgress(raw, blob), onComplete(raw, blob), onQuit, langs } and
+// reports its score out of `nativeMax`. A new interactive task adds one entry to ENGINES.
 import { lazy } from 'react'
 import { assetUrl, slideAudioUrl } from '../src/utils/assetPaths.js'
 
@@ -33,13 +33,29 @@ export const ASSESSMENT = {
   props: ({ unit, onComplete, onQuit }) => ({ unit, onComplete, onQuit, bilingual: true }),
 }
 
-/** Each unit's main interactive task, by its component's name (src/data/units.js `engine`). */
+const ours = (load) => lazy(load)
+const usual = ({ pool, saved, onComplete, onProgress, onQuit }) => ({ pool, savedData: saved || {}, onComplete, onProgress, onQuit, bilingual: true })
+
+/** The interactive tasks, by the name a unit's task gives in `engine` (src/data/units.js). */
 export const ENGINES = {
   TideLab: {
     nativeMax: 10,
-    label: 'Tide Lab', labelFr: 'Labo des marées',
     component: task('TideLab'),
     pool: (u) => u.tideLab,
-    props: ({ pool, saved, onComplete, onProgress, onQuit }) => ({ pool, savedData: saved || {}, onComplete, onProgress, onQuit, bilingual: true }),
+    props: usual,
+  },
+  // Maths 5.3: measure angles with a protractor the student places.
+  Protractor: {
+    nativeMax: 10,
+    component: ours(() => import('./tasks/ProtractorTask.jsx')),
+    pool: (u) => u.protractor,
+    props: usual,
+  },
+  // Maths 5.3: a quadrilateral from a sketch, its fourth angle, the 360° check, then on paper.
+  QuadCheck: {
+    nativeMax: 10,
+    component: task('ZeroLine'),
+    pool: (u) => u.quads,
+    props: usual,
   },
 }

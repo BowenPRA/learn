@@ -14,7 +14,7 @@ const INSTANT = (input) => input.type === 'choice' || (input.type === 'tap' && (
  * onDone(result) fires once, when the last step is finished; onNext moves on.
  * `left` is the question card, laid out beside the steps from lg up.
  */
-export default function ItemRunner({ item, lang, left, big = false, signed = false, isLast, onDone, onNext }) {
+export default function ItemRunner({ item, lang, left, big = false, roomy = false, signed = false, isLast, onDone, onNext }) {
   const t = words(lang);
   const ink = LEVEL_INK[item.level];
   const [s, setS] = useState(() => initRun(item));
@@ -52,7 +52,7 @@ export default function ItemRunner({ item, lang, left, big = false, signed = fal
   const hintShown = now?.extra === hint;
 
   return (
-    <div className="flex-1 w-full max-w-6xl mx-auto p-3 sm:p-5 pb-10 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-5 lg:items-start">
+    <div className={`flex-1 w-full mx-auto p-3 sm:p-5 pb-10 lg:grid lg:gap-5 lg:items-start ${roomy ? 'max-w-7xl lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]' : 'max-w-6xl lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]'}`}>
       <div className="lg:sticky lg:top-4 flex flex-col gap-3 min-w-0">{left(finished)}</div>
       <div ref={panel} className="mt-3 lg:mt-0 flex flex-col gap-3 min-w-0 scroll-mt-3">
         {!finished && (

@@ -10,7 +10,8 @@ import { words } from './words';
  * A whole step-practice set, with no host around it: no login, no XP, no top
  * bar. The host gives the language and what was saved, and hears back:
  *
- *   set       the unit's `stepPractice` ({ title, items, big?, signed? })
+ *   set       the unit's `stepPractice` ({ title, items, big?, signed?, roomy? });
+ *             `roomy` gives the picture most of the screen (a set whose pictures are measured)
  *   lang      'en' | 'vn' | 'fr'
  *   saved     the blob saved last time: { [itemId]: 1 } — items done without help
  *   onSave    (summary) after every finished item   — summary = { score, blob, items, done, total }
@@ -53,9 +54,9 @@ export default function StepPracticeSet({ set, lang = 'en', saved = {}, onSave, 
   const sum = summaryOf(items, saved, results);
 
   return (
-    <ItemRunner key={item.id} item={item} lang={lang} big={big} signed={!!set.signed} isLast={isLast} onDone={done} onNext={goNext}
+    <ItemRunner key={item.id} item={item} lang={lang} big={big} roomy={!!set.roomy} signed={!!set.signed} isLast={isLast} onDone={done} onNext={goNext}
       left={(finished) => (
-        <QuestionCard item={item} lang={lang} prompt={txt(item, 'prompt', lang)} done={finished} big={big}
+        <QuestionCard item={item} lang={lang} prompt={txt(item, 'prompt', lang)} done={finished} big={big} roomy={!!set.roomy}
           how={newLevel ? (big ? t.howBig : t.how)[item.level] : null}
           doneText={`${sum.done} / ${sum.total} ${t.solved}`} />
       )} />

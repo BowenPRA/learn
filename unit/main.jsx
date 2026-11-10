@@ -1,18 +1,15 @@
 /* eslint-disable react-refresh/only-export-components -- the page's entry file: nothing imports it */
-// PRA Learn's unit page (/unit/#/<TRACK>/<UNIT>[/<part>]): a unit of five parts worth
-// 100 XP with up to 20 bonus (src/data/units.js). The lesson deck, the main task and
-// the quiz are the Dashboard's own components, copied unchanged into src/ by
-// scripts/sync-dashboard.mjs; the words and workbook parts, the unit page and the
-// saving are PRA Learn's own (app/). It asks for a PRA Learn sign-in, and Back goes
-// to the PRA Learn home.
+// PRA Learn's unit page (/unit/#/<TRACK>/<UNIT>[/<task>]): a unit is a list of tasks,
+// each worth its own XP, as on Mr. Bowen's Dashboard (src/data/units.js, README.md
+// here). It asks for a PRA Learn sign-in, and Back goes to the PRA Learn home.
 import { StrictMode, Suspense, useCallback, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { HashRouter, Route, Routes, useNavigate, useParams } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
 import './unit.css'
 import { api } from '../src/lib/api.js'
-import { loadUnit, saveUnitPart } from '../src/lib/unitProgress.js'
-import { UNIT_PARTS, findUnit, unitKey } from '../src/data/units.js'
+import { loadUnit, saveUnitTask } from '../src/lib/unitProgress.js'
+import { findTask, findUnit, taskTitle, unitKey } from '../src/data/units.js'
 import { className } from '../src/data/subjects.js'
 import { langsFor } from './src/utils/lang.js'
 import { ASSESSMENT, ENGINES, NOTES } from './app/engines.js'
@@ -21,7 +18,12 @@ import Words from './app/Words.jsx'
 import Workbook from './app/Workbook.jsx'
 
 const DATA = import.meta.glob('./src/data/*/*/data.js')
-const WORKBOOKS = import.meta.glob('./content/*/*/workbook.js')
+const SETS = import.meta.glob('./content/*/*/*.js')
+
+// The saves still on their way (one unit page, one queue): each waits for the one before.
+const saves = { last: Promise.resolve() }
+const queueSave = (run) => { saves.last = saves.last.then(run); return saves.last }
+const savesDone = () => saves.last
 
 const home = () => window.location.assign(import.meta.env.BASE_URL + window.location.search)
 
@@ -50,18 +52,18 @@ function SignedIn({ children }) {
   return state === 'in' ? children : <Spinner />
 }
 
-/** The unit's Dashboard data ({ meta, notes, realWords, assessment, … }) and its workbook set. */
+/** The unit's own data ({ meta, notes, realWords, assessment, … }) and its step-practice sets. */
 function useUnitData(u) {
   const [got, setGot] = useState(null)
   useEffect(() => {
     if (!u) return
     let alive = true
     const load = DATA[`./src/data/${u.track}/${u.unit}/data.js`]
-    const book = WORKBOOKS[`./content/${u.track}/${u.unit}/workbook.js`]
-    Promise.all([load ? load() : null, book ? book() : null]).then(([mod, wb]) => {
+    const sets = u.tasks.filter((t) => t.kind === 'steps')
+    Promise.all([load ? load() : null, ...sets.map((t) => SETS[`./content/${u.track}/${u.unit}/${t.set}.js`]?.())]).then(([mod, ...mods]) => {
       if (!alive) return
       const data = mod && Object.entries(mod).find(([k]) => k.endsWith('_DATA'))?.[1]
-      setGot({ data: data || null, workbook: wb?.workbook || null })
+      setGot({ data: data || null, sets: Object.fromEntries(sets.map((t, i) => [t.id, mods[i]?.default || mods[i]?.workbook || null])) })
     })
     return () => { alive = false }
   }, [u])
@@ -69,7 +71,7 @@ function useUnitData(u) {
 }
 
 function UnitRoute() {
-  const { track, unit: unitId, part } = useParams()
+  const { track, unit: unitId, task: taskId } = useParams()
   const navigate = useNavigate()
   const u = findUnit(track, unitId)
   const got = useUnitData(u)
@@ -82,7 +84,7 @@ function UnitRoute() {
     loadUnit(key).then(setRecords).catch((e) => { setRecords({}); setError(e.message) })
   }, [key])
   useEffect(() => { if (u) refresh() }, [u, refresh])
-  useEffect(() => { if (u) document.title = `${u.title} · PRA Learn` }, [u])
+  useEffect(() => { if (u) document.title = `${u.label} ${u.title} · PRA Learn` }, [u])
 
   if (!u) return <ToLearn />
   if (!got || !records) return <Spinner />
@@ -90,55 +92,51 @@ function UnitRoute() {
 
   const data = got.data
   const langs = langsFor({ bilingual: true, french: true }, data)
-  const engine = ENGINES[u.engine]
-  const view = { ...u, groupLabel: className(u.classKey, 'en'), engineLabel: engine?.label, engineLabelFr: engine?.labelFr }
-  const toUnit = () => { refresh(); navigate(`/${track}/${unitId}`, { replace: true }) }
-  const save = (partId, patch) => saveUnitPart(key, partId, patch).catch((e) => setError(e.message))
-  const finish = async (partId, patch) => { await save(partId, patch); toUnit() }
+  const view = { ...u, groupLabel: className(u.classKey, 'en') }
+  // Saves go one after another, and going back to the unit waits for the last one, so
+  // the unit page always shows the XP just earned.
+  const save = (id, patch) => { queueSave(() => saveUnitTask(key, id, patch).catch((e) => setError(e.message))) }
+  const toUnit = async () => { await savesDone(); refresh(); navigate(`/${track}/${unitId}`, { replace: true }) }
+  const finish = (id, patch) => { save(id, patch); toUnit() }
 
-  if (!part) {
+  if (!taskId) {
     return (
-      <UnitHome unit={view} data={data} records={records} lang={lang} langs={langs} error={error}
+      <UnitHome unit={view} records={records} lang={lang} langs={langs} error={error}
         onLang={() => setLang((l) => (l === 'en' ? 'fr' : 'en'))}
-        onOpen={(p) => navigate(`/${track}/${unitId}/${p}`)} onBack={home} />
+        onOpen={(id) => navigate(`/${track}/${unitId}/${id}`)} onBack={home} />
     )
   }
-  if (!UNIT_PARTS.some((p) => p.id === part)) return <ToLearn />
-  const rec = records[part]
-  const partDef = UNIT_PARTS.find((p) => p.id === part)
+  const task = findTask(u, taskId)
+  if (!task) return <ToLearn />
+  const rec = records[task.id]
+  const name = (l) => taskTitle(task, l)
 
-  if (part === 'words') {
-    return <Words unit={data} track={track} unitId={unitId} part={partDef} record={rec}
-      onSave={(patch) => save('words', patch)} onQuit={toUnit} />
+  if (task.kind === 'words') {
+    return <Words unit={data} track={track} unitId={unitId} task={task} record={rec}
+      onSave={(patch) => save(task.id, patch)} onQuit={toUnit} />
   }
-  if (part === 'workbook') {
-    if (!got.workbook) { toUnit(); return <Spinner /> }
-    return <Workbook set={got.workbook} record={rec} langs={langs}
-      onSave={(patch) => save('workbook', patch)} onDone={toUnit} onQuit={toUnit} />
+  if (task.kind === 'steps') {
+    const set = got.sets[task.id]
+    if (!set) return <ToLearn />
+    return <Workbook set={set} record={rec} langs={langs} title={name}
+      onSave={(patch) => save(task.id, patch)} onDone={toUnit} onQuit={toUnit} />
   }
 
-  // The Dashboard's own tasks, handed what the Dashboard hands them.
-  const t = part === 'lesson' ? NOTES : part === 'quiz' ? ASSESSMENT : engine
+  // The tasks that are their own screens: the lesson deck, the quiz, an interactive task.
+  const t = task.kind === 'notes' ? NOTES : task.kind === 'quiz' ? ASSESSMENT : ENGINES[task.engine]
   if (!t) return <ToLearn />
   const scoreOf = (raw) => Math.max(0, Math.min(1, (Number(raw) || 0) / t.nativeMax))
-  const ctxFor = {
-    lesson: {
-      onProgress: (raw, blob) => save('lesson', { score: scoreOf(raw), saved: blob, finished: !!blob?.finished }),
-      onComplete: (raw, blob) => finish('lesson', { score: scoreOf(raw), saved: blob, finished: !!blob?.finished }),
-    },
-    practice: {
-      onProgress: (raw, blob) => save('practice', { score: scoreOf(raw), saved: blob }),
-      onComplete: (raw, blob) => finish('practice', { score: scoreOf(raw), saved: blob, finished: true, bonus: Number(raw) >= t.nativeMax }),
-    },
-    quiz: {
-      onComplete: (raw) => finish('quiz', { score: scoreOf(raw), finished: true, bonus: Number(raw) >= t.nativeMax && !rec?.runs }),
-    },
-  }[part]
+  // The lesson deck says for itself when it is finished (its last slide); the others
+  // are finished when they hand in. The quiz saves nothing until then.
+  const done = (blob) => (task.kind === 'notes' ? !!blob?.finished : true)
+  const onProgress = task.kind === 'quiz' ? () => {}
+    : (raw, blob) => save(task.id, { score: scoreOf(raw), saved: blob, finished: task.kind === 'notes' && !!blob?.finished })
+  const onComplete = (raw, blob) => finish(task.id, { score: scoreOf(raw), finished: done(blob), ...(task.kind === 'quiz' ? {} : { saved: blob }) })
   const pool = t.pool(data, { track, unitId })
   const Comp = t.component
   return (
     <Suspense fallback={<Spinner />}>
-      <Comp langs={langs} {...t.props({ pool, unit: data, saved: rec?.saved, onQuit: toUnit, onProgress: () => {}, ...ctxFor })} />
+      <Comp langs={langs} {...t.props({ pool, unit: data, saved: rec?.saved, onQuit: toUnit, onProgress, onComplete })} />
     </Suspense>
   )
 }
@@ -148,7 +146,7 @@ createRoot(document.getElementById('root')).render(
     <HashRouter>
       <Routes>
         <Route path="/:track/:unit" element={<SignedIn><UnitRoute /></SignedIn>} />
-        <Route path="/:track/:unit/:part" element={<SignedIn><UnitRoute /></SignedIn>} />
+        <Route path="/:track/:unit/:task" element={<SignedIn><UnitRoute /></SignedIn>} />
         <Route path="*" element={<ToLearn />} />
       </Routes>
     </HashRouter>

@@ -1,64 +1,83 @@
-// A unit's own page: its XP out of 100 (and the bonus on top), and its five parts in
-// order, each with the XP it holds and what earns its bonus. Nothing is locked; the
-// first part not yet finished is marked "Up next". In the Dashboard tasks' look.
-import { ArrowLeft, Check, ChevronRight, ClipboardCheck, FileText, Languages, Moon, NotebookPen, Presentation, Sparkles, Star, Sun, Waves } from 'lucide-react'
+// A unit's own page, in the look of the Dashboard's unit card: the unit's XP out of 100,
+// the one task to do next, and the unit's tasks as coloured tiles, each with the XP it
+// holds out of the XP it is worth. Nothing is locked.
+import { ArrowLeft, Check, ChevronRight, History, MonitorPlay, Moon, Play, Star, Sun } from 'lucide-react'
 import useDarkMode from '../src/hooks/useDarkMode.js'
 import { tr } from '../src/utils/lang.js'
-import { UNIT_BONUS, UNIT_DONE_XP, UNIT_PARTS, nextPartOf, partXP, unitXP } from '../../src/data/units.js'
+import { UNIT_DONE_XP, UNIT_XP, nextTaskOf, taskDone, taskTitle, taskXP, unitXP } from '../../src/data/units.js'
 import { classroomHref } from '../../src/data/classroomLessons.js'
+import { taskLook } from './taskLook.js'
 
-const LOOK = {
-  lesson: { icon: FileText, face: '#64748b', edge: '#475569' },
-  words: { icon: Languages, face: '#58cc02', edge: '#58a700' },
-  practice: { icon: Waves, face: '#1a5fa8', edge: '#134a85' },
-  workbook: { icon: NotebookPen, face: '#ff9600', edge: '#cc7800' },
-  quiz: { icon: ClipboardCheck, face: '#2563eb', edge: '#1d4ed8' },
-}
-
-function about(part, ctx, lang) {
-  switch (part.id) {
-    case 'lesson': return tr(lang, 'The lesson, with questions to check as you go.', null, 'La leçon, avec des questions pour vérifier au fur et à mesure.')
-    case 'words': return tr(lang, `Review the ${ctx.words} words, then take the vocab quiz.`, null, `Revois les ${ctx.words} mots, puis fais le quiz de vocabulaire.`)
-    case 'practice': return tr(lang, `${ctx.engine}: the main activity of the unit.`, null, `${ctx.engineFr} : l’activité principale de l’unité.`)
-    case 'workbook': return tr(lang, 'Step-by-step problems, like the Workbook.', null, 'Des problèmes pas à pas, comme dans le cahier.')
-    case 'quiz': return tr(lang, `${ctx.questions} questions to finish the unit.`, null, `${ctx.questions} questions pour finir l’unité.`)
-    default: return ''
-  }
-}
-const BONUS_FOR = {
-  words: ['Timed quiz, 80% or more', 'Quiz chronométré, 80 % ou plus'],
-  practice: ['Full marks', 'Toutes les réponses justes'],
-  workbook: ['Every problem without help', 'Tous les problèmes sans aide'],
-  quiz: ['Full marks the first time', 'Tout juste du premier coup'],
-}
-
-function Ring({ value, max, done }) {
+function Ring({ value, done, full }) {
   const r = 52
   const c = 2 * Math.PI * r
-  const frac = Math.max(0, Math.min(1, value / max))
+  const frac = Math.max(0, Math.min(1, value / UNIT_XP))
   return (
-    <svg viewBox="0 0 128 128" className="h-32 w-32 shrink-0" aria-hidden>
+    <svg viewBox="0 0 128 128" className="h-28 w-28 sm:h-32 sm:w-32 shrink-0" role="img" aria-label={`${value} / ${UNIT_XP} XP`}>
       <circle cx="64" cy="64" r={r} fill="none" strokeWidth="12" className="stroke-slate-200 dark:stroke-slate-800" />
-      <circle cx="64" cy="64" r={r} fill="none" strokeWidth="12" strokeLinecap="round"
-        stroke={done ? '#58cc02' : '#1cb0f6'} strokeDasharray={`${frac * c} ${c}`} transform="rotate(-90 64 64)"
-        style={{ transition: 'stroke-dasharray 0.8s ease-out' }} />
+      {frac > 0 && (
+        <circle cx="64" cy="64" r={r} fill="none" strokeWidth="12" strokeLinecap="round"
+          stroke={full ? '#fbbf24' : done ? '#58cc02' : '#1cb0f6'} strokeDasharray={`${frac * c} ${c}`} transform="rotate(-90 64 64)"
+          style={{ transition: 'stroke-dasharray 0.8s ease-out' }} />
+      )}
       <text x="64" y="62" textAnchor="middle" className="fill-slate-800 dark:fill-slate-100" style={{ font: '900 30px ui-sans-serif, system-ui' }}>{value}</text>
-      <text x="64" y="84" textAnchor="middle" className="fill-slate-400" style={{ font: '800 13px ui-sans-serif, system-ui', letterSpacing: '0.08em' }}>/ {max} XP</text>
+      <text x="64" y="84" textAnchor="middle" className="fill-slate-400" style={{ font: '800 13px ui-sans-serif, system-ui', letterSpacing: '0.08em' }}>/ {UNIT_XP} XP</text>
     </svg>
   )
 }
 
-export default function UnitHome({ unit, data, records, lang, onLang, langs, error, onOpen, onBack }) {
+/** Why the next task is the next one, in a few words. */
+function whyNote(next, records, lang) {
+  const { task, why } = next
+  const left = task.xp - taskXP(task, records[task.id])
+  if (why === 'start') return tr(lang, 'Start here', null, 'Commence ici')
+  if (why === 'continue') return tr(lang, 'Carry on where you stopped', null, 'Reprends où tu t’es arrêté')
+  if (why === 'next') return tr(lang, `Worth ${task.xp} XP`, null, `Vaut ${task.xp} XP`)
+  return tr(lang, `${left} more XP to win here`, null, `Encore ${left} XP à gagner ici`)
+}
+
+function Tile({ task, n, record, lang, onOpen }) {
+  const { Icon, face, edge } = taskLook(task)
+  const xp = taskXP(task, record)
+  const full = xp >= task.xp
+  const half = !!record && !taskDone(record)
+  const name = taskTitle(task, lang)
+  return (
+    <button type="button" onClick={onOpen} title={name}
+      className="relative flex h-36 sm:h-40 w-full flex-col items-center justify-between rounded-[1.5rem] border-b-[6px] p-3 sm:p-4 text-white transition-all duration-150 hover:brightness-110 active:translate-y-[6px] active:border-b-0"
+      style={{ background: face, borderColor: edge }}>
+      <span className="absolute left-3 top-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-black/20 text-[11px] font-black tabular-nums" aria-hidden>{n}</span>
+      {full && (
+        <span className="absolute right-2.5 top-2.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/90 text-emerald-600 shadow-sm" title={tr(lang, 'Full marks', null, 'Tout juste')}>
+          <Check className="h-3.5 w-3.5" strokeWidth={4} />
+        </span>
+      )}
+      {half && !full && (
+        <span className="absolute right-2.5 top-2.5 inline-flex items-center gap-1 rounded-full bg-white/90 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-slate-700 shadow-sm">
+          <History className="h-3 w-3" strokeWidth={3} /> {tr(lang, 'Continue', null, 'Continuer')}
+        </span>
+      )}
+      <span className="mt-3 flex flex-col items-center">
+        <Icon className="mb-1.5 h-8 w-8 sm:h-9 sm:w-9 drop-shadow-sm" strokeWidth={2.5} />
+        <span className="text-center text-base sm:text-lg font-black leading-tight tracking-wide drop-shadow-sm">{name}</span>
+      </span>
+      <span className="relative mt-auto flex w-full items-center justify-center overflow-hidden rounded-xl bg-black/15 py-1.5">
+        <span className="absolute inset-y-0 left-0 bg-white/25 transition-all duration-500" style={{ width: `${(xp / task.xp) * 100}%` }} />
+        <span className="relative text-[11px] font-black uppercase tracking-[0.15em] tabular-nums text-white/95">{xp} / {task.xp} XP</span>
+      </span>
+    </button>
+  )
+}
+
+export default function UnitHome({ unit, records, lang, onLang, langs, error, onOpen, onBack }) {
   const [isDark, toggleDark] = useDarkMode()
-  const sum = unitXP(records)
-  const next = nextPartOf(records)
-  const ctx = {
-    words: (data.realWords || []).filter((w) => w.isReal !== false).length,
-    questions: data.assessment?.questions?.length || 0,
-    engine: unit.engineLabel || 'Practice',
-    engineFr: unit.engineLabelFr || unit.engineLabel || 'Entraînement',
-  }
+  const sum = unitXP(unit, records)
+  const full = sum.xp >= UNIT_XP
+  const next = nextTaskOf(unit, records)
   const title = tr(lang, unit.title, null, unit.titleFr)
+  const subtitle = tr(lang, unit.subtitle, null, unit.subtitleFr)
+  const quiz = unit.tasks.some((t) => t.kind === 'quiz')
+  const cols = unit.tasks.length === 4 ? 'sm:grid-cols-4' : 'sm:grid-cols-3'
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
       <header className="sticky top-0 z-20 flex h-14 sm:h-16 items-center justify-between border-b-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 sm:px-6">
@@ -77,79 +96,72 @@ export default function UnitHome({ unit, data, records, lang, onLang, langs, err
         </div>
       </header>
 
-      <main className="mx-auto max-w-4xl px-4 pb-16 pt-6 sm:pt-10">
-        <section className="flex flex-col-reverse items-start gap-6 rounded-3xl border-2 border-b-4 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:flex-row sm:items-center sm:p-8">
-          <div className="min-w-0 flex-1">
-            <p className="flex flex-wrap items-center gap-2 text-xs font-black uppercase tracking-widest text-[#1899d6]">
-              <span>{unit.groupLabel}</span>
-              <span className="rounded-lg bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-slate-500">{unit.label}</span>
-              {unit.teacher && <span className="text-slate-400">{unit.teacher}</span>}
-            </p>
-            <h1 className="mt-2 text-4xl sm:text-5xl font-black text-slate-800 dark:text-slate-100">{title}</h1>
-            <p className="mt-2 max-w-xl font-semibold text-slate-500 dark:text-slate-400">{unit.subtitle}</p>
-            <div className="mt-4 flex flex-wrap items-center gap-2">
-              {sum.done
-                ? <span className="inline-flex items-center gap-1.5 rounded-full bg-[#d7ffb8] dark:bg-green-900/40 px-3 py-1 text-sm font-black text-[#3c8a00] dark:text-green-300"><Check className="h-4 w-4" strokeWidth={3} /> {tr(lang, 'Unit finished', null, 'Unité terminée')}</span>
-                : <span className="rounded-full bg-slate-100 dark:bg-slate-800 px-3 py-1 text-sm font-bold text-slate-500">{tr(lang, `Finish: ${UNIT_DONE_XP} XP and the quiz`, null, `Pour finir : ${UNIT_DONE_XP} XP et le quiz`)}</span>}
-              <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-black ${sum.bonus ? 'bg-[#fff4cc] dark:bg-yellow-900/40 text-[#cc9a00]' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'}`}>
-                <Sparkles className="h-4 w-4" /> +{sum.bonus} / {UNIT_BONUS} {tr(lang, 'bonus', null, 'bonus')}
-              </span>
+      <main className="mx-auto max-w-4xl px-3 sm:px-4 pb-16 pt-5 sm:pt-8">
+        <div className="rounded-3xl border-2 border-b-4 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+          <section className="flex items-center gap-4 p-5 sm:gap-6 sm:p-7">
+            <div className="min-w-0 flex-1">
+              <p className="flex flex-wrap items-center gap-2 text-xs font-black uppercase tracking-widest text-[#1899d6]">
+                <span>{unit.groupLabel}</span>
+                {unit.teacher && <span className="text-slate-400">{unit.teacher}</span>}
+              </p>
+              <h1 className="mt-1.5 text-2xl sm:text-4xl font-black leading-tight tracking-tight text-slate-800 dark:text-slate-100">
+                <span className="mr-2 tabular-nums text-[#1cb0f6]">{unit.label}</span>{title}
+              </h1>
+              {subtitle && <p className="mt-2 max-w-xl text-sm sm:text-base font-bold text-slate-500 dark:text-slate-400">{subtitle}</p>}
+              <p className="mt-3">
+                {full ? (
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 dark:bg-amber-900/30 px-3 py-1 text-sm font-black text-amber-700 dark:text-amber-300"><Star className="h-4 w-4 fill-current" /> {tr(lang, 'Full marks', null, 'Tout juste')}</span>
+                ) : sum.done ? (
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 px-3 py-1 text-sm font-black text-emerald-700 dark:text-emerald-400"><Check className="h-4 w-4" strokeWidth={4} /> {tr(lang, 'Unit finished', null, 'Unité terminée')}</span>
+                ) : (
+                  <span className="text-sm font-bold text-slate-400">
+                    {quiz
+                      ? tr(lang, `Finished at ${UNIT_DONE_XP} XP with the quiz done`, null, `Terminée à ${UNIT_DONE_XP} XP, quiz fait`)
+                      : tr(lang, `Finished at ${UNIT_DONE_XP} XP`, null, `Terminée à ${UNIT_DONE_XP} XP`)}
+                  </span>
+                )}
+              </p>
             </div>
-          </div>
-          <Ring value={sum.xp} max={100} done={sum.done} />
-        </section>
+            <Ring value={sum.xp} done={sum.done} full={full} />
+          </section>
 
-        {error && <p className="mt-4 rounded-2xl border-2 border-[#ff4b4b] bg-[#ffdfe0] dark:bg-red-900/30 p-4 font-bold text-[#c03030] dark:text-red-300">{error}</p>}
+          <div className="space-y-5 border-t-2 border-slate-100 dark:border-slate-800 px-3 pb-5 pt-4 sm:px-6 sm:pb-6 sm:pt-5">
+            {error && <p className="rounded-2xl border-2 border-[#ff4b4b] bg-[#ffdfe0] dark:bg-red-900/30 p-4 font-bold text-[#c03030] dark:text-red-300">{error}</p>}
 
-        <ol className="mt-6 space-y-3">
-          {UNIT_PARTS.map((p, i) => {
-            const rec = records[p.id]
-            const { xp, bonus } = partXP(p, rec)
-            const look = LOOK[p.id]
-            const Icon = look.icon
-            const state = rec?.runs ? 'done' : rec ? 'started' : 'new'
-            const isNext = next?.id === p.id
-            return (
-              <li key={p.id}>
-                <button type="button" onClick={() => onOpen(p.id)}
-                  className={`group flex w-full items-center gap-4 rounded-3xl border-2 border-b-4 bg-white dark:bg-slate-900 p-4 sm:p-5 text-left transition-all hover:-translate-y-0.5 active:translate-y-0.5 active:border-b-2 ${isNext ? 'border-[#1cb0f6]' : 'border-slate-200 dark:border-slate-800'}`}>
-                  <span className="relative inline-flex h-14 w-14 sm:h-16 sm:w-16 shrink-0 items-center justify-center rounded-2xl border-b-4 text-white" style={{ background: look.face, borderColor: look.edge }}>
-                    <Icon className="h-7 w-7 sm:h-8 sm:w-8" strokeWidth={2.4} />
-                    <span className="absolute -left-2 -top-2 inline-flex h-6 w-6 items-center justify-center rounded-full border-2 border-white dark:border-slate-900 bg-slate-700 text-[11px] font-black text-white">{i + 1}</span>
+            {next && (() => {
+              const { face, edge } = taskLook(next.task)
+              return (
+                <button type="button" onClick={() => onOpen(next.task.id)}
+                  className="group flex w-full items-center gap-3 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 p-2.5 pr-3 text-left transition-colors hover:border-slate-300 dark:hover:border-slate-600">
+                  <span className="hidden sm:block shrink-0 pl-1 text-[10px] font-black uppercase tracking-widest text-slate-400">{tr(lang, 'Next', null, 'Ensuite')}</span>
+                  <span className="flex shrink-0 items-center gap-1.5 rounded-lg border-b-[3px] py-1 pl-2 pr-2.5 text-xs sm:text-sm font-black tracking-wide text-white" style={{ background: face, borderColor: edge }}>
+                    <Play className="h-3 w-3 fill-current" strokeWidth={2.5} /> {taskTitle(next.task, lang)}
                   </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="flex flex-wrap items-center gap-2">
-                      <span className="text-lg sm:text-xl font-black text-slate-800 dark:text-slate-100">{tr(lang, p.title, null, p.titleFr)}</span>
-                      {isNext && <span className="rounded-full bg-[#1cb0f6] px-2.5 py-0.5 text-[11px] font-black uppercase tracking-widest text-white">{tr(lang, 'Up next', null, 'À faire')}</span>}
-                      {state === 'done' && <Check className="h-5 w-5 text-[#58cc02]" strokeWidth={3.5} aria-label="done" />}
-                    </span>
-                    <span className="mt-0.5 block text-sm font-semibold text-slate-500 dark:text-slate-400">{about(p, ctx, lang)}</span>
-                    <span className="mt-2 flex items-center gap-3">
-                      <span className="h-2.5 w-full max-w-[14rem] overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
-                        <span className="block h-full rounded-full transition-all duration-700" style={{ width: `${(xp / p.xp) * 100}%`, background: look.face }} />
-                      </span>
-                      <span className="shrink-0 text-sm font-black text-slate-600 dark:text-slate-300">{xp} / {p.xp} XP</span>
-                      {p.bonus > 0 && (
-                        <span title={tr(lang, BONUS_FOR[p.id][0], null, BONUS_FOR[p.id][1])}
-                          className={`hidden sm:inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-xs font-black ${bonus ? 'bg-[#fff4cc] dark:bg-yellow-900/40 text-[#cc9a00]' : 'text-slate-400'}`}>
-                          <Star className={`h-3.5 w-3.5 ${bonus ? 'fill-current' : ''}`} /> +{p.bonus} {bonus ? '' : `· ${tr(lang, BONUS_FOR[p.id][0], null, BONUS_FOR[p.id][1])}`}
-                        </span>
-                      )}
-                    </span>
-                  </span>
-                  <ChevronRight className="h-6 w-6 shrink-0 text-slate-300 transition group-hover:translate-x-0.5 group-hover:text-[#1cb0f6]" />
+                  <span className="min-w-0 flex-1 truncate text-xs sm:text-sm font-bold text-slate-500 dark:text-slate-400">{whyNote(next, records, lang)}</span>
+                  <ChevronRight className="h-4 w-4 shrink-0 text-slate-300 dark:text-slate-600 transition-transform group-hover:translate-x-0.5 group-hover:text-slate-500" strokeWidth={3} />
                 </button>
-              </li>
-            )
-          })}
-        </ol>
+              )
+            })()}
 
-        {unit.classroom && (
-          <a href={classroomHref(unit.classroom, window.location.search)}
-            className="mt-6 inline-flex items-center gap-2 rounded-2xl px-4 py-3 font-bold text-slate-500 hover:bg-white dark:hover:bg-slate-900">
-            <Presentation className="h-5 w-5 text-[#1cb0f6]" /> {tr(lang, 'The slides from class', null, 'Les diapos du cours')}
-          </a>
-        )}
+            <div className={`grid grid-cols-2 gap-2.5 sm:gap-3 ${cols}`}>
+              {unit.tasks.map((task, i) => (
+                <Tile key={task.id} task={task} n={i + 1} record={records[task.id]} lang={lang} onOpen={() => onOpen(task.id)} />
+              ))}
+            </div>
+
+            {unit.classroom && (
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="mr-1 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                  <MonitorPlay className="h-4 w-4" strokeWidth={2.5} /> {tr(lang, 'From the classroom', null, 'Vu en classe')}
+                </span>
+                <a href={classroomHref(unit.classroom, window.location.search)}
+                  className="flex items-center gap-1.5 rounded-xl border-2 border-b-[3px] border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs font-black text-slate-600 dark:text-slate-300 transition-all hover:border-[#1cb0f6] hover:text-[#1899d6] active:translate-y-[1px] active:border-b-2">
+                  {tr(lang, 'The slides from class', null, 'Les diapos du cours')}
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
       </main>
     </div>
   )

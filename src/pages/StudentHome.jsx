@@ -4,7 +4,7 @@ import { AlertCircle, ArrowRight, CalendarDays, CheckCircle2, ChevronRight, Hour
 import { Loading, Notice, SubjectTile } from '../components/ui.jsx'
 import { ClassroomLessonList, classroomLessonsFor, classroomLink, classroomTitle, newestPerClass } from '../components/ClassroomLessons.jsx'
 import { UnitList, totalXP, unitsFor, useUnitProgress } from '../components/UnitCards.jsx'
-import { UNIT_PARTS, nextPartOf, unitHref, unitKey, unitXP } from '../data/units.js'
+import { nextTaskOf, taskTitle, unitHref, unitKey, unitXP } from '../data/units.js'
 import Pip from '../components/Pip.jsx'
 import { PackCard, nextPart, packDone, packStars, partLabels, partPath, partState, todayIso, weekEndIso } from '../components/packs.jsx'
 import { api } from '../lib/api.js'
@@ -68,8 +68,8 @@ export default function StudentHome() {
   // The units for this year group, newest first (src/data/units.js), and the XP in them.
   const units = unitsFor(me)
   const xpAll = totalXP(units, unitProgress)
-  const unitOpen = [...units].reverse().find((u) => !unitXP(unitProgress[unitKey(u)]).done)
-  const unitNext = unitOpen && (nextPartOf(unitProgress[unitKey(unitOpen)]) || UNIT_PARTS[0])
+  const unitOpen = [...units].reverse().find((u) => !unitXP(u, unitProgress[unitKey(u)]).done)
+  const unitNext = unitOpen && (nextTaskOf(unitOpen, unitProgress[unitKey(unitOpen)])?.task || unitOpen.tasks[0])
   const classes = [...new Set([...data.packs.map((p) => p.class_key), ...units.map((u) => u.classKey), ...newestPerClass(fromClass).map((l) => l.classKey)])]
   const teacherOf = (k) => data.packs.find((p) => p.class_key === k)?.content?.teacher || units.find((u) => u.classKey === k)?.teacher || fromClass.find((l) => l.classKey === k)?.teacher
   const list = (packs, opts = {}) => (
@@ -142,7 +142,7 @@ export default function StudentHome() {
         {unitBtn && (
           <a href={unitHref(unitOpen, window.location.search, unitNext.id)} className="btn-white btn-big mt-5 w-full justify-between gap-3 text-left sm:w-auto sm:min-w-[22rem]">
             <span className="min-w-0">
-              <span className="block truncate text-lg font-extrabold">{t(unitProgress[unitKey(unitOpen)]?.[unitNext.id] ? 'continuePart' : 'startPart', { part: lang === 'vn' ? unitNext.titleVn : unitNext.title })}</span>
+              <span className="block truncate text-lg font-extrabold">{t(unitProgress[unitKey(unitOpen)]?.[unitNext.id] ? 'continuePart' : 'startPart', { part: taskTitle(unitNext, lang) })}</span>
               <span className="block truncate text-sm font-semibold text-pra-ink-soft">{unitOpen.label} {lang === 'vn' ? unitOpen.titleVn || unitOpen.title : unitOpen.title}</span>
             </span>
             <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pra-blue text-white">
