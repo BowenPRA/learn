@@ -61,7 +61,7 @@ function LessonRow({ lesson, lang, tone, newest = false, plan = false }) {
         {plan && (
           <div className="relative z-10 mt-2 shrink-0 sm:mt-0">
             <a href={classroomPlanLink(lesson)} title={t('classPlanTitle')}
-              className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-pra-line bg-white px-3 text-sm font-bold text-pra-ink-soft shadow-sm transition hover:border-pra-blue-tint hover:text-pra-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pra-blue">
+              className="inline-flex h-10 items-center gap-1.5 rounded-xl border-2 border-pra-line bg-white px-3 text-sm font-extrabold text-pra-ink-soft shadow-[0_2px_0_#D6E0EB] transition active:translate-y-[2px] active:shadow-none hover:border-pra-blue-tint hover:text-pra-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pra-blue">
               <FileText className="h-4 w-4 text-pra-green-deep" strokeWidth={2.4} aria-hidden /> {t('classPlan')}
             </a>
           </div>
@@ -74,7 +74,7 @@ function LessonRow({ lesson, lang, tone, newest = false, plan = false }) {
 
 function Rows({ lessons, lang, tone, newestKey, plan }) {
   return (
-    <ul className="divide-y divide-pra-line">
+    <ul className="divide-y-2 divide-pra-line">
       {lessons.map((l) => (
         <LessonRow key={keyOf(l)} lesson={l} lang={lang} tone={tone} plan={plan} newest={keyOf(l) === newestKey} />
       ))}
@@ -97,7 +97,7 @@ function UnitGroups({ group, lang, tone, plan }) {
     return next
   })
   return (
-    <div className="divide-y divide-pra-line">
+    <div className="divide-y-2 divide-pra-line">
       {group.units.map((u) => {
         const isOpen = open.has(u.unit)
         const name = u.name && (lang === 'vn' ? u.name[1] : u.name[0])
@@ -119,7 +119,7 @@ function UnitGroups({ group, lang, tone, plan }) {
               <ChevronDown className={`h-5 w-5 shrink-0 text-pra-ink-soft transition-transform ${isOpen ? 'rotate-180' : ''}`} aria-hidden />
             </button>
             {isOpen && (
-              <div className="border-t border-pra-line">
+              <div className="border-t-2 border-pra-line">
                 <Rows lessons={u.lessons} lang={lang} tone={tone} newestKey={newestKey} plan={plan} />
               </div>
             )}
@@ -144,8 +144,8 @@ function ClassCard({ group, lang, showClass, staff, newestCount }) {
   const canExpand = !staff && n > newestCount
   return (
     <div className="card relative overflow-hidden">
-      <span aria-hidden className="absolute inset-x-0 top-0 h-1.5" style={{ background: tone }} />
-      <div className="flex items-center gap-3 border-b border-pra-line px-4 pb-3.5 pt-5 sm:px-5" style={{ background: `${tone}0A` }}>
+      <span aria-hidden className="absolute inset-x-0 top-0 h-2" style={{ background: tone }} />
+      <div className="flex items-center gap-3 border-b-2 border-pra-line px-4 pb-3.5 pt-5 sm:px-5">
         <SubjectTile subject={subject} tone={tone} size="h-11 w-11" icon="h-6 w-6" />
         <div className="min-w-0 flex-1">
           <h3 className="break-words text-lg font-extrabold leading-tight text-pra-ink">{showClass ? className(group.classKey, lang) : subjectName(subject, lang)}</h3>
@@ -157,7 +157,7 @@ function ClassCard({ group, lang, showClass, staff, newestCount }) {
         : <Rows lessons={group.lessons.slice(0, newestCount)} lang={lang} tone={tone} newestKey={keyOf(group.lessons[0])} plan={false} />}
       {canExpand && (
         <button type="button" onClick={() => setAll((v) => !v)} aria-expanded={all}
-          className="flex min-h-[56px] w-full items-center justify-center gap-2 border-t border-pra-line px-4 text-base font-extrabold text-pra-blue transition-colors hover:bg-pra-blue-pale focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-pra-blue">
+          className="flex min-h-[56px] w-full items-center justify-center gap-2 border-t-2 border-pra-line px-4 text-base font-extrabold text-pra-blue transition-colors hover:bg-pra-blue-pale focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-pra-blue">
           <ListTree className="h-5 w-5 shrink-0" strokeWidth={2.4} aria-hidden />
           <span>{all ? t('classFewer') : t('classAll', { n })}</span>
           <ChevronDown className={`h-5 w-5 shrink-0 transition-transform ${all ? 'rotate-180' : ''}`} aria-hidden />

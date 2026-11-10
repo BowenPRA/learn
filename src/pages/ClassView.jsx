@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { ArrowLeft, BookOpen, ChevronDown, ChevronUp, EyeOff, KeyRound, Loader2, Lock, Pencil, Presentation, Printer, Send, Unlock, UserPlus } from 'lucide-react'
-import { Loading, Notice, Stars } from '../components/ui.jsx'
+import { BookOpen, ChevronDown, ChevronUp, EyeOff, KeyRound, Loader2, Lock, Pencil, Presentation, Printer, Send, Unlock, UserPlus, Users } from 'lucide-react'
+import { BackLink, Loading, Notice, SectionHead, Stars } from '../components/ui.jsx'
 import { ClassroomLessonList, classroomLessonsFor } from '../components/ClassroomLessons.jsx'
+import UnitXPTable from '../components/UnitXPTable.jsx'
 import { api } from '../lib/api.js'
 import { pick, shortDate, useT } from '../lib/i18n.jsx'
 import { className } from '../data/subjects.js'
@@ -88,15 +89,18 @@ export default function ClassView() {
 
   return (
     <main className="mx-auto max-w-6xl px-4 pb-16 pt-6">
-      <Link to="/" className="btn-ghost -ml-3 mb-2"><ArrowLeft className="h-5 w-5" /> {t('myClassesStaff')}</Link>
-      <h1 className="mb-1 text-3xl font-extrabold text-pra-ink">{className(classKey, lang)}</h1>
-      <p className="mb-6 font-bold text-pra-ink-soft">{t('nStudents', { n: data.students.length })} · {t('nLogins', { n: data.students.filter((s) => s.login === 'on').length })}</p>
+      <BackLink to="/">{t('myClassesStaff')}</BackLink>
+      <h1 className="page-title mb-2">{className(classKey, lang)}</h1>
+      <p className="mb-6 flex flex-wrap gap-2">
+        <span className="chip bg-pra-blue-pale py-1 text-pra-blue-ink"><Users className="h-4 w-4" aria-hidden /> {t('nStudents', { n: data.students.length })}</span>
+        <span className="chip bg-pra-blue-pale py-1 text-pra-blue-ink"><KeyRound className="h-4 w-4" aria-hidden /> {t('nLogins', { n: data.students.filter((s) => s.login === 'on').length })}</span>
+      </p>
       {err && <div className="mb-4"><Notice tone="bad">{t('failed', { msg: err })}</Notice></div>}
       {note && <div className="mb-4"><Notice tone="bad">{note}</Notice></div>}
 
       {/* Lessons */}
       <section className="mb-8">
-        <h2 className="mb-3 text-xl font-extrabold text-pra-ink">{t('lessons')}</h2>
+        <SectionHead icon={BookOpen} tone="#116DFF">{t('lessons')}</SectionHead>
         {!data.packs.length && !decks.length && <div className="card p-5 font-semibold text-pra-ink-soft">{t('noLessons')}</div>}
         <div className="space-y-3">
           {data.packs.map((p) => {
@@ -110,7 +114,7 @@ export default function ClassView() {
                   </div>
                   <label className="flex items-center gap-2 text-sm font-bold text-pra-ink-soft">
                     {t('dueOn')}
-                    <input type="date" className="rounded-xl border-2 border-pra-line px-2 py-2 text-pra-ink" value={p.due_on || ''}
+                    <input type="date" className="min-h-[48px] rounded-2xl border-2 border-pra-line bg-white px-3 py-2 font-bold text-pra-ink focus:border-pra-blue focus:outline-none" value={p.due_on || ''}
                       onChange={(e) => setPack(p, { due_on: e.target.value || null })} disabled={busy === `pack:${p.id}`} />
                   </label>
                   {p.status === 'published'
@@ -120,7 +124,7 @@ export default function ClassView() {
                 {p.status !== 'draft' && <PartsSummary pack={p} data={data} />}
                 <div className="mt-3 flex flex-wrap gap-2">
                   {partsOf({ parts: p.parts }).map((part, _, all) => (
-                    <Link key={part.id} to={partLink(p.slug, part)} className="btn-ghost border-2 border-pra-line">
+                    <Link key={part.id} to={partLink(p.slug, part)} className="btn-soft min-h-[44px] px-4 text-sm">
                       {part.kind === 'practice' ? <Pencil className="h-4 w-4" /> : <BookOpen className="h-4 w-4" />} {t('preview_')}: {partLabel(all, part, t)}
                     </Link>
                   ))}
@@ -129,7 +133,7 @@ export default function ClassView() {
                   </button>}
                 </div>
                 {open === p.id && (
-                  <div className="mt-3 rounded-2xl bg-pra-paper p-4">
+                  <div className="well mt-3 p-4">
                     {!m ? <Loader2 className="h-5 w-5 animate-spin text-pra-ink-soft" /> : <Misses m={m} lang={lang} students={data.students} />}
                   </div>
                 )}
@@ -140,10 +144,7 @@ export default function ClassView() {
         {/* This class's classroom decks (src/data/classroomLessons.js): always open, nothing to set. */}
         {decks.length > 0 && (
           <div className={data.packs.length ? 'mt-6' : ''}>
-            <h3 className="mb-1 flex items-center gap-2 text-lg font-extrabold text-pra-ink">
-              <Presentation className="h-5 w-5 text-pra-sky" strokeWidth={2.6} aria-hidden /> {t('classLessons')}
-            </h3>
-            <p className="mb-3 font-semibold text-pra-ink-soft">{t('classLessonsClassHint')}</p>
+            <SectionHead icon={Presentation} tone="#2196E3" hint={t('classLessonsClassHint')}>{t('classLessons')}</SectionHead>
             <ClassroomLessonList lessons={decks} lang={lang} staff />
           </div>
         )}
@@ -153,8 +154,11 @@ export default function ClassView() {
       <section className="mb-8">
         <div className="mb-3 flex flex-wrap items-center gap-3">
           <div className="mr-auto">
-            <h2 className="text-xl font-extrabold text-pra-ink">{t('whoDid')}</h2>
-            <p className="text-sm font-semibold text-pra-ink-soft">{L('Who needs help comes first: work past its due date, then low first scores.', 'Học viên cần hỗ trợ đứng đầu: bài quá hạn, rồi điểm lần đầu thấp.')}</p>
+            <h2 className="flex items-center gap-2.5 text-xl font-extrabold tracking-tight text-pra-ink">
+              <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-pra-green-pale"><Users className="h-5 w-5 text-pra-green-deep" strokeWidth={2.6} aria-hidden /></span>
+              {t('whoDid')}
+            </h2>
+            <p className="mt-1.5 text-sm font-semibold text-pra-ink-soft">{L('Who needs help comes first: work past its due date, then low first scores.', 'Học viên cần hỗ trợ đứng đầu: bài quá hạn, rồi điểm lần đầu thấp.')}</p>
           </div>
           {noLogin.length > 0
             ? <button type="button" className="btn-primary" onClick={makeLogins} disabled={!!busy}>{busy === 'make' ? <Loader2 className="h-5 w-5 animate-spin" /> : <UserPlus className="h-5 w-5" />} {noLogin.length === 1 ? t('makeLoginFor1') : t('makeLoginsFor', { n: noLogin.length })}</button>
@@ -163,8 +167,8 @@ export default function ClassView() {
         <div className="card overflow-x-auto">
           <table className="w-full min-w-[720px] text-left text-sm">
             <thead>
-              <tr className="border-b-2 border-pra-line text-xs font-extrabold uppercase tracking-wider text-pra-ink-soft">
-                <th className="sticky left-0 bg-white px-4 py-3">{t('student')}</th>
+              <tr className="border-b-2 border-pra-line bg-pra-paper text-xs font-extrabold uppercase tracking-wider text-pra-ink-soft">
+                <th className="sticky left-0 bg-pra-paper px-4 py-3">{t('student')}</th>
                 <th className="px-3 py-3">{t('login')}</th>
                 {shown.map((p) => partsOf({ parts: p.parts }).map((part, _, all) => (
                   <th key={`${p.id}:${part.id}`} className="px-3 py-3" title={p.title}>
@@ -176,11 +180,11 @@ export default function ClassView() {
             </thead>
             <tbody>
               {order.map((s) => (
-                <tr key={s.id} className="border-b border-pra-line last:border-0">
+                <tr key={s.id} className="border-b-2 border-pra-line last:border-0">
                   <td className="sticky left-0 min-w-[170px] bg-white px-4 py-3">
                     <span className="block whitespace-nowrap font-extrabold text-pra-ink">{s.name}</span>
                     {s.login === 'on' && needs[s.id].help && (
-                      <span className="my-0.5 inline-block whitespace-nowrap rounded-full bg-pra-coral-pale px-2 py-0.5 text-xs font-extrabold text-pra-coral-deep">
+                      <span className="my-0.5 inline-block whitespace-nowrap rounded-full bg-pra-coral-pale px-2 py-0.5 text-xs font-extrabold text-[#A8321F]">
                         {L('Needs help', 'Cần hỗ trợ')}{needs[s.id].why.length ? `: ${needs[s.id].why.map((w) => L(...w)).join(', ')}` : ''}
                       </span>
                     )}
@@ -214,6 +218,8 @@ export default function ClassView() {
         </div>
         <p className="mt-2 flex items-center gap-2 text-sm font-semibold text-pra-ink-soft"><Printer className="h-4 w-4 shrink-0" /> {t('cardsHow')}</p>
       </section>
+
+      <UnitXPTable classKey={classKey} students={data.students} lang={lang} />
     </main>
   )
 }
@@ -282,11 +288,11 @@ function PartsSummary({ pack, data }) {
         const pct = (n) => `${(n / total) * 100}%`
         const label = `${partLabel(all, part, t)}: ${done} ${L('done', 'xong')}, ${started} ${L('started', 'đang làm')}, ${none} ${L('not started', 'chưa làm')}`
         return (
-          <div key={part.id} className="rounded-xl border-2 border-pra-line px-3 py-2" role="group" aria-label={label}>
+          <div key={part.id} className="well px-3 py-2.5" role="group" aria-label={label}>
             <p className="flex items-center gap-1.5 text-sm font-extrabold text-pra-ink">
               {part.kind === 'practice' ? <Pencil className="h-3.5 w-3.5" /> : <BookOpen className="h-3.5 w-3.5" />} {partLabel(all, part, t)}
             </p>
-            <div className="mt-1.5 flex h-2.5 overflow-hidden rounded-full bg-slate-100" aria-hidden="true">
+            <div className="mt-1.5 flex h-3 overflow-hidden rounded-full bg-pra-line" aria-hidden="true">
               <div className="bg-pra-green" style={{ width: pct(done) }} />
               <div className="bg-pra-blue-tint" style={{ width: pct(started) }} />
             </div>
@@ -344,12 +350,12 @@ function Misses({ m, lang, students }) {
   return (
     <div className="grid gap-5 lg:grid-cols-2">
       <div className="min-w-0">
-        <h4 className="mb-2 text-sm font-extrabold uppercase tracking-wider text-pra-ink-soft">{t('mostMissed')}</h4>
+        <h4 className="eyebrow mb-2">{t('mostMissed')}</h4>
         {!list.length ? <p className="font-semibold text-pra-ink-soft">{t('noMisses')}</p> : (
           <ol className="space-y-3">
             {list.map((x) => (
               <li key={`${x.part}:${x.id}`} className="flex gap-3">
-                <span className="inline-flex h-8 min-w-[2rem] items-center justify-center rounded-full bg-pra-coral-pale px-2 text-sm font-extrabold text-pra-coral-deep">{x.wrong_first}</span>
+                <span className="inline-flex h-8 min-w-[2rem] items-center justify-center rounded-lg bg-pra-coral-pale px-2 text-sm font-black tabular-nums text-[#A8321F]">{x.wrong_first}</span>
                 <span className="min-w-0 flex-1">
                   <span className="block font-bold text-pra-ink">{labelOf(x)}</span>
                   <span className="text-xs font-bold text-pra-ink-soft">{partName(x.part)} · {t('wrongFirst', { n: x.wrong_first, asked: x.asked })}</span>
@@ -360,7 +366,7 @@ function Misses({ m, lang, students }) {
         )}
       </div>
       <div className="min-w-0">
-        <h4 className="mb-2 text-sm font-extrabold uppercase tracking-wider text-pra-ink-soft">{L('Common slips', 'Lỗi thường gặp')}</h4>
+        <h4 className="eyebrow mb-2">{L('Common slips', 'Lỗi thường gặp')}</h4>
         {!slipParts.length ? <p className="font-semibold text-pra-ink-soft">{L('No slips yet. They show here once children answer the practice.', 'Chưa có lỗi nào. Lỗi sẽ hiện ở đây khi các em làm phần luyện tập.')}</p> : (
           <div className="space-y-4">
             {slipParts.map(({ part, rows }) => (
@@ -371,7 +377,7 @@ function Misses({ m, lang, students }) {
                 <ol className="space-y-3">
                   {rows.map((r) => (
                     <li key={r.key} className="flex gap-3">
-                      <span className="inline-flex h-8 min-w-[2rem] items-center justify-center rounded-full bg-pra-sun-pale px-2 text-sm font-extrabold text-pra-sun-ink"
+                      <span className="inline-flex h-8 min-w-[2rem] items-center justify-center rounded-lg bg-pra-sun-pale px-2 text-sm font-black tabular-nums text-pra-sun-ink"
                         title={L(`${r.n} children`, `${r.n} em`)}>{r.n}</span>
                       <span className="min-w-0 flex-1">
                         <span className="block font-bold text-pra-ink">{r.msg}</span>

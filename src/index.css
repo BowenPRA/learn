@@ -17,25 +17,40 @@
 }
 
 @layer components {
-  /* Buttons: at least 48px high (56px for the big ones), one main action per screen.
-     The coloured ones sit on a darker edge and press down into it, like a real key. */
+  /* The look (10 Nov 2026): the Dashboard's chunky keys and cards, in PRA's colours.
+     Everything that can be pressed sits on a darker bottom edge and moves down into it;
+     nothing has a soft shadow, a glow or a gradient. Radii: 24px cards (rounded-3xl),
+     16px controls (rounded-2xl), full for chips. Edges: 4px on keys, 3px on cards, 6px on a
+     page's banner. */
+
+  /* Buttons: at least 48px high (60px for the big ones), one main action per screen. */
   .btn {
-    @apply inline-flex min-h-[48px] items-center justify-center gap-2 rounded-2xl px-5 py-3 text-base font-bold transition duration-150 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex min-h-[48px] select-none items-center justify-center gap-2 rounded-2xl px-5 py-3 text-base font-extrabold transition duration-100 disabled:cursor-not-allowed disabled:opacity-50;
   }
-  .btn-primary { @apply btn bg-pra-blue text-white shadow-[0_4px_0_#0B4FBF] hover:-translate-y-px hover:bg-[#2A7DFF] hover:shadow-[0_5px_0_#0B4FBF] active:translate-y-[3px] active:shadow-[0_1px_0_#0B4FBF] disabled:translate-y-0 disabled:shadow-[0_4px_0_#0B4FBF]; }
-  .btn-green { @apply btn bg-pra-green-deep text-white shadow-[0_4px_0_#1F5C12] hover:-translate-y-px hover:bg-[#3A8A1C] hover:shadow-[0_5px_0_#1F5C12] active:translate-y-[3px] active:shadow-[0_1px_0_#1F5C12]; }
-  .btn-white { @apply btn bg-white text-pra-blue-ink shadow-[0_4px_0_rgba(14,42,92,0.35)] hover:-translate-y-px hover:bg-pra-blue-pale active:translate-y-[3px] active:shadow-[0_1px_0_rgba(14,42,92,0.35)]; }
-  .btn-soft { @apply btn border border-pra-line bg-white text-pra-ink shadow-soft hover:border-pra-blue-tint hover:text-pra-blue; }
+  .btn-primary { @apply btn bg-pra-blue text-white shadow-[0_4px_0_#0B4FBF] hover:bg-[#2A7DFF] active:translate-y-[3px] active:shadow-[0_1px_0_#0B4FBF] disabled:translate-y-0 disabled:bg-pra-blue disabled:shadow-[0_4px_0_#0B4FBF]; }
+  .btn-green { @apply btn bg-pra-green-deep text-white shadow-[0_4px_0_#1F5C12] hover:bg-[#3A8A1C] active:translate-y-[3px] active:shadow-[0_1px_0_#1F5C12] disabled:translate-y-0 disabled:bg-pra-green-deep disabled:shadow-[0_4px_0_#1F5C12]; }
+  /* On a coloured banner: a white key on the banner's own darker edge. */
+  .btn-white { @apply btn bg-white text-pra-ink shadow-[0_4px_0_rgba(0,0,0,0.22)] hover:bg-pra-paper active:translate-y-[3px] active:shadow-[0_1px_0_rgba(0,0,0,0.22)]; }
+  .btn-soft { @apply btn border-2 border-pra-line bg-white text-pra-ink shadow-edge hover:border-pra-blue-tint hover:bg-pra-blue-pale hover:text-pra-blue active:translate-y-[2px] active:shadow-[0_1px_0_#D6E0EB] disabled:translate-y-0 disabled:shadow-edge; }
   .btn-ghost { @apply btn min-h-[44px] px-3 text-pra-ink-soft hover:bg-pra-blue-pale hover:text-pra-blue; }
-  .btn-big { @apply min-h-[60px] rounded-3xl px-7 text-lg; }
-  /* Cards as in The Current: white, a thin line, a soft shadow. Links lift a little. */
-  .card { @apply rounded-3xl border border-pra-line bg-white shadow-soft; }
-  .card-link { @apply transition duration-200 hover:-translate-y-0.5 hover:border-pra-blue-tint hover:shadow-lift focus-visible:shadow-lift; }
+  .btn-big { @apply min-h-[60px] rounded-2xl px-7 text-lg; }
+  /* A square key for one icon (back, close). */
+  .btn-icon { @apply btn-soft h-12 w-12 shrink-0 p-0 text-pra-ink-soft; }
+
+  /* Cards: white, a 2px line, a 3px bottom edge (shadow-edge). A card that is a link presses down. */
+  .card { @apply rounded-3xl border-2 border-pra-line bg-white shadow-edge; }
+  .card-link { @apply transition duration-100 hover:border-pra-blue-tint hover:shadow-[0_3px_0_#D3E4FF] active:translate-y-[3px] active:shadow-none; }
+  /* A page's banner: one flat colour on its darker edge (the colour is set where it is used). */
+  .banner { @apply relative overflow-hidden rounded-3xl border-b-[6px] p-5 text-white sm:p-7; }
+  /* A quiet inset row inside a card. */
+  .well { @apply rounded-2xl bg-pra-paper; }
+
   .field {
-    @apply block w-full rounded-2xl border-2 border-pra-line bg-pra-paper px-4 py-3 text-lg font-bold text-pra-ink outline-none transition placeholder:font-medium placeholder:text-slate-400 focus:border-pra-blue focus:bg-white focus:shadow-[0_0_0_4px_rgba(17,109,255,0.12)];
+    @apply block w-full rounded-2xl border-2 border-pra-line bg-pra-paper px-4 py-3 text-lg font-bold text-pra-ink outline-none transition placeholder:font-medium placeholder:text-slate-400 focus:border-pra-blue focus:bg-white;
   }
-  .eyebrow { @apply text-xs font-bold uppercase tracking-[0.14em] text-pra-ink-soft; }
+  .eyebrow { @apply text-xs font-extrabold uppercase tracking-[0.14em] text-pra-ink-soft; }
   .chip { @apply inline-flex items-center gap-1 rounded-full px-3 py-0.5 text-sm font-bold; }
+  .page-title { @apply text-3xl font-black leading-tight tracking-tight text-pra-ink sm:text-4xl; }
 }
 
 /* Inline SVG figures and diagrams scale to their box. */

@@ -62,7 +62,7 @@ export function ListenButton({ text, label, className = '' }) {
   }
   return (
     <button type="button" onClick={toggle} aria-pressed={on}
-      className={`inline-flex min-h-[44px] shrink-0 items-center gap-2 rounded-2xl border-2 px-3 py-1.5 text-base font-extrabold transition ${on ? 'border-pra-blue bg-pra-blue text-white' : 'border-pra-blue-tint bg-white text-pra-blue hover:border-pra-blue'} ${className}`}>
+      className={`inline-flex min-h-[44px] shrink-0 items-center gap-2 rounded-2xl border-2 px-3 py-1.5 text-base font-extrabold transition duration-100 active:translate-y-[2px] active:shadow-none ${on ? 'border-pra-blue bg-pra-blue text-white shadow-[0_3px_0_#0B4FBF]' : 'border-pra-blue-tint bg-white text-pra-blue shadow-edge-blue hover:border-pra-blue'} ${className}`}>
       {on ? <Square className="h-5 w-5 fill-current" strokeWidth={2.5} aria-hidden /> : <Volume2 className="h-5 w-5" strokeWidth={2.5} aria-hidden />}
       <span>{on ? t('stopListen') : label || t('listen')}</span>
     </button>

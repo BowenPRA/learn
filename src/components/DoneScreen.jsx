@@ -37,13 +37,13 @@ export default function DoneScreen({ stars, title, line, whole = false, actions 
       <div className="-mt-2 flex items-end gap-2" role="img" aria-label={t('stars', { n: stars })}>
         {[1, 2, 3].map((i) => (
           <Star key={i}
-            className={`${i === 2 ? 'h-16 w-16 -translate-y-2' : 'h-12 w-12'} ${i <= stars ? 'fill-pra-sun text-pra-sun-deep drop-shadow-[0_3px_0_rgba(245,166,35,0.35)]' : 'fill-pra-line text-pra-line'} motion-safe:animate-star-pop`}
+            className={`${i === 2 ? 'h-16 w-16 -translate-y-2' : 'h-12 w-12'} ${i <= stars ? 'fill-pra-sun text-pra-sun-deep' : 'fill-pra-line text-pra-line'} motion-safe:animate-star-pop`}
             style={{ animationDelay: `${250 + i * 220}ms` }} strokeWidth={2} />
         ))}
       </div>
-      <h1 className="text-3xl font-black leading-tight text-pra-ink sm:text-4xl">{title}</h1>
+      <h1 className="page-title">{title}</h1>
       {line && <p className="text-xl font-bold text-pra-ink-soft">{line}</p>}
-      <div className="w-full rounded-3xl border border-pra-green-tint bg-gradient-to-br from-pra-green-pale to-white px-5 py-4 shadow-soft">
+      <div className="w-full rounded-3xl border-2 border-pra-green-tint bg-pra-green-pale px-5 py-4">
         <p className="text-lg font-extrabold text-pra-green-dark" lang="en">{en}</p>
         <p className="lang-vi mt-1 text-base font-semibold text-pra-green-dark" lang="vi">{vn}</p>
       </div>

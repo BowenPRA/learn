@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { AlertCircle, ArrowRight, CalendarDays, CheckCircle2, ChevronRight, Hourglass, Presentation, Sparkles, Star, Trophy, Zap } from 'lucide-react'
-import { Loading, Notice, SubjectTile } from '../components/ui.jsx'
+import { AlertCircle, ArrowRight, CalendarDays, CheckCircle2, ChevronRight, Gamepad2, Hourglass, Presentation, Sparkles, Star, Trophy, Zap } from 'lucide-react'
+import { Loading, Notice, SectionHead as Head, SubjectTile } from '../components/ui.jsx'
 import { ClassroomLessonList, classroomLessonsFor, classroomLink, classroomTitle, newestPerClass } from '../components/ClassroomLessons.jsx'
 import { UnitList, totalXP, unitsFor, useUnitProgress } from '../components/UnitCards.jsx'
 import { nextTaskOf, taskTitle, unitHref, unitKey, unitXP } from '../data/units.js'
@@ -15,26 +15,14 @@ import { splitClass, subjectName, subjectTone } from '../data/subjects.js'
 
 const WEEK = 7 * 86400000
 
-/** A section heading with a coloured icon badge. */
-function Head({ id, icon: Icon, tone, children }) {
-  return (
-    <h2 id={id} className="mb-3 flex items-center gap-2.5 text-xl font-extrabold text-pra-ink">
-      <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl" style={{ background: `${tone}1A` }}>
-        <Icon className="h-5 w-5" style={{ color: tone }} strokeWidth={2.6} aria-hidden />
-      </span>
-      {children}
-    </h2>
-  )
-}
-
-/** A small see-through tile on the blue welcome card: a number and what it counts. */
+/** A small darker tile on the blue welcome card: a number and what it counts. */
 function Stat({ icon: Icon, value, label, iconClass }) {
   return (
-    <div className="flex items-center gap-2.5 rounded-2xl bg-white/15 px-3.5 py-2.5 ring-1 ring-inset ring-white/25 backdrop-blur">
+    <div className="flex items-center gap-2.5 rounded-2xl bg-black/15 px-3.5 py-2">
       <Icon className={`h-6 w-6 ${iconClass}`} strokeWidth={2.4} aria-hidden />
       <span className="leading-tight">
-        <span className="block text-xl font-black text-white">{value}</span>
-        <span className="block text-xs font-bold uppercase tracking-wide text-white/80">{label}</span>
+        <span className="block text-xl font-black tabular-nums text-white">{value}</span>
+        <span className="block text-[11px] font-extrabold uppercase tracking-wider text-white/85">{label}</span>
       </span>
     </div>
   )
@@ -105,17 +93,13 @@ export default function StudentHome() {
 
   return (
     <main className="mx-auto max-w-5xl px-4 pb-16 pt-6">
-      <section className="relative isolate mb-8 overflow-hidden rounded-[2rem] bg-gradient-to-br from-pra-blue via-[#1A6FE8] to-pra-navy p-6 text-white shadow-hero sm:p-8" aria-labelledby="h-hello">
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute -right-10 -top-24 h-72 w-72 rounded-full bg-pra-sky/40 blur-3xl" />
-          <div className="absolute -bottom-24 left-1/3 h-64 w-64 rounded-full bg-pra-lime/25 blur-3xl" />
-          <div className="frond absolute -bottom-16 -left-10 h-64 w-64 bg-white/10" />
-        </div>
+      <section className="banner isolate mb-8 border-pra-blue-deep bg-pra-blue sm:p-8" aria-labelledby="h-hello">
+        <div aria-hidden className="frond pointer-events-none absolute -bottom-20 -right-16 -z-10 h-72 w-72 rotate-180 bg-white/10" />
         <Pip wave mood={mood} size={92} className="absolute right-3 top-4 sm:hidden" label={t('pipName')} />
         <div className="flex items-end gap-4 sm:gap-6">
           <div className="min-w-0 flex-1">
-            <p className="pr-20 text-sm font-extrabold uppercase tracking-[0.16em] text-white/80 sm:pr-0">{greeting}</p>
-            <h1 id="h-hello" className="mt-1 break-words pr-20 text-3xl font-black leading-tight sm:pr-0 sm:text-5xl">{me?.name || ''}!</h1>
+            <p className="pr-20 text-xs font-extrabold uppercase tracking-[0.16em] text-white/85 sm:pr-0 sm:text-sm">{greeting}</p>
+            <h1 id="h-hello" className="mt-1 break-words pr-20 text-3xl font-black leading-tight tracking-tight sm:pr-0 sm:text-5xl">{me?.name || ''}!</h1>
             <p className="mt-2 max-w-xl pr-16 text-base font-semibold text-white/90 sm:pr-0 sm:text-lg">{summary}</p>
             {(stars > 0 || partsDone > 0 || xpAll > 0) && (
               <div className="mt-4 flex flex-wrap gap-2.5">
@@ -134,7 +118,7 @@ export default function StudentHome() {
               <span className="block truncate text-lg font-extrabold">{t(started ? 'continuePart' : 'startPart', { part: partName })}</span>
               <span className="block truncate text-sm font-semibold text-pra-ink-soft">{firstTitle}</span>
             </span>
-            <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pra-blue text-white">
+            <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-pra-blue text-white">
               <ArrowRight className="h-6 w-6" strokeWidth={3} />
             </span>
           </Link>
@@ -145,7 +129,7 @@ export default function StudentHome() {
               <span className="block truncate text-lg font-extrabold">{t(unitProgress[unitKey(unitOpen)]?.[unitNext.id] ? 'continuePart' : 'startPart', { part: taskTitle(unitNext, lang) })}</span>
               <span className="block truncate text-sm font-semibold text-pra-ink-soft">{unitOpen.label} {lang === 'vn' ? unitOpen.titleVn || unitOpen.title : unitOpen.title}</span>
             </span>
-            <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pra-blue text-white">
+            <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-pra-blue text-white">
               <ArrowRight className="h-6 w-6" strokeWidth={3} />
             </span>
           </a>
@@ -159,7 +143,7 @@ export default function StudentHome() {
                   <span className="block truncate text-lg font-extrabold">{t('openLesson', { title: classroomTitle(deck, lang) })}</span>
                   <span className="block truncate text-sm font-semibold text-pra-ink-soft">{subjectName(splitClass(deck.classKey)[0], lang)} · {deck.unit}{deck.teacher ? ` · ${deck.teacher}` : ''}</span>
                 </span>
-                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pra-blue text-white">
+                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-pra-blue text-white">
                   <Presentation className="h-5 w-5" strokeWidth={2.6} />
                 </span>
               </a>
@@ -189,16 +173,26 @@ export default function StudentHome() {
 
       {units.length > 0 && (
         <section className="mb-8" aria-labelledby="h-units">
-          <Head id="h-units" icon={Sparkles} tone="#F5A623">{t('units')}</Head>
-          <p className="-mt-1 mb-3 font-semibold text-pra-ink-soft">{t('unitsHint')}</p>
+          <Head id="h-units" icon={Sparkles} tone="#F5A623" hint={t('unitsHint')}>{t('units')}</Head>
+          
           <UnitList units={units} progress={unitProgress} lang={lang} />
+          <a href={`${import.meta.env.BASE_URL}unit/${window.location.search}#/arcade`}
+            className="card card-link mt-3 flex items-center gap-4 p-4 sm:p-5">
+            <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-pra-violet text-white"><Gamepad2 className="h-7 w-7" strokeWidth={2.4} aria-hidden /></span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-lg font-extrabold text-pra-ink">{t('arcade')}</span>
+              <span className="block text-sm font-semibold text-pra-ink-soft">{t('arcadeHint')}</span>
+            </span>
+            <span className="chip bg-pra-sun py-1 font-black tabular-nums text-pra-sun-ink"><Zap className="h-4 w-4 fill-current" aria-hidden /> {xpAll} XP</span>
+            <ChevronRight className="hidden h-6 w-6 shrink-0 text-pra-ink-soft sm:block" aria-hidden />
+          </a>
         </section>
       )}
 
       {fromClass.length > 0 && (
         <section className="mb-8" aria-labelledby="h-class">
-          <Head id="h-class" icon={Presentation} tone="#2196E3">{t('classLessons')}</Head>
-          <p className="-mt-1 mb-3 font-semibold text-pra-ink-soft">{t('classLessonsHint')}</p>
+          <Head id="h-class" icon={Presentation} tone="#2196E3" hint={t('classLessonsHint')}>{t('classLessons')}</Head>
+          
           <ClassroomLessonList lessons={fromClass} lang={lang} />
         </section>
       )}

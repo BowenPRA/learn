@@ -1,5 +1,6 @@
 /* The unit page's styles: the Dashboard's own index.css (copied unchanged by the sync),
    built with the Dashboard's Tailwind theme (tailwind.unit.js), never PRA Learn's. */
+@import '../src/fonts.css';
 @import './src/index.css';
 @config './tailwind.unit.js';
 
@@ -11,3 +12,11 @@
   0%, 100% { transform: rotate(0deg); }
   50% { transform: rotate(-3deg); }
 }
+
+/* The course page, the unit page and the Arcade hub use PRA Learn's own fonts
+   (src/fonts.css), so they read as one site with the home pages. The tasks and games
+   keep the system font they were laid out in. */
+.pra-ui { font-family: "PRA Minus", Poppins, "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif; }
+.pra-ui :focus-visible { outline: 3px solid #116DFF; outline-offset: 2px; }
+/* Poppins is wider and closes up more than a system font: ease the tight tracking. */
+.pra-ui .tracking-tight { letter-spacing: -0.01em; }

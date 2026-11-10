@@ -16,7 +16,7 @@ export default {
           sun: '#FFC857', 'sun-deep': '#F5A623', 'sun-ink': '#7A5000', 'sun-pale': '#FFF6DE',
           coral: '#FF6F59', 'coral-deep': '#D2452F', 'coral-pale': '#FFEEEA',
           violet: '#7C5CFF', 'violet-pale': '#F2EEFF',
-          ink: '#1B2A41', 'ink-soft': '#55657A', line: '#E3EAF2', paper: '#F7FAFE',
+          ink: '#1B2A41', 'ink-soft': '#55657A', line: '#DFE7F0', 'line-deep': '#D6E0EB', paper: '#F7FAFE',
           // The Current's logo colours (admin tailwind.config.js), for small touches that
           // tie the two sites together: the sky of the river, the lime of the leaves.
           sky: '#2196E3', lime: '#8DC63F', navy: '#1F5AA6',
@@ -27,10 +27,9 @@ export default {
         vi: ['"PRA Minus"', '"Be Vietnam Pro"', 'system-ui', '-apple-system', '"Segoe UI"', 'sans-serif'],
       },
       boxShadow: {
-        // The Current's cards: a thin line and a soft shadow, a little deeper here.
-        soft: '0 1px 2px rgba(16, 32, 64, 0.04), 0 6px 20px -8px rgba(16, 32, 64, 0.12)',
-        lift: '0 2px 4px rgba(16, 32, 64, 0.05), 0 16px 32px -12px rgba(17, 109, 255, 0.30)',
-        hero: '0 20px 48px -20px rgba(11, 79, 191, 0.55)',
+        // No soft shadows: a card or a quiet key sits on a flat 3px edge of the line colour.
+        edge: '0 3px 0 #D6E0EB',
+        'edge-blue': '0 3px 0 #D3E4FF',
       },
       keyframes: {
         'pip-float': { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-6px)' } },

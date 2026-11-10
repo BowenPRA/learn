@@ -14,7 +14,7 @@ import { useT } from '../lib/i18n.jsx'
 function Box({ icon: Icon, label, children }) {
   return (
     <label className="block">
-      <span className="mb-2 block pl-1 text-sm font-extrabold uppercase tracking-[0.12em] text-pra-ink-soft">{label}</span>
+      <span className="mb-2 block pl-1 text-xs font-extrabold uppercase tracking-[0.14em] text-pra-ink-soft">{label}</span>
       <span className="group relative block">
         <Icon className="pointer-events-none absolute left-4 top-1/2 h-6 w-6 -translate-y-1/2 text-slate-400 transition group-focus-within:text-pra-blue" strokeWidth={2.5} aria-hidden />
         {children}
@@ -25,8 +25,8 @@ function Box({ icon: Icon, label, children }) {
 
 function Feature({ icon: Icon, tone, children }) {
   return (
-    <li className="flex flex-col items-start gap-2 rounded-2xl border border-white/70 bg-white/75 p-4 shadow-soft backdrop-blur">
-      <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl" style={{ background: `${tone}1A` }}>
+    <li className="flex flex-col items-start gap-2 rounded-2xl border-2 border-pra-line bg-white p-4 shadow-edge">
+      <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl" style={{ background: `${tone}1F` }}>
         <Icon className="h-6 w-6" style={{ color: tone }} strokeWidth={2.6} />
       </span>
       <span className="text-base font-bold leading-snug text-pra-ink">{children}</span>
@@ -58,7 +58,7 @@ export default function SignIn() {
   }
   const tab = (key, Icon, label) => (
     <button type="button" onClick={() => { setWho(key); setErr('') }} aria-pressed={who === key}
-      className={`flex min-h-[56px] flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-2xl px-2 text-[15px] font-extrabold transition sm:gap-2 sm:px-3 sm:text-lg ${who === key ? 'bg-pra-blue text-white shadow-[0_4px_0_#0B4FBF]' : 'text-pra-ink-soft hover:bg-white hover:text-pra-blue'}`}>
+      className={`flex min-h-[52px] flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-2xl px-2 text-[15px] font-extrabold transition sm:gap-2 sm:px-3 sm:text-lg ${who === key ? 'bg-white text-pra-blue shadow-edge-blue' : 'text-pra-ink-soft hover:text-pra-blue'}`}>
       <Icon className="h-5 w-5 shrink-0 sm:h-6 sm:w-6" strokeWidth={2.5} /> {label}
     </button>
   )
@@ -70,25 +70,23 @@ export default function SignIn() {
     <div className="relative isolate flex min-h-screen flex-col overflow-hidden">
       <Backdrop />
       <DemoBand />
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3">
+      <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-3">
         <Logo />
         <LangSwitch />
       </div>
 
-      <main className="mx-auto grid w-full max-w-6xl flex-1 items-center gap-6 px-4 pb-10 pt-2 lg:grid-cols-[1.1fr_1fr] lg:gap-12 lg:pt-0">
+      <main className="mx-auto grid w-full max-w-5xl flex-1 items-center gap-6 px-4 pb-10 pt-2 lg:grid-cols-[1.1fr_1fr] lg:gap-10 lg:pt-0">
         {/* Welcome: Pip, the name of the site and three things to do here */}
         <section className="min-w-0">
           <div className="flex items-center gap-4 sm:gap-6">
             <div className="relative">
-              <span aria-hidden className="absolute -right-2 top-2 h-5 w-5 rounded-full bg-pra-sun motion-safe:animate-sparkle" />
-              <span aria-hidden className="absolute -left-1 bottom-10 h-3 w-3 rounded-full bg-pra-sky motion-safe:animate-sparkle [animation-delay:800ms]" />
               <Pip wave float size={112} className="lg:hidden" label={t('pipName')} />
-              <Pip wave float size={210} className="hidden lg:inline-block" label={t('pipName')} />
+              <Pip wave float size={190} className="hidden lg:inline-block" label={t('pipName')} />
             </div>
             <div className="min-w-0">
-              <p className="mb-2 inline-block rounded-xl border border-pra-line bg-white px-3 py-1 text-xs font-extrabold uppercase tracking-[0.16em] text-pra-blue shadow-sm">{t('welcomeTo')}</p>
-              <h1 className="text-4xl font-black leading-[1.05] tracking-tight text-pra-blue-ink sm:text-5xl lg:text-7xl">
-                PRA <span className="bg-gradient-to-r from-pra-green-deep to-pra-green bg-clip-text text-transparent">Learn</span>
+              <p className="mb-2 inline-block rounded-xl bg-pra-blue-pale px-3 py-1 text-xs font-extrabold uppercase tracking-[0.16em] text-pra-blue">{t('welcomeTo')}</p>
+              <h1 className="text-4xl font-black leading-[1.05] tracking-tight text-pra-blue-ink sm:text-5xl lg:text-6xl">
+                PRA <span className="text-pra-green-deep">Learn</span>
               </h1>
             </div>
           </div>
@@ -102,8 +100,8 @@ export default function SignIn() {
 
         {/* The sign-in card */}
         <section className="w-full max-w-md justify-self-center lg:justify-self-end">
-          <div className="rounded-[2rem] border border-pra-line bg-white/90 p-2 shadow-soft backdrop-blur">
-            <div className="mb-2 flex gap-2 rounded-[1.5rem] bg-pra-blue-pale p-1.5">
+          <div className="card p-2">
+            <div className="mb-2 flex gap-1.5 rounded-[1.25rem] bg-pra-blue-pale p-1.5">
               {tab('student', GraduationCap, t('imStudent'))}
               {tab('teacher', Users, t('imTeacher'))}
             </div>

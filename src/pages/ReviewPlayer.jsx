@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, Home, Pencil } from 'lucide-react'
-import { CloseButton, LangSwitch, Loading, Notice } from '../components/ui.jsx'
+import { Bar, CloseButton, LangSwitch, Loading, Notice } from '../components/ui.jsx'
 import DoneScreen from '../components/DoneScreen.jsx'
 import { ListenButton, stopSpeaking } from '../components/Listen.jsx'
 import { nextPart, partLabels, partPath } from '../components/packs.jsx'
@@ -97,13 +97,11 @@ function ReviewRun({ pack, part, row, progress, assets }) {
 
   return (
     <div ref={top} className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-20 border-b-2 border-pra-line bg-white/95 backdrop-blur">
+      <header className="sticky top-0 z-20 border-b-2 border-pra-line bg-white">
         <div className="mx-auto flex max-w-5xl items-center gap-3 px-4 py-2">
           <CloseButton to={back} label={t('back')} />
           <div className="flex flex-1 items-center gap-3">
-            <div className="h-3 flex-1 overflow-hidden rounded-full bg-pra-line" role="progressbar" aria-valuemin={1} aria-valuemax={slides.length} aria-valuenow={at + 1}>
-              <div className="h-full rounded-full bg-pra-green transition-all" style={{ width: `${((at + 1) / slides.length) * 100}%` }} />
-            </div>
+            <Bar value={(at + 1) / slides.length} className="h-4 flex-1" role="progressbar" aria-valuemin={1} aria-valuemax={slides.length} aria-valuenow={at + 1} />
             <span className="text-sm font-extrabold tabular-nums text-pra-ink-soft">{at + 1} / {slides.length}</span>
           </div>
           {!oneLang && <LangSwitch />}
@@ -117,16 +115,16 @@ function ReviewRun({ pack, part, row, progress, assets }) {
         {saveFailed && <Notice tone="bad">{t('notSaved')}</Notice>}
       </main>
 
-      <footer className="sticky bottom-0 z-20 border-t-2 border-pra-line bg-white/95 backdrop-blur">
+      <footer className="sticky bottom-0 z-20 border-t-2 border-pra-line bg-white">
         {!answered && <p className="mx-auto max-w-5xl px-4 pt-2 text-center text-sm font-bold text-pra-ink-soft" role="status">{t('answerFirst')}</p>}
         <div className="mx-auto flex max-w-5xl items-center gap-2 px-4 py-3 sm:gap-3">
-          <button id="review-back" type="button" className="btn-soft h-14 w-14 shrink-0 p-0" onClick={() => setAt(Math.max(0, at - 1))} disabled={at === 0} aria-label={t('back')}>
-            <ChevronLeft className="h-7 w-7" strokeWidth={2.5} />
+          <button id="review-back" type="button" className="btn-icon h-14 w-14" onClick={() => setAt(Math.max(0, at - 1))} disabled={at === 0} aria-label={t('back')}>
+            <ChevronLeft className="h-7 w-7" strokeWidth={3} />
           </button>
           {/* Listen reads this slide's title and main text in English. */}
           <div className="flex flex-1 justify-center"><ListenButton key={at} text={slideWords(slide)} className="min-h-[56px] px-4" /></div>
           <button id="review-next" type="button" className="btn-primary btn-big min-w-[132px] shrink-0 px-5 sm:min-w-[150px]" onClick={goNext} disabled={!answered}>
-            {isLast ? t('done') : t('next')} <ChevronRight className="h-6 w-6" strokeWidth={2.5} />
+            {isLast ? t('done') : t('next')} <ChevronRight className="h-6 w-6" strokeWidth={3} />
           </button>
         </div>
       </footer>

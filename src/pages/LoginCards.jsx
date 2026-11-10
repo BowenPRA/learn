@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { ArrowLeft, Check, Printer } from 'lucide-react'
-import { Notice } from '../components/ui.jsx'
+import { useNavigate, useParams } from 'react-router-dom'
+import { Check, Printer } from 'lucide-react'
+import { BackLink, Notice } from '../components/ui.jsx'
 import { CARDS_KEY } from '../lib/cards.js'
 import { useT } from '../lib/i18n.jsx'
 import { className } from '../data/subjects.js'
@@ -25,8 +25,8 @@ export default function LoginCards() {
   return (
     <main className="print-sheet mx-auto max-w-5xl px-4 pb-16 pt-6">
       <div className="no-print mb-6">
-        <Link to={back} className="btn-ghost -ml-3 mb-2"><ArrowLeft className="h-5 w-5" /> {className(classKey, lang)}</Link>
-        <h1 className="mb-2 text-3xl font-extrabold text-pra-ink">{t('cardsTitle')}</h1>
+        <BackLink to={back}>{className(classKey, lang)}</BackLink>
+        <h1 className="page-title mb-2">{t('cardsTitle')}</h1>
         {cards.length ? <Notice>{t('cardsNote')}</Notice> : <Notice tone="bad">{t('cardsEmpty')}</Notice>}
         {stillIn && <div className="mt-3"><Notice tone="bad">{lang === 'vn' ? 'Đã đặt lại mã, nhưng thiết bị cũ có thể vẫn đăng nhập thêm tối đa một giờ.' : 'Code reset, but the old device may stay signed in for up to an hour.'}</Notice></div>}
         {cards.length > 0 && (

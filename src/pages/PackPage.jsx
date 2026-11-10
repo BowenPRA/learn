@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, BookOpen, CalendarClock, Pencil, User } from 'lucide-react'
-import { Loading, Notice, Ring, Stars, SubjectTile } from '../components/ui.jsx'
+import { ArrowRight, BookOpen, CalendarClock, Check, Pencil, User } from 'lucide-react'
+import { BackLink, Loading, Notice, Ring, Stars, SubjectTile } from '../components/ui.jsx'
 import Pip from '../components/Pip.jsx'
 import { useT, pick, shortDate } from '../lib/i18n.jsx'
 import { useAuth } from '../lib/auth.jsx'
@@ -30,23 +30,23 @@ export default function PackPage() {
 
   return (
     <main className="mx-auto max-w-5xl px-4 pb-16 pt-6">
-      <Link to={back} className="btn-ghost -ml-3 mb-3"><ArrowLeft className="h-5 w-5" /> {t('back')}</Link>
+      <BackLink to={back}>{t('back')}</BackLink>
       <header className="mb-6 flex items-start gap-4">
         <SubjectTile subject={subject} tone={tone} size="h-16 w-16" icon="h-8 w-8" />
         <div className="min-w-0">
           <p className="mb-1 flex flex-wrap items-center gap-x-3 gap-y-1">
-            <span className="text-sm font-extrabold uppercase tracking-wide" style={{ color: tone }}>{subjectName(subject, lang)}</span>
+            <span className="text-xs font-extrabold uppercase tracking-wider" style={{ color: tone }}>{subjectName(subject, lang)}</span>
             {pack.content.teacher && <span className="inline-flex items-center gap-1 text-sm font-bold text-pra-ink-soft"><User className="h-4 w-4" /> {pack.content.teacher}</span>}
             {pack.due_on && (
               <span className="chip bg-pra-sun-pale text-pra-sun-ink"><CalendarClock className="h-4 w-4" /> {t('due', { date: shortDate(pack.due_on, lang) })}</span>
             )}
           </p>
-          <h1 className="break-words text-3xl font-black leading-tight text-pra-ink sm:text-4xl">{pick(pack.content, 'title', lang)}</h1>
+          <h1 className="page-title break-words">{pick(pack.content, 'title', lang)}</h1>
         </div>
       </header>
       {staff && <div className="mb-4"><Notice>{t('preview')}</Notice></div>}
       {whole && (
-        <div className="mb-6 flex items-center gap-4 overflow-hidden rounded-3xl border border-pra-green-tint bg-gradient-to-r from-pra-green-pale to-white p-4 shadow-soft sm:p-5" role="status">
+        <div className="mb-6 flex items-center gap-4 overflow-hidden rounded-3xl border-2 border-pra-green-tint bg-pra-green-pale p-4 sm:p-5" role="status">
           <Pip wave mood="happy" size={88} className="-mb-6" />
           <div>
             <p className="text-xl font-extrabold text-pra-green-dark">{t('packDone')}</p>
@@ -67,9 +67,9 @@ export default function PackPage() {
           const next = upNext?.id === p.id
           return (
             <Link key={p.id} to={partPath(pack.slug, p)}
-              className={`card card-link group relative flex flex-col items-center gap-3 p-6 text-center ${next ? 'border-pra-blue-tint ring-2 ring-pra-blue/30' : ''}`}>
+              className={`card card-link group relative flex flex-col items-center gap-3 p-6 text-center ${next ? 'border-pra-blue shadow-[0_3px_0_#116DFF] hover:border-pra-blue hover:shadow-[0_3px_0_#116DFF]' : ''}`}>
               {next && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-pra-blue px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-white shadow-[0_3px_0_#0B4FBF]">
+                <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-pra-blue px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-white">
                   {t('upNext')}
                 </span>
               )}
@@ -81,7 +81,7 @@ export default function PackPage() {
               <span className="text-2xl font-extrabold text-pra-ink">{labels[p.id]}</span>
               <span className="text-base font-semibold text-pra-ink-soft">{own && own !== labels[p.id] ? own : t(practice ? 'practiceSub' : 'reviewSub')}</span>
               <span className={`chip ${st.state === 'done' ? 'bg-pra-green-pale text-pra-green-dark' : st.state === 'started' ? 'bg-pra-blue-pale text-pra-blue-ink' : 'bg-pra-paper text-pra-ink-soft'}`}>
-                {st.state === 'done' ? `${t('done')} ✓` : st.state === 'started' ? t('nOfTotal', { n: st.n, total: st.total }) : t('notStarted')}
+                {st.state === 'done' ? <><Check className="h-4 w-4" strokeWidth={3.5} aria-hidden /> {t('done')}</> : st.state === 'started' ? t('nOfTotal', { n: st.n, total: st.total }) : t('notStarted')}
               </span>
               {g?.done && <Stars n={starsFor(g.best_score ?? g.score)} label={t('stars', { n: starsFor(g.best_score ?? g.score) })} />}
               <span className={`${practice ? 'btn-green' : 'btn-primary'} mt-auto w-full`}>

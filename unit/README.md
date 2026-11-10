@@ -18,6 +18,33 @@ out of the XP it is worth. Coming back from a task, the XP just won pops up ("+1
 The first version (6 November 2026) gave every unit the same five parts. That is gone;
 Tides keeps its five as five tasks, with the same ids, so progress saved before still counts.
 
+## The course page, gold and the Arcade
+
+Brought over from the Dashboard on 10 November 2026:
+
+- **Course page** (`/unit/#/<TRACK>`, `app/CourseHome.jsx`): the XP held across the
+  course's units, a banner for the unit to carry on with (one button into its next
+  task), the units as cards with an XP ring, and the way into the Arcade. A unit page's
+  back button goes here.
+- **Gold** (`app/arcade/economy.js`): every XP a student holds in their units is one
+  gold coin; gold earned is never stored. A game costs 25 gold. Play is free once the
+  student has finished every unit or holds 80% of all the XP on offer.
+- **Arcade** (`/unit/#/arcade`, `app/Arcade.jsx`): Tower Defense and Swarm Survivor
+  (`src/tasks/games/`, `src/components/towerdefense/`, `src/components/survivor/`), six
+  levels, and a leaderboard for each game and level. The games quiz the student on the
+  key words of the units they are working on. Saved through `../src/lib/arcade.js`:
+  the gold spent and the best score a level and game. The leaderboard shows the top ten
+  of the student's own year group by login-card name. The live site needs
+  `supabase/learn-arcade.sql` run once (`tests/arcade.test.mjs`).
+- **Fix N**: a finished lesson that is not at full marks shows how many mistakes are
+  left on its tile; opening it goes to its results, where "Fix my mistakes" redoes
+  only those.
+- **Teachers** see a class's XP, task by task, on the class page
+  (`../src/components/UnitXPTable.jsx`).
+
+Not brought over: steps that lock until XP is earned, the daily plan, AI-marked short
+answers.
+
 ## Where a task can come from
 
 A task's `kind` in `src/data/units.js`:

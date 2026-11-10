@@ -549,6 +549,17 @@ Office has no separate pages yet: the same class pages for every class.
   carry the subject's icon tile and a ring; on a lesson page the next part is marked "Up
   next"; review buttons are blue, practice buttons green. Motion is gentle and stops
   under prefers-reduced-motion (`motion-safe:`).
+- **The look since 10 November 2026** (Bowen: "more inspiration from the Dashboard ... high
+  quality, visually engaging but not over designed"): one system across PRA Learn, the unit
+  pages and the Arcade hub. Flat colours on a darker bottom edge that presses down; no soft
+  shadows, glows, blurs or gradients. In `src/index.css`: `.btn-primary`, `.btn-green`,
+  `.btn-white`, `.btn-soft`, `.btn-icon` (4px edge), `.card` and `.card-link` (2px line, 3px
+  edge: `shadow-edge` in `tailwind.config.js`), `.banner` (6px edge), `.well`, `.chip`,
+  `.field`, `.eyebrow`, `.page-title`. Radii: 24px cards, 16px controls. In
+  `src/components/ui.jsx`: `Bar` (progress), `Ring`, `SectionHead`, `BackLink`, `TopBar`,
+  `SubjectTile`, `Notice`. The unit pages keep the Dashboard's Tailwind theme and the
+  subject's colour, and take PRA's fonts through `.pra-ui` (`unit/unit.css`); the Arcade
+  stays dark.
 
 ## 11. Domain and hosting
 

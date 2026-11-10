@@ -51,6 +51,8 @@ const S = {
   myClasses: ['My classes', 'Lớp của em'],
   classLessons: ['Lessons from class', 'Bài học trên lớp'],
   units: ['Units', 'Chủ đề'],
+  arcade: ['Arcade', 'Khu trò chơi'],
+  arcadeHint: ['Every XP is 1 gold. Spend your gold on games.', 'Mỗi XP là 1 đồng vàng. Dùng vàng để chơi trò chơi.'],
   unitsHint: ['Each unit has its own tasks. Every task gives XP, up to 100 XP a unit.', 'Mỗi chủ đề có các nhiệm vụ riêng. Mỗi nhiệm vụ cho XP, tối đa 100 XP một chủ đề.'],
   unitsStaffHint: ['Each unit is a list of tasks, each worth its own XP, up to 100 XP a unit. Students in the year group open them from their home page. Open one to see it as they do; nothing is saved for staff.', 'Mỗi chủ đề gồm các nhiệm vụ, mỗi nhiệm vụ có số XP riêng, tối đa 100 XP một chủ đề. Học viên khối đó mở từ trang chủ của các em. Thầy cô mở thử để xem như học viên; không lưu gì cho giáo viên.'],
   heroUnit: ['Your next unit is waiting. Every part earns XP!', 'Chủ đề tiếp theo đang chờ em. Phần nào cũng có XP!'],

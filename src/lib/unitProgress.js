@@ -71,3 +71,29 @@ export async function saveUnitTask(key, part, patch) {
   if (error) throw notReady(error)
   return data
 }
+
+/**
+ * A class's unit progress, for staff: { [studentId]: { [unitKey]: { [taskId]: record } } }.
+ * The live rows are the ones the staff_read rule lets this login see. In demo mode it is
+ * made up from the students handed in, the same every time.
+ */
+export async function loadClassUnits(classKey, students = []) {
+  const out = {}
+  if (DEMO) {
+    const units = UNITS.filter((u) => u.classKey === classKey)
+    students.forEach((s, i) => {
+      for (const u of units) {
+        u.tasks.forEach((t, k) => {
+          if ((i + k) % 4 === 3 || k > (i % (u.tasks.length + 1))) return
+          const best = [1, 0.8, 0.6, 1][(i + k) % 4]
+          ;((out[s.id] ||= {})[unitKey(u)] ||= {})[t.id] = { best, last: best, runs: (i + k) % 3 ? 1 : 0, saved: null }
+        })
+      }
+    })
+    return out
+  }
+  const { data, error } = await supabase.from('learn_unit_progress').select('student_id, unit_key, part, best, last, runs').eq('class_key', classKey)
+  if (error) throw notReady(error)
+  for (const r of data || []) ((out[r.student_id] ||= {})[r.unit_key] ||= {})[r.part] = { best: Number(r.best) || 0, last: r.last == null ? null : Number(r.last), runs: r.runs }
+  return out
+}

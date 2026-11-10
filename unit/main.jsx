@@ -2,7 +2,7 @@
 // PRA Learn's unit page (/unit/#/<TRACK>/<UNIT>[/<task>]): a unit is a list of tasks,
 // each worth its own XP, as on Mr. Bowen's Dashboard (src/data/units.js, README.md
 // here). It asks for a PRA Learn sign-in, and Back goes to the PRA Learn home.
-import { StrictMode, Suspense, useCallback, useEffect, useState } from 'react'
+import { StrictMode, Suspense, lazy, useCallback, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { HashRouter, Route, Routes, useNavigate, useParams } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
@@ -14,6 +14,14 @@ import { className } from '../src/data/subjects.js'
 import { langsFor } from './src/utils/lang.js'
 import { ASSESSMENT, ENGINES, NOTES } from './app/engines.js'
 import UnitHome from './app/UnitHome.jsx'
+import CourseHome from './app/CourseHome.jsx'
+import { notesToFix } from './src/utils/notesReview.js'
+import { loadArcade } from '../src/lib/arcade.js'
+import { loadAllUnits } from '../src/lib/unitProgress.js'
+import { goldBalance, unitsFor } from './app/arcade/economy.js'
+
+// The arcade and its two games load only when someone opens them.
+const Arcade = lazy(() => import('./app/Arcade.jsx'))
 import Words from './app/Words.jsx'
 import Workbook from './app/Workbook.jsx'
 
@@ -77,6 +85,7 @@ function UnitRoute() {
   const got = useUnitData(u)
   const [records, setRecords] = useState(null)
   const [gained, setGained] = useState(0)
+  const [gold, setGold] = useState(null)
   const [error, setError] = useState('')
   const [lang, setLang] = useState('en')
   const key = u ? unitKey(u) : ''
@@ -86,6 +95,17 @@ function UnitRoute() {
     loadUnit(key).then(setRecords).catch((e) => { setRecords({}); setError(e.message) })
   }, [key])
   useEffect(() => { if (u) refresh() }, [u, refresh])
+  // The gold to spend in the arcade: the XP across the student's units, less what is spent.
+  useEffect(() => {
+    if (!records) return undefined
+    let alive = true
+    ;(async () => {
+      const me = await api.me(await api.session())
+      const [all, arcade] = await Promise.all([loadAllUnits(), loadArcade()])
+      if (alive) setGold(goldBalance(unitsFor(me), all, arcade.spent))
+    })().catch(() => alive && setGold(null))
+    return () => { alive = false }
+  }, [records])
   useEffect(() => { if (u) document.title = `${u.label} ${u.title} · PRA Learn` }, [u])
 
   if (!u) return <ToLearn />
@@ -106,6 +126,11 @@ function UnitRoute() {
   // Saves go one after another, and going back to the unit waits for the last one, so
   // the unit page always shows the XP just earned.
   const save = (id, patch) => { queueSave(() => saveUnitTask(key, id, patch).catch((e) => setError(e.message))) }
+  // A finished lesson's mistakes still to fix, for its tile.
+  const fixes = Object.fromEntries(u.tasks.filter((t) => t.kind === 'notes').map((t) => {
+    const r = records[t.id]
+    return [t.id, r ? notesToFix(data.notes, { current: Math.round((r.best || 0) * t.xp), answers: r.saved }, t.xp) : 0]
+  }))
   // Back to the unit page with the new records, and the XP just won to show.
   const toUnit = async () => {
     await savesDone()
@@ -119,9 +144,9 @@ function UnitRoute() {
 
   if (!taskId) {
     return (
-      <UnitHome unit={view} records={records} notes={notes} gained={gained} onGainSeen={clearGain} lang={lang} langs={langs} error={error}
+      <UnitHome unit={view} records={records} notes={notes} fixes={fixes} gold={gold} onArcade={() => navigate('/arcade')} gained={gained} onGainSeen={clearGain} lang={lang} langs={langs} error={error}
         onLang={() => setLang((l) => (l === 'en' ? 'fr' : 'en'))}
-        onOpen={(id) => navigate(`/${track}/${unitId}/${id}`)} onBack={home} />
+        onOpen={(id) => navigate(`/${track}/${unitId}/${id}`)} onBack={() => navigate(`/${track}`)} />
     )
   }
   const task = findTask(u, taskId)
@@ -159,10 +184,27 @@ function UnitRoute() {
   )
 }
 
+function ArcadeRoute() {
+  const navigate = useNavigate()
+  // Back goes where the student came from (a unit or a course), else to PRA Learn.
+  return <Arcade onBack={() => (window.history.length > 1 ? navigate(-1) : home())} />
+}
+
+function CourseRoute() {
+  const { track } = useParams()
+  const navigate = useNavigate()
+  return (
+    <CourseHome key={track} track={track} onBack={home} onArcade={() => navigate('/arcade')}
+      onOpenUnit={(u) => navigate(`/${u.track}/${u.unit}`)} onOpenTask={(u, id) => navigate(`/${u.track}/${u.unit}/${id}`)} />
+  )
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <HashRouter>
       <Routes>
+        <Route path="/arcade" element={<SignedIn><Suspense fallback={<Spinner />}><ArcadeRoute /></Suspense></SignedIn>} />
+        <Route path="/:track" element={<SignedIn><CourseRoute /></SignedIn>} />
         <Route path="/:track/:unit" element={<SignedIn><UnitRoute /></SignedIn>} />
         <Route path="/:track/:unit/:task" element={<SignedIn><UnitRoute /></SignedIn>} />
         <Route path="*" element={<ToLearn />} />
