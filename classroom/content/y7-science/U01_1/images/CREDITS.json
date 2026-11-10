@@ -1,0 +1,91 @@
+[
+  {
+    "name": "lb-plant-cell-diagram.jpg",
+    "title": "Diagram of a leaf cell (Learner's Book, p. 9)",
+    "source": "Cambridge Lower Secondary Science 7 Learner's Book, Unit 1.1, page 9",
+    "license": "(c) Cambridge University Press - NOT openly licensed",
+    "usage": "Cropped from the teacher's own scan, used verbatim at the teacher's instruction. Classroom teaching only - replace with an original drawing if this site is ever promoted or distributed beyond the class.",
+    "bytes": 125323
+  },
+  {
+    "name": "lb-leaf-micrograph.jpg",
+    "title": "Part of a leaf seen through a microscope (Learner's Book, p. 9)",
+    "source": "Cambridge Lower Secondary Science 7 Learner's Book, Unit 1.1, page 9",
+    "license": "(c) Cambridge University Press - NOT openly licensed",
+    "usage": "Cropped from the teacher's own scan. Classroom teaching only.",
+    "bytes": 29112
+  },
+  {
+    "name": "lb-microscope-labelled.jpg",
+    "title": "A microscope, labelled (Learner's Book, p. 10)",
+    "source": "Cambridge Lower Secondary Science 7 Learner's Book, Unit 1.1, page 10",
+    "license": "(c) Cambridge University Press - NOT openly licensed",
+    "usage": "Used verbatim at the teacher's instruction. Classroom teaching only.",
+    "bytes": 127598
+  },
+  {
+    "name": "hooke-cork.jpg",
+    "title": "File:Micrographia Schem 11.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Micrographia_Schem_11.jpg",
+    "license": "Public domain",
+    "artist": "Robert Hooke (1635-1703), Micrographia, 1665",
+    "usage": "Cropped to Fig. 1 (the cork micrograph) and downscaled."
+  },
+  {
+    "name": "prison-cell.jpg",
+    "title": "File:Prison cell (2761961063).jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Prison_cell_(2761961063).jpg",
+    "license": "CC BY 2.0",
+    "artist": "NikiSublime from Boston, USA"
+  },
+  {
+    "name": "everest.jpg",
+    "title": "File:Everest North Face toward Base Camp Tibet Luca Galuzzi 2006.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg",
+    "license": "CC BY-SA 2.5",
+    "artist": "Luca Galuzzi (Lucag)"
+  },
+  {
+    "name": "electron-microscope.jpg",
+    "title": "File:Electron microscope Mamut at the Institute of Scientific Instruments of the Czech Academy of Science in Brno (2).jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Electron_microscope_Mamut_at_the_Institute_of_Scientific_Instruments_of_the_Czech_Academy_of_Science_in_Brno_(2).jpg",
+    "license": "CC BY-SA 3.0 cz",
+    "artist": "Akademie ved Ceske republiky / Czech Academy of Sciences"
+  },
+  {
+    "title": "File:Onion Epidermis Cells W.M. 40x - 132.jpg",
+    "name": "onion-cells.jpg",
+    "thumb": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Onion_Epidermis_Cells_W.M._40x_-_132.jpg/1280px-Onion_Epidermis_Cells_W.M._40x_-_132.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Onion_Epidermis_Cells_W.M._40x_-_132.jpg",
+    "license": "CC BY 2.0",
+    "artist": "loganrickert",
+    "bytes": 178217
+  },
+  {
+    "title": "File:Human cheek cells from science class.jpg",
+    "name": "cheek-cells.jpg",
+    "thumb": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Human_cheek_cells_from_science_class.jpg/1280px-Human_cheek_cells_from_science_class.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Human_cheek_cells_from_science_class.jpg",
+    "license": "CC0",
+    "artist": "Kyreb",
+    "bytes": 58940
+  },
+  {
+    "title": "File:Cloroplasti Elodea.jpg",
+    "name": "chloroplasts.jpg",
+    "thumb": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Cloroplasti_Elodea.jpg/1280px-Cloroplasti_Elodea.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Cloroplasti_Elodea.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Cimice50",
+    "bytes": 141135
+  },
+  {
+    "title": "File:Optical microscope nikon alphaphot.jpg",
+    "name": "microscope.jpg",
+    "thumb": "https://upload.wikimedia.org/wikipedia/commons/3/3a/Optical_microscope_nikon_alphaphot.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Optical_microscope_nikon_alphaphot.jpg",
+    "license": "Public domain",
+    "artist": "GcG(jawp)",
+    "bytes": 396825
+  }
+]

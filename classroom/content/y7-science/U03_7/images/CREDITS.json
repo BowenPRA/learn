@@ -1,0 +1,56 @@
+[
+  {
+    "file": "petrol-shop.jpg",
+    "name": "Gas station in Hanoi HFC Total.jpg",
+    "title": "A petrol shop on Nguyễn Công Trứ street, Hà Nội: motorbikes at the pumps",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Gas_station_in_Hanoi_HFC_Total.jpg",
+    "license": "CC0",
+    "artist": "Amenoc",
+    "usage": "MOTO_PUMP (slide 5). The 1920px Commons thumbnail cropped to the pumps and the motorbikes (x 300-1540, y 860-1410), brightened 35% (an evening shot), resized to 1200px wide. Stands in for the book's photo of a motorcycle being filled (page 118): no openly licensed photo of a motorbike being filled at a Vietnamese pump was found."
+  },
+  {
+    "file": "wood-fire.jpg",
+    "name": "Communal cooking in Ninh Hải village, Ninh Binh province, Vietnam, 20240201 1837 4914.jpg",
+    "title": "Pots of bánh chưng cooking over wood fires, Ninh Hải village, Ninh Bình, before Tết 2024",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Communal_cooking_in_Ninh_H%E1%BA%A3i_village,_Ninh_Binh_province,_Vietnam,_20240201_1837_4914.jpg",
+    "license": "CC BY 4.0",
+    "artist": "Jakub Hałun",
+    "usage": "WOOD_FIRE (slide 17), the book's pot heated over a wood fire (page 119). The 960px Commons thumbnail, uncropped."
+  },
+  {
+    "file": "lamp-filament.jpg",
+    "name": "Gluehlampe 01 KMJ.jpg",
+    "title": "A clear filament lamp (60 W, E27) on white",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Gluehlampe_01_KMJ.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "KMJ",
+    "usage": "ANS_LAMP_A (slide 8) and HEAT_CAMERA (slide 9): the book's lamp A. The original (768 x 1276) resized to 480px wide."
+  },
+  {
+    "file": "lamp-twisty.jpg",
+    "name": "06 Spiral CFL Bulb 2010-03-08 (white back).jpg",
+    "title": "A spiral compact fluorescent (energy-saving) lamp on white",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:06_Spiral_CFL_Bulb_2010-03-08_(white_back).jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "Sun Ladder",
+    "usage": "ANS_LAMP_B (slide 8) and HEAT_CAMERA (slide 9): the book's lamp B. The 960px Commons thumbnail cropped to the lamp (x 80-880, y 40-1400), resized to 500px wide."
+  },
+  {
+    "file": "heat-filament.jpg",
+    "name": "Thermal image of an incandescent light.jpg",
+    "title": "Thermal (infrared) image of a 100 W clear filament lamp, switched on",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Thermal_image_of_an_incandescent_light.jpg",
+    "license": "CC0",
+    "artist": "Zaereth",
+    "usage": "HEAT_CAMERA (slide 9). The original is 240 x 211: its °F scale bar (71-347 °F) is cropped off the bottom and the image doubled in size; the slide gives the hottest reading in °C (347 °F, about 175 °C)."
+  },
+  {
+    "file": "heat-twisty.jpg",
+    "name": "Helical fluorescent lamp thermal image.jpg",
+    "title": "Thermal (infrared) image of a 26 W helical fluorescent lamp, switched on",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Helical_fluorescent_lamp_thermal_image.jpg",
+    "license": "CC0",
+    "artist": "Zaereth",
+    "usage": "HEAT_CAMERA (slide 9). The original is 240 x 205: its °F scale bar (74-204 °F) is cropped off the bottom and the image doubled in size; the slide gives the hottest reading in °C (204 °F, about 96 °C). A 26 W helical lamp gives about the same light as the 100 W filament lamp beside it."
+  }
+]

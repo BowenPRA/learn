@@ -1,0 +1,20 @@
+[
+  {
+    "name": "biscuits.jpg",
+    "title": "File:Assorted biscuits Khong Guan.JPG",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Assorted_biscuits_Khong_Guan.JPG",
+    "license": "CC BY 3.0",
+    "artist": "Midori",
+    "usage": "Word problem 1 - Mr Bowen bakes 7128 biscuits and bags them in eights; the test for 8 looks at the last three digits, 128 divided by 8 = 16, so 891 bags exactly. Cropped in from the full frame to the open tin so the biscuits read on a projector. Khong Guan tins are familiar to this class, which is why this one was chosen over a Western cookie plate.",
+    "bytes": 192876
+  },
+  {
+    "name": "chairs.jpg",
+    "title": "File:Stacked chairs 01.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Stacked_chairs_01.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Kritzolina",
+    "usage": "Word problem 2, the deadpan one - Mr Bowen's 1908 chairs go into rows of 9 with none left over (212 rows). Cropped from the tall original to a landscape band across the three stacks, because a portrait photo has to go in a showcase rather than a split panel.",
+    "bytes": 247749
+  }
+]

@@ -83,7 +83,7 @@ export default function TeacherHome() {
             {t('classLessons')}
           </h2>
           <p className="mb-3 max-w-3xl font-semibold text-pra-ink-soft">{t('classLessonsStaffHint')}</p>
-          <ClassroomLessonList lessons={decks} lang={lang} showClass />
+          <ClassroomLessonList lessons={decks} lang={lang} showClass staff />
         </section>
       )}
     </main>

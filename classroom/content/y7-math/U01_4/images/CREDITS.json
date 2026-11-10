@@ -1,0 +1,20 @@
+[
+  {
+    "name": "books.jpg",
+    "title": "File:Bookshelf at Tuggeranong Library April 2025.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Bookshelf_at_Tuggeranong_Library_April_2025.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Nick-D",
+    "usage": "Word problem 2 - 18 of Mr Bowen's 24 books are maths books; HCF(18, 24) = 6 simplifies 18/24 to 3/4. Cropped from the full library view to the bookcase itself so the shelves read on a projector.",
+    "bytes": 170963
+  },
+  {
+    "name": "fruit.jpg",
+    "title": "File:Bananas & citrus fruits, greengrocers display, Redruth, Cornwall - October 2022.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Bananas_%26_citrus_fruits,_greengrocers_display,_Redruth,_Cornwall_-_October_2022.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Mutney",
+    "usage": "Word problem 3, the deadpan one - 30 bananas and 45 oranges into identical staff-room baskets, HCF(30, 45) = 15. Cropped from the original portrait shot to the banana crate and the orange trays, which is exactly the two fruits in the problem.",
+    "bytes": 186459
+  }
+]

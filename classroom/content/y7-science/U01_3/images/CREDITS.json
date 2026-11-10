@@ -1,0 +1,56 @@
+[
+  {
+    "name": "blood.jpg",
+    "title": "File:Blood cells 090304-F-5951M-108.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Blood_cells_090304-F-5951M-108.jpg",
+    "license": "Public domain",
+    "artist": "U.S. Air Force photo / Airman 1st Class Laura Max",
+    "usage": "The real red blood cell: stained human blood down a microscope, showing the biconcave discs with pale centres and one small purple white blood cell. Paired with the drawn RED_BLOOD_CELL diagram.",
+    "bytes": 112476
+  },
+  {
+    "name": "capillary.jpg",
+    "title": "File:A red blood cell in a capillary, pancreatic tissue - TEM.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:A_red_blood_cell_in_a_capillary,_pancreatic_tissue_-_TEM.jpg",
+    "license": "Public domain",
+    "artist": "Louisa Howard (Dartmouth Electron Microscope Facility)",
+    "usage": "A single red blood cell inside a capillary, bent into a curve because the vessel is narrower than the cell. Carries the book's first red-blood-cell adaptation (p.18: small enough to get through capillaries) and the key word 'capillary'. The original's scale-bar caption strip was cropped off the bottom.",
+    "bytes": 211603
+  },
+  {
+    "name": "neuron.jpg",
+    "title": "File:Neuron in tissue culture.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Neuron_in_tissue_culture.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "GerryShaw",
+    "usage": "The real neurone: a single green-stained nerve cell with its cell body and long branching processes (dendrites and axon). Paired with the drawn NEURONE diagram.",
+    "bytes": 188235
+  },
+  {
+    "name": "trachea.jpg",
+    "title": "File:Trachea (mammal) histology cross-section.png",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Trachea_(mammal)_histology_cross-section.png",
+    "license": "CC BY-SA 4.0",
+    "artist": "User:Magscope",
+    "usage": "The real ciliated cells: the lining of the trachea, with the fringe of cilia along the dark epithelial edge. Paired with the drawn CILIATED_CELL diagram.",
+    "bytes": 132513
+  },
+  {
+    "name": "roothair.jpg",
+    "title": "File:Lepidium sativum 2018-05-11 1844.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Lepidium_sativum_2018-05-11_1844.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Salicyna",
+    "usage": "The real root hairs: garden cress germinating in soil, the white fuzz on each young root being the root hairs. Paired with the drawn ROOT_HAIR_CELL diagram.",
+    "bytes": 337354
+  },
+  {
+    "name": "leaf.jpg",
+    "title": "File:Angiosperm Morphology Mesophyll Arrangement in Syringa Leaf (36176478164).jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Angiosperm_Morphology_Mesophyll_Arrangement_in_Syringa_Leaf_(36176478164).jpg",
+    "license": "CC0",
+    "artist": "Berkshire Community College Bioscience Image Library",
+    "usage": "The real palisade cells: a lilac (Syringa) leaf cross-section with the tall column-shaped palisade layer just under the top epidermis, spongy mesophyll below. Paired with the drawn PALISADE_CELL diagram.",
+    "bytes": 243557
+  }
+]

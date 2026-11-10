@@ -1,0 +1,29 @@
+[
+  {
+    "name": "chessboard.jpg",
+    "title": "File:Empty wooden chessboard.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Empty_wooden_chessboard.jpg",
+    "license": "CC0",
+    "artist": "Paul Lloyd",
+    "usage": "The ask-before-you-tell slide for square numbers - eight squares along each side, so 8 x 8 = 64 squares on the board. Chosen because the object is already familiar, the grid is countable from the back of the room, and the white background sits cleanly on a light or dark slide. Cropped in from the original margins to fill a landscape split panel.",
+    "bytes": 97449
+  },
+  {
+    "name": "sugarcubes.jpg",
+    "title": "File:Wurfelzucker -- 2018 -- 3564.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:W%C3%BCrfelzucker_--_2018_--_3564.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Dietmar Rabich",
+    "usage": "The ask-before-you-tell slide for cube numbers - a box packed 4 along each edge holds 4 x 4 x 4 = 64 cubes. Real cubes photographed next to the drawn cube stacks in CUBE_STACKS, so the class sees the object and the diagram of it side by side. High contrast on black, which projects well.",
+    "bytes": 112178
+  },
+  {
+    "name": "cubemelon.jpg",
+    "title": "File:Square watermelon.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Square_watermelon.jpg",
+    "license": "CC BY 2.0",
+    "artist": "Flickr user laughlin, Tokyo, Japan",
+    "usage": "The deadpan word problem - Mr Bowen's cube watermelons, packed 3 along each edge of a crate, so 3 cubed = 27 melons. These are real: Japanese growers box the fruit as it grows. Read the slide completely straight. Cropped from the shop shelf to the melon itself so it fills a split panel.",
+    "bytes": 130337
+  }
+]

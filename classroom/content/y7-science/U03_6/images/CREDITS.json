@@ -1,0 +1,38 @@
+[
+  {
+    "file": "ball.webm",
+    "name": "Gymnastikball-Flummi.webm",
+    "title": "Slow-motion video (240 frames a second) of a big exercise ball hitting the floor: it goes flat at the bottom, then bounces back up",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Gymnastikball-Flummi.webm",
+    "license": "CC BY-SA 4.0",
+    "artist": "Rhetos / Mathe-AC Lernwerkstatt Aachen",
+    "usage": "BallFilm (slide 5). Trimmed to 13.0-27.5 s of the Commons 1080p VP9 transcode (the rebound: the ball comes down, flattens on the floor, rises again) = 14.5 s; scaled to 960x540, VP9 CRF 36, 50 fps, audio removed. The original's German captions and end card are outside the trim, so this entry carries the credit the end card asks for (Mathe-AC Lernwerkstatt Aachen). Stands in for a tennis ball: no openly licensed tennis-ball squash clip exists on Commons."
+  },
+  {
+    "file": "gasplant.jpg",
+    "name": "Bayside Power Station.jpg",
+    "title": "Bayside Power Station, a natural-gas power station in Saint John, New Brunswick, Canada: red-and-white chimneys with steam",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Bayside_Power_Station.jpg",
+    "license": "CC BY 4.0",
+    "artist": "Quintin Soloviev",
+    "usage": "POWER_STATION (slide 13), standing in for the book's power station on page 112. The 960 px Commons thumbnail (Display P3 converted to sRGB), cropped to the chimneys (x 140-700, full height: 560x640), re-encoded at quality 80. Commons has no photograph of a Vietnamese gas power station (Phú Mỹ, Nhơn Trạch, Cà Mau, Ô Môn)."
+  },
+  {
+    "file": "windfarm.jpg",
+    "name": "Bạc Liêu windpower farm.jpg",
+    "title": "Bạc Liêu wind farm, Vietnam: wind turbines standing in the sea beside a long walkway, at sunset",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:B%E1%BA%A1c_Li%C3%AAu_windpower_farm.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "[Tycho] (Wikimedia Commons user Shansov.net), shansov.net",
+    "usage": "USEFUL_DANGER (slide 14), the 'useful' photograph. The 960 px Commons thumbnail, re-encoded at quality 80."
+  },
+  {
+    "file": "typhoon.jpg",
+    "name": "Typhoon-Yagi 3.jpg",
+    "title": "A big tree pulled out by the roots by Typhoon Yagi lies across a busy street in Hà Nội, Vietnam (8 September 2024)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Typhoon-Yagi_3.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Octagon",
+    "usage": "USEFUL_DANGER (slide 14), the 'dangerous' photograph, standing in for the book's storm damage on page 113. The 960 px Commons thumbnail (colour profile converted to sRGB), re-encoded at quality 80. The people in it are passers-by; nobody is hurt."
+  }
+]

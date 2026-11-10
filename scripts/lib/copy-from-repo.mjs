@@ -1,6 +1,7 @@
 // Copying files from another of Mr. Bowen's repos into PRA Learn, byte for byte, at
 // one commit (never the working tree, so nobody's unfinished work comes along).
-// Used by scripts/sync-classroom.mjs and scripts/sync-dashboard.mjs.
+// Used by scripts/sync-dashboard.mjs. (The classroom decks were copied the same way
+// until 10 Nov 2026; they are PRA Learn's own now, see classroom/README.md.)
 import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'

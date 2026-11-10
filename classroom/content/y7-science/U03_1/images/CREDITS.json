@@ -1,0 +1,110 @@
+[
+  {
+    "file": "bowling.jpg",
+    "name": "20190118A Plastic house bowling ball conventional grip.jpg",
+    "title": "A bowling ball on a plain background",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:20190118A_Plastic_house_bowling_ball_conventional_grip.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "RCraig09",
+    "usage": "Starter vote card (ANS_HEAVY, ANS_SAME); downscaled to 960 px."
+  },
+  {
+    "file": "football.jpg",
+    "name": "Soccer Ball (46208304925).jpg",
+    "title": "A black-and-white football on grass",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Soccer_Ball_(46208304925).jpg",
+    "license": "CC BY 2.0",
+    "artist": "Wutthichai Charoenburi from Bangkok",
+    "usage": "Cropped square around the ball from the 960 px thumbnail; starter vote card (ANS_SAME)."
+  },
+  {
+    "file": "aristotle.jpg",
+    "name": "Aristotle Altemps Inv8575.jpg",
+    "title": "Marble bust of Aristotle (Roman copy after Lysippos), Palazzo Altemps, Rome",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Aristotle_Altemps_Inv8575.jpg",
+    "license": "Public domain",
+    "artist": "After Lysippos; photo: Jastrow (public domain)",
+    "usage": "FALL_STORY panel."
+  },
+  {
+    "file": "pisa.jpg",
+    "name": "The Leaning Tower of Pisa SB.jpeg",
+    "title": "The Leaning Tower of Pisa, whole tower under a blue sky",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:The_Leaning_Tower_of_Pisa_SB.jpeg",
+    "license": "CC BY-SA 3.0",
+    "artist": "Saffron Blaze",
+    "usage": "FALL_STORY panel. The file page also carries an Italian cultural-heritage notice, which limits commercial reproduction only."
+  },
+  {
+    "file": "galileo.jpg",
+    "name": "Justus Sustermans - Portrait of Galileo Galilei, 1636.jpg",
+    "title": "Portrait of Galileo Galilei, Justus Sustermans, 1636",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Justus_Sustermans_-_Portrait_of_Galileo_Galilei,_1636.jpg",
+    "license": "Public domain",
+    "artist": "Justus Sustermans",
+    "usage": "FALL_STORY panel."
+  },
+  {
+    "file": "apollo15.webm",
+    "name": "Apollo 15 feather and hammer drop.ogv",
+    "title": "Video: David Scott drops a hammer and a feather on the Moon, Apollo 15, 2 August 1971",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Apollo_15_feather_and_hammer_drop.ogv",
+    "license": "Public domain (PD-USGov-NASA)",
+    "artist": "NASA",
+    "usage": "Trimmed 0.3 s to 46.6 s from the original Theora file and re-encoded as VP9/Opus WebM (654x480). The drop is at about 38 s; \"Mr Galileo was correct\" at about 43 s."
+  },
+  {
+    "file": "earth.jpg",
+    "name": "The Blue Marble, AS17-148-22727.jpg",
+    "title": "The Blue Marble: Earth photographed from Apollo 17, 1972",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:The_Blue_Marble,_AS17-148-22727.jpg",
+    "license": "Public domain",
+    "artist": "NASA / Apollo 17 crew (Harrison Schmitt)",
+    "usage": "EARTH_PULL, clipped to a circle."
+  },
+  {
+    "file": "weightlifter.jpg",
+    "name": "Jürgen Spieß (GER).JPG",
+    "title": "Weightlifter Jürgen Spieß holding a barbell at his shoulders, Beijing 2008",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:J%C3%BCrgen_Spie%C3%9F_(GER).JPG",
+    "license": "CC BY-SA 3.0",
+    "artist": "Sebastian Wandinger",
+    "usage": "The Weight slide."
+  },
+  {
+    "file": "carsand.jpg",
+    "name": "Oh dear......... (12568437524).jpg",
+    "title": "A car sunk in soft mud and sand on the beach at Weston-super-Mare",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Oh_dear........._(12568437524).jpg",
+    "license": "CC BY 2.0",
+    "artist": "Charlie from United Kingdom",
+    "usage": "SAND_CAR, with weight and contact-force arrows drawn over it."
+  },
+  {
+    "file": "scales.jpg",
+    "name": "Dretec digital bathroom scale BS-164.jpg",
+    "title": "A white digital bathroom scale",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Dretec_digital_bathroom_scale_BS-164.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Qurren",
+    "usage": "Question 11: what do scales measure?"
+  },
+  {
+    "file": "moonjump.webm",
+    "name": "Apollo 16 Nothing So Hidden 1972 NASA.webm",
+    "title": "Video: two Apollo 16 astronauts bounding down a slope on the Moon",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Apollo_16_Nothing_So_Hidden_1972_NASA.webm",
+    "license": "Public domain (PD-USGov-NASA)",
+    "artist": "NASA",
+    "usage": "Trimmed 811.2 s to 825.6 s from the 1080p transcode, sound removed, re-encoded as VP9 WebM (854x640). Plays as a silent loop."
+  },
+  {
+    "file": "strobe.jpg",
+    "name": "Falling ball.jpg",
+    "title": "Multi-flash photo of a falling ball, 20 flashes a second",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Falling_ball.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "MichaelMaggs",
+    "usage": "Downscaled to 1500 px tall. The numbers on the photo (0, 1, 4, 9 ... 100) are the distances fallen, in equal units."
+  }
+]

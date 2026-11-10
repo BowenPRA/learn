@@ -1,0 +1,29 @@
+[
+  {
+    "file": "protractor.jpg",
+    "name": "Wooden Protractor.jpg",
+    "title": "A semicircular protractor with an outer and an inner scale",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Wooden_Protractor.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "CatalinaDurhan",
+    "usage": "TOOLS (slide 3), left. The 960 px Commons thumbnail, cropped to the protractor (910x540 from x=30, y=60), scaled to 800 px, quality 80. Chosen because both scales show clearly: the two numbers at each mark are the point of slides 4–5."
+  },
+  {
+    "file": "setsquare.jpg",
+    "name": "Squadra 30 60.jpg",
+    "title": "A green 30°–60° set square on white",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Squadra_30_60.jpg",
+    "license": "CC BY 3.0",
+    "artist": "Luigi Chiesa",
+    "usage": "TOOLS (slide 3), middle. The 960 px Commons thumbnail, scaled to 500 px wide, quality 80."
+  },
+  {
+    "file": "trysquare.jpg",
+    "name": "Trysquare.jpg",
+    "title": "A carpenter's try square on a wooden board",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Trysquare.jpg",
+    "license": "CC BY-SA 2.0 ca",
+    "artist": "Luigi Zanasi",
+    "usage": "TOOLS (slide 3), right: the same right angle, used by a carpenter. The 960 px Commons thumbnail, cropped (920x680 from x=40, y=20), scaled to 800 px, quality 80."
+  }
+]

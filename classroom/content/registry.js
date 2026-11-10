@@ -1,15 +1,21 @@
 import { COURSES } from './courses.js'
 
-// Auto-discover every lesson. Each lesson lives at
-//   content/<course>/<unit>/index.js
-// and default-exports { meta, slides, plan? }. Adding a new folder with an
-// index.js is all it takes for a lesson to appear — no list to maintain.
-// content/banks/ holds question banks, which have no index.js on purpose so
+// Every lesson lives at
+//   content/<course>/<slug>/index.js
+// and default-exports { meta, slides, plan? }. Opening a lesson downloads only
+// that lesson's code (and the shared kits it imports from other lesson folders),
+// never the other decks: the glob is lazy, so each index.js is its own chunk.
+// Which lessons students and staff can open is src/data/classroomLessons.js;
+// `npm run check:lessons` checks that list against these folders.
+// content/banks/ would hold question banks, which have no index.js on purpose so
 // that this glob never mistakes one for a lesson.
-const modules = import.meta.glob('./*/*/index.js', { eager: true })
+const modules = import.meta.glob('./*/*/index.js')
 
-// lessons: [{ course, unit, id, title, objective, order, slug, slides, plan }]
-const lessons = Object.entries(modules).map(([path, mod]) => {
+const pathOf = (courseId, slug) => `./${courseId}/${slug}/index.js`
+
+// A lesson as the deck player reads it:
+// { course, unit, id, title, objective, order, slug, slides, plan, ... }
+function shape(path, mod) {
   const data = mod.default || {}
   const meta = data.meta || {}
   // Fall back to the folder name for the course if meta omits it.
@@ -24,15 +30,13 @@ const lessons = Object.entries(modules).map(([path, mod]) => {
     subtitle: meta.subtitle || '',
     objective: meta.objective || '',
     order: meta.order ?? 999,
-    // `hidden: true` delists a lesson: it disappears from the home page and
-    // its course page, but stays reachable at its direct URL. Use it to retire
-    // a lesson without deleting it — see content/y7-science/U00_1.
+    // `hidden: true` delisted a lesson on the classroom site's own home page. In
+    // PRA Learn, src/data/classroomLessons.js decides what is listed.
     hidden: meta.hidden === true,
-    // The self-study twin on the Dashboard, `{ track, unit }` — see
-    // src/lib/dashboardLink.js. Null for a lesson with no unit built yet.
+    // The self-study twin on the old Dashboard, `{ track, unit }`. The classroom
+    // page always passes null, so the deck shows no Dashboard link.
     dashboard: meta.dashboard || null,
-    // `href` lists something that is not a deck — an app with its own route,
-    // like Guess Who (#/guess-who). Its row opens that route; it has no slides.
+    // `href` lists something that is not a deck. None of the lessons here has one.
     href: meta.href || null,
     // `french: true` adds FR to the deck's EN/VN switch — set it once every
     // string in the lesson, widgets included, has its `…Fr` twin.
@@ -43,28 +47,30 @@ const lessons = Object.entries(modules).map(([path, mod]) => {
     slides: data.slides || [],
     plan: data.plan || null,
   }
-})
-
-const byOrder = (a, b) => a.order - b.order || a.slug.localeCompare(b.slug)
-
-/** Courses joined with their lessons, in display order. Every field of a
- *  courses.js entry passes through as it is (`teacher`, `units`, …); only
- *  lesson meta is picked field by field above. */
-export function getCatalog() {
-  return COURSES.map((course) => ({
-    ...course,
-    lessons: lessons
-      .filter((l) => l.course === course.id && !l.hidden)
-      .sort(byOrder),
-  }))
 }
 
-/** One course by id, or undefined. */
+/** One course by id (from courses.js), or undefined. */
 export function getCourse(courseId) {
-  return getCatalog().find((c) => c.id === courseId)
+  return COURSES.find((c) => c.id === courseId)
 }
 
-/** One lesson by course id + slug, or undefined. */
-export function getLesson(courseId, slug) {
-  return lessons.find((l) => l.course === courseId && l.slug === slug)
+/** Whether content/<course>/<slug>/index.js exists. */
+export function hasLesson(courseId, slug) {
+  return Boolean(modules[pathOf(courseId, slug)])
+}
+
+const loaded = new Map()
+
+/** One lesson by course id + slug: a promise of the lesson, or of undefined when
+ *  there is no such folder. Loaded once per page; a failed download is tried
+ *  again on the next call. */
+export function loadLesson(courseId, slug) {
+  const path = pathOf(courseId, slug)
+  if (!modules[path]) return Promise.resolve(undefined)
+  if (!loaded.has(path)) {
+    const p = modules[path]().then((mod) => shape(path, mod))
+    p.catch(() => loaded.delete(path))
+    loaded.set(path, p)
+  }
+  return loaded.get(path)
 }

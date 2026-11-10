@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AlertCircle, ArrowRight, CalendarDays, CheckCircle2, ChevronRight, Hourglass, Presentation, Sparkles, Star, Trophy, Zap } from 'lucide-react'
 import { Loading, Notice, SubjectTile } from '../components/ui.jsx'
-import { ClassroomLessonList, classroomLessonsFor, classroomLink, classroomTitle } from '../components/ClassroomLessons.jsx'
+import { ClassroomLessonList, classroomLessonsFor, classroomLink, classroomTitle, newestPerClass } from '../components/ClassroomLessons.jsx'
 import { UnitList, totalXP, unitsFor, useUnitProgress } from '../components/UnitCards.jsx'
 import { UNIT_PARTS, nextPartOf, unitHref, unitKey, unitXP } from '../data/units.js'
 import Pip from '../components/Pip.jsx'
@@ -70,7 +70,7 @@ export default function StudentHome() {
   const xpAll = totalXP(units, unitProgress)
   const unitOpen = [...units].reverse().find((u) => !unitXP(unitProgress[unitKey(u)]).done)
   const unitNext = unitOpen && (nextPartOf(unitProgress[unitKey(unitOpen)]) || UNIT_PARTS[0])
-  const classes = [...new Set([...data.packs.map((p) => p.class_key), ...units.map((u) => u.classKey), ...fromClass.map((l) => l.classKey)])]
+  const classes = [...new Set([...data.packs.map((p) => p.class_key), ...units.map((u) => u.classKey), ...newestPerClass(fromClass).map((l) => l.classKey)])]
   const teacherOf = (k) => data.packs.find((p) => p.class_key === k)?.content?.teacher || units.find((u) => u.classKey === k)?.teacher || fromClass.find((l) => l.classKey === k)?.teacher
   const list = (packs, opts = {}) => (
     <div className="space-y-3">{packs.map((p) => <PackCard key={p.id} pack={p} rows={rows[p.id]} lang={lang} {...opts} />)}</div>
@@ -96,9 +96,12 @@ export default function StudentHome() {
   const firstTitle = first && (lang === 'vn' ? first.title_vn || first.title : first.title)
   const mood = late.length ? 'surprised' : !data.packs.length && !fromClass.length && !units.length ? 'calm' : 'happy'
   // With nothing to do in a pack, the big button opens the next part of the oldest
-  // unfinished unit; with no unit either, the newest lesson from class.
+  // unfinished unit; with no unit either, the newest lesson from class. A year group
+  // with lessons in two subjects gets one button per subject (Maths, then Science),
+  // each opening that subject's newest lesson: the list has no dates, so which of the
+  // two was taught last cannot be told, and the child picks the one they just had.
   const unitBtn = !part && unitOpen
-  const deck = !part && !unitBtn && fromClass[0]
+  const decks = !part && !unitBtn ? newestPerClass(fromClass) : []
 
   return (
     <main className="mx-auto max-w-5xl px-4 pb-16 pt-6">
@@ -147,16 +150,21 @@ export default function StudentHome() {
             </span>
           </a>
         )}
-        {deck && (
-          <a href={classroomLink(deck)} className="btn-white btn-big mt-5 w-full justify-between gap-3 text-left sm:w-auto sm:min-w-[22rem]">
-            <span className="min-w-0">
-              <span className="block truncate text-lg font-extrabold">{t('openLesson', { title: classroomTitle(deck, lang) })}</span>
-              <span className="block truncate text-sm font-semibold text-pra-ink-soft">{deck.unit} · {subjectName(splitClass(deck.classKey)[0], lang)}{deck.teacher ? ` · ${deck.teacher}` : ''}</span>
-            </span>
-            <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pra-blue text-white">
-              <Presentation className="h-5 w-5" strokeWidth={2.6} />
-            </span>
-          </a>
+        {decks.length > 0 && (
+          <div className={decks.length > 1 ? 'mt-5 grid gap-3 sm:grid-cols-2' : ''}>
+            {decks.map((deck) => (
+              <a key={`${deck.course}/${deck.slug}`} href={classroomLink(deck)}
+                className={`btn-white btn-big w-full justify-between gap-3 text-left ${decks.length > 1 ? 'min-w-0 px-5' : 'mt-5 sm:w-auto sm:min-w-[22rem]'}`}>
+                <span className="min-w-0">
+                  <span className="block truncate text-lg font-extrabold">{t('openLesson', { title: classroomTitle(deck, lang) })}</span>
+                  <span className="block truncate text-sm font-semibold text-pra-ink-soft">{subjectName(splitClass(deck.classKey)[0], lang)} · {deck.unit}{deck.teacher ? ` · ${deck.teacher}` : ''}</span>
+                </span>
+                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pra-blue text-white">
+                  <Presentation className="h-5 w-5" strokeWidth={2.6} />
+                </span>
+              </a>
+            ))}
+          </div>
         )}
       </section>
 

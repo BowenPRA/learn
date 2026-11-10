@@ -1,0 +1,20 @@
+[
+  {
+    "file": "ramp.jpg",
+    "name": "Access ramp co-located with stairs Adelaide Street Brisbane 01.jpg",
+    "title": "A ramp beside a flight of stairs, Adelaide Street, Brisbane",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Access_ramp_co-located_with_stairs_Adelaide_Street_Brisbane_01.jpg",
+    "license": "CC0",
+    "artist": "John Robert McPherson",
+    "usage": "STAIRS_RAMP (slide 6): stairs are discrete (step 1, 2, 3), a ramp is continuous (stand anywhere). The 1152 px original, whole frame, scaled to 960 px, quality 80. The ramp is the curved path between the planters and the stone blocks; the diagram labels it."
+  },
+  {
+    "file": "hanoi.jpg",
+    "name": "Hanoi street scene- motorbikes (22522817795).jpg",
+    "title": "Motorbikes and a bus at a crossing in Hanoi",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Hanoi_street_scene-_motorbikes_(22522817795).jpg",
+    "license": "CC BY-SA 2.0",
+    "artist": "Nicolas Lannuzel (Flickr)",
+    "usage": "SCHOOL_RUN (slide 16, back to the starter: how do most of us come to school?). The 1280 px Commons thumbnail, scaled to 1100 px, quality 80."
+  }
+]

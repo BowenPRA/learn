@@ -144,7 +144,7 @@ export default function ClassView() {
               <Presentation className="h-5 w-5 text-pra-sky" strokeWidth={2.6} aria-hidden /> {t('classLessons')}
             </h3>
             <p className="mb-3 font-semibold text-pra-ink-soft">{t('classLessonsClassHint')}</p>
-            <ClassroomLessonList lessons={decks} lang={lang} />
+            <ClassroomLessonList lessons={decks} lang={lang} staff />
           </div>
         )}
       </section>

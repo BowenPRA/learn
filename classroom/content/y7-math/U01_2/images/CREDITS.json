@@ -1,0 +1,38 @@
+[
+  {
+    "name": "coins.jpg",
+    "title": "File:Minhas Economias , My Savings - Flickr - Jeff Belmonte.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Minhas_Economias_,_My_Savings_-_Flickr_-_Jeff_Belmonte.jpg",
+    "license": "CC BY 2.0",
+    "artist": "Jeff Belmonte from Cuiaba, Brazil",
+    "usage": "Problem 1 - the daily bank fee, 5 x -7. Kept at its native 800px; the original is no larger.",
+    "bytes": 94945
+  },
+  {
+    "name": "frost.jpg",
+    "title": "File:Ice crystals on car window.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Ice_crystals_on_car_window.jpg",
+    "license": "CC BY 4.0",
+    "artist": "Infinirivative",
+    "usage": "Problem 2 - the temperature falling 3 degrees an hour, 6 x -3.",
+    "bytes": 227242
+  },
+  {
+    "name": "diver.jpg",
+    "title": "File:US Navy 100530-N-0413B-040 Navy Diver 2nd Class Jeremy Odell descends on a buoy line during a recovery search dive.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:US_Navy_100530-N-0413B-040_Navy_Diver_2nd_Class_Jeremy_Odell_descends_on_a_buoy_line_during_a_recovery_search_dive.jpg",
+    "license": "Public domain",
+    "artist": "U.S. Navy photo by Mass Communication Specialist 1st Class Anderson Bomjardim",
+    "usage": "Problem 3 - the descent shared over 6 minutes, -48 / 6. The diver is actually descending a line, which is the whole point of the picture.",
+    "bytes": 79804
+  },
+  {
+    "name": "durian.jpg",
+    "title": "File:Malvaceae- Durio zibethinus (durian).jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Malvaceae-_Durio_zibethinus_(durian).jpg",
+    "license": "CC BY 2.0",
+    "artist": "Kristof Zyskowski & Yulia Bereshpolova",
+    "usage": "Problem 4 - the deadpan one, where every number is irrelevant because one factor is zero. A market stall, which matches the story.",
+    "bytes": 217035
+  }
+]

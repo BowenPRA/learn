@@ -30,7 +30,8 @@ import {
   ChevronLeft, ChevronRight, Shuffle, EyeOff, Eye, Timer, ListOrdered, Loader2,
   WifiOff, MonitorUp, RotateCw, Smartphone, Maximize2, Minimize2,
 } from 'lucide-react'
-import { getLesson } from '../../content/registry.js'
+import { hasLesson, loadLesson } from '../../content/registry.js'
+import { useViewer } from '../../viewer.js'
 import { openBus } from '../lib/remote/bus.js'
 import { cleanRoomCode } from '../lib/remote/room.js'
 import { usePresence, useWakeLock, useRemoteAppTags, lastRoom, rememberRoom, buzz } from '../lib/remote/phone.js'
@@ -177,8 +178,23 @@ function RemoteRoom({ room }) {
   }, [active, room])
 
   const [course, slug] = (host?.deck || '').split('/')
-  const lesson = useMemo(() => (course && slug ? getLesson(course, slug) : null), [course, slug])
-  const notes = useMemo(() => planNotes(lesson?.plan), [lesson])
+  // PRA Learn: the deck's code is downloaded when the laptop names it, and the
+  // plan's notes and answers are shown only to a signed-in staff member.
+  const deckKey = course && slug ? `${course}/${slug}` : ''
+  const [got, setGot] = useState({ key: '', lesson: null })
+  useEffect(() => {
+    if (!deckKey) return undefined
+    let alive = true
+    loadLesson(course, slug).then(
+      (l) => alive && setGot({ key: deckKey, lesson: l || null }),
+      () => alive && setGot({ key: deckKey, lesson: null }),
+    )
+    return () => { alive = false }
+  }, [deckKey, course, slug])
+  const lessonKnown = deckKey !== '' && got.key === deckKey
+  const lesson = lessonKnown ? got.lesson : null
+  const staff = useViewer() === 'staff'
+  const notes = useMemo(() => planNotes(staff ? lesson?.plan : null), [lesson, staff])
 
   const laptopLive = Boolean(host) && now - host.at < LAPTOP_GONE_MS
   const ready = laptopLive && Boolean(lesson)
@@ -254,6 +270,8 @@ function RemoteRoom({ room }) {
         </button>
       </Notice>
     )
+  } else if (!lessonKnown && hasLesson(course, slug)) {
+    body = <Notice icon={Loader2} spin title="Loading the deck" />
   } else if (!lesson) {
     body = (
       <Notice icon={RotateCw} title="This phone has an older copy of the site">

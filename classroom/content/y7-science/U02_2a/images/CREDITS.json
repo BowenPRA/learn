@@ -1,0 +1,29 @@
+[
+  {
+    "name": "boil.jpg",
+    "title": "File:Boilingkettle.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Boilingkettle.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "User:Plorpy2",
+    "usage": "A glass electric kettle with the water visibly rolling into bubbles and steam rising from the spout — the boiling slide. Chosen over the Learner's Book kettle photo (p.35) because a glass kettle shows the bubbling liquid AND the escaping gas in one frame, which is the whole point: boiling is a liquid turning to gas throughout, not just at the surface.",
+    "bytes": 133120
+  },
+  {
+    "name": "condense.jpg",
+    "title": "File:Condensation droplets on glass surface.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Condensation_droplets_on_glass_surface.jpg",
+    "license": "CC BY 4.0",
+    "artist": "User:Dreamora96x",
+    "usage": "Water droplets that have condensed onto a cool glass surface — the condensation slide. The invisible water vapour in the warm air has touched something cold and turned back into visible liquid water, which is exactly the change of state being taught (gas to liquid), and the same thing the class sees on a cold drink or a bathroom mirror.",
+    "bytes": 246784
+  },
+  {
+    "name": "melt.jpg",
+    "title": "File:Melting - Flickr - Trinity.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Melting_-_Flickr_-_Trinity.jpg",
+    "license": "CC BY-SA 2.0",
+    "artist": "Rebecca Partington, Seattle, USA (via Flickr)",
+    "usage": "A single ice cube sitting in a small puddle of its own meltwater on a table — the melting slide. It shows the solid AND the liquid it is becoming in one shot, so 'a solid turning into a liquid' is a picture rather than a sentence. Small original (800 px) but sharp enough for a split panel.",
+    "bytes": 63488
+  }
+]

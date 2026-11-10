@@ -1,0 +1,117 @@
+[
+  {
+    "name": "lb-animal-cell.jpg",
+    "title": "An animal cell (Learner's Book, p. 14)",
+    "source": "Cambridge Lower Secondary Science 7 Learner's Book, Unit 1.2, page 14",
+    "license": "(c) Cambridge University Press - NOT openly licensed",
+    "usage": "Cropped from the teacher's own scan and upscaled 1.6x (the scan is only 957px per page). Used as the Draw This target so students copy the same figure that is in front of them. Classroom teaching only - replace with an original drawing if this site is ever promoted or distributed beyond the class.",
+    "bytes": 33268
+  },
+  {
+    "name": "lb-cell-artwork.jpg",
+    "title": "Artist's impression of animal cells (Learner's Book, p. 13)",
+    "source": "Cambridge Lower Secondary Science 7 Learner's Book, Unit 1.2, page 13",
+    "license": "(c) Cambridge University Press - NOT openly licensed",
+    "usage": "Cropped from the teacher's own scan. The unit's opening artwork, reused as the lesson's closing visual. Classroom teaching only.",
+    "bytes": 104662
+  },
+  {
+    "name": "milky-way.jpg",
+    "title": "File:ESO - Milky Way.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:ESO_-_Milky_Way.jpg",
+    "license": "CC BY 4.0",
+    "artist": "ESO/S. Brunier",
+    "usage": "The payoff for the cell-count calculation: more cells in you than stars in the galaxy.",
+    "bytes": 150253
+  },
+  {
+    "name": "cheek-cells.jpg",
+    "title": "File:Human Cheek Cells (Methylene Blue Stain).jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Human_Cheek_Cells_(Methylene_Blue_Stain).jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Fritzmann2002",
+    "usage": "Exactly the result of the Learner's Book practical - cheek cells stained with methylene blue.",
+    "bytes": 75494
+  },
+  {
+    "name": "onion-cells.jpg",
+    "title": "File:Onion Epidermis Cells W.M. 40x - 132.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Onion_Epidermis_Cells_W.M._40x_-_132.jpg",
+    "license": "CC BY 2.0",
+    "artist": "loganrickert",
+    "usage": "Plant cells with obvious cell walls and NO chloroplasts - the counter-example that stops 'green = plant'.",
+    "bytes": 111402
+  },
+  {
+    "name": "moss-cells.jpg",
+    "title": "File:Bryum capillare leaf cells.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Bryum_capillare_leaf_cells.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Des_Callaghan",
+    "usage": "Moss leaf cells: cell walls and chloroplasts both unmistakable. Downscaled to 1000px / q74 (398 kB at 1200px was too heavy).",
+    "bytes": 253073
+  },
+  {
+    "name": "blood-cells.jpg",
+    "title": "File:Blood cells 090304-F-5951M-108.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Blood_cells_090304-F-5951M-108.jpg",
+    "license": "Public domain",
+    "artist": "U.S. Air Force photo / Airman 1st Class Laura Max",
+    "usage": "Human blood down a microscope - round, soft, no straight edges anywhere.",
+    "bytes": 96605
+  },
+  {
+    "name": "neuron.jpg",
+    "title": "File:Cultured Rat Hippocampal Neuron (24327909026).jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Cultured_Rat_Hippocampal_Neuron_(24327909026).jpg",
+    "license": "CC BY 2.0",
+    "artist": "ZEISS Microscopy from Germany",
+    "usage": "A nerve cell, for the beyond-the-book slide on specialised animal cells.",
+    "bytes": 192589
+  },
+  {
+    "name": "quiz-pondweed.jpg",
+    "title": "File:Canadian Pond Weed Leaf Tip.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Canadian_Pond_Weed_Leaf_Tip.jpg",
+    "license": "CC BY 4.0",
+    "artist": "KarlGaff",
+    "usage": "Plant or Animal quiz, photograph 1 - answer PLANT. Walls and chloroplasts both obvious.",
+    "bytes": 207430
+  },
+  {
+    "name": "quiz-muscle.jpg",
+    "title": "File:Skeletal striated muscle.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Skeletal_striated_muscle.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "Nephron",
+    "usage": "Plant or Animal quiz, photograph 2 - answer ANIMAL. Long soft fibres, dark nuclei, no straight walls.",
+    "bytes": 258253
+  },
+  {
+    "name": "quiz-rhoeo.jpg",
+    "title": "File:Rhoeo Discolor epidermis.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Rhoeo_Discolor_epidermis.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "Mnolf",
+    "usage": "Plant or Animal quiz, photograph 3 - answer PLANT. The trap: purple, no chloroplasts, but unmistakable straight walls. Kept at its native 795px; the original is no larger.",
+    "bytes": 38415
+  },
+  {
+    "name": "quiz-blood.jpg",
+    "title": "File:Red blood cells (RBCs), platelets and white blood cells or leukocyte (neutrophil) on PBS.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Red_blood_cells_(RBCs),_platelets_and_white_blood_cells_or_leukocyte_(neutrophil)_on_PBS.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Ajay Kumar Chaurasiya",
+    "usage": "Plant or Animal quiz, photograph 4 - answer ANIMAL. The big cell with the purple middle is a white blood cell.",
+    "bytes": 54962
+  },
+  {
+    "name": "slide-coverslip.jpg",
+    "title": "File:Microscope slide and cover slip.JPG",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Microscope_slide_and_cover_slip.JPG",
+    "license": "CC BY 3.0",
+    "artist": "Witia",
+    "usage": "A real microscope slide and cover slip, for the equipment slide.",
+    "bytes": 74890
+  }
+]

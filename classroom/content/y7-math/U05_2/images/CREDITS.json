@@ -1,0 +1,29 @@
+[
+  {
+    "file": "scissors.jpg",
+    "name": "Opened big scissors.jpg",
+    "title": "A pair of open scissors with black handles",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Opened_big_scissors.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Jiří Sedláček",
+    "usage": "SCISSORS_PHOTO (slide 5). The 1280 px Commons thumbnail, cropped to the scissors (1280x500 from y=150), scaled to 1200 px wide, quality 80. Chosen because the handles run straight on from the blades, so the dashed lines and the two equal angles drawn over it are honest."
+  },
+  {
+    "file": "crossing-above.jpg",
+    "name": "Тарховка, переезд Тарховской улицы сверху.jpg",
+    "title": "Tarkhovka, Russia: the level crossing of Tarkhovskaya Street, seen from straight above",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:%D0%A2%D0%B0%D1%80%D1%85%D0%BE%D0%B2%D0%BA%D0%B0,_%D0%BF%D0%B5%D1%80%D0%B5%D0%B5%D0%B7%D0%B4_%D0%A2%D0%B0%D1%80%D1%85%D0%BE%D0%B2%D1%81%D0%BA%D0%BE%D0%B9_%D1%83%D0%BB%D0%B8%D1%86%D1%8B_%D1%81%D0%B2%D0%B5%D1%80%D1%85%D1%83.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Nikolai Bulykin",
+    "usage": "TRACKS_PHOTO (slide 7). The 1280 px Commons thumbnail, cropped round the crossing (900x640 from x=270, y=240), quality 80. Orange lines are drawn over the two rails (parallel) and a blue line along the road (perpendicular); a drone photo from straight above, so the angles are true."
+  },
+  {
+    "file": "painters.jpg",
+    "name": "Painting Time.jpg",
+    "title": "Two men painting a shop shutter, with a wooden ladder and a scaffold of crossed poles",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Painting_Time.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Sundaram Perumal",
+    "usage": "LADDER (slide 22), labelled “Mr Bowen’s ladder” for the word problem. The 1280 px Commons thumbnail, cropped (920x729 from x=360, y=100), quality 80. The crossed poles also make a good spoken example of vertically opposite angles."
+  }
+]

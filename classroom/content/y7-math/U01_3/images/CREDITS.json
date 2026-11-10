@@ -1,0 +1,47 @@
+[
+  {
+    "name": "bus.jpg",
+    "title": "File:Iveco Bus 8 at Bus Stop City Bus Station Odos 7th Martiou Rhodes 4 September 2018.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Iveco_Bus_8_at_Bus_Stop_City_Bus_Station_Odos_7th_Martiou_Rhodes_4_September_2018.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "PjotrMahh1",
+    "usage": "Word problem 1 - two bus routes leaving together, LCM(10, 15) = 30. A real city bus at a stop, which matches the story.",
+    "bytes": 184648
+  },
+  {
+    "name": "hotdog.jpg",
+    "title": "File:Hot dog with two sausages, 2025-11-29.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Hot_dog_with_two_sausages,_2025-11-29.jpg",
+    "license": "CC0",
+    "artist": "Hekatlys",
+    "usage": "Word problem 2 - hot dogs in packs of 8 and buns in packs of 12, fewest packs with none left over, LCM(8, 12) = 24. Also the offline fallback for the film clip on the slide before it.",
+    "bytes": 115933
+  },
+  {
+    "name": "(no file - embedded video)",
+    "title": "Steve Martin's Hot Dog Bun Meltdown - Father of the Bride (1991)",
+    "descUrl": "https://www.youtube.com/shorts/8yAVlsmpw1I",
+    "license": "(c) Touchstone Pictures - NOT openly licensed; embedded from YouTube, never copied into this repo",
+    "artist": "Touchstone Pictures / uploaded by the channel 'The Good, The Bad, & The Quoted'",
+    "usage": "Sets up word problem 2. Played in class as a YouTube embed (youtube-nocookie.com) in HotDogClipWidget - no copy of the film is stored or redistributed here. If the upload is taken down the frame goes blank; the hotdog.jpg slide after it still carries the problem.",
+    "bytes": 0
+  },
+  {
+    "name": "tap.jpg",
+    "title": "File:Dripping faucet 1.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Dripping_faucet_1.jpg",
+    "license": "CC BY-SA 2.5",
+    "artist": "User:Dschwen",
+    "usage": "Word problem 3 - two taps dripping every 4 s and every 6 s, LCM(4, 6) = 12. The trap: do not multiply 4 by 6.",
+    "bytes": 70750
+  },
+  {
+    "name": "clock.jpg",
+    "title": "File:Classic alarm clock 20180513.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Classic_alarm_clock_20180513.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Santeri Viinamaki",
+    "usage": "Word problem 4 - the deadpan one: two alarms both set to every 15 minutes, so they always ring together, LCM(15, 15) = 15.",
+    "bytes": 130652
+  }
+]

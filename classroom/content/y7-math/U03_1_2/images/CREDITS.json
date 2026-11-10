@@ -1,0 +1,26 @@
+[
+  {
+    "file": "moon.jpg",
+    "name": "FullMoon2010.jpg",
+    "title": "The full Moon photographed from Earth (downscaled to 1000 px)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:FullMoon2010.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "Gregory H. Revera"
+  },
+  {
+    "file": "stopwatch.jpg",
+    "name": "Casio F-91W watch (2023) (front closeup -stopwatch mode).jpg",
+    "title": "A digital watch in stopwatch mode reading 35.36 seconds — timed to two decimal places (downscaled to 1000 px)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Casio_F-91W_watch_(2023)_(front_closeup_-stopwatch_mode).jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Multicherry"
+  },
+  {
+    "file": "scale.jpg",
+    "name": "Medals weighed in digital scale.jpg",
+    "title": "A kitchen scale reading 82 g, printed with its own degree of accuracy: CAPACITY 10000g X 1g (cropped to the display and downscaled)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Medals_weighed_in_digital_scale.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Kpubkalanami"
+  }
+]

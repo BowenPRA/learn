@@ -1,0 +1,42 @@
+[
+  {
+    "file": "apple.jpg",
+    "name": "Red Apple.jpg",
+    "title": "A red apple on white paper (cropped, background whitened)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Red_Apple.jpg",
+    "license": "CC BY 2.0",
+    "artist": "Abhijit Tembhekar from Mumbai, India"
+  },
+  {
+    "file": "banana.jpg",
+    "name": "Banana isolated on white.jpg",
+    "title": "A yellow banana on a white background (cropped)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Banana_isolated_on_white.jpg",
+    "license": "CC BY 2.0",
+    "artist": "robin_24"
+  },
+  {
+    "file": "strawberry.jpg",
+    "name": "Strawberry on white background.jpg",
+    "title": "A strawberry on a white background (cropped, background whitened)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Strawberry_on_white_background.jpg",
+    "license": "CC0",
+    "artist": "Joselodos"
+  },
+  {
+    "file": "stall.jpg",
+    "name": "Vietnam 08 - 46 - fruit for sale on Halong Bay (3171231510).jpg",
+    "title": "Fruit for sale on a boat in Halong Bay, Vietnam: each basket holds one kind of fruit",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Vietnam_08_-_46_-_fruit_for_sale_on_Halong_Bay_(3171231510).jpg",
+    "license": "CC BY 2.0",
+    "artist": "McKay Savage from London, UK"
+  },
+  {
+    "file": "bricks.jpg",
+    "name": "Brick wall stretcher bond Stuttgart 2014 01.jpg",
+    "title": "A stretcher-bond brick wall in Stuttgart, Germany",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Brick_wall_stretcher_bond_Stuttgart_2014_01.jpg",
+    "license": "CC BY 4.0",
+    "artist": "Julian Herzog"
+  }
+]

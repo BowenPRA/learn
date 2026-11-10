@@ -1,0 +1,38 @@
+[
+  {
+    "name": "diffusion.jpg",
+    "title": "File:Diffusion with ink.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Diffusion_with_ink.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "User:Zvonimirl",
+    "usage": "One drop of ink spreading through still water, caught mid-spread. It pays off the question 2.1a left unanswered — how the smell of cooking crosses two rooms with the door shut — and it is the only picture in the deck of particles doing something entirely on their own. Black-and-white, which helps: there is nothing in the frame except the spreading.",
+    "bytes": 92613
+  },
+  {
+    "name": "salt.jpg",
+    "title": "File:Sodium chloride crystals, light microscopy.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Sodium_chloride_crystals,_light_microscopy.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "User:Ihor Panas",
+    "usage": "Table salt under a light microscope: unmistakable cubes with square corners, and a 0.1 mm scale bar. This is the deck's evidence slide — particles are too small to see, but if a solid's particles really are stacked in a fixed regular pattern, that pattern should sometimes show on the outside, and here it does. Chosen over an STM image of individual atoms because every candidate for that was too small to project (500 px or less) and read as stripes rather than particles.",
+    "bytes": 169880
+  },
+  {
+    "name": "sponge.jpg",
+    "title": "File:Sponge-viscose.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Sponge-viscose.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "Johan",
+    "usage": "A household sponge on a plain background, with the holes clearly visible — which is the whole point, because the holes are the answer. Used twice: once with the question (a solid cannot be compressed, so why can you squash this?) and once with the resolution (you are compressing the air in the gaps, not the sponge). The Learner's Book poses this task on p.34 with no picture at all.",
+    "bytes": 170859
+  },
+  {
+    "name": "earth.jpg",
+    "title": "File:The Earth seen from Apollo 17.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:The_Earth_seen_from_Apollo_17.jpg",
+    "license": "Public domain",
+    "artist": "NASA / Apollo 17 crew",
+    "usage": "\"The Blue Marble\". Paired with the drawn VACUUM_BOX diagram so the abstract idea (a box with no particles in it) gets a real place attached to it: the thin gas skin is the atmosphere, everything black is very nearly a perfect vacuum, and that is why there is no sound in space.",
+    "bytes": 235673
+  }
+]

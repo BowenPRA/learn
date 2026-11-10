@@ -1,0 +1,47 @@
+[
+  {
+    "name": "lift-panel.jpg",
+    "title": "File:El Gâla the lift button panel Tenjin 1-chōme Chūō-ku Fukuoka 20251107.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:El_G%C3%A2la_the_lift_button_panel_Tenjin_1-ch%C5%8Dme_Ch%C5%AB%C5%8D-ku_Fukuoka_20251107.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Hirho",
+    "usage": "Downscaled to 900px, quality 80. Used on the car-park word problem: the B3/B4/B5 buttons are the floors below zero.",
+    "bytes": 147456
+  },
+  {
+    "name": "piggy-bank.jpg",
+    "title": "File:Piggy-bank-968302.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Piggy-bank-968302.jpg",
+    "license": "CC0",
+    "artist": "stevepb",
+    "usage": "Downscaled to 1000px, quality 80. Used on the bank-account word problem.",
+    "bytes": 105472
+  },
+  {
+    "name": "south-pole-station.jpg",
+    "title": "File:Amundsen-scott-south pole station 2007.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Amundsen-scott-south_pole_station_2007.jpg",
+    "license": "Public domain",
+    "artist": "Bill Spindler, U.S. Antarctic Program, National Science Foundation",
+    "usage": "Downscaled to 1100px, quality 80. Used on the research-station word problem.",
+    "bytes": 171008
+  },
+  {
+    "name": "boomerang-nebula.jpg",
+    "title": "File:Hubble catches scattered light from the Boomerang Nebula (opo0525a).jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Hubble_catches_scattered_light_from_the_Boomerang_Nebula_(opo0525a).jpg",
+    "license": "Public domain",
+    "artist": "NASA, ESA and The Hubble Heritage Team (STScI/AURA)",
+    "usage": "Downscaled to 1000px, quality 80. Used on the soup-in-space word problem; the nebula is about -272 C, the coldest known place.",
+    "bytes": 32768
+  },
+  {
+    "name": "snail.jpg",
+    "title": "File:Snail-wiki-120-Zachi-Evenor.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Snail-wiki-120-Zachi-Evenor.jpg",
+    "license": "CC BY 2.0",
+    "artist": "Zachi Evenor",
+    "usage": "Downscaled to 800px, quality 78. Used on the snail-in-the-well word problem.",
+    "bytes": 214016
+  }
+]

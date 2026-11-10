@@ -1,0 +1,47 @@
+[
+  {
+    "name": "halong.jpg",
+    "title": "File:Karst HaLongBay Vietnam (pixinn.net).jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Karst_HaLongBay_Vietnam_(pixinn.net).jpg",
+    "license": "CC BY 3.0",
+    "artist": "Christophe Meneboeuf",
+    "usage": "Hạ Long Bay: solid limestone, liquid sea and gaseous air in one frame, for the slide that introduces matter and the three states. Chosen over an iceberg or a geyser because it is the class's own country — 'everything here is matter' lands harder when 'here' is somewhere they have been.",
+    "bytes": 123165
+  },
+  {
+    "name": "hourglass.jpg",
+    "title": "File:Hourglass with flowing sand.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Hourglass_with_flowing_sand.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "User:Pauloleong2002",
+    "usage": "Sand pouring in a clear stream through the neck of an hourglass — the deck's opening hook (is sand a liquid?) and, twelve slides later, half of the compare slide that answers it. Chosen over a sand dune because the falling STREAM is what makes the class say 'liquid', and a dune does not have one.",
+    "bytes": 178818
+  },
+  {
+    "name": "ice.jpg",
+    "title": "File:Ice cubes openphoto.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Ice_cubes_openphoto.jpg",
+    "license": "CC BY-SA 2.5",
+    "artist": "Darren Hester",
+    "usage": "A stack of ice cubes, every one of them still a cube, for the properties of a solid. Deliberately water rather than a brick or a rock: the same substance appears as a liquid two slides later, so 'solid' reads as a state rather than as a kind of stuff. It is also a tile in the Word Wall.",
+    "bytes": 92842
+  },
+  {
+    "name": "mercury.jpg",
+    "title": "File:Pouring liquid mercury bionerd.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Pouring_liquid_mercury_bionerd.jpg",
+    "license": "CC BY 3.0",
+    "artist": "User:Bionerd",
+    "usage": "Liquid mercury being poured into a dish — a metal that splashes. Paired with the hourglass on the 'you cannot tell by looking' compare slide: sand pours and is a solid, mercury is a metal and is a liquid. Both are baited tiles in the Word Wall at the end of the deck.",
+    "bytes": 143818
+  },
+  {
+    "name": "balloon.jpg",
+    "title": "File:Cappadocia Balloon Inflating Wikimedia Commons.JPG",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Cappadocia_Balloon_Inflating_Wikimedia_Commons.JPG",
+    "license": "CC BY-SA 3.0",
+    "artist": "Benh LIEU SONG",
+    "usage": "The inside of a hot-air balloon being inflated, with a person standing in it for scale. The Learner's Book photograph on p.32 is a balloon in flight, which shows a balloon; this one shows a GAS filling every corner of an enormous container, which is the property being taught.",
+    "bytes": 156821
+  }
+]

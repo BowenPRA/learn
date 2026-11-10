@@ -1,0 +1,137 @@
+[
+  {
+    "file": "mercury.jpg",
+    "name": "Mercury in true color.jpg",
+    "title": "Mercury in true colour, photographed by MESSENGER (2008)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Mercury_in_true_color.jpg",
+    "license": "Public domain (NASA)",
+    "artist": "NASA / Johns Hopkins University Applied Physics Laboratory / Arizona State University / Carnegie Institution of Washington",
+    "usage": "PLANET_ROW tile; downscaled to 420 px."
+  },
+  {
+    "file": "venus.jpg",
+    "name": "PIA23791-Venus-NewlyProcessedView-20200608 (cropped).jpg",
+    "title": "Venus from Mariner 10, newly processed view (PIA23791)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:PIA23791-Venus-NewlyProcessedView-20200608_(cropped).jpg",
+    "license": "Public domain",
+    "artist": "NASA/JPL-Caltech",
+    "usage": "PLANET_ROW tile. The same file as 3.2’s venus.jpg."
+  },
+  {
+    "file": "earth.jpg",
+    "name": "The Blue Marble, AS17-148-22727.jpg",
+    "title": "The Blue Marble: Earth photographed from Apollo 17, 1972",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:The_Blue_Marble,_AS17-148-22727.jpg",
+    "license": "Public domain",
+    "artist": "NASA / Apollo 17 crew (Harrison Schmitt)",
+    "usage": "PLANET_ROW tile. The same file as 3.2’s earth.jpg (and the same photograph as 3.1’s)."
+  },
+  {
+    "file": "mars.jpg",
+    "name": "Mars - August 30 2021 - Flickr - Kevin M. Gill.png",
+    "title": "Mars, 30 August 2021, colour composite",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Mars_-_August_30_2021_-_Flickr_-_Kevin_M._Gill.png",
+    "license": "CC BY 2.0",
+    "artist": "Kevin M. Gill",
+    "usage": "PLANET_ROW tile; flattened onto black and saved as a 420 px JPEG."
+  },
+  {
+    "file": "jupiter.jpg",
+    "name": "Jupiter OPAL 2024.png",
+    "title": "Jupiter in true colour, Hubble OPAL programme, 5 January 2024",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Jupiter_OPAL_2024.png",
+    "license": "Public domain",
+    "artist": "NASA/STScI (Hubble OPAL)",
+    "usage": "PLANET_ROW tile. The same file as 3.2’s jupiter.jpg, so the class sees the same Jupiter two lessons running."
+  },
+  {
+    "file": "saturn.jpg",
+    "name": "Saturn during Equinox.jpg",
+    "title": "Saturn at equinox, photographed by Cassini, 2008",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Saturn_during_Equinox.jpg",
+    "license": "Public domain (NASA)",
+    "artist": "NASA / JPL / Space Science Institute",
+    "usage": "PLANET_ROW tile; downscaled to 640 px wide."
+  },
+  {
+    "file": "uranus.jpg",
+    "name": "Uranus2.jpg",
+    "title": "Uranus photographed by Voyager 2, 1986",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Uranus2.jpg",
+    "license": "Public domain",
+    "artist": "NASA/JPL-Caltech",
+    "usage": "PLANET_ROW tile and NEPTUNE_STORY. The same file as 3.2’s uranus.jpg."
+  },
+  {
+    "file": "neptune.jpg",
+    "name": "Neptune Full.jpg",
+    "title": "Neptune photographed by Voyager 2, 1989 (PIA01492)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Neptune_Full.jpg",
+    "license": "Public domain (NASA)",
+    "artist": "NASA / JPL",
+    "usage": "PLANET_ROW tile and NEPTUNE_STORY; downscaled to 420 px. The familiar deep-blue processing, chosen so Neptune is easy to tell from Uranus beside it in the row. 3.2 showed the paler true-colour Neptune; plan.js says so in case a student notices."
+  },
+  {
+    "file": "moon.jpg",
+    "name": "FullMoon2010.jpg",
+    "title": "The full Moon, 2010",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:FullMoon2010.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "Gregory H. Revera",
+    "usage": "PLANET_ROW, under the Earth; downscaled to 300 px."
+  },
+  {
+    "file": "sun.jpg",
+    "name": "The Sun by the Atmospheric Imaging Assembly of NASA's Solar Dynamics Observatory - 20100819.jpg",
+    "title": "The Sun in extreme ultraviolet light, Solar Dynamics Observatory, 19 August 2010",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:The_Sun_by_the_Atmospheric_Imaging_Assembly_of_NASA%27s_Solar_Dynamics_Observatory_-_20100819.jpg",
+    "license": "Public domain (NASA)",
+    "artist": "NASA / SDO (AIA)",
+    "usage": "Slide 3, The Sun; downscaled to 900 px. Like the book's photo (p.92), taken by a spacecraft with a special camera."
+  },
+  {
+    "file": "spoilers.jpg",
+    "name": "Spoilers Activated on Landing, William P. Hobby Airport, Houston, Texas (16075468149).jpg",
+    "title": "A plane's wing just after landing, with its spoilers raised",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Spoilers_Activated_on_Landing,_William_P._Hobby_Airport,_Houston,_Texas_(16075468149).jpg",
+    "license": "CC BY-SA 2.0",
+    "artist": "Ken Lund",
+    "usage": "Slide 15, Air resistance — the same idea as the book's aeroplane-wing photo (p.93); downscaled to 960 px."
+  },
+  {
+    "file": "juno.jpg",
+    "name": "JUNO - PIA13746.jpg",
+    "title": "Juno Mission to Jupiter (2010 artist's concept, PIA13746)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:JUNO_-_PIA13746.jpg",
+    "license": "Public domain (NASA)",
+    "artist": "NASA / JPL",
+    "usage": "Slide 17, Vacuum — the book's Juno picture (p.93) is this same NASA artwork; downscaled to 960 px."
+  },
+  {
+    "file": "voyager.jpg",
+    "name": "Voyager spacecraft.jpg",
+    "title": "Artist's impression of a Voyager spacecraft in space",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Voyager_spacecraft.jpg",
+    "license": "Public domain (NASA)",
+    "artist": "NASA / JPL",
+    "usage": "Slide 18, Voyager 1 (Question 5); downscaled to 960 px."
+  },
+  {
+    "file": "bouvard.jpg",
+    "name": "Alexis Bouvard.jpg",
+    "title": "Alexis Bouvard (1767–1843), lithograph by Julien-Léopold Boilly",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Alexis_Bouvard.jpg",
+    "license": "Public domain",
+    "artist": "Julien-Léopold Boilly",
+    "usage": "NEPTUNE_STORY; downscaled to 480 px."
+  },
+  {
+    "file": "leverrier.jpg",
+    "name": "Urbain Le Verrier.jpg",
+    "title": "Urbain Le Verrier (1811–1877)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Urbain_Le_Verrier.jpg",
+    "license": "Public domain (PD-old)",
+    "artist": "Unknown 19th-century engraver; scan from the Smithsonian Institution Libraries' Scientific Identity portrait collection",
+    "usage": "NEPTUNE_STORY; downscaled to 480 px tall."
+  }
+]

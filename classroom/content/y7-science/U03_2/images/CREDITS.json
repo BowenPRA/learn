@@ -1,0 +1,110 @@
+[
+  {
+    "file": "orion.jpg",
+    "name": "Orion Nebula - Hubble 2006 mosaic 18000.jpg",
+    "title": "The Orion Nebula, Hubble Space Telescope mosaic, 2006",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Orion_Nebula_-_Hubble_2006_mosaic_18000.jpg",
+    "license": "Public domain",
+    "artist": "NASA, ESA, M. Robberto (Space Telescope Science Institute/ESA) and the Hubble Space Telescope Orion Treasury Project Team",
+    "usage": "The Nebula slide. A 1.4:1 landscape crop of the middle of the 1280 px thumbnail, downscaled to 1200 px. The same nebula as the book's photo on p. 87. Also the 'real thing' half of MODEL_REAL (the Model slide straight after), clipped to a circle."
+  },
+  {
+    "file": "hltau.jpg",
+    "name": "HL Tau protoplanetary disk.jpg",
+    "title": "ALMA image of the protoplanetary disc around the young star HL Tauri (eso1436a), 2014",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:HL_Tau_protoplanetary_disk.jpg",
+    "license": "CC BY 4.0",
+    "artist": "ALMA (ESO/NAOJ/NRAO)",
+    "usage": "The A Young Star: HL Tauri slide. Downscaled to 900 px."
+  },
+  {
+    "file": "ecliptic.jpg",
+    "name": "Plane of Ecliptic.jpg",
+    "title": "Clementine star-tracker image: the Moon, the Sun's corona and Saturn, Mars and Mercury in a line, 1994",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Plane_of_Ecliptic.jpg",
+    "license": "Public domain",
+    "artist": "The Clementine Project, commissioned by NASA",
+    "usage": "SIDE_VIEW, with labels drawn over it. Used at its original 640 x 449. From right to left: the Moon lit by Earthshine, the Sun's corona behind the Moon, Saturn, Mars, Mercury (NASA APOD 21 Sept 1996)."
+  },
+  {
+    "file": "sun.jpg",
+    "name": "The Sun by the Atmospheric Imaging Assembly of NASA's Solar Dynamics Observatory - 20100819.jpg",
+    "title": "The Sun in extreme ultraviolet light (AIA 304), Solar Dynamics Observatory, 19 August 2010",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:The_Sun_by_the_Atmospheric_Imaging_Assembly_of_NASA%27s_Solar_Dynamics_Observatory_-_20100819.jpg",
+    "license": "Public domain",
+    "artist": "NASA/SDO (AIA)",
+    "usage": "Square crop, 480 px, clipped to a circle in OPTIONS and STAR_PLANET."
+  },
+  {
+    "file": "jupiter.jpg",
+    "name": "Jupiter OPAL 2024.png",
+    "title": "Jupiter in true colour, Hubble OPAL programme, 5 January 2024",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Jupiter_OPAL_2024.png",
+    "license": "Public domain",
+    "artist": "NASA/STScI (Hubble OPAL)",
+    "usage": "Square crop, 480 px JPEG, clipped to a circle in OPTIONS and STAR_PLANET."
+  },
+  {
+    "file": "earth.jpg",
+    "name": "The Blue Marble, AS17-148-22727.jpg",
+    "title": "The Blue Marble: Earth photographed from Apollo 17, 1972",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:The_Blue_Marble,_AS17-148-22727.jpg",
+    "license": "Public domain",
+    "artist": "NASA / Apollo 17 crew (Harrison Schmitt)",
+    "usage": "Square, 480 px, clipped to a circle in OPTIONS and SPIN_ODD."
+  },
+  {
+    "file": "neptune.jpg",
+    "name": "Neptune - Voyager 2 (29347980845) flatten crop.jpg",
+    "title": "Neptune from Voyager 2, August 1989",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Neptune_-_Voyager_2_(29347980845)_flatten_crop.jpg",
+    "license": "Public domain",
+    "artist": "NASA / JPL / Voyager-ISS / Aster Cowart",
+    "usage": "Square, 480 px, clipped to a circle in OPTIONS."
+  },
+  {
+    "file": "venus.jpg",
+    "name": "PIA23791-Venus-NewlyProcessedView-20200608 (cropped).jpg",
+    "title": "Venus from Mariner 10, newly processed view (PIA23791)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:PIA23791-Venus-NewlyProcessedView-20200608_(cropped).jpg",
+    "license": "Public domain",
+    "artist": "NASA/JPL-Caltech",
+    "usage": "Square, 480 px, clipped to a circle in SPIN_ODD."
+  },
+  {
+    "file": "uranus.jpg",
+    "name": "Uranus2.jpg",
+    "title": "Uranus photographed by Voyager 2, 1986",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Uranus2.jpg",
+    "license": "Public domain",
+    "artist": "NASA/JPL-Caltech",
+    "usage": "Trimmed 6% each side, 480 px, clipped to a circle in SPIN_ODD with a drawn axis lying on its side."
+  },
+  {
+    "file": "starbirth.webm",
+    "name": "STScI- Exploring Star and Planet Formation.webm",
+    "title": "Video: Exploring Star and Planet Formation (Webb animation, 1 July 2022)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:STScI-_Exploring_Star_and_Planet_Formation.webm",
+    "license": "Public domain (NASA/STScI: no copyright claimed; credit NASA, ESA, CSA, STScI)",
+    "artist": "Video: NASA, ESA, CSA, STScI. Animation: Dani Player (STScI), Frank Summers (STScI). Audio: Joseph DePasquale (STScI)",
+    "usage": "Trimmed 3.5 s to 87.5 s from NASA's 1280 x 720 MP4 (science.nasa.gov/asset/webb/exploring-star-and-planet-formation), re-encoded as VP9/Opus WebM 960 x 540 with its narration and music. Segments in the trimmed file, cut at the scene changes: 1 the cloud 0-29.2 s, 2 a new star and its disc 29.2-52.9 s, 3 planets 52.9-84.0 s. Timings checked against NASA's caption file and frame grabs."
+  },
+  {
+    "file": "starbirth-poster.jpg",
+    "name": "STScI- Exploring Star and Planet Formation.webm",
+    "title": "Poster frame of the same film: the Hubble image of the star cluster Westerlund 2 that opens it",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:STScI-_Exploring_Star_and_Planet_Formation.webm",
+    "license": "Public domain (NASA/STScI: no copyright claimed; credit NASA, ESA, CSA, STScI)",
+    "artist": "NASA, ESA, CSA, STScI",
+    "usage": "The frame at 1.5 s of starbirth.webm, 960 x 540, shown before the film is played."
+  },
+  {
+    "file": "starbirth-captions.vtt",
+    "name": "Captions.vtt (Exploring Star and Planet Formation)",
+    "title": "NASA's English caption file for the same film",
+    "descUrl": "https://science.nasa.gov/asset/webb/exploring-star-and-planet-formation",
+    "license": "Public domain (NASA/STScI: no copyright claimed; credit NASA, ESA, CSA, STScI)",
+    "artist": "NASA, ESA, CSA, STScI",
+    "usage": "Speech cues only (the [Music] cues dropped), every time moved 3.5 s earlier to match the trimmed starbirth.webm. Played as the video's default captions track."
+  }
+]

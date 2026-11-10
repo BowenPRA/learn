@@ -1,0 +1,74 @@
+[
+  {
+    "file": "runners.jpg",
+    "name": "Kalevan Kisat 2018 - Men's 100 m final - 3.jpg",
+    "title": "Six sprinters mid-stride at the finish of the men's 100 m final, Finnish Athletics Championships (Kalevan Kisat) 2018",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Kalevan_Kisat_2018_-_Men%27s_100_m_final_-_3.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Tuomas Vitikainen",
+    "usage": "RUNNERS (slide 5), standing in for the book's runners on page 106. The 960 px Commons thumbnail, cropped to 16:9 (rows 40-580) to trim empty track and sky, re-encoded at quality 80."
+  },
+  {
+    "file": "rice.jpg",
+    "name": "Saigon Rice shop.jpg",
+    "title": "Open sacks of uncooked white rice with price signs, at a rice shop next to a market in Ho Chi Minh City, Vietnam",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Saigon_Rice_shop.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "Takeaway",
+    "usage": "LastsAYear (slide 19), 'rice' tile, standing in for the book's rice photo on page 108. The 960 px Commons thumbnail, re-encoded at quality 80."
+  },
+  {
+    "file": "coal.jpg",
+    "name": "Coal lumps.jpg",
+    "title": "Close-up of shiny black lumps of coal",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Coal_lumps.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "Nostrifikator",
+    "usage": "LastsAYear (slide 19), 'coal' tile. The 960 px Commons thumbnail, re-encoded at quality 80."
+  },
+  {
+    "file": "battery.jpg",
+    "name": "Energizer NiMH rechargeable AA batteries (four) (various positions).jpg",
+    "title": "Four AA batteries on a white background",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Energizer_NiMH_rechargeable_AA_batteries_(four)_(various_positions).jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Multicherry",
+    "usage": "LastsAYear (slide 19), 'batteries' tile. The 960 px Commons thumbnail, re-encoded at quality 80."
+  },
+  {
+    "file": "dam.jpg",
+    "name": "Trên đập thủy điện Hòa Bình nhìn toàn cảnh.jpg",
+    "title": "Hoa Binh hydroelectric dam, Vietnam: the lake held up high behind the dam (left) and the river far below it (right)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Tr%C3%AAn_%C4%91%E1%BA%ADp_th%E1%BB%A7y_%C4%91i%E1%BB%87n_H%C3%B2a_B%C3%ACnh_nh%C3%ACn_to%C3%A0n_c%E1%BA%A3nh.jpg",
+    "license": "CC0",
+    "artist": "CactiStaccingCrane",
+    "usage": "LastsAYear (slide 19), 'dam' tile; the book's own dam (page 110) is Glen Canyon in the USA. The 960 px Commons thumbnail, cropped to 16:9 (rows 150-690) to trim sky and foreground bushes, re-encoded at quality 80."
+  },
+  {
+    "file": "coffee.jpg",
+    "name": "Coffee - Kávé (16195785835).jpg",
+    "title": "A white cup of hot black coffee with steam rising from it",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Coffee_-_K%C3%A1v%C3%A9_(16195785835).jpg",
+    "license": "CC0",
+    "artist": "Benjamin Balázs from Hungary",
+    "usage": "LastsAYear (slide 19), 'hot coffee' tile. The Commons thumbnail at 800x1200 (portrait), cropped to a landscape band 800x450 (rows 290-740: the steam and the top of the cup), re-encoded at quality 80."
+  },
+  {
+    "file": "ball.jpg",
+    "name": "Bouncing ball strobe edit.jpg",
+    "title": "Strobe photograph of a bouncing ball: each bounce is lower than the one before",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Bouncing_ball_strobe_edit.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "MichaelMaggs, edit by Richard Bartz",
+    "usage": "LastsAYear (slide 19), 'bouncing ball' tile, standing in for the book's tennis-ball photo on page 108. The 960 px Commons thumbnail, re-encoded at quality 80."
+  },
+  {
+    "file": "rocket.webm",
+    "name": "STS-135 Space Shuttle Launch 7aKYeRSYLB0.webm",
+    "title": "Space Shuttle Atlantis launching on STS-135, the last shuttle flight (8 July 2011): main-engine ignition close-up, then lift-off from the pad",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:STS-135_Space_Shuttle_Launch_7aKYeRSYLB0.webm",
+    "license": "Public domain (NASA)",
+    "artist": "NASA's Kennedy Space Center",
+    "usage": "RocketFilm (slide 15). Trimmed to 0:02.0-0:25.0 of the 2:33 Commons original (1280x720, from NASA Kennedy's YouTube channel): main-engine ignition at about 0:07, lift-off at about 0:14. Scaled to 960x540, re-encoded as VP9 (CRF 36) with Opus 96 kb/s and +2 dB gain; 1.7 MB. Sound kept, NASA's launch commentary included."
+  }
+]

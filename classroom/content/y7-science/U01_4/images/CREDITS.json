@@ -1,0 +1,47 @@
+[
+  {
+    "name": "trachea.jpg",
+    "title": "File:Trachea (mammal) histology cross-section.png",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Trachea_(mammal)_histology_cross-section.png",
+    "license": "CC BY-SA 4.0",
+    "artist": "User:Magscope",
+    "usage": "The real ciliated epithelium: the lining of the windpipe, a whole sheet of ciliated cells with the fringe of cilia along the dark epithelial edge. Paired with the drawn CILIATED_EPITHELIUM diagram. The same file is used in U01_3, where it carried the single ciliated CELL — here it carries the TISSUE, which is the point of the lesson.",
+    "bytes": 132513
+  },
+  {
+    "name": "onionepi.jpg",
+    "title": "File:Onion Epidermis Cells W.M. 40x - 294.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Onion_Epidermis_Cells_W.M._40x_-_294.jpg",
+    "license": "CC BY 2.0",
+    "artist": "loganrickert",
+    "usage": "The real onion epidermis: a wet mount down a light microscope, showing the cells packed edge to edge with no gaps. Chosen over sharper-nucleus candidates because the cell WALLS are unmistakable from the back of a classroom, and 'joined edge to edge in a sheet' is the tissue idea this photograph has to carry. Paired with the drawn ONION_EPIDERMIS diagram.",
+    "bytes": 97124
+  },
+  {
+    "name": "onion.jpg",
+    "title": "File:Red onion rings closeup.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Red_onion_rings_closeup.jpg",
+    "license": "Public domain",
+    "artist": "Sebastian Wallroth",
+    "usage": "A cut red onion, close up: the layers, and the thin translucent skin peeling away from them at the left. That skin is the onion epidermis, so this photograph is what makes the micrograph next to it mean something concrete.",
+    "bytes": 148757
+  },
+  {
+    "name": "leaf.jpg",
+    "title": "File:Angiosperm Morphology Mesophyll Arrangement in Syringa Leaf (36176478164).jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Angiosperm_Morphology_Mesophyll_Arrangement_in_Syringa_Leaf_(36176478164).jpg",
+    "license": "CC0",
+    "artist": "Berkshire Community College Bioscience Image Library",
+    "usage": "A lilac (Syringa) leaf cut across, showing all four tissues of the leaf organ stacked in order: upper epidermis, the tall palisade layer, the loose spongy layer, lower epidermis. Paired with the drawn LEAF_SECTION diagram. The same file is used in U01_3 for the palisade CELL; here it is the whole ORGAN.",
+    "bytes": 243557
+  },
+  {
+    "name": "chestxray.jpg",
+    "title": "File:Normal posteroanterior (PA) chest radiograph (X-ray).jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Normal_posteroanterior_(PA)_chest_radiograph_(X-ray).jpg",
+    "license": "CC0",
+    "artist": "Mikael Häggström",
+    "usage": "A normal chest X-ray — real human organs in a living person, for the slide that asks the class to find the lungs, the heart and the stomach's gas bubble. The 'Dx' and 'Sin' radiology markers were cropped off the top strip so they do not read as part of the anatomy.",
+    "bytes": 105000
+  }
+]

@@ -1,0 +1,67 @@
+[
+  {
+    "file": "lemon.jpg",
+    "name": "Lemon and lime.jpg",
+    "title": "A lemon and a lime — the sour taste that opens the acid section",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Lemon_and_lime.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Rhododendrites"
+  },
+  {
+    "file": "soap.jpg",
+    "name": "Handmade soap.jpg",
+    "title": "A bar of handmade soap with lather — the slippery feel of a base",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Handmade_soap.jpg",
+    "license": "CC BY 2.5",
+    "artist": "Malene Thyssen"
+  },
+  {
+    "file": "litmus-acid.jpg",
+    "name": "The result of blue litmus paper reaction with an acid.jpg",
+    "title": "Blue litmus paper dipped in hydrochloric acid, turning red (cropped to the strip and dish)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:The_result_of_blue_litmus_paper_reaction_with_an_acid.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Kanesskong"
+  },
+  {
+    "file": "litmus-base.jpg",
+    "name": "The result of red litmus paper reaction with a base.jpg",
+    "title": "Red litmus paper dipped in sodium hydroxide, turning blue (cropped to the strip and dish; the matching half of litmus-acid.jpg)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:The_result_of_red_litmus_paper_reaction_with_a_base.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Kanesskong"
+  },
+  {
+    "file": "cabbage.jpg",
+    "name": "Extract of red cabbage in the beacker (pH indicator).jpg",
+    "title": "Red cabbage extract in a flask beside test tubes running pink to yellow (cropped)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Extract_of_red_cabbage_in_the_beacker_(pH_indicator).jpg",
+    "license": "CC BY 4.0",
+    "artist": "Alessandro e Damiano"
+  },
+  {
+    "file": "phrange.jpg",
+    "name": "PH scale 1.jpg",
+    "title": "A school rack of test tubes running red through yellow and green to blue (cropped to the rack)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:PH_scale_1.jpg",
+    "license": "CC BY 4.0",
+    "artist": "Alvy16",
+    "usage": "Used as 'what it looks like in a real lab' only. The tubes are not labelled with pH numbers, so the slide's caption does not name one; the numbered scale students copy down is the authored PH_SCALE diagram."
+  },
+  {
+    "file": "corrosive.jpg",
+    "name": "GHS-pictogram-acid.svg",
+    "title": "The GHS corrosive hazard pictogram (rendered from the source SVG to a PNG, then to JPEG)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:GHS-pictogram-acid.svg",
+    "license": "Public domain",
+    "artist": "United Nations (Globally Harmonized System) — uploaded by an unknown author"
+  },
+  {
+    "file": "antacid.jpg",
+    "name": "Man adding effervescent tablet in the glass of water.jpg",
+    "title": "A hand dropping an effervescent tablet into a glass of water — the indigestion tablet on the neutralisation slide",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Man_adding_effervescent_tablet_in_the_glass_of_water.jpg",
+    "license": "CC BY 2.0",
+    "artist": "Shixart1985"
+  }
+]
