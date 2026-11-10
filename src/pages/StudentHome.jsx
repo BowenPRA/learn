@@ -1,31 +1,49 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { AlertCircle, ArrowRight, CalendarDays, CheckCircle2, ChevronRight, Gamepad2, Hourglass, Presentation, Sparkles, Star, Trophy, Zap } from 'lucide-react'
-import { Loading, Notice, SectionHead as Head, SubjectTile } from '../components/ui.jsx'
+import { AlertCircle, CalendarDays, CheckCircle2, ChevronRight, Coins, Gamepad2, Hourglass, LayoutGrid, Play, Presentation, Sparkles, Star, Trophy } from 'lucide-react'
+import { Bar, CourseTile, Loading, Notice, SectionHead as Head, SubjectTile } from '../components/ui.jsx'
 import { ClassroomLessonList, classroomLessonsFor, classroomLink, classroomTitle, newestPerClass } from '../components/ClassroomLessons.jsx'
-import { UnitList, totalXP, unitsFor, useUnitProgress } from '../components/UnitCards.jsx'
-import { nextTaskOf, taskTitle, unitHref, unitKey, unitXP } from '../data/units.js'
+import { totalXP, unitsFor, useUnitProgress } from '../components/UnitCards.jsx'
+import { UNIT_XP, nextTaskOf, taskTitle, unitHref, unitKey, unitXP } from '../data/units.js'
 import Pip from '../components/Pip.jsx'
 import { PackCard, nextPart, packDone, packStars, partLabels, partPath, partState, todayIso, weekEndIso } from '../components/packs.jsx'
 import { api } from '../lib/api.js'
 import { useT } from '../lib/i18n.jsx'
 import { useAuth } from '../lib/auth.jsx'
 import { byPack, partsOf } from '../pack/model.js'
-import { splitClass, subjectName, subjectTone } from '../data/subjects.js'
+import { className, splitClass, subjectLook, subjectName, subjectTone } from '../data/subjects.js'
 
 const WEEK = 7 * 86400000
 
-/** A small darker tile on the blue welcome card: a number and what it counts. */
+const BLUE = { face: '#116DFF', edge: '#0B4FBF' }
+
+/** A number and what it counts, on the XP card. */
 function Stat({ icon: Icon, value, label, iconClass }) {
   return (
-    <div className="flex items-center gap-2.5 rounded-2xl bg-black/15 px-3.5 py-2">
-      <Icon className={`h-6 w-6 ${iconClass}`} strokeWidth={2.4} aria-hidden />
-      <span className="leading-tight">
-        <span className="block text-xl font-black tabular-nums text-white">{value}</span>
-        <span className="block text-[11px] font-extrabold uppercase tracking-wider text-white/85">{label}</span>
-      </span>
-    </div>
+    <li className="flex items-center gap-2 rounded-2xl bg-pra-paper px-3 py-2">
+      <Icon className={`h-5 w-5 shrink-0 ${iconClass}`} strokeWidth={2.5} aria-hidden />
+      <span className="whitespace-nowrap text-sm font-bold text-pra-ink-soft"><span className="font-black tabular-nums text-pra-ink">{value}</span> {label}</span>
+    </li>
   )
+}
+
+/** The one thing to do next: a banner in the subject's colour, one tap to start. */
+function GoBanner({ to, href, look, eyebrow, title }) {
+  const cls = 'group flex w-full items-center gap-4 rounded-3xl border-b-[6px] p-4 text-left text-white transition duration-100 hover:brightness-105 active:mb-1 active:translate-y-1 active:border-b-2 sm:p-5'
+  const style = { background: look.face, borderColor: look.edge }
+  const body = (
+    <>
+      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-black/15 sm:h-14 sm:w-14">
+        <Play className="h-6 w-6 fill-current" strokeWidth={2.5} aria-hidden />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-xs font-extrabold uppercase tracking-wider text-white/90">{eyebrow}</span>
+        <span className="mt-0.5 line-clamp-2 text-xl font-black leading-tight tracking-tight sm:text-2xl">{title}</span>
+      </span>
+      <ChevronRight className="h-7 w-7 shrink-0 transition group-hover:translate-x-1" strokeWidth={3} aria-hidden />
+    </>
+  )
+  return to ? <Link to={to} className={cls} style={style}>{body}</Link> : <a href={href} className={cls} style={style}>{body}</a>
 }
 
 export default function StudentHome() {
@@ -90,67 +108,74 @@ export default function StudentHome() {
   // two was taught last cannot be told, and the child picks the one they just had.
   const unitBtn = !part && unitOpen
   const decks = !part && !unitBtn ? newestPerClass(fromClass) : []
+  // The courses: one card a course that has units, with the XP held across them.
+  const courses = [...new Set(units.map((u) => u.track))].map((track) => {
+    const list = units.filter((u) => u.track === track)
+    const sums = list.map((u) => unitXP(u, unitProgress[unitKey(u)] || {}))
+    return { track, classKey: list[0].classKey, teacher: list[0].teacher, n: list.length, xp: sums.reduce((n, x) => n + x.xp, 0), done: sums.filter((x) => x.done).length }
+  })
+  const maxXp = units.length * UNIT_XP
+  const unitsDone = courses.reduce((n, c) => n + c.done, 0)
+  const unitsBase = `${import.meta.env.BASE_URL}unit/${window.location.search}`
 
   return (
-    <main className="mx-auto max-w-5xl px-4 pb-16 pt-6">
-      <section className="banner isolate mb-8 border-pra-blue-deep bg-pra-blue sm:p-8" aria-labelledby="h-hello">
-        <div aria-hidden className="frond pointer-events-none absolute -bottom-20 -right-16 -z-10 h-72 w-72 rotate-180 bg-white/10" />
-        <Pip wave mood={mood} size={92} className="absolute right-3 top-4 sm:hidden" label={t('pipName')} />
-        <div className="flex items-end gap-4 sm:gap-6">
-          <div className="min-w-0 flex-1">
-            <p className="pr-20 text-xs font-extrabold uppercase tracking-[0.16em] text-white/85 sm:pr-0 sm:text-sm">{greeting}</p>
-            <h1 id="h-hello" className="mt-1 break-words pr-20 text-3xl font-black leading-tight tracking-tight sm:pr-0 sm:text-5xl">{me?.name || ''}!</h1>
-            <p className="mt-2 max-w-xl pr-16 text-base font-semibold text-white/90 sm:pr-0 sm:text-lg">{summary}</p>
-            {(stars > 0 || partsDone > 0 || xpAll > 0) && (
-              <div className="mt-4 flex flex-wrap gap-2.5">
-                {xpAll > 0 && <Stat icon={Zap} value={xpAll} label="XP" iconClass="fill-pra-sun text-pra-sun" />}
-                <Stat icon={Star} value={stars} label={t('starsTotal')} iconClass="fill-pra-sun text-pra-sun" />
-                <Stat icon={CheckCircle2} value={`${partsDone}/${partsAll}`} label={t('partsDone')} iconClass="text-pra-lime" />
+    <main className="mx-auto max-w-5xl px-4 pb-16 pt-6 sm:pt-8">
+      {/* Who is here, and one line about what is waiting. */}
+      <header className="mb-6 flex items-center gap-4" aria-labelledby="h-hello">
+        <span className="flex h-16 w-16 shrink-0 items-start justify-center overflow-hidden rounded-2xl border-2 border-pra-line bg-white shadow-edge sm:h-20 sm:w-20">
+          <Pip mood={mood} size={128} className="mt-1.5 sm:mt-2" label={t('pipName')} />
+        </span>
+        <div className="min-w-0">
+          <p className="eyebrow">{greeting}</p>
+          <h1 id="h-hello" className="page-title break-words">{me?.name || ''}!</h1>
+          <p className="mt-0.5 font-semibold text-pra-ink-soft">{summary}</p>
+        </div>
+      </header>
+
+      {/* Everything earned so far: the child's own, never compared with anyone. */}
+      {(units.length > 0 || data.packs.length > 0) && (
+        <section className="card mb-6 p-4 sm:p-6" aria-label={t('yourXP')}>
+          <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+            {maxXp > 0 && (
+              <div className="flex items-center gap-3">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-b-4 border-pra-sun-deep bg-pra-sun">
+                  <Trophy className="h-6 w-6 text-pra-sun-ink" strokeWidth={2.5} aria-hidden />
+                </span>
+                <div>
+                  <p className="eyebrow">{t('yourXP')}</p>
+                  <p className="text-3xl font-black tabular-nums leading-none text-pra-ink">{xpAll}<span className="text-lg text-slate-400"> / {maxXp}</span></p>
+                </div>
               </div>
             )}
+            <ul className="flex flex-wrap gap-2">
+              {data.packs.length > 0 && <Stat icon={Star} value={stars} label={t('starsTotal')} iconClass="fill-pra-sun text-pra-sun-deep" />}
+              {data.packs.length > 0 && <Stat icon={CheckCircle2} value={`${partsDone}/${partsAll}`} label={t('partsDone')} iconClass="text-pra-green-deep" />}
+              {units.length > 0 && <Stat icon={Sparkles} value={`${unitsDone}/${units.length}`} label={t('unitsFinished')} iconClass="text-pra-sun-deep" />}
+            </ul>
           </div>
-          <Pip wave float mood={mood} size={150} className="-mb-2 hidden sm:inline-block lg:hidden" label={t('pipName')} />
-          <Pip wave float mood={mood} size={200} className="-mb-3 mr-4 hidden lg:inline-block" label={t('pipName')} />
+          {maxXp > 0 && <Bar value={xpAll / maxXp} tone="#F5A623" className="mt-4 h-4" />}
+        </section>
+      )}
+
+      {/* The one thing to do next. */}
+      {(part || unitBtn || decks.length > 0) && (
+        <div className={`mb-8 grid gap-3 ${decks.length > 1 ? 'sm:grid-cols-2' : ''}`}>
+          {part && (
+            <GoBanner to={partPath(first.slug, part)} look={BLUE}
+              eyebrow={t(started ? 'continuePart' : 'startPart', { part: partName })} title={firstTitle} />
+          )}
+          {unitBtn && (
+            <GoBanner href={unitHref(unitOpen, window.location.search, unitNext.id)} look={subjectLook(splitClass(unitOpen.classKey)[0])}
+              eyebrow={t(unitProgress[unitKey(unitOpen)]?.[unitNext.id] ? 'continuePart' : 'startPart', { part: taskTitle(unitNext, lang) })}
+              title={`${unitOpen.label} ${lang === 'vn' ? unitOpen.titleVn || unitOpen.title : unitOpen.title}`} />
+          )}
+          {decks.map((deck) => (
+            <GoBanner key={`${deck.course}/${deck.slug}`} href={classroomLink(deck)} look={subjectLook(splitClass(deck.classKey)[0])}
+              eyebrow={`${subjectName(splitClass(deck.classKey)[0], lang)} · ${deck.unit}${deck.teacher ? ` · ${deck.teacher}` : ''}`}
+              title={t('openLesson', { title: classroomTitle(deck, lang) })} />
+          ))}
         </div>
-        {part && (
-          <Link to={partPath(first.slug, part)} className="btn-white btn-big mt-5 w-full justify-between gap-3 text-left sm:w-auto sm:min-w-[22rem]">
-            <span className="min-w-0">
-              <span className="block truncate text-lg font-extrabold">{t(started ? 'continuePart' : 'startPart', { part: partName })}</span>
-              <span className="block truncate text-sm font-semibold text-pra-ink-soft">{firstTitle}</span>
-            </span>
-            <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-pra-blue text-white">
-              <ArrowRight className="h-6 w-6" strokeWidth={3} />
-            </span>
-          </Link>
-        )}
-        {unitBtn && (
-          <a href={unitHref(unitOpen, window.location.search, unitNext.id)} className="btn-white btn-big mt-5 w-full justify-between gap-3 text-left sm:w-auto sm:min-w-[22rem]">
-            <span className="min-w-0">
-              <span className="block truncate text-lg font-extrabold">{t(unitProgress[unitKey(unitOpen)]?.[unitNext.id] ? 'continuePart' : 'startPart', { part: taskTitle(unitNext, lang) })}</span>
-              <span className="block truncate text-sm font-semibold text-pra-ink-soft">{unitOpen.label} {lang === 'vn' ? unitOpen.titleVn || unitOpen.title : unitOpen.title}</span>
-            </span>
-            <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-pra-blue text-white">
-              <ArrowRight className="h-6 w-6" strokeWidth={3} />
-            </span>
-          </a>
-        )}
-        {decks.length > 0 && (
-          <div className={decks.length > 1 ? 'mt-5 grid gap-3 sm:grid-cols-2' : ''}>
-            {decks.map((deck) => (
-              <a key={`${deck.course}/${deck.slug}`} href={classroomLink(deck)}
-                className={`btn-white btn-big w-full justify-between gap-3 text-left ${decks.length > 1 ? 'min-w-0 px-5' : 'mt-5 sm:w-auto sm:min-w-[22rem]'}`}>
-                <span className="min-w-0">
-                  <span className="block truncate text-lg font-extrabold">{t('openLesson', { title: classroomTitle(deck, lang) })}</span>
-                  <span className="block truncate text-sm font-semibold text-pra-ink-soft">{subjectName(splitClass(deck.classKey)[0], lang)} · {deck.unit}{deck.teacher ? ` · ${deck.teacher}` : ''}</span>
-                </span>
-                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-pra-blue text-white">
-                  <Presentation className="h-5 w-5" strokeWidth={2.6} />
-                </span>
-              </a>
-            ))}
-          </div>
-        )}
-      </section>
+      )}
 
       {late.length > 0 && (
         <section className="mb-8" aria-labelledby="h-late">
@@ -171,20 +196,53 @@ export default function StudentHome() {
         </section>
       )}
 
-      {units.length > 0 && (
+      {/* The courses, as on the Dashboard's menu: one card a course, then the Arcade. */}
+      {courses.length > 0 && (
         <section className="mb-8" aria-labelledby="h-units">
-          <Head id="h-units" icon={Sparkles} tone="#F5A623" hint={t('unitsHint')}>{t('units')}</Head>
-          
-          <UnitList units={units} progress={unitProgress} lang={lang} />
-          <a href={`${import.meta.env.BASE_URL}unit/${window.location.search}#/arcade`}
-            className="card card-link mt-3 flex items-center gap-4 p-4 sm:p-5">
-            <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-pra-violet text-white"><Gamepad2 className="h-7 w-7" strokeWidth={2.4} aria-hidden /></span>
-            <span className="min-w-0 flex-1">
-              <span className="block text-lg font-extrabold text-pra-ink">{t('arcade')}</span>
-              <span className="block text-sm font-semibold text-pra-ink-soft">{t('arcadeHint')}</span>
+          <Head id="h-units" icon={LayoutGrid} tone="#116DFF" hint={t('unitsHint')}>{t('myCourses')}</Head>
+          <div className="grid gap-4 md:grid-cols-2">
+            {courses.map((c) => {
+              const [subject] = splitClass(c.classKey)
+              const look = subjectLook(subject)
+              const all = c.done === c.n
+              return (
+                <a key={c.track} href={`${unitsBase}#/${c.track}`} className="card card-link group flex flex-col gap-4 p-5 sm:p-6">
+                  <span className="flex items-center gap-4">
+                    <CourseTile subject={subject} look={look} size="h-14 w-14 sm:h-16 sm:w-16" icon="h-7 w-7 sm:h-8 sm:w-8" />
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-2xl font-black leading-tight tracking-tight text-pra-ink">{className(c.classKey, lang)}</span>
+                      <span className="block truncate text-sm font-bold text-pra-ink-soft">{c.teacher ? `${c.teacher} · ` : ''}{c.n === 1 ? t('oneUnit') : t('nUnits', { n: c.n })}</span>
+                    </span>
+                    <span className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-b-4 border-pra-line bg-pra-paper text-slate-400 transition group-hover:border-pra-blue-deep group-hover:bg-pra-blue group-hover:text-white sm:flex">
+                      <ChevronRight className="h-5 w-5" strokeWidth={3} aria-hidden />
+                    </span>
+                  </span>
+                  <span className="flex items-center gap-3">
+                    <Bar value={c.xp / (c.n * UNIT_XP)} tone={all ? '#F5A623' : look.face} className="h-3 flex-1" />
+                    <span className="whitespace-nowrap text-xs font-black tabular-nums text-pra-ink">{c.xp}<span className="text-slate-400"> / {c.n * UNIT_XP} XP</span></span>
+                    <span className="flex items-center gap-1 whitespace-nowrap text-xs font-black tabular-nums text-slate-400">
+                      {all && <CheckCircle2 className="h-4 w-4 text-pra-sun-deep" strokeWidth={3} aria-hidden />}{t('nOfDone', { n: c.done, total: c.n })}
+                    </span>
+                  </span>
+                </a>
+              )
+            })}
+          </div>
+          {/* The Arcade is a play zone, not a course: its own dark banner under the courses. */}
+          <a href={`${unitsBase}#/arcade`}
+            className="group relative mt-4 flex items-center gap-4 overflow-hidden rounded-3xl border-b-[6px] border-[#1e1b4b] bg-[#0b1022] p-4 text-white transition duration-100 hover:brightness-110 active:mb-1 active:translate-y-1 active:border-b-2 sm:gap-5 sm:p-6">
+            <span aria-hidden className="absolute inset-x-0 top-0 h-1.5 bg-pra-sun" />
+            <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border-b-4 border-[#4B2FCF] bg-pra-violet sm:h-16 sm:w-16">
+              <Gamepad2 className="h-7 w-7 sm:h-8 sm:w-8" strokeWidth={2.5} aria-hidden />
             </span>
-            <span className="chip bg-pra-sun py-1 font-black tabular-nums text-pra-sun-ink"><Zap className="h-4 w-4 fill-current" aria-hidden /> {xpAll} XP</span>
-            <ChevronRight className="hidden h-6 w-6 shrink-0 text-pra-ink-soft sm:block" aria-hidden />
+            <span className="min-w-0 flex-1">
+              <span className="block text-2xl font-black leading-tight tracking-tight">{t('arcade')}</span>
+              <span className="block text-sm font-bold text-slate-300">{t('arcadeHint')}</span>
+            </span>
+            <span className="flex shrink-0 items-center gap-1.5 rounded-xl border-b-[3px] border-pra-sun-deep bg-pra-sun px-3 py-1.5 text-sm font-black tabular-nums text-pra-sun-ink">
+              <Coins className="h-4 w-4" strokeWidth={2.6} aria-hidden /> {xpAll} XP
+            </span>
+            <ChevronRight className="hidden h-6 w-6 shrink-0 text-white/70 transition group-hover:translate-x-1 sm:block" strokeWidth={3} aria-hidden />
           </a>
         </section>
       )}

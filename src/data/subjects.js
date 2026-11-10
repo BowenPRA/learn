@@ -17,8 +17,17 @@ const NAMES = {
   presentation_play: ['Presentation and Play', 'Thuyết trình và trò chơi'],
   applied_english: ['Applied English', 'Tiếng Anh ứng dụng'],
 }
-// One accent per subject for icons and rings (small accents only, never page colours).
-const TONE = { math: '#116DFF', english: '#7C5CFF', science: '#48971D', history: '#F5A623' }
+// A subject's colours, as on the Dashboard: maths orange, science green. `face` is a
+// tile's or a banner's colour, `edge` the darker edge under it, `ink` the colour of text
+// and small accents on white. PRA's blue and green stay for actions and "done".
+const LOOK = {
+  math: { face: '#f97316', edge: '#c2410c', ink: '#ea580c' },
+  science: { face: '#10b981', edge: '#047857', ink: '#059669' },
+  english: { face: '#7C5CFF', edge: '#4B2FCF', ink: '#6C4DF2' },
+  history: { face: '#f59e0b', edge: '#b45309', ink: '#b45309' },
+  other: { face: '#0ea5e9', edge: '#0369a1', ink: '#0284c7' },
+}
+export const subjectLook = (subject) => LOOK[subject] || LOOK.other
 
 // The classes PRA Learn is for (Bowen, 6 November 2026): English, Maths, Science and
 // Technology, from Year 1 up (Year 1 to Year 9 and Upper Secondary). Every other class
@@ -42,7 +51,7 @@ export function subjectName(subject, lang) {
   if (n) return n[lang === 'vn' ? 1 : 0]
   return String(subject || '').split('_').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 }
-export const subjectTone = (subject) => TONE[subject] || '#2F7D14'
+export const subjectTone = (subject) => subjectLook(subject).ink
 /** 'math:Year 5' -> 'Year 5 Maths' (EN) / 'Toán Year 5' (VN). */
 export function className(key, lang) {
   const [s, yg] = splitClass(key)

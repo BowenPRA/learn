@@ -148,6 +148,17 @@ export function SubjectTile({ subject, tone, size = 'h-14 w-14', icon = 'h-7 w-7
   )
 }
 
+/** A solid tile in the subject's colour on its darker edge, with the subject's icon in white. */
+export function CourseTile({ subject, look, size = 'h-14 w-14', icon = 'h-7 w-7' }) {
+  const Icon = SUBJECT_ICONS[subject] || Sparkles
+  return (
+    <span aria-hidden className={`inline-flex shrink-0 items-center justify-center rounded-2xl border-b-4 ${size}`}
+      style={{ background: look.face, borderColor: look.edge }}>
+      <Icon className={`${icon} text-white`} strokeWidth={2.5} />
+    </span>
+  )
+}
+
 /** Two palm fronds behind a page (the website's motif). Decoration only. */
 export function Backdrop() {
   return (
