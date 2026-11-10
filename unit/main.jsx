@@ -9,7 +9,7 @@ import { Loader2 } from 'lucide-react'
 import './unit.css'
 import { api } from '../src/lib/api.js'
 import { loadUnit, saveUnitTask } from '../src/lib/unitProgress.js'
-import { findTask, findUnit, taskTitle, unitKey } from '../src/data/units.js'
+import { findTask, findUnit, taskTitle, unitKey, unitXP } from '../src/data/units.js'
 import { className } from '../src/data/subjects.js'
 import { langsFor } from './src/utils/lang.js'
 import { ASSESSMENT, ENGINES, NOTES } from './app/engines.js'
@@ -76,10 +76,12 @@ function UnitRoute() {
   const u = findUnit(track, unitId)
   const got = useUnitData(u)
   const [records, setRecords] = useState(null)
+  const [gained, setGained] = useState(0)
   const [error, setError] = useState('')
   const [lang, setLang] = useState('en')
   const key = u ? unitKey(u) : ''
 
+  const clearGain = useCallback(() => setGained(0), [])
   const refresh = useCallback(() => {
     loadUnit(key).then(setRecords).catch((e) => { setRecords({}); setError(e.message) })
   }, [key])
@@ -93,15 +95,31 @@ function UnitRoute() {
   const data = got.data
   const langs = langsFor({ bilingual: true, french: true }, data)
   const view = { ...u, groupLabel: className(u.classKey, 'en') }
+  // What is in each task, in a word or two, for its tile.
+  const count = (n, en, fr) => (n ? (lang === 'fr' ? `${n} ${fr}` : `${n} ${en}`) : '')
+  const notes = Object.fromEntries(u.tasks.map((t) => [t.id,
+    (lang === 'fr' ? t.noteFr || t.note : t.note)
+    || (t.kind === 'notes' ? count(data.notes?.length, 'slides', 'diapos')
+      : t.kind === 'words' ? count((data.realWords || []).filter((w) => w.isReal !== false).length, 'words', 'mots')
+        : t.kind === 'quiz' ? count(data.assessment?.questions?.length, 'questions', 'questions')
+          : t.kind === 'steps' ? count(got.sets[t.id]?.items?.length, 'questions', 'questions') : '')]))
   // Saves go one after another, and going back to the unit waits for the last one, so
   // the unit page always shows the XP just earned.
   const save = (id, patch) => { queueSave(() => saveUnitTask(key, id, patch).catch((e) => setError(e.message))) }
-  const toUnit = async () => { await savesDone(); refresh(); navigate(`/${track}/${unitId}`, { replace: true }) }
+  // Back to the unit page with the new records, and the XP just won to show.
+  const toUnit = async () => {
+    await savesDone()
+    const before = unitXP(u, records).xp
+    const now = await loadUnit(key).catch(() => records)
+    setRecords(now)
+    setGained(Math.max(0, unitXP(u, now).xp - before))
+    navigate(`/${track}/${unitId}`, { replace: true })
+  }
   const finish = (id, patch) => { save(id, patch); toUnit() }
 
   if (!taskId) {
     return (
-      <UnitHome unit={view} records={records} lang={lang} langs={langs} error={error}
+      <UnitHome unit={view} records={records} notes={notes} gained={gained} onGainSeen={clearGain} lang={lang} langs={langs} error={error}
         onLang={() => setLang((l) => (l === 'en' ? 'fr' : 'en'))}
         onOpen={(id) => navigate(`/${track}/${unitId}/${id}`)} onBack={home} />
     )

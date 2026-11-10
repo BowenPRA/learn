@@ -14,7 +14,9 @@
 // A task's `id` is what its progress is saved under (learn_unit_progress.part): lower-case
 // letters, digits and underscores. Never change one once students have used it.
 // Its name, picture and colour come from its kind unless it gives its own (`title`,
-// `icon`, `tone`): see unit/app/taskLook.js. A unit opens at /unit/#/<TRACK>/<UNIT>.
+// `icon`, `tone`): see unit/app/taskLook.js. `note` is the few words under its name on
+// its tile ("8 angles"); most kinds count their own. The page groups tasks under the
+// steps Learn, Practice and Quiz by kind; `step` puts a task under another one. A unit opens at /unit/#/<TRACK>/<UNIT>.
 
 export const UNIT_XP = 100
 /** A unit is finished at this much XP with the quiz done (the Dashboard's rule). */
@@ -52,7 +54,7 @@ export const UNITS = [
     tasks: [
       { id: 'lesson', kind: 'notes', xp: 20 },
       { id: 'words', kind: 'words', xp: 10 },
-      { id: 'practice', kind: 'engine', engine: 'TideLab', xp: 30, title: 'Tide Lab', titleFr: 'Labo des marées', icon: 'Waves', tone: 'navy' },
+      { id: 'practice', kind: 'engine', engine: 'TideLab', xp: 30, title: 'Tide Lab', titleFr: 'Labo des marées', icon: 'Waves', tone: 'navy', note: 'Our river', noteFr: 'Notre rivière' },
       { id: 'workbook', kind: 'steps', set: 'workbook', xp: 20 },
       { id: 'quiz', kind: 'quiz', xp: 20 },
     ],
@@ -65,9 +67,9 @@ export const UNITS = [
     classroom: { course: 'y7-math', slug: 'U05_3' },
     tasks: [
       { id: 'lesson', kind: 'notes', xp: 25 },
-      { id: 'protractor', kind: 'engine', engine: 'Protractor', xp: 30, title: 'Protractor', titleFr: 'Rapporteur', icon: 'DraftingCompass', tone: 'sky' },
-      { id: 'workbook', kind: 'steps', set: 'workbook', xp: 25 },
-      { id: 'quads', kind: 'engine', engine: 'QuadCheck', xp: 20, title: 'Quadrilaterals', titleFr: 'Quadrilatères', icon: 'Diamond', tone: 'violet' },
+      { id: 'protractor', kind: 'engine', engine: 'Protractor', xp: 30, title: 'Protractor', titleFr: 'Rapporteur', icon: 'DraftingCompass', tone: 'sky', note: '8 angles', noteFr: '8 angles' },
+      { id: 'workbook', kind: 'steps', set: 'workbook', xp: 25, note: '7 problems', noteFr: '7 problèmes' },
+      { id: 'quads', kind: 'engine', engine: 'QuadCheck', xp: 20, title: 'Quadrilaterals', titleFr: 'Quadrilatères', icon: 'Diamond', tone: 'violet', note: '6 questions', noteFr: '6 questions' },
     ],
   },
   {

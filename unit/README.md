@@ -1,9 +1,14 @@
 # Units
 
 A unit works the way it does on Mr. Bowen's Dashboard (10 November 2026): it is a list
-of tasks chosen for that unit, each worth its own XP. The page shows the unit's XP out
-of 100, the one task to do next, and each task as a coloured tile with the XP it holds
-out of the XP it is worth.
+of tasks chosen for that unit, each worth its own XP.
+
+The page is laid out like the Dashboard's track page and unit card. A top bar has the
+class in its subject's colour (maths orange, science green) and the unit's XP. A banner
+in that colour shows the unit, its XP bar and one big button for the task to do next,
+with Pip the otter. Under it the tasks are coloured tiles grouped into numbered steps
+(Learn, Practice, Quiz), each tile with what is in it ("8 angles") and the XP it holds
+out of the XP it is worth. Coming back from a task, the XP just won pops up ("+12 XP").
 
 - A task's XP is its best score times the XP it is worth.
 - The tasks may offer more than 100 XP between them; the unit's XP stops at 100.

@@ -2,3 +2,12 @@
    built with the Dashboard's Tailwind theme (tailwind.unit.js), never PRA Learn's. */
 @import './src/index.css';
 @config './tailwind.unit.js';
+
+/* Pip's wave on the unit page (the same as in src/index.css). */
+@media (prefers-reduced-motion: no-preference) {
+  .pip-wave { animation: pip-wave 2.8s ease-in-out infinite; transform-origin: 50% 90%; }
+}
+@keyframes pip-wave {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-3deg); }
+}
