@@ -1,1 +1,0 @@
-import{r as e}from"./rolldown-runtime-XKyaHtl9.js";import{Zc as t}from"./vendor-DwddSC97.js";import{_ as n,y as r}from"./unit-DWRVjjI8.js";var i=e(t(),1);function a({langs:e,bilingual:t}={}){let a=r(e,t),[o,s]=(0,i.useState)(a[0]);return{lang:o,setLang:s,langs:a,toggleLang:a.length>1?()=>s(e=>n(a,e)):void 0}}export{a as t};
