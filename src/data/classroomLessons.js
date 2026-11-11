@@ -268,6 +268,11 @@ export const CLASSROOM_LESSONS = [
     subtitle: 'Is it alive? Spot it, name them, test it: organisms, the seven characteristics (MRS GREN) in a polar bear and a plant, and why a car is not alive',
   },
   {
+    course: 'y7-science', slug: 'U04_2', classKey: 'science:Year 7', unit: '4.2', teacher: 'Mr. Bowen',
+    title: 'Viruses',
+    subtitle: 'Is a virus alive? Look inside (protein coat, pegs, RNA, seen with an electron microscope), follow a flu virus into a cell (replication), and decide with the seven characteristics',
+  },
+  {
     course: 'y7-science', slug: 'U04_3', classKey: 'science:Year 7', unit: '4.3', teacher: 'Mr. Bowen',
     title: 'What Is a Species?',
     subtitle: 'Compare, name, test: two elephants, species and variation, and why a lion and a tiger are two species (fertile offspring)',

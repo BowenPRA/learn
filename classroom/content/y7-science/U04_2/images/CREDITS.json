@@ -1,0 +1,65 @@
+[
+  {
+    "file": "electron-microscope.jpg",
+    "name": "Scientist during work with Scanning Electron Microscope.jpg",
+    "title": "A scientist at a scanning electron microscope, the picture on the screens beside her",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Scientist_during_work_with_Scanning_Electron_Microscope.jpg",
+    "license": "CC BY 4.0",
+    "artist": "Gabriela P.",
+    "usage": "EM_PHOTOS (slide 5). The 960px Commons thumbnail (960x557; original 3582x2080), uncropped. Stands in for the book's photograph of a scientist in Jakarta (page 131)."
+  },
+  {
+    "file": "flu-in-cells.jpg",
+    "name": "Colorized transmission electron micrograph of Avian influenza A H5N1 viruses.jpg",
+    "title": "Bird-flu (influenza A H5N1) viruses, coloured gold, made inside cells, coloured green: a colourised transmission electron micrograph",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Colorized_transmission_electron_micrograph_of_Avian_influenza_A_H5N1_viruses.jpg",
+    "license": "Public domain (US CDC)",
+    "artist": "Cynthia Goldsmith, CDC",
+    "usage": "EM_PHOTOS (slide 5). The 960px Commons thumbnail (960x791; original 3336x2750), uncropped. The same kind of picture as the book's pages 131-132."
+  },
+  {
+    "file": "flu-virus.jpg",
+    "name": "Influenza virus particle color.jpg",
+    "title": "One influenza virus particle: the pegs (orange fringe), the coat and the RNA inside (purple), a false-coloured transmission electron micrograph",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Influenza_virus_particle_color.jpg",
+    "license": "Public domain (US CDC)",
+    "artist": "Cynthia Goldsmith; Dr Erskine L. Palmer, CDC",
+    "usage": "REAL_FLU (slide 7), ACTIVITY (slide 15) and the virus check (slide 16). The 960px Commons thumbnail (960x821; original 1663x1423) cropped to the particle (x 230-880, y 60-800)."
+  },
+  {
+    "file": "covid-leaving-cell.jpg",
+    "name": "SARS-CoV-2 scanning electron microscope image.jpg",
+    "title": "SARS-CoV-2 viruses (round, gold) coming out of the surface of a cell grown in a laboratory: a colourised scanning electron micrograph",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:SARS-CoV-2_scanning_electron_microscope_image.jpg",
+    "license": "CC BY 2.0",
+    "artist": "National Institute of Allergy and Infectious Diseases (NIAID)",
+    "usage": "REPLICATION (slide 12). The 960px Commons thumbnail (960x779; original 2116x1716), uncropped."
+  },
+  {
+    "file": "covid-drawing.jpg",
+    "name": "SARS-CoV-2 without background.png",
+    "title": "The CDC drawing of a SARS-CoV-2 virus: a grey ball with red spike proteins (the same drawing as the book's page 133)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:SARS-CoV-2_without_background.png",
+    "license": "Public domain (US CDC)",
+    "artist": "Alissa Eckert, MS; Dan Higgins, MAM (CDC)",
+    "usage": "COVID (slide 13). The 960px Commons thumbnail (960x964; original 1958x1966), flattened onto white."
+  },
+  {
+    "file": "covid-photo.jpg",
+    "name": "Novel Coronavirus SARS-CoV-2.jpg",
+    "title": "Real SARS-CoV-2 viruses, from a patient in the USA, seen with a transmission electron microscope (colourised): the spikes make a crown round each one",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Novel_Coronavirus_SARS-CoV-2.jpg",
+    "license": "CC BY 2.0",
+    "artist": "NIAID-RML",
+    "usage": "COVID (slide 13) and ACTIVITY (slide 15). The 960px Commons thumbnail (960x750; original 3060x2390), uncropped."
+  },
+  {
+    "file": "mosaic-leaf.jpg",
+    "name": "Tobacco mosaic virus symptoms tobacco.jpg",
+    "title": "A tobacco leaf with the pale and dark patches of tobacco mosaic virus, a virus that infects plant cells",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Tobacco_mosaic_virus_symptoms_tobacco.jpg",
+    "license": "CC BY 3.0 US",
+    "artist": "R.J. Reynolds Tobacco Company Slide Set (Bugwood.org, UGA1402027)",
+    "usage": "ACTIVITY (slide 15). The 960px Commons thumbnail (960x640; original 3072x2048) cropped to the top 600 px, which takes off the image number in the corner."
+  }
+]
