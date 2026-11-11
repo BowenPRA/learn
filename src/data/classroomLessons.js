@@ -267,6 +267,11 @@ export const CLASSROOM_LESSONS = [
     title: 'Characteristics of Living Organisms',
     subtitle: 'Is it alive? Spot it, name them, test it: organisms, the seven characteristics (MRS GREN) in a polar bear and a plant, and why a car is not alive',
   },
+  {
+    course: 'y7-science', slug: 'U04_3', classKey: 'science:Year 7', unit: '4.3', teacher: 'Mr. Bowen',
+    title: 'What Is a Species?',
+    subtitle: 'Compare, name, test: two elephants, species and variation, and why a lion and a tiger are two species (fertile offspring)',
+  },
 ]
 
 /** Where a classroom lesson opens: its own page, outside PRA Learn's hash routes.
