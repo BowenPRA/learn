@@ -173,6 +173,21 @@ function ClassCard({ group, lang, showClass, staff, newestCount }) {
  * otherwise (a student's home) each card shows the newest `newestCount` and opens the
  * rest on request. `showClass` names the class ('Year 7 Science') for staff.
  */
+/** The classroom games (CLASSROOM_GAMES), staff pages only: one card, each game a row
+ *  with its Plan link. The chip says "Game" where a lesson's says its unit. */
+export function ClassroomGameList({ games, lang }) {
+  const { t } = useT()
+  const tone = '#F5A623'
+  return (
+    <div className="card relative overflow-hidden lg:max-w-[calc(50%-0.5rem)]">
+      <span aria-hidden className="absolute inset-x-0 top-0 h-2" style={{ background: tone }} />
+      <div className="pt-2">
+        <Rows lessons={games.map((g) => ({ ...g, unit: t('classGame') }))} lang={lang} tone={tone} newestKey={null} plan />
+      </div>
+    </div>
+  )
+}
+
 export function ClassroomLessonList({ lessons, lang, showClass = false, staff = false, newestCount = 3 }) {
   const groups = classroomGroups(lessons)
   return (

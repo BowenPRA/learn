@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronRight, KeyRound, Layers, Presentation, Sparkles, Users } from 'lucide-react'
+import { ChevronRight, Gamepad2, KeyRound, Layers, Presentation, Sparkles, Users } from 'lucide-react'
 import { Loading, Notice, SectionHead, SubjectTile } from '../components/ui.jsx'
-import { ClassroomLessonList, classroomLessonsFor } from '../components/ClassroomLessons.jsx'
+import { ClassroomGameList, ClassroomLessonList, classroomLessonsFor } from '../components/ClassroomLessons.jsx'
+import { CLASSROOM_GAMES } from '../data/classroomLessons.js'
 import { UnitList, unitsFor } from '../components/UnitCards.jsx'
 import { api } from '../lib/api.js'
 import { useAuth } from '../lib/auth.jsx'
@@ -72,6 +73,13 @@ export default function TeacherHome() {
         <section className="mb-6 mt-10" aria-labelledby="h-class">
           <SectionHead id="h-class" icon={Presentation} tone="#2196E3" hint={t('classLessonsStaffHint')}>{t('classLessons')}</SectionHead>
           <ClassroomLessonList lessons={decks} lang={lang} showClass staff />
+        </section>
+      )}
+      {/* The classroom games (CLASSROOM_GAMES): staff only, they hold the answers. */}
+      {CLASSROOM_GAMES.length > 0 && (
+        <section className="mb-6 mt-10" aria-labelledby="h-games">
+          <SectionHead id="h-games" icon={Gamepad2} tone="#F5A623" hint={t('classGamesStaffHint')}>{t('classGames')}</SectionHead>
+          <ClassroomGameList games={CLASSROOM_GAMES} lang={lang} />
         </section>
       )}
     </main>

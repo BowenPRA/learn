@@ -44,6 +44,10 @@ function shape(path, mod) {
     // `vietnamese: false` takes VN off the switch. The Year 7 lessons are
     // English and French from Unit 4 (15 October 2026); older decks keep VN.
     vietnamese: meta.vietnamese !== false,
+    // `enFr: true` (with `french: true`) adds EN+FR to the switch: English with
+    // the French underneath, for a widget that prints both (Jeopardy). Everything
+    // else in the deck reads 'en+fr' as English.
+    enFr: meta.enFr === true,
     slides: data.slides || [],
     plan: data.plan || null,
   }

@@ -1,0 +1,62 @@
+[
+  {
+    "name": "study-and-relax.ogg",
+    "title": "File:Study And Relax by Kevin MacLeod.ogg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Study_And_Relax_by_Kevin_MacLeod.ogg",
+    "license": "CC BY 4.0",
+    "artist": "Kevin MacLeod",
+    "source": "Wikimedia Commons. CC BY, not public domain - the artist's name has to travel with it, which is why it is written here and in the teacher plan.",
+    "usage": "Thinking music while the 30-second clue timer runs, and the default track. Lofi: the artist describes it as a worn-out record with a mis-punched spindle hole, which is the warped-tape sound the genre is built on. Downloaded unedited; the widget only ever plays the opening 30 seconds and fades it out.",
+    "bytes": 3878032
+  },
+  {
+    "name": "lofi.mp3",
+    "title": "File:Lofi by Caden Currie.mp3",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Lofi_by_Caden_Currie.mp3",
+    "license": "CC BY 3.0",
+    "artist": "Caden Currie (the file's own metadata spells the surname 'Carrie'; the title and the artist's SoundCloud spell it 'Currie')",
+    "source": "Wikimedia Commons, from https://soundcloud.com/caden-currie-592396957/lofi",
+    "usage": "Thinking music while the clue timer runs. Straightforwardly a lofi composition - that is what the file is called and what its description says. Downloaded unedited.",
+    "bytes": 1411447
+  },
+  {
+    "name": "lift-motif.ogg",
+    "title": "File:Kevin MacLeod - Lift Motif.ogg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Kevin_MacLeod_-_Lift_Motif.ogg",
+    "license": "CC BY 3.0",
+    "artist": "Kevin MacLeod",
+    "source": "Wikimedia Commons. CC BY, not public domain - keep the attribution.",
+    "usage": "Thinking music while the clue timer runs, and the closest thing here to a quiz-show cue. Forty-four seconds of lift music: an ORIGINAL composition that does the job the television countdown does - polite, patient, faintly ridiculous - without reproducing the tune that does it, which is still in copyright. Downloaded unedited.",
+    "bytes": 827184
+  },
+  {
+    "name": "boss-battle.opus",
+    "title": "File:8-bit Music for GameDev - 03. Boss Battle.opus",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:8-bit_Music_for_GameDev_-_03._Boss_Battle.opus",
+    "license": "CC0",
+    "artist": "HydroGene",
+    "source": "Wikimedia Commons - part of the artist's '8-bit Music for GameDev' set, dedicated to the public domain for use in games",
+    "usage": "Thinking music while the clue timer runs. Chiptune boss music: the heavy one, for the 500s. Downloaded unedited.",
+    "bytes": 2033216
+  },
+  {
+    "name": "time-attack.ogg",
+    "title": "File:Komiku - 44 - Time Attack against the universe.ogg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Komiku_-_44_-_Time_Attack_against_the_universe.ogg",
+    "license": "CC0",
+    "artist": "Komiku",
+    "source": "Wikimedia Commons - from Komiku's public-domain game-music catalogue",
+    "usage": "Thinking music while the clue timer runs. Forty seconds long, which is the whole track and barely longer than the countdown itself. Downloaded unedited.",
+    "bytes": 882541
+  },
+  {
+    "name": "phonk.opus",
+    "title": "File:WhiteWhyne - current (Phonk x Synthwave Instrumental, Dark & Atmospheric Beats).opus",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:WhiteWhyne_-_current_(Phonk_x_Synthwave_Instrumental,_Dark_%26_Atmospheric_Beats).opus",
+    "license": "CC BY 3.0",
+    "artist": "WhiteWhyne",
+    "source": "Wikimedia Commons. CC BY, not public domain - keep the attribution.",
+    "usage": "Thinking music while the clue timer runs. Phonk and synthwave, which is the genre this age group actually listens to - the reason it is here at all. Downloaded unedited.",
+    "bytes": 2282187
+  }
+]

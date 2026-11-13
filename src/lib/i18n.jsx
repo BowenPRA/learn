@@ -67,6 +67,9 @@ const S = {
   openLesson: ['Open: {title}', 'Mở bài: {title}'],
   nFromClass: ['{n} from class', '{n} bài trên lớp'],
   classLessonsStaffHint: ['The classroom slides, exactly as taught. Students in the year group open them from their home page; they are always open.', 'Bài giảng trên lớp, đúng như khi dạy. Học viên khối đó mở từ trang chủ của các em; bài luôn mở.'],
+  classGames: ['Classroom games', 'Trò chơi trên lớp'],
+  classGamesStaffHint: ['For the projector. Staff only: students cannot open them, because the answers are inside.', 'Dùng với máy chiếu. Chỉ giáo viên mở được: học viên không mở được, vì đáp án nằm sẵn trong trò chơi.'],
+  classGame: ['Game', 'Trò chơi'],
   // Lessons from class, by subject and book unit (10 Nov 2026: 55 Year 7 lessons)
   classUnit: ['Unit {n}', 'Chương {n}'],
   classCount1: ['1 lesson', '1 bài'],

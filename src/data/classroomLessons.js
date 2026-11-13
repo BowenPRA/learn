@@ -279,6 +279,21 @@ export const CLASSROOM_LESSONS = [
   },
 ]
 
+// Games the teacher runs on the projector, from classroom/content/games/<slug>/.
+// STAFF ONLY: a game holds every answer, so these are never in a student's list,
+// and classroom/main.jsx sends anyone but staff back to the home page. The teacher
+// home lists them under "Classroom games". Jeopardy moved here from
+// BowenPRA/classroom on 13 Nov 2026 (Bowen: all 14 boards, staff only).
+export const CLASSROOM_GAMES = [
+  {
+    course: 'games', slug: 'G02_jeopardy',
+    title: 'Jeopardy',
+    titleVn: 'Jeopardy',
+    subtitle: '14 boards: ten Year 7 (Maths and Science units, the newest in English and French), Kindergarten & Year 1, Year 1 pictures, and two Teens boards',
+    subtitleVn: '14 bảng: mười bảng Year 7 (các chương Toán và Khoa học, bảng mới nhất có tiếng Anh và tiếng Pháp), Mẫu giáo & Year 1, Year 1 bằng hình, và hai bảng cho lớp Teens',
+  },
+]
+
 /** Where a classroom lesson opens: its own page, outside PRA Learn's hash routes.
  *  The address's ?demo travels with it, so the demo stays the demo. */
 export const classroomHref = (lesson, search = '') =>

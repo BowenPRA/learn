@@ -16,7 +16,7 @@ import './deck.css'
 import Deck from './src/components/Deck.jsx'
 import { getCourse, hasLesson, loadLesson } from './content/registry.js'
 import { useViewer } from './viewer.js'
-import { CLASSROOM_LESSONS } from '../src/data/classroomLessons.js'
+import { CLASSROOM_GAMES, CLASSROOM_LESSONS } from '../src/data/classroomLessons.js'
 
 // Mr. Bowen's phone remote (the QR on a deck's "Phone remote" panel opens
 // /classroom/#/remote/<room>). Its own chunk, as in the classroom.
@@ -52,9 +52,13 @@ function Waiting({ failed = false, onRetry }) {
   )
 }
 
+/** A game from CLASSROOM_GAMES: staff only, because it holds its own answers. */
+const isGame = (courseId, slug) => CLASSROOM_GAMES.some((g) => g.course === courseId && g.slug === slug)
+
 /** In src/data/classroomLessons.js, with a course in courses.js and a folder in content/. */
 const canOpen = (courseId, slug) =>
-  CLASSROOM_LESSONS.some((l) => l.course === courseId && l.slug === slug) && Boolean(getCourse(courseId)) && hasLesson(courseId, slug)
+  (CLASSROOM_LESSONS.some((l) => l.course === courseId && l.slug === slug) || isGame(courseId, slug))
+  && Boolean(getCourse(courseId)) && hasLesson(courseId, slug)
 
 /** The lesson's code, downloaded once `enabled`: [{ lesson } | { failed: true } | null while loading, retry]. */
 function useLesson(courseId, slug, enabled) {
@@ -73,11 +77,13 @@ function useLesson(courseId, slug, enabled) {
   return [state.key === key ? state.value : null, () => setAttempt((n) => n + 1)]
 }
 
-/** A deck, for anyone signed in to PRA Learn (a student or staff, or demo mode). */
+/** A deck, for anyone signed in to PRA Learn (a student or staff, or demo mode).
+ *  A game opens for staff only; anyone else goes back to the PRA Learn home. */
 function LessonView() {
   const { courseId, slug } = useParams()
   const viewer = useViewer()
-  const ok = canOpen(courseId, slug)
+  const game = isGame(courseId, slug)
+  const ok = canOpen(courseId, slug) && (!game || viewer === 'checking' || viewer === 'staff')
   const [got, retry] = useLesson(courseId, slug, ok && viewer !== 'out' && viewer !== 'checking')
   // The browser tab names the lesson: "Tides · PRA Learn".
   const title = got?.lesson?.title || ''

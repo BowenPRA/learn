@@ -6,6 +6,9 @@
 //   vn  Vietnamese   every bilingual course, unless the lesson sets
 //                    `meta.vietnamese: false` (Year 7 from Unit 4, 15 Oct 2026)
 //   fr  French       lessons that set `meta.french: true`
+//   en+fr            English with the French underneath, on lessons that also
+//                    set `meta.enFr: true`. tr() and field() read it as English,
+//                    so only a widget that checks for it (isEnFr) shows both.
 
 /** The languages a deck offers, in toggle order. */
 export function deckLangs(course, lesson) {
@@ -13,8 +16,12 @@ export function deckLangs(course, lesson) {
   const langs = ['en']
   if (lesson?.vietnamese !== false) langs.push('vn')
   if (lesson?.french) langs.push('fr')
+  if (lesson?.french && lesson?.enFr) langs.push('en+fr')
   return langs
 }
+
+/** Whether `lang` is the EN+FR setting (English first, French under it). */
+export const isEnFr = (lang) => lang === 'en+fr'
 
 /** Choose one of three strings for `lang`, falling back to English. */
 export function tr(lang, en, vn, fr) {
