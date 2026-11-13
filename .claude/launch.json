@@ -1,0 +1,15 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "learn-dev",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": [
+        "/c",
+        "cd /d C:/Users/sbowe/learn && npx vite --port 5201 --strictPort"
+      ],
+      "port": 5201,
+      "url": "http://localhost:5201"
+    }
+  ]
+}

@@ -14,6 +14,7 @@
     "check:lessons": "node scripts/check-lessons.mjs",
     "audit:svg": "node scripts/svg-audit.mjs",
     "check:deck": "node scripts/deck-check.mjs",
+    "check:features": "node scripts/check-features.mjs",
     "predeploy": "node scripts/check-env.mjs && vite build --mode production",
     "deploy": "gh-pages -d dist -r https://BowenPRA@github.com/BowenPRA/learn.git"
   },

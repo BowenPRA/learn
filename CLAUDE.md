@@ -15,6 +15,23 @@ One Vite build, three pages:
 | Mr Bowen's classroom decks, `/classroom/#/lesson/<course>/<slug>` | `classroom/` | `classroom/README.md`, then the lesson rules below |
 | Units (the Dashboard idea, streamlined), `/unit/` | `unit/` | `unit/README.md` |
 
+## Before building or answering "does it have X"
+
+- **`docs/FEATURES.md` is the map of what exists.** Read it before saying something is
+  missing or starting to build it, then search the code. When you add, rename or remove
+  a feature, change its line in the same piece of work (`npm run check:features`).
+- **This folder is the lessons environment** (since 13 November 2026): decks, units,
+  games, quizzes and lesson packs are worked on from here. Invoices, reports,
+  attendance, the public website and the inbox belong to the admin environment
+  (`C:\Users\sbowe\Desktop\Admin Email`); if a request is really one of those, say so
+  instead of doing it from here.
+- **`docs/THE-CURRENT.md` lists everything PRA Learn shares with The Current** (the
+  database, logins, the class rule, teachers' lesson requests). Read it before touching
+  any of those.
+- The old classroom repo (`C:\Users\sbowe\code\classroom`) and the Dashboard
+  (`C:\Users\sbowe\Dashboard`) are read-only sources. Bring a piece over only when
+  Bowen asks; never edit them.
+
 ## Rules for the whole repo
 
 - **The repo is public.** No student's name or photo, no book page, Workbook exercise,
