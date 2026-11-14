@@ -1,9 +1,9 @@
 // How a task looks on the unit page: its picture and its colour (a tile's face and the
 // darker edge under it, as on the Dashboard). A task takes its kind's look unless
 // src/data/units.js gives it its own `icon` or `tone`.
-import { ClipboardCheck, Diamond, DraftingCompass, FileText, FlaskConical, Languages, Lightbulb, NotebookPen, Puzzle, Shapes, Waves } from 'lucide-react'
+import { ClipboardCheck, Diamond, DraftingCompass, FileText, FlaskConical, Languages, Lightbulb, NotebookPen, PenLine, Puzzle, Scissors, Search, Shapes, Waves } from 'lucide-react'
 
-const ICONS = { ClipboardCheck, Diamond, DraftingCompass, FileText, FlaskConical, Languages, Lightbulb, NotebookPen, Puzzle, Shapes, Waves }
+const ICONS = { ClipboardCheck, Diamond, DraftingCompass, FileText, FlaskConical, Languages, Lightbulb, NotebookPen, PenLine, Puzzle, Scissors, Search, Shapes, Waves }
 
 const TONES = {
   slate: ['#64748b', '#475569'],
@@ -23,6 +23,7 @@ const KIND = {
   engine: { icon: 'Puzzle', tone: 'sky' },
   steps: { icon: 'NotebookPen', tone: 'orange' },
   quiz: { icon: 'ClipboardCheck', tone: 'blue' },
+  writing: { icon: 'PenLine', tone: 'violet' },
 }
 
 export function taskLook(task) {

@@ -25,6 +25,11 @@ const Arcade = lazy(() => import('./app/Arcade.jsx'))
 import Words from './app/Words.jsx'
 import Workbook from './app/Workbook.jsx'
 
+// Timed writing and My Writing load only when opened.
+const WritingTask = lazy(() => import('./app/writing/WritingTask.jsx'))
+const MyWriting = lazy(() => import('./app/writing/MyWriting.jsx'))
+const ClassReader = lazy(() => import('./app/writing/ClassReader.jsx'))
+
 const DATA = import.meta.glob('./src/data/*/*/data.js')
 const SETS = import.meta.glob('./content/*/*/*.js')
 
@@ -113,12 +118,13 @@ function UnitRoute() {
   if (!got.data) return <ToLearn />
 
   const data = got.data
-  const langs = langsFor({ bilingual: true, french: true }, data)
+  // Year 7 is English and French; the other tracks (Upper Secondary English) English and Vietnamese.
+  const langs = langsFor({ bilingual: true, french: track.startsWith('Y7_') }, data)
   const view = { ...u, groupLabel: className(u.classKey, 'en') }
   // What is in each task, in a word or two, for its tile.
   const count = (n, en, fr) => (n ? (lang === 'fr' ? `${n} ${fr}` : `${n} ${en}`) : '')
   const notes = Object.fromEntries(u.tasks.map((t) => [t.id,
-    (lang === 'fr' ? t.noteFr || t.note : t.note)
+    (lang === 'fr' ? t.noteFr || t.note : lang === 'vn' ? t.noteVn || t.note : t.note)
     || (t.kind === 'notes' ? count(data.notes?.length, 'slides', 'diapos')
       : t.kind === 'words' ? count((data.realWords || []).filter((w) => w.isReal !== false).length, 'words', 'mots')
         : t.kind === 'quiz' ? count(data.assessment?.questions?.length, 'questions', 'questions')
@@ -145,7 +151,7 @@ function UnitRoute() {
   if (!taskId) {
     return (
       <UnitHome unit={view} records={records} notes={notes} fixes={fixes} gold={gold} onArcade={() => navigate('/arcade')} gained={gained} onGainSeen={clearGain} lang={lang} langs={langs} error={error}
-        onLang={() => setLang((l) => (l === 'en' ? 'fr' : 'en'))}
+        onLang={() => setLang((l) => langs[(langs.indexOf(l) + 1) % langs.length] || 'en')}
         onOpen={(id) => navigate(`/${track}/${unitId}/${id}`)} onBack={() => navigate(`/${track}`)} />
     )
   }
@@ -157,6 +163,14 @@ function UnitRoute() {
   if (task.kind === 'words') {
     return <Words unit={data} track={track} unitId={unitId} task={task} record={rec}
       onSave={(patch) => save(task.id, patch)} onQuit={toUnit} />
+  }
+  if (task.kind === 'writing') {
+    return (
+      <Suspense fallback={<Spinner />}>
+        <WritingTask unit={u} data={data} task={task} langs={langs}
+          onSave={(patch) => save(task.id, patch)} onQuit={toUnit} onOpenEssay={(id) => navigate(`/writing/${id}`)} />
+      </Suspense>
+    )
   }
   if (task.kind === 'steps') {
     const set = got.sets[task.id]
@@ -190,6 +204,21 @@ function ArcadeRoute() {
   return <Arcade onBack={() => (window.history.length > 1 ? navigate(-1) : home())} />
 }
 
+function WritingRoute() {
+  const { id } = useParams()
+  const navigate = useNavigate()
+  return <MyWriting id={id} onOpen={(eid) => navigate(eid ? `/writing/${eid}` : '/writing')} onBack={() => (id ? navigate('/writing') : home())} />
+}
+
+/** A teacher reading a class's writing: one essay, or one student's writing over time. */
+function ClassWritingRoute() {
+  const { classKey, id, studentId } = useParams()
+  const navigate = useNavigate()
+  const base = `/writing/class/${encodeURIComponent(classKey)}`
+  return <ClassReader key={classKey} classKey={classKey} id={id} studentId={studentId}
+    onOpen={(eid) => navigate(`${base}/${eid}`)} onStudent={(sid) => navigate(`${base}/student/${sid}`)} />
+}
+
 function CourseRoute() {
   const { track } = useParams()
   const navigate = useNavigate()
@@ -204,6 +233,10 @@ createRoot(document.getElementById('root')).render(
     <HashRouter>
       <Routes>
         <Route path="/arcade" element={<SignedIn><Suspense fallback={<Spinner />}><ArcadeRoute /></Suspense></SignedIn>} />
+        <Route path="/writing" element={<SignedIn><Suspense fallback={<Spinner />}><WritingRoute /></Suspense></SignedIn>} />
+        <Route path="/writing/:id" element={<SignedIn><Suspense fallback={<Spinner />}><WritingRoute /></Suspense></SignedIn>} />
+        <Route path="/writing/class/:classKey/student/:studentId" element={<SignedIn><Suspense fallback={<Spinner />}><ClassWritingRoute /></Suspense></SignedIn>} />
+        <Route path="/writing/class/:classKey/:id" element={<SignedIn><Suspense fallback={<Spinner />}><ClassWritingRoute /></Suspense></SignedIn>} />
         <Route path="/:track" element={<SignedIn><CourseRoute /></SignedIn>} />
         <Route path="/:track/:unit" element={<SignedIn><UnitRoute /></SignedIn>} />
         <Route path="/:track/:unit/:task" element={<SignedIn><UnitRoute /></SignedIn>} />

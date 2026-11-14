@@ -13,7 +13,7 @@ out of the XP it is worth. Coming back from a task, the XP just won pops up ("+1
 - A task's XP is its best score times the XP it is worth.
 - The tasks may offer more than 100 XP between them; the unit's XP stops at 100.
 - A unit is finished at 100 XP, or at 80 XP with its quiz done (80 alone when it has no quiz).
-- Nothing is locked. There is no bonus XP, no arcade and no AI marking.
+- Nothing is locked. There is no bonus XP. The one thing the AI marks is timed writing (below).
 
 The first version (6 November 2026) gave every unit the same five parts. That is gone;
 Tides keeps its five as five tasks, with the same ids, so progress saved before still counts.
@@ -56,6 +56,7 @@ A task's `kind` in `src/data/units.js`:
 | `engine` | An interactive task with its own screen | `app/engines.js` (one entry a task) |
 | `steps` | Step-by-step problems in the Workbook's question types, all new | `content/<TRACK>/<UNIT>/<set>.js`, played by `src/stepPractice/` |
 | `quiz` | The end-of-unit quiz | `assessment` in the unit's `data.js`, played by `src/tasks/Assessment.jsx` |
+| `writing` | Timed writing, AI-marked, then the corrections; kept in My Writing | `writing` in the unit's `data.js`, played by `app/writing/WritingTask.jsx` |
 
 The classroom deck is not a task: it stays exactly as taught, and the unit page links to
 it ("From the classroom").
@@ -67,6 +68,7 @@ it ("From the classroom").
 | Science 3.4 Tides | Lesson 20, Key words 10, Tide Lab 30, Workbook 20, Quiz 20 |
 | Maths 5.3 Drawing Lines and Quadrilaterals | Lesson 25, Protractor 30, Workbook 25, Quadrilaterals 20 |
 | Science 5.2 Comparing Metals and Non-metals (`hidden`: no lesson yet) | Key words 20, Metal or non-metal? 20, Test it 15, Mystery substances 25, Quiz 20 |
+| Upper Secondary English 1 Complete Sentences | Lesson 15, Key words 10, Grammar edit 20, Find & Fix 15, Quiz 15, Timed writing 30 |
 
 Maths 5.3:
 
@@ -83,6 +85,54 @@ Maths 5.3:
 - **Quadrilaterals** (`src/tasks/ZeroLine.jsx`, the unit's `quads`): draw a quadrilateral
   from a sketch, measure its fourth angle, check the four add up to 360°; then a square
   and a quadrilateral on paper, which can be skipped.
+
+## Timed writing and My Writing
+
+Added 14 November 2026 for the Upper Secondary English track (`UPPER_ENG`, class
+`english:Upper Secondary`), from the Dashboard's GED essay task. Every English unit ends
+with one.
+
+- **The task** (`app/writing/WritingTask.jsx`): a prompt from the unit's bank, about 5
+  minutes to plan with the questions for that kind of writing, then the writing box with
+  sentence frames beside it. 30 minutes at the least (`writing.minutes`). Paste, cut, copy
+  and drag are blocked and spell check is off; leaving the page, paste tries and big
+  blocks of text arriving at once are counted and shown with the essay. The clock is the
+  server's: it starts when the essay starts and keeps going if the student leaves; at
+  0:00 the writing is handed in as it is, and a save after the deadline hands in what was
+  last saved.
+- **The mark**: the `learn-grade-essay` Edge Function (Gemini), three parts 0-4 (ideas,
+  organisation, language), 12 in all, with the code caps in its `marking.js`. Each report
+  also counts the mistakes in the unit's own grammar (`writing.focus`).
+- **The corrections** (`app/writing/RevisionWorkshop.jsx`): one sentence at a time, the
+  student retypes it until it matches. The task's XP is 8 parts the mark and 2 parts the
+  corrections.
+- **My Writing** (`/unit/#/writing`, `app/writing/MyWriting.jsx`): the marks as a line
+  over time, the mistakes that keep coming back, unfinished writing and every essay with
+  its report and the teacher's note. The student home page has a card for it.
+- **Saved** in `learn_essays` (`supabase/learn-essays.sql`), one row an attempt, through
+  `../src/lib/essays.js`. Demo mode keeps essays in the browser, marks them with a
+  stand-in that finds a few mistakes by rule, and starts with three sample essays.
+- **Teachers** see a class's writing on the class page (`../src/components/ClassWriting.jsx`):
+  a row a student, a column a prompt, flags and notes marked, "Needs a look" and "No note
+  yet" filters. A cell opens the reader (`/unit/#/writing/class/<class>/<essay>`,
+  `app/writing/ClassReader.jsx`): the essay and report, the teacher's own mark (0-12, or the
+  AI's) and a note the student reads in My Writing, and Previous / Next through the class's
+  essays on the same prompt. A student's name opens their writing over time
+  (`.../student/<id>`). Saved through `learn_essay_note`.
+
+A unit's `writing` in its `data.js`:
+
+```js
+writing: {
+  type: 'narrative',            // narrative, descriptive, explanatory, argument, letter, summary (app/writing/frames.js)
+  minutes: 30, minWords: 150, paragraphs: 3,
+  focus: { label: 'Complete sentences', labelVn: '…', look: 'fragments, run-on sentences and comma splices' },
+  frames: [],                   // optional extra frames { stage, text, textVn }
+  prompts: [{ id: 'u1w1', title, titleVn, task, taskVn, guidelines: [], guidelinesVn: [] }],
+}
+```
+
+A prompt's `id` is saved with every essay: never change it once used.
 
 Science 5.2 has no classroom deck yet, so it has no Lesson task and stays `hidden`.
 Its three step-practice sets (`content/Y7_SCI/U05_2/`) follow the Workbook's 5.2

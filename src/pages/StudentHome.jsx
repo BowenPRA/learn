@@ -6,6 +6,7 @@ import { ClassroomLessonList, classroomLessonsFor, classroomLink, classroomTitle
 import { totalXP, unitsFor, useUnitProgress } from '../components/UnitCards.jsx'
 import { UNIT_XP, nextTaskOf, taskTitle, unitHref, unitKey, unitXP } from '../data/units.js'
 import Pip from '../components/Pip.jsx'
+import WritingCard from '../components/WritingCard.jsx'
 import { PackCard, nextPart, packDone, packStars, partLabels, partPath, partState, todayIso, weekEndIso } from '../components/packs.jsx'
 import { api } from '../lib/api.js'
 import { useT } from '../lib/i18n.jsx'
@@ -176,6 +177,9 @@ export default function StudentHome() {
           ))}
         </div>
       )}
+
+      {/* Timed writing is kept and read back in My Writing: its own card, high on the page. */}
+      {units.some((u) => u.tasks.some((tk) => tk.kind === 'writing')) && <WritingCard lang={lang} />}
 
       {late.length > 0 && (
         <section className="mb-8" aria-labelledby="h-late">

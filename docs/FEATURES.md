@@ -20,6 +20,7 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **Late / This week / Coming up / Done**: lesson packs sorted by due date. `src/pages/StudentHome.jsx`
 - **My courses**: the student's units as cards with XP and "n of N done". `src/components/UnitCards.jsx`
 - **Arcade banner**: the way into the Arcade from the home page. `src/pages/StudentHome.jsx`
+- **My Writing card**: latest mark and its direction, writing left unfinished, teacher notes; shown when a unit has timed writing. `src/components/WritingCard.jsx`
 - **Lessons from class**: the year group's classroom decks, newest 3 per subject, then all by unit. `src/components/ClassroomLessons.jsx`
 - **Lesson page**: one card per part (Review, Practice) with progress and the next part marked. `src/pages/PackPage.jsx` · `/p/:slug`
 - **Guided review**: back through the lesson's slides, a check question to go on. `src/pages/ReviewPlayer.jsx`, `src/pack/Slide.jsx`, `src/pack/Check.jsx` · `/p/:slug/review`
@@ -29,7 +30,7 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **My results**: the student's own stars per part, no class ranking. `src/pages/MyResults.jsx` · `/me`
 - **Language switch (EN/VI)**: the portal's own words; content carries its own `…Vn` twins. `src/lib/i18n.jsx`, `src/components/ui.jsx`
 - **Pip the otter**: mascot with moods (happy, calm, sad, surprised, dizzy, asleep). `src/components/Pip.jsx`, `src/components/pip/storyCharacter.js`
-- **Demo mode**: sample Year 5 class and four packs in the browser; no .env, or `?demo`. `src/lib/api.js`, `src/lib/demo/backend.js`, `src/lib/demo/packY5Negatives.js`
+- **Demo mode**: sample Year 5 class and four packs in the browser, and an Upper Secondary English class with made-up writing; no .env, or `?demo`. `src/lib/api.js`, `src/lib/demo/backend.js`, `src/lib/demo/packY5Negatives.js`
 - **Demo band**: strip on every page in demo mode, with a reset. `src/components/ui.jsx`
 - **Classes PRA Learn is for**: English, Maths, Science, Technology, Year 1 up; others hidden. `src/data/subjects.js`
 
@@ -48,6 +49,8 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **Logins on the class page**: make logins, Reset code, Block / Unblock, last seen. `src/pages/ClassView.jsx`
 - **Login cards**: print name, login name, secret code and address; Done forgets them. `src/pages/LoginCards.jsx`, `src/lib/cards.js` · `/t/:classKey/cards`
 - **Unit XP table**: a class's XP task by task, one table a unit. `src/components/UnitXPTable.jsx`
+- **Writing (class page)**: a class's timed writing, a row a student and a column a prompt, with flags, notes, averages and filters (needs a look, no note yet). `src/components/ClassWriting.jsx`
+- **Writing reader (teacher)**: one essay with the AI's report, the teacher's own mark and note, Previous and Next through the class on the same prompt; one student's writing over time. `unit/app/writing/ClassReader.jsx` · `/unit/#/writing/class/<class>/<essay>`, `/unit/#/writing/class/<class>/student/<id>`
 - **Class gate**: a class page for a non-PRA Learn class goes home. `src/App.jsx`
 - **Teacher's plan**: staff-only printable plan of a deck (one A4 page). `classroom/src/pages/Plan.jsx` · `/classroom/#/plan/<course>/<slug>`
 
@@ -101,6 +104,14 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **Quadrilaterals (QuadCheck)**: draw from a sketch, fourth angle, 360° check. `unit/src/tasks/ZeroLine.jsx`
 - **Task kind steps (Workbook)**: fresh Workbook-style problems on the step engine. `unit/app/Workbook.jsx`, `unit/content/<TRACK>/<UNIT>/`
 - **Task kind quiz**: end-of-unit quiz. `unit/src/tasks/Assessment.jsx`
+- **Task kind writing (Timed writing)**: prompt bank, 5-minute plan, 30+ minutes against the server's clock, paste blocked, leaving the page counted, AI mark /12, then the corrections. `unit/app/writing/WritingTask.jsx` · `/unit/#/<TRACK>/<UNIT>/writing`
+- **Revision workshop (corrections)**: the student retypes each sentence the marker corrected. `unit/app/writing/RevisionWorkshop.jsx`, `unit/app/writing/revision.js`
+- **Sentence frames and plan**: frames and plan questions by kind of writing (story, description, explanation, argument, letter, summary). `unit/app/writing/frames.js`, `unit/app/writing/Planner.jsx`
+- **Essay report**: mark, three parts, unit focus, next step, caps, flags, teacher note, mistakes marked in the text. `unit/app/writing/EssayReport.jsx`, `unit/app/writing/look.js`
+- **My Writing**: marks over time, mistakes that keep coming back, unfinished writing, every essay. `unit/app/writing/MyWriting.jsx` · `/unit/#/writing`, `/unit/#/writing/<id>`
+- **Essay store**: save, hand in, mark, revise; demo marker and sample history. `src/lib/essays.js`
+- **Grammar edit**: choose the right word inside a passage (engine GrammarEdit). `unit/src/tasks/GrammarEdit.jsx`
+- **Find & Fix**: click the mistakes in a passage and type the fixes (engine FindFix). `unit/src/tasks/Proofread.jsx`, `unit/src/utils/proofread.js`
 - **Fix N / Fix my mistakes**: redo only the wrong answers of a finished lesson. `unit/src/utils/notesReview.js`
 - **Unit data**: a unit's meta, notes, words, quiz and engine pools. `unit/src/data/<TRACK>/<UNIT>/data.js`
 - **Unit audio and pictures**: recordings and images by track and unit. `public/audio/`, `public/images/`
@@ -150,6 +161,8 @@ runs; nothing in this repo runs SQL against the live database.
 - **learn-schema.sql**: learn_accounts, learn_packs, learn_progress, bucket learn-packs, RLS, the portal's `learn_*` functions. `supabase/learn-schema.sql`
 - **learn-names-2026-11-06.sql**: login name rule `^[a-z0-9]{2,20}$` (nicknames). `supabase/learn-names-2026-11-06.sql`
 - **learn-units.sql**: learn_unit_progress, `learn_unit_save`, `learn_unit_progress_class`; upgrades the 6 Nov version. `supabase/learn-units.sql`
+- **learn-essays.sql**: learn_essays (every attempt kept), `learn_essay_save` (server clock, late hand-in), `learn_essay_revise`, `learn_essay_note`. `supabase/learn-essays.sql`
+- **learn-grade-essay function**: the AI marker; writes the mark itself; needs the GEMINI_API_KEY secret. `supabase/functions/learn-grade-essay/`
 - **learn-arcade.sql**: learn_arcade_wallet, learn_arcade_scores, `learn_arcade_spend`, `learn_arcade_score`, `learn_arcade_board`. `supabase/learn-arcade.sql`
 - **Test stand-ins**: fake Supabase and The Current for PGlite; first units version. `tests/sql/stubs.sql`, `tests/sql/learn-units-v1.sql`
 
@@ -199,6 +212,7 @@ Units (`src/data/units.js`), in order:
 - **Science 3.4 Tides**: Lesson 20, Key words 10, Tide Lab 30, Workbook 20, Quiz 20. `unit/src/data/Y7_SCI/U03_4/data.js`
 - **Maths 5.3 Drawing Lines and Quadrilaterals**: Lesson 25, Protractor 30, Workbook 25, Quadrilaterals 20. `unit/src/data/Y7_MATH/U05_3/data.js`
 - **Science 5.2 Comparing Metals and Non-metals** (hidden): Key words 20, Metal or non-metal? 20, Test it 15, Mystery 25, Quiz 20. `unit/src/data/Y7_SCI/U05_2/data.js`
+- **Upper Secondary English 1 Complete Sentences**: Lesson 15, Key words 10, Grammar edit 20, Find & Fix 15, Quiz 15, Timed writing 30. `unit/src/data/UPPER_ENG/U01/data.js`
 
 Lesson packs: one converted pack (Year 5 Maths, `packs/`) and three hand-made demo packs
 on negative numbers (`src/lib/demo/packY5Negatives.js`).

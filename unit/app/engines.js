@@ -58,4 +58,18 @@ export const ENGINES = {
     pool: (u) => u.quads,
     props: usual,
   },
+  // Upper Secondary English: choose the right form inside a short passage.
+  GrammarEdit: {
+    nativeMax: 20,
+    component: task('GrammarEdit'),
+    pool: (u) => ({ exercises: u.grammarEdit || [] }),
+    props: ({ pool, saved, onComplete, onQuit }) => ({ pool, savedData: saved || {}, onComplete, onQuit }),
+  },
+  // Upper Secondary English: find the mistakes in a passage and type the fixes.
+  FindFix: {
+    nativeMax: 10,
+    component: task('Proofread'),
+    pool: (u) => u.proofread || [],
+    props: usual,
+  },
 }

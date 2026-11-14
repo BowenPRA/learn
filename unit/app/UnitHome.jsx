@@ -20,6 +20,7 @@ const STEPS = [
   { id: 'learn', kinds: ['notes', 'words'], name: ['Learn', 'Apprendre'] },
   { id: 'practice', kinds: ['engine', 'steps'], name: ['Practice', 'S’entraîner'] },
   { id: 'quiz', kinds: ['quiz'], name: ['Quiz', 'Quiz'] },
+  { id: 'write', kinds: ['writing'], name: ['Write', 'Écrire'] },
 ]
 const stepOf = (task) => task.step || STEPS.find((s) => s.kinds.includes(task.kind))?.id || 'practice'
 
@@ -139,7 +140,7 @@ export default function UnitHome({ unit, records, notes = {}, fixes = {}, gold =
           )}
           {langs.length > 1 && (
             <button type="button" onClick={onLang} className="inline-flex h-11 min-w-[44px] shrink-0 items-center justify-center rounded-xl border-2 border-slate-200 dark:border-slate-700 px-2.5 text-xs font-black uppercase tracking-widest text-slate-500 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
-              {lang === 'fr' ? 'FR' : 'EN'}
+              {lang === 'fr' ? 'FR' : lang === 'vn' ? 'VN' : 'EN'}
             </button>
           )}
           <button type="button" onClick={toggleDark} aria-label={tr(lang, 'Light or dark', null, 'Clair ou sombre')} className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">

@@ -148,7 +148,8 @@ export const demo = {
     try { sessionStorage.removeItem(WHO) } catch { /* ignore */ }
     tell()
   },
-  reset() { db = seed(); persist() },
+  // Start over also forgets the demo's timed writing and unit progress (src/lib/essays.js, src/lib/unitProgress.js).
+  reset() { db = seed(); persist(); for (const k of ['learn-demo-essays', 'learn-demo-class-essays', 'learn-demo-units']) { try { localStorage.removeItem(k) } catch { /* private window */ } } },
 
   async me(session) {
     if (!session) return null
@@ -203,6 +204,7 @@ export const demo = {
     const logins = db.students.filter((s) => s.login === 'on').length
     return [
       { class_key: 'math:Year 5', packs: db.packs.length, students: db.students.length, logins },
+      { class_key: 'english:Upper Secondary', packs: 0, students: db.students.length, logins }, // Upper Secondary English: units and timed writing only
       { class_key: 'english:Year 7', packs: 0, students: 9, logins: 0 },
       { class_key: 'wellbeing:Year 7', packs: 0, students: 9, logins: 0 }, // hidden: not a PRA Learn area
       { class_key: 'math:Kindergarten', packs: 0, students: 8, logins: 0 }, // hidden: below Year 1
@@ -211,6 +213,8 @@ export const demo = {
 
   async classOverview(classKey) {
     load()
+    // The Upper Secondary English class has the same twelve students and no packs: its work is units and timed writing.
+    if (classKey === 'english:Upper Secondary') return wait({ class_key: classKey, students: db.students.map((s) => ({ ...s })), packs: [], progress: [] })
     if (classKey !== 'math:Year 5') return { class_key: classKey, students: [], packs: [], progress: [] }
     return wait({
       class_key: classKey,

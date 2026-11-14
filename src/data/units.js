@@ -29,6 +29,7 @@ const KIND_TITLES = {
   engine: ['Practice', 'Luyện tập', 'Entraînement'],
   steps: ['Workbook', 'Bài tập', 'Cahier'],
   quiz: ['Quiz', 'Kiểm tra', 'Quiz'],
+  writing: ['Timed writing', 'Viết có giờ', 'Écriture chronométrée'],
 }
 
 /** A task's name in a language (`en`, `vn`, `fr`); its own title first, then its kind's. */
@@ -85,6 +86,22 @@ export const UNITS = [
       { id: 'test', kind: 'steps', set: 'test', xp: 15, title: 'Test it', titleFr: 'Teste-le', icon: 'Lightbulb', tone: 'rose' },
       { id: 'mystery', kind: 'steps', set: 'mystery', xp: 25, title: 'Mystery substances', titleFr: 'Substances mystère', icon: 'FlaskConical', tone: 'violet' },
       { id: 'quiz', kind: 'quiz', xp: 20 },
+    ],
+  },
+  {
+    // Upper Secondary English (freshman English): grammar and writing. Every unit ends
+    // with timed writing, marked by the AI and kept in My Writing (/unit/#/writing).
+    track: 'UPPER_ENG', unit: 'U01', classKey: 'english:Upper Secondary', label: '1', teacher: 'Mr. Bowen',
+    title: 'Complete Sentences', titleVn: 'Câu hoàn chỉnh',
+    subtitle: 'Fragments, run-ons and comma splices, and four ways to fix them. Then a 30-minute story.',
+    subtitleVn: 'Câu cụt, câu chạy dài, lỗi nối bằng dấu phẩy, và bốn cách sửa. Sau đó viết một câu chuyện trong 30 phút.',
+    tasks: [
+      { id: 'lesson', kind: 'notes', xp: 15 },
+      { id: 'words', kind: 'words', xp: 10 },
+      { id: 'edit', kind: 'engine', engine: 'GrammarEdit', xp: 20, title: 'Grammar edit', titleVn: 'Sửa ngữ pháp', icon: 'PenLine', tone: 'sky' },
+      { id: 'findfix', kind: 'engine', engine: 'FindFix', xp: 15, title: 'Find & Fix', titleVn: 'Tìm & sửa', icon: 'Search', tone: 'orange' },
+      { id: 'quiz', kind: 'quiz', xp: 15 },
+      { id: 'writing', kind: 'writing', xp: 30, note: '30 minutes', noteVn: '30 phút' },
     ],
   },
 ]

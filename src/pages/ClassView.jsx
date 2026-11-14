@@ -4,6 +4,7 @@ import { BookOpen, ChevronDown, ChevronUp, EyeOff, KeyRound, Loader2, Lock, Penc
 import { BackLink, Loading, Notice, SectionHead, Stars } from '../components/ui.jsx'
 import { ClassroomLessonList, classroomLessonsFor } from '../components/ClassroomLessons.jsx'
 import UnitXPTable from '../components/UnitXPTable.jsx'
+import ClassWriting from '../components/ClassWriting.jsx'
 import { api } from '../lib/api.js'
 import { pick, shortDate, useT } from '../lib/i18n.jsx'
 import { className } from '../data/subjects.js'
@@ -219,6 +220,7 @@ export default function ClassView() {
         <p className="mt-2 flex items-center gap-2 text-sm font-semibold text-pra-ink-soft"><Printer className="h-4 w-4 shrink-0" /> {t('cardsHow')}</p>
       </section>
 
+      <ClassWriting classKey={classKey} students={data.students} lang={lang} />
       <UnitXPTable classKey={classKey} students={data.students} lang={lang} />
     </main>
   )
