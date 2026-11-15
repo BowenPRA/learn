@@ -118,8 +118,9 @@ function UnitRoute() {
   if (!got.data) return <ToLearn />
 
   const data = got.data
-  // Year 7 is English and French; the other tracks (Upper Secondary English) English and Vietnamese.
-  const langs = langsFor({ bilingual: true, french: track.startsWith('Y7_') }, data)
+  // Year 7 is English and French; Upper Secondary English is English only (an English class,
+  // not one adapted for Vietnamese learners: Bowen, 15 November 2026).
+  const langs = langsFor(track === 'UPPER_ENG' ? { bilingual: false } : { bilingual: true, french: track.startsWith('Y7_') }, data)
   const view = { ...u, groupLabel: className(u.classKey, 'en') }
   // What is in each task, in a word or two, for its tile.
   const count = (n, en, fr) => (n ? (lang === 'fr' ? `${n} ${fr}` : `${n} ${en}`) : '')

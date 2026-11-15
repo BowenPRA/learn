@@ -43,7 +43,7 @@ function Panel({ essay, me, onSaved }) {
       setState('saved')
     } catch (e) { setState(e.message) }
   }
-  const flags = flagLines(essay, 'en').filter((f) => f.warn)
+  const flags = flagLines(essay).filter((f) => f.warn)
   return (
     <div className="space-y-4 rounded-[1.5rem] border-2 border-violet-200 bg-white p-5 shadow-sm dark:border-violet-900 dark:bg-slate-900">
       <div>
@@ -149,7 +149,7 @@ export default function ClassReader({ classKey, id, studentId, onOpen, onStudent
           })}
         </div>
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
-          <EssayReport essay={essay} lang="en" teacherView />
+          <EssayReport essay={essay} teacherView />
           <aside className="space-y-3 lg:sticky lg:top-24 lg:self-start">
             <Panel key={essay.id} essay={essay} me={got.me} onSaved={onSaved} />
             <button type="button" onClick={() => onStudent(essay.studentId)} className={`${navBtn} w-full justify-center`}>

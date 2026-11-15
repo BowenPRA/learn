@@ -126,13 +126,18 @@ A unit's `writing` in its `data.js`:
 writing: {
   type: 'narrative',            // narrative, descriptive, explanatory, argument, letter, summary (app/writing/frames.js)
   minutes: 30, minWords: 150, paragraphs: 3,
-  focus: { label: 'Complete sentences', labelVn: '…', look: 'fragments, run-on sentences and comma splices' },
-  frames: [],                   // optional extra frames { stage, text, textVn }
-  prompts: [{ id: 'u1w1', title, titleVn, task, taskVn, guidelines: [], guidelinesVn: [] }],
+  focus: { label: 'Complete sentences', look: 'fragments, run-on sentences and comma splices' },
+  frames: [],                   // optional extra frames { stage, text }
+  prompts: [{ id: 'u1w1', title, task, guidelines: [] }],
 }
 ```
 
 A prompt's `id` is saved with every essay: never change it once used.
+
+The English track is English only (15 November 2026): no `…Vn` twins, no language
+switch (`unit/main.jsx` gives `UPPER_ENG` English alone), and examples that do not lean on
+where the students are from. It is a freshman English class, not one adapted for
+second-language learners.
 
 Science 5.2 has no classroom deck yet, so it has no Lesson task and stays `hidden`.
 Its three step-practice sets (`content/Y7_SCI/U05_2/`) follow the Workbook's 5.2

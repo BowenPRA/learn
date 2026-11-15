@@ -179,7 +179,7 @@ export default function StudentHome() {
       )}
 
       {/* Timed writing is kept and read back in My Writing: its own card, high on the page. */}
-      {units.some((u) => u.tasks.some((tk) => tk.kind === 'writing')) && <WritingCard lang={lang} />}
+      {units.some((u) => u.tasks.some((tk) => tk.kind === 'writing')) && <WritingCard />}
 
       {late.length > 0 && (
         <section className="mb-8" aria-labelledby="h-late">

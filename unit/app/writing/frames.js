@@ -1,121 +1,121 @@
 // Sentence frames and plan questions for timed writing, by the kind of writing a prompt
 // asks for (`type` in a unit's `writing`). Frames take the sentence-building load off a
-// second-language writer so the minutes go on ideas. `___` is the gap the student fills.
-// A unit may add its own frames with `writing.frames` ({ stage, text, textVn }).
+// writer so the minutes go on ideas. `___` is the gap the student fills.
+// A unit may add its own frames with `writing.frames` ({ stage, text }).
 //
 // From the Dashboard's GED frame bank (src/utils/essayFrames.js), widened from the one
 // two-source argument essay to the kinds of writing the Upper Secondary units set.
 
-const S = (id, label, labelVn, hint, hintVn) => ({ id, label, labelVn, hint, hintVn })
-const F = (stage, text, textVn) => ({ stage, text, textVn })
-const Q = (id, label, labelVn, placeholder) => ({ id, label, labelVn, placeholder })
+const S = (id, label, hint) => ({ id, label, hint })
+const F = (stage, text) => ({ stage, text })
+const Q = (id, label, placeholder) => ({ id, label, placeholder })
 
 export const KINDS = {
   narrative: {
-    label: 'Story', labelVn: 'Kể chuyện',
+    label: 'Story',
     stages: [
-      S('start', 'Beginning', 'Mở đầu', 'Who, where, when. Make the reader want to know more.', 'Ai, ở đâu, khi nào. Làm người đọc muốn biết thêm.'),
-      S('middle', 'What happened', 'Diễn biến', 'Tell the events in order. Use past tense.', 'Kể các sự việc theo thứ tự. Dùng thì quá khứ.'),
-      S('detail', 'Details', 'Chi tiết', 'What you saw, heard and felt.', 'Điều bạn thấy, nghe và cảm thấy.'),
-      S('end', 'Ending', 'Kết thúc', 'How it ended, and what you learned.', 'Kết thúc ra sao, và bạn học được gì.'),
+      S('start', 'Beginning', 'Who, where, when. Make the reader want to know more.'),
+      S('middle', 'What happened', 'Tell the events in order. Use past tense.'),
+      S('detail', 'Details', 'What you saw, heard and felt.'),
+      S('end', 'Ending', 'How it ended, and what you learned.'),
     ],
     frames: [
-      F('start', 'It was a ___ day in ___ when ___.', 'Đó là một ngày ___ ở ___ khi ___.'),
-      F('start', 'I will never forget the day ___.', 'Tôi sẽ không bao giờ quên ngày ___.'),
-      F('middle', 'At first, ___. Then ___.', 'Lúc đầu, ___. Sau đó ___.'),
-      F('middle', 'Suddenly, ___.', 'Đột nhiên, ___.'),
-      F('middle', 'After that, ___, so ___.', 'Sau đó, ___, nên ___.'),
-      F('detail', 'I could hear ___ and smell ___.', 'Tôi có thể nghe ___ và ngửi thấy ___.'),
-      F('detail', 'I felt ___ because ___.', 'Tôi cảm thấy ___ vì ___.'),
-      F('end', 'In the end, ___.', 'Cuối cùng, ___.'),
-      F('end', 'That day taught me that ___.', 'Ngày hôm đó dạy tôi rằng ___.'),
+      F('start', 'It was a ___ day in ___ when ___.'),
+      F('start', 'I will never forget the day ___.'),
+      F('middle', 'At first, ___. Then ___.'),
+      F('middle', 'Suddenly, ___.'),
+      F('middle', 'After that, ___, so ___.'),
+      F('detail', 'I could hear ___ and smell ___.'),
+      F('detail', 'I felt ___ because ___.'),
+      F('end', 'In the end, ___.'),
+      F('end', 'That day taught me that ___.'),
     ],
     plan: [
-      Q('start', 'Where and when does it begin? Who is there?', 'Bắt đầu ở đâu, khi nào? Có ai?', 'Hoi An beach, last summer, my family'),
-      Q('middle', 'What happens, in order? (three events)', 'Điều gì xảy ra, theo thứ tự? (ba sự việc)', 'we arrive · my brother loses his shoe · the search'),
-      Q('detail', 'One thing you saw, heard or felt', 'Một điều bạn thấy, nghe hoặc cảm thấy', 'the cold water, everyone shouting'),
-      Q('end', 'How does it end? What did you learn?', 'Kết thúc ra sao? Bạn học được gì?', 'my father finds it; small things can ruin a day'),
+      Q('start', 'Where and when does it begin? Who is there?', 'the beach, last summer, my family'),
+      Q('middle', 'What happens, in order? (three events)', 'we arrive · my brother loses his shoe · the search'),
+      Q('detail', 'One thing you saw, heard or felt', 'the cold water, everyone shouting'),
+      Q('end', 'How does it end? What did you learn?', 'my father finds it; small things can ruin a day'),
     ],
   },
   descriptive: {
-    label: 'Description', labelVn: 'Miêu tả',
+    label: 'Description',
     stages: [
-      S('start', 'Introduce it', 'Giới thiệu', 'What and where it is, and your feeling about it.', 'Nó là gì, ở đâu, và cảm nghĩ của bạn.'),
-      S('senses', 'The senses', 'Các giác quan', 'Sight, sound, smell, touch.', 'Nhìn, nghe, ngửi, chạm.'),
-      S('end', 'Why it matters', 'Vì sao quan trọng', 'Why it is special to you.', 'Vì sao nó đặc biệt với bạn.'),
+      S('start', 'Introduce it', 'What and where it is, and your feeling about it.'),
+      S('senses', 'The senses', 'Sight, sound, smell, touch.'),
+      S('end', 'Why it matters', 'Why it is special to you.'),
     ],
     frames: [
-      F('start', '___ is a ___ place near ___.', '___ là một nơi ___ gần ___.'),
-      F('senses', 'When you walk in, the first thing you notice is ___.', 'Khi bước vào, điều đầu tiên bạn nhận thấy là ___.'),
-      F('senses', 'The air smells of ___, and you can hear ___.', 'Không khí có mùi ___, và bạn có thể nghe ___.'),
-      F('senses', 'On one side there is ___; on the other, ___.', 'Một bên có ___; bên kia, ___.'),
-      F('end', '___ is special to me because ___.', '___ đặc biệt với tôi vì ___.'),
+      F('start', '___ is a ___ place near ___.'),
+      F('senses', 'When you walk in, the first thing you notice is ___.'),
+      F('senses', 'The air smells of ___, and you can hear ___.'),
+      F('senses', 'On one side there is ___; on the other, ___.'),
+      F('end', '___ is special to me because ___.'),
     ],
     plan: [
-      Q('start', 'What is it, and where?', 'Nó là gì, ở đâu?', 'a small cafe by the river'),
-      Q('senses', 'What do you see, hear, smell?', 'Bạn thấy, nghe, ngửi gì?', 'boats, quiet music, coffee'),
-      Q('end', 'Why is it special to you?', 'Vì sao nó đặc biệt với bạn?', 'it is where I feel calm'),
+      Q('start', 'What is it, and where?', 'a small cafe by the river'),
+      Q('senses', 'What do you see, hear, smell?', 'boats, quiet music, coffee'),
+      Q('end', 'Why is it special to you?', 'it is where I feel calm'),
     ],
   },
   explanatory: {
-    label: 'Explanation', labelVn: 'Giải thích',
+    label: 'Explanation',
     stages: [
-      S('start', 'Introduction', 'Mở bài', 'Say what you will explain and why it matters.', 'Nói bạn sẽ giải thích gì và vì sao quan trọng.'),
-      S('steps', 'Steps or reasons', 'Các bước hoặc lý do', 'One step or reason in each paragraph.', 'Mỗi đoạn một bước hoặc một lý do.'),
-      S('end', 'Conclusion', 'Kết bài', 'Sum up in new words.', 'Tóm lại bằng lời mới.'),
+      S('start', 'Introduction', 'Say what you will explain and why it matters.'),
+      S('steps', 'Steps or reasons', 'One step or reason in each paragraph.'),
+      S('end', 'Conclusion', 'Sum up in new words.'),
     ],
     frames: [
-      F('start', 'There are ___ main reasons why ___.', 'Có ___ lý do chính vì sao ___.'),
-      F('start', 'This essay explains how to ___.', 'Bài viết này giải thích cách ___.'),
-      F('steps', 'First, ___. This is important because ___.', 'Đầu tiên, ___. Điều này quan trọng vì ___.'),
-      F('steps', 'Next, ___. For example, ___.', 'Tiếp theo, ___. Ví dụ, ___.'),
-      F('steps', 'Another reason is that ___.', 'Một lý do khác là ___.'),
-      F('steps', 'Finally, ___.', 'Cuối cùng, ___.'),
-      F('end', 'In short, ___.', 'Tóm lại, ___.'),
+      F('start', 'There are ___ main reasons why ___.'),
+      F('start', 'This essay explains how to ___.'),
+      F('steps', 'First, ___. This is important because ___.'),
+      F('steps', 'Next, ___. For example, ___.'),
+      F('steps', 'Another reason is that ___.'),
+      F('steps', 'Finally, ___.'),
+      F('end', 'In short, ___.'),
     ],
     plan: [
-      Q('start', 'What are you explaining?', 'Bạn đang giải thích điều gì?', 'how to make banh mi'),
-      Q('steps', 'Your steps or reasons, in order', 'Các bước hoặc lý do, theo thứ tự', 'bread · filling · sauce'),
-      Q('end', 'Your last sentence', 'Câu cuối của bạn', 'with these steps anyone can make it'),
+      Q('start', 'What are you explaining?', 'how to make a simple sandwich'),
+      Q('steps', 'Your steps or reasons, in order', 'bread · filling · sauce'),
+      Q('end', 'Your last sentence', 'with these steps anyone can make it'),
     ],
   },
   argument: {
-    label: 'Argument', labelVn: 'Nghị luận',
+    label: 'Argument',
     stages: [
-      S('start', 'Your position', 'Quan điểm', 'Say what you think, and the main reason.', 'Nói bạn nghĩ gì, và lý do chính.'),
-      S('reasons', 'Reasons and evidence', 'Lý do và dẫn chứng', 'One reason a paragraph, with an example.', 'Mỗi đoạn một lý do, có ví dụ.'),
-      S('other', 'The other side', 'Phía bên kia', 'What others say, and your answer.', 'Người khác nói gì, và câu trả lời của bạn.'),
-      S('end', 'Conclusion', 'Kết luận', 'Your position again, in new words.', 'Nhắc lại quan điểm bằng lời mới.'),
+      S('start', 'Your position', 'Say what you think, and the main reason.'),
+      S('reasons', 'Reasons and evidence', 'One reason a paragraph, with an example.'),
+      S('other', 'The other side', 'What others say, and your answer.'),
+      S('end', 'Conclusion', 'Your position again, in new words.'),
     ],
     frames: [
-      F('start', 'I believe that ___ because ___.', 'Tôi tin rằng ___ vì ___.'),
-      F('start', 'Some people think ___, but I disagree.', 'Một số người nghĩ ___, nhưng tôi không đồng ý.'),
-      F('reasons', 'The main reason is that ___. For example, ___.', 'Lý do chính là ___. Ví dụ, ___.'),
-      F('reasons', 'This shows that ___.', 'Điều này cho thấy ___.'),
-      F('other', 'It is true that ___. However, ___.', 'Đúng là ___. Tuy nhiên, ___.'),
-      F('other', 'Even if ___, it does not change the fact that ___.', 'Ngay cả khi ___, điều đó không thay đổi sự thật rằng ___.'),
-      F('end', 'For these reasons, ___.', 'Vì những lý do này, ___.'),
+      F('start', 'I believe that ___ because ___.'),
+      F('start', 'Some people think ___, but I disagree.'),
+      F('reasons', 'The main reason is that ___. For example, ___.'),
+      F('reasons', 'This shows that ___.'),
+      F('other', 'It is true that ___. However, ___.'),
+      F('other', 'Even if ___, it does not change the fact that ___.'),
+      F('end', 'For these reasons, ___.'),
     ],
     plan: [
-      Q('start', 'What do you think, in one line?', 'Bạn nghĩ gì, trong một dòng?', 'phones should stay in bags during class'),
-      Q('reasons', 'Two reasons, each with an example', 'Hai lý do, mỗi lý do một ví dụ', 'focus: grades went up · fewer fights over messages'),
-      Q('other', 'What would someone who disagrees say? Your answer.', 'Người không đồng ý sẽ nói gì? Câu trả lời của bạn.', 'emergencies: the office phone is there'),
-      Q('end', 'Your last sentence', 'Câu cuối của bạn', 'class time is for learning'),
+      Q('start', 'What do you think, in one line?', 'phones should stay in bags during class'),
+      Q('reasons', 'Two reasons, each with an example', 'focus: grades went up · fewer fights over messages'),
+      Q('other', 'What would someone who disagrees say? Your answer.', 'emergencies: the office phone is there'),
+      Q('end', 'Your last sentence', 'class time is for learning'),
     ],
   },
 }
 
 KINDS.letter = {
-  ...KINDS.explanatory, label: 'Letter', labelVn: 'Thư',
+  ...KINDS.explanatory, label: 'Letter',
   frames: [
-    F('start', 'Dear ___,', 'Kính gửi ___,'),
-    F('start', 'I am writing to ___.', 'Tôi viết thư này để ___.'),
+    F('start', 'Dear ___,'),
+    F('start', 'I am writing to ___.'),
     ...KINDS.explanatory.frames.filter((f) => f.stage === 'steps'),
-    F('end', 'Thank you for ___. I look forward to ___.', 'Cảm ơn ___. Tôi mong ___.'),
-    F('end', 'Yours sincerely,', 'Trân trọng,'),
+    F('end', 'Thank you for ___. I look forward to ___.'),
+    F('end', 'Yours sincerely,'),
   ],
 }
-KINDS.summary = { ...KINDS.explanatory, label: 'Summary', labelVn: 'Tóm tắt' }
+KINDS.summary = { ...KINDS.explanatory, label: 'Summary' }
 
 export const kindOf = (type) => KINDS[type] || KINDS.explanatory
 

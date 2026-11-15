@@ -46,7 +46,7 @@ function demoSeed() {
   })
   const seed = [
     { n: 21, id: 'u1w1', title: 'A day that went wrong', score: [2, 1, 1], body: 'Last year I go to the beach with my family, we was very happy. Because the sun was hot. My brother lost his shoe in the water, he cry a lot.\nWe look for it for one hour. Then my father find it.' },
-    { n: 12, id: 'u1w2', title: 'Someone who helped me', score: [2, 2, 2], body: 'My grandmother help me learn to cook. Every Sunday she show me one new dish, I watched her hands carefully.\nThe first time I made pho it was too salty. She laughed, she said I will do better next time.\nNow I can cook for my family. Because of her I love cooking.' },
+    { n: 12, id: 'u1w2', title: 'Someone who helped me', score: [2, 2, 2], body: 'My grandmother help me learn to cook. Every Sunday she show me one new dish, I watched her hands carefully.\nThe first time I made soup it was too salty. She laughed, she said I will do better next time.\nNow I can cook for my family. Because of her I love cooking.' },
     { n: 4, id: 'u1w3', title: 'My first time', score: [3, 3, 2], body: 'Last year my uncle taught me to ride his motorbike on a quiet road near the river. I was nervous because the bike was heavy and loud.\nAt first I pressed the brake too hard and nearly fell. My uncle laughed, he told me to look ahead and not at my hands. After an hour I could ride slowly to the end of the road and back.\nNow I feel proud when I ride with my family. That day taught me that being scared is part of learning something new.' },
   ]
   const kinds = [['Comma splice', 'Join two sentences with a full stop, not a comma.'], ['Verb tense', 'Tell a past story in the past tense.'], ['Fragment', 'A because-clause cannot stand alone.']]

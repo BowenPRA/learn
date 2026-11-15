@@ -4,7 +4,6 @@
 // the mark arrives; My Writing and the teacher's view show the same thing later.
 import { useState } from 'react'
 import { AlertTriangle, ChevronDown, Clock, MessageSquare, Sparkles, Target, ThumbsUp, TrendingUp } from 'lucide-react'
-import { tr } from '../../src/utils/lang.js'
 import { markOf } from '../../../src/lib/essays.js'
 import { TRAITS, flagLines, fmtDate, fmtMinutes, markTone } from './look.js'
 
@@ -45,13 +44,13 @@ function Dots({ value, max = 4, face }) {
   )
 }
 
-export default function EssayReport({ essay, lang = 'en', showText = true, teacherView = false }) {
+export default function EssayReport({ essay, showText = true, teacherView = false }) {
   const [openRevised, setOpenRevised] = useState(false)
   const r = essay?.report
   if (!r) return null
   const mark = markOf(essay)
   const tone = markTone(mark)
-  const flags = flagLines(essay, lang)
+  const flags = flagLines(essay)
   const p = essay.prompt || {}
 
   return (
@@ -64,15 +63,15 @@ export default function EssayReport({ essay, lang = 'en', showText = true, teach
             <span className="text-xs font-black uppercase tracking-widest text-white/80">/ 12</span>
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-[11px] font-black uppercase tracking-widest text-slate-400">{fmtDate(essay.submittedAt || essay.startedAt, lang)}</p>
-            <h3 className="mt-1 text-2xl font-black leading-tight text-slate-800 dark:text-white">{tr(lang, p.title, p.titleVn)}</h3>
+            <p className="text-[11px] font-black uppercase tracking-widest text-slate-400">{fmtDate(essay.submittedAt || essay.startedAt)}</p>
+            <h3 className="mt-1 text-2xl font-black leading-tight text-slate-800 dark:text-white">{p.title}</h3>
             <p className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-bold text-slate-500 dark:text-slate-400">
-              <span>{r.wordCount} {tr(lang, 'words', 'từ')}</span>
-              <span>{r.paragraphs} {tr(lang, r.paragraphs === 1 ? 'paragraph' : 'paragraphs', 'đoạn')}</span>
+              <span>{r.wordCount} words</span>
+              <span>{r.paragraphs} {r.paragraphs === 1 ? 'paragraph' : 'paragraphs'}</span>
               {essay.secondsUsed != null && <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" strokeWidth={3} />{fmtMinutes(essay.secondsUsed)} / {essay.minutesAllowed} min</span>}
             </p>
             {essay.teacherScore != null && essay.teacherScore !== essay.score && (
-              <p className="mt-1 text-xs font-bold text-slate-400">{teacherView ? `The teacher's mark. The AI gave ${essay.score}.` : tr(lang, `Your teacher's mark. The AI gave ${essay.score}.`, `Điểm của giáo viên. AI cho ${essay.score}.`)}</p>
+              <p className="mt-1 text-xs font-bold text-slate-400">{teacherView ? `The teacher's mark. The AI gave ${essay.score}.` : `Your teacher's mark. The AI gave ${essay.score}.`}</p>
             )}
           </div>
         </div>
@@ -86,7 +85,7 @@ export default function EssayReport({ essay, lang = 'en', showText = true, teach
       {essay.teacherNote && (
         <section className="rounded-[1.5rem] border-2 border-amber-200 bg-amber-50 p-5 dark:border-amber-900 dark:bg-amber-950/30">
           <p className="mb-1 flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-amber-700 dark:text-amber-400">
-            <MessageSquare className="h-4 w-4" strokeWidth={2.5} /> {essay.teacherBy || tr(lang, 'Your teacher', 'Giáo viên')}
+            <MessageSquare className="h-4 w-4" strokeWidth={2.5} /> {essay.teacherBy || 'Your teacher'}
           </p>
           <p className="whitespace-pre-wrap text-[16px] font-semibold leading-relaxed text-amber-900 dark:text-amber-100">{essay.teacherNote}</p>
         </section>
@@ -98,7 +97,7 @@ export default function EssayReport({ essay, lang = 'en', showText = true, teach
           {TRAITS.map((t) => (
             <div key={t.key} className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
               <div className="mb-2 flex items-center justify-between gap-2">
-                <h4 className="text-sm font-black uppercase tracking-widest" style={{ color: t.ink }}>{tr(lang, t.label, t.labelVn)}</h4>
+                <h4 className="text-sm font-black uppercase tracking-widest" style={{ color: t.ink }}>{t.label}</h4>
                 <span className="text-lg font-black tabular-nums text-slate-800 dark:text-white">{r.traits[t.key]}<span className="text-sm text-slate-400">/4</span></span>
               </div>
               <Dots value={r.traits[t.key]} face={t.ink} />
@@ -112,22 +111,22 @@ export default function EssayReport({ essay, lang = 'en', showText = true, teach
         <section className="grid gap-4 md:grid-cols-2">
           {r.strengths?.length > 0 && (
             <div className="rounded-[1.5rem] border border-emerald-200 bg-emerald-50 p-5 dark:border-emerald-900 dark:bg-emerald-950/30">
-              <p className="mb-2 flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-emerald-700 dark:text-emerald-400"><ThumbsUp className="h-4 w-4" strokeWidth={2.5} /> {tr(lang, 'What worked', 'Điểm tốt')}</p>
+              <p className="mb-2 flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-emerald-700 dark:text-emerald-400"><ThumbsUp className="h-4 w-4" strokeWidth={2.5} /> What worked</p>
               <ul className="space-y-1 text-[15px] font-semibold text-emerald-900 dark:text-emerald-100">{r.strengths.map((s, i) => <li key={i}>{s}</li>)}</ul>
             </div>
           )}
           {r.focus?.label && (
             <div className="rounded-[1.5rem] border border-violet-200 bg-violet-50 p-5 dark:border-violet-900 dark:bg-violet-950/30">
-              <p className="mb-2 flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-violet-700 dark:text-violet-400"><Target className="h-4 w-4" strokeWidth={2.5} /> {tr(lang, 'This unit', 'Bài này')}: {r.focus.label}</p>
+              <p className="mb-2 flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-violet-700 dark:text-violet-400"><Target className="h-4 w-4" strokeWidth={2.5} /> This unit: {r.focus.label}</p>
               <p className="text-[15px] font-semibold text-violet-900 dark:text-violet-100">
-                {r.focus.count === 0 ? tr(lang, 'No mistakes of this kind. ', 'Không có lỗi loại này. ') : tr(lang, `${r.focus.count} mistake${r.focus.count === 1 ? '' : 's'} of this kind. `, `${r.focus.count} lỗi loại này. `)}
+                {r.focus.count === 0 ? 'No mistakes of this kind. ' : `${r.focus.count} mistake${r.focus.count === 1 ? '' : 's'} of this kind. `}
                 {r.focus.note}
               </p>
             </div>
           )}
           {r.nextStep && (
             <div className="rounded-[1.5rem] border border-sky-200 bg-sky-50 p-5 md:col-span-2 dark:border-sky-900 dark:bg-sky-950/30">
-              <p className="mb-1 flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-sky-700 dark:text-sky-400"><TrendingUp className="h-4 w-4" strokeWidth={2.5} /> {tr(lang, 'Next time', 'Lần sau')}</p>
+              <p className="mb-1 flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-sky-700 dark:text-sky-400"><TrendingUp className="h-4 w-4" strokeWidth={2.5} /> Next time</p>
               <p className="text-[16px] font-bold text-sky-900 dark:text-sky-100">{r.nextStep}</p>
             </div>
           )}
@@ -136,7 +135,7 @@ export default function EssayReport({ essay, lang = 'en', showText = true, teach
 
       {(r.scoreNotes?.length > 0 || flags.length > 0) && (
         <section className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-900/60">
-          <p className="mb-2 text-[11px] font-black uppercase tracking-widest text-slate-500">{tr(lang, 'Worth knowing', 'Lưu ý')}</p>
+          <p className="mb-2 text-[11px] font-black uppercase tracking-widest text-slate-500">Worth knowing</p>
           <ul className="space-y-1.5 text-[14px] font-semibold text-slate-600 dark:text-slate-300">
             {r.scoreNotes.map((n, i) => <li key={`n${i}`}>{n}</li>)}
             {flags.map((f, i) => <li key={`f${i}`} className={f.warn ? 'text-rose-600 dark:text-rose-400' : ''}>{f.text}</li>)}
@@ -148,7 +147,7 @@ export default function EssayReport({ essay, lang = 'en', showText = true, teach
       {showText && (
         <section className="overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
           <p className="border-b border-slate-200 bg-slate-50 px-6 py-3 text-[11px] font-black uppercase tracking-widest text-slate-500 dark:border-slate-800 dark:bg-slate-800/50">
-            {teacherView ? tr(lang, 'What the student wrote', 'Bài học viên viết') : tr(lang, 'What you wrote', 'Bài bạn viết')}
+            {teacherView ? 'What the student wrote' : 'What you wrote'}
           </p>
           <div className="px-6 py-5 sm:px-8"><MarkedText text={essay.body} revisions={r.revisions} /></div>
           {r.revisions.length > 0 && (
@@ -179,7 +178,7 @@ export default function EssayReport({ essay, lang = 'en', showText = true, teach
           <button type="button" onClick={() => setOpenRevised((o) => !o)} className="flex w-full items-center justify-between px-6 py-4 text-left">
             <span className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-emerald-700 dark:text-emerald-400">
               <Sparkles className="h-4 w-4" strokeWidth={2.5} />
-              {tr(lang, 'Corrected version', 'Bản đã sửa')} · {essay.revision.fixed}/{essay.revision.total} {tr(lang, 'fixed', 'đã sửa')}
+              Corrected version · {essay.revision.fixed}/{essay.revision.total} fixed
             </span>
             <ChevronDown className={`h-5 w-5 text-slate-400 transition ${openRevised ? 'rotate-180' : ''}`} />
           </button>
