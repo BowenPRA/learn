@@ -288,7 +288,9 @@ export const CLASSROOM_LESSONS = [
 // STAFF ONLY: a game holds every answer, so these are never in a student's list,
 // and classroom/main.jsx sends anyone but staff back to the home page. The teacher
 // home lists them under "Classroom games". Jeopardy moved here from
-// BowenPRA/classroom on 13 Nov 2026 (Bowen: all 14 boards, staff only).
+// BowenPRA/classroom on 13 Nov 2026 (Bowen: all 14 boards, staff only), Guess
+// Who on 16 Nov 2026 (Bowen: an animal board from Science 4.4, a plain look, no
+// student faces yet).
 export const CLASSROOM_GAMES = [
   {
     course: 'games', slug: 'G02_jeopardy',
@@ -296,6 +298,13 @@ export const CLASSROOM_GAMES = [
     titleVn: 'Jeopardy',
     subtitle: '14 boards: ten Year 7 (Maths and Science units, the newest in English and French), Kindergarten & Year 1, Year 1 pictures, and two Teens boards',
     subtitleVn: '14 bảng: mười bảng Year 7 (các chương Toán và Khoa học, bảng mới nhất có tiếng Anh và tiếng Pháp), Mẫu giáo & Year 1, Year 1 bằng hình, và hai bảng cho lớp Teens',
+  },
+  {
+    course: 'games', slug: 'G05_guess-who',
+    title: 'Guess Who?',
+    titleVn: 'Guess Who?',
+    subtitle: 'Yes-or-no questions, one guess, Riverbucks: the 21 animals of Science 4.4 Using keys, or 24 monsters. English and French; you answer on your phone',
+    subtitleVn: 'Câu hỏi có-hay-không, một lần đoán, Riverbucks: 21 con vật của Science 4.4 Using keys, hoặc 24 quái vật. Tiếng Anh và tiếng Pháp; giáo viên trả lời trên điện thoại',
   },
 ]
 

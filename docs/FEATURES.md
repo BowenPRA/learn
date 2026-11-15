@@ -41,7 +41,7 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **My classes (teacher home)**: classes by year group, with students, logins, packs, decks. `src/pages/TeacherHome.jsx` · `/`
 - **Units (teacher home)**: every unit, for staff to open. `src/pages/TeacherHome.jsx`, `src/components/UnitCards.jsx`
 - **Lessons from class (staff)**: every deck with its class, folded by unit, with Plan links. `src/components/ClassroomLessons.jsx`
-- **Classroom games**: staff-only list of games (Jeopardy). `src/components/ClassroomLessons.jsx`, `src/data/classroomLessons.js`
+- **Classroom games**: staff-only list of games (Jeopardy, Guess Who). `src/components/ClassroomLessons.jsx`, `src/data/classroomLessons.js`
 - **Class page**: one class's packs, results, logins, unit XP and decks. `src/pages/ClassView.jsx` · `/t/:classKey`
 - **Open / Hide / Due date**: staff publish, hide and date a pack for the class. `src/pages/ClassView.jsx`, `src/lib/live.js`
 - **Most missed + Common slips**: the questions most of the class got wrong, slips and who hit them. `src/pages/ClassView.jsx`, `src/stepPractice/model.js`
@@ -79,7 +79,9 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **Mr Bowen cartoon**: one SVG for story strips, widgets and diagrams. `classroom/src/lib/mrBowen.js`
 - **Jeopardy**: 14 boards, staff only, EN+FR setting, phone screen, sounds and pictures. `classroom/content/games/G02_jeopardy/` · `/classroom/#/lesson/games/G02_jeopardy`
 - **Jeopardy boards**: the boards' categories, clues and answers. `classroom/content/games/G02_jeopardy/boards.js`
-- **Game phone screen**: shared pieces for a game's remote screen. `classroom/src/remote/GamePanel.jsx`, `classroom/content/games/G02_jeopardy/remote.jsx`
+- **Guess Who**: yes-or-no questions and one guess, staff only, EN/FR; Animals (the 21 of Science 4.4) or Monsters; the secret and the answers on the phone; ideas under the box; Riverbucks by question count. `classroom/content/games/G05_guess-who/` · `/classroom/#/lesson/games/G05_guess-who`
+- **Guess Who boards and ideas**: the cards (animal photos with what a key asks about, emoji monsters) and the model questions. `classroom/content/games/G05_guess-who/boards.js`, `classroom/content/games/G05_guess-who/questions.js`
+- **Game phone screen**: shared pieces for a game's remote screen. `classroom/src/remote/GamePanel.jsx`, `classroom/content/games/G02_jeopardy/remote.jsx`, `classroom/content/games/G05_guess-who/remote.jsx`
 - **Games inside a deck**: a slide with `layout: 'game'`. `classroom/src/components/layouts/GameLayout.jsx`
 - **Image credits**: a CREDITS.json beside each lesson's pictures, with source and licence. `classroom/content/y7-math/U01_1/images/CREDITS.json`
 - **Dashboard link (unused)**: kept in the player; the page always passes no link. `classroom/src/lib/dashboardLink.js`
@@ -204,7 +206,7 @@ Classroom decks (`src/data/classroomLessons.js`, 13 November 2026):
 
 - **y7-math**: 24 decks: Units 1 to 6 plus tasks T1 Formula Machine, T2 Girl Math, T3 The Maths Poster. `classroom/content/y7-math/`
 - **y7-science**: 34 decks: Units 1 to 4 (to 4.3), labs, models; Day 1 hidden. `classroom/content/y7-science/`
-- **games**: 1, Jeopardy (staff only, `CLASSROOM_GAMES`). `classroom/content/games/`
+- **games**: 2, Jeopardy and Guess Who (staff only, `CLASSROOM_GAMES`). `classroom/content/games/`
 - **Unit headings**: Maths units 1–5 and Science 1–3 have names; Maths 6 and Science 4 show a number only. `src/data/classroomLessons.js`
 
 Units (`src/data/units.js`), in order:

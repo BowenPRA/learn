@@ -39,7 +39,8 @@ export const COURSES = [
   // Games the teacher runs on the projector. Staff only: a game holds its own
   // answers, so it is listed in CLASSROOM_GAMES (src/data/classroomLessons.js), not
   // with the lessons, and classroom/main.jsx turns students away from it. Moved from
-  // BowenPRA/classroom on 13 Nov 2026 (Jeopardy only; the other games stayed there).
+  // BowenPRA/classroom: Jeopardy on 13 Nov 2026, Guess Who on 16 Nov 2026 (the
+  // other games stayed there).
   {
     id: 'games',
     title: 'Classroom Games',
