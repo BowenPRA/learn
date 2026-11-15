@@ -277,6 +277,11 @@ export const CLASSROOM_LESSONS = [
     title: 'What Is a Species?',
     subtitle: 'Compare, name, test: two elephants, species and variation, and why a lion and a tiger are two species (fertile offspring)',
   },
+  {
+    course: 'y7-science', slug: 'U04_4', classKey: 'science:Year 7', unit: '4.4', teacher: 'Mr. Bowen',
+    title: 'Using Keys',
+    subtitle: 'Ask, follow, rewrite: yes-or-no questions, the dichotomous key on page 139, and the same key written as numbered pairs',
+  },
 ]
 
 // Games the teacher runs on the projector, from classroom/content/games/<slug>/.
