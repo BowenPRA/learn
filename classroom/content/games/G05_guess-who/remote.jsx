@@ -95,7 +95,7 @@ function LobbyScreen({ state, act, tools }) {
               <Face card={b.cards[id === 'animals' ? 12 : 0]} className="shrink-0 w-12 h-12 rounded-xl" />
               <span className="min-w-0 flex-1">
                 <span className="block font-black leading-snug">{b.title[0]}</span>
-                <span className="block text-xs font-bold text-slate-400 leading-snug">{id === 'animals' ? '21 animals from Science 4.4 Using keys' : '24 Halloween monsters'}</span>
+                <span className="block text-xs font-bold text-slate-400 leading-snug">{id === 'animals' ? '36 animals, 24 a round: Science 4.4 and more' : '24 Halloween monsters'}</span>
               </span>
               {on && (
                 <span className="shrink-0 w-7 h-7 rounded-lg bg-[#58cc02] flex items-center justify-center">

@@ -26,9 +26,10 @@ export const plan = {
     { time: 'end of round', phase: 'Guess', detail: 'Final guess, tap one card, confirm. The phone warns you when they are about to guess and shows which card they tapped. Then Next round, for the next team.' },
   ],
   answers: [
-    { q: 'Animals board: the 21 animals', a: 'Ant, bee, butterfly, chicken, crab, dragonfly, earthworm, carp, clown fish, horn shark, lionfish, zebra fish, gecko, housefly, hoverfly, ladybird, saola, slug, snail, snake, spider. The same photographs as 4.4.' },
+    { q: 'Animals board: the 36 animals', a: 'The 21 from 4.4, in the same photographs: ant, bee, butterfly, chicken, crab, dragonfly, earthworm, carp, clown fish, horn shark, lionfish, zebra fish, gecko, housefly, hoverfly, ladybird, saola, slug, snail, snake, spider. And 15 more: lion, tiger, elephant, giraffe, hippo, horse, cow, dog, polar bear, blue whale, penguin, duck, falcon, sea turtle, octopus. Each round deals 24 at random. The reveal shows one fact about the secret animal.' },
+    { q: 'The new traps', a: 'Blue whale: lives in water and has fins, but is not a fish (it breathes air). Penguin: wings and feathers, but cannot fly. Octopus: eight arms, no legs. Sea turtle: legs that are flippers, and a shell.' },
     { q: 'The traps from 4.4', a: 'Spider: more than six legs (8). Ant: exactly six. Bee and ladybird: four wings. Hoverfly and housefly: two. Snail and slug: no legs. Earthworm: body made of rings. Crab: more than six legs and a shell.' },
-    { q: 'Why five questions is "perfect"', a: 'Each perfect question halves the animals: 21 → 11 → 6 → 3 → 2 → 1. So four questions needs luck, and the top prize rewards a class that keeps choosing the most even split.' },
+    { q: 'Why five questions is "perfect"', a: 'Each perfect question halves the animals: 24 → 12 → 6 → 3 → 2 → 1. So four questions needs luck, and the top prize rewards a class that keeps choosing the most even split.' },
     { q: 'A question that is not yes-or-no', a: 'Tap Reword on the phone. The question goes back into the box with "Try again!" and does not count.' },
     { q: 'You tapped the wrong answer', a: 'Tap the answer in the list on the phone: make it YES, make it NO, or take it out. The projector says what changed, so the class can put cards back up.' },
   ],

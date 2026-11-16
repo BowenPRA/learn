@@ -79,7 +79,7 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **Mr Bowen cartoon**: one SVG for story strips, widgets and diagrams. `classroom/src/lib/mrBowen.js`
 - **Jeopardy**: 14 boards, staff only, EN+FR setting, phone screen, sounds and pictures. `classroom/content/games/G02_jeopardy/` · `/classroom/#/lesson/games/G02_jeopardy`
 - **Jeopardy boards**: the boards' categories, clues and answers. `classroom/content/games/G02_jeopardy/boards.js`
-- **Guess Who**: yes-or-no questions and one guess, staff only, EN/FR; Animals (the 21 of Science 4.4) or Monsters; the secret and the answers on the phone; ideas under the box; Riverbucks by question count. `classroom/content/games/G05_guess-who/` · `/classroom/#/lesson/games/G05_guess-who`
+- **Guess Who**: yes-or-no questions and one guess, staff only, EN/FR; Animals (36, 24 a round: Science 4.4 and more, a fact on each reveal) or Monsters, in a jungle or a night-sky scene, with cards that deal in and flip; the secret and the answers on the phone; ideas under the box; Riverbucks by question count. `classroom/content/games/G05_guess-who/` · `/classroom/#/lesson/games/G05_guess-who`
 - **Guess Who boards and ideas**: the cards (animal photos with what a key asks about, emoji monsters) and the model questions. `classroom/content/games/G05_guess-who/boards.js`, `classroom/content/games/G05_guess-who/questions.js`
 - **Game phone screen**: shared pieces for a game's remote screen. `classroom/src/remote/GamePanel.jsx`, `classroom/content/games/G02_jeopardy/remote.jsx`, `classroom/content/games/G05_guess-who/remote.jsx`
 - **Games inside a deck**: a slide with `layout: 'game'`. `classroom/src/components/layouts/GameLayout.jsx`

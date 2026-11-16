@@ -303,8 +303,8 @@ export const CLASSROOM_GAMES = [
     course: 'games', slug: 'G05_guess-who',
     title: 'Guess Who?',
     titleVn: 'Guess Who?',
-    subtitle: 'Yes-or-no questions, one guess, Riverbucks: the 21 animals of Science 4.4 Using keys, or 24 monsters. English and French; you answer on your phone',
-    subtitleVn: 'Câu hỏi có-hay-không, một lần đoán, Riverbucks: 21 con vật của Science 4.4 Using keys, hoặc 24 quái vật. Tiếng Anh và tiếng Pháp; giáo viên trả lời trên điện thoại',
+    subtitle: 'Yes-or-no questions, one guess, Riverbucks: 36 animals (Science 4.4 Using keys and more) in a jungle, or 24 monsters under the stars. English and French; you answer on your phone',
+    subtitleVn: 'Câu hỏi có-hay-không, một lần đoán, Riverbucks: 36 con vật (Science 4.4 Using keys và thêm nữa) trong rừng, hoặc 24 quái vật dưới bầu trời sao. Tiếng Anh và tiếng Pháp; giáo viên trả lời trên điện thoại',
   },
 ]
 

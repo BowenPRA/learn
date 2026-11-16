@@ -76,6 +76,11 @@ const SOUNDS = {
     tone(a, { freq: 220, to: 150, length: 0.45, type: 'sawtooth', gain: 0.14 })
     tone(a, { freq: 233, to: 156, length: 0.45, type: 'square', gain: 0.06 })
   },
+  // A Riverbuck lost: a coin bouncing away.
+  coin: (a) => {
+    tone(a, { freq: 1320, to: 990, length: 0.12, type: 'square', gain: 0.07 })
+    tone(a, { freq: 990, to: 660, start: 0.11, length: 0.2, type: 'square', gain: 0.06 })
+  },
   again: (a) => {
     tone(a, { freq: 440, to: 330, length: 0.14 })
     tone(a, { freq: 440, to: 330, start: 0.16, length: 0.14 })

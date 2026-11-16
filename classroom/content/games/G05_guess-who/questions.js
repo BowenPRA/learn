@@ -119,6 +119,8 @@ const ANIMAL_TOPICS = [
   { id: 'fins', tier: 1, keys: ['fin'], make: split((c) => c.has.fins, 'Does it have fins?', 'A-t-il des nageoires ?') },
   { id: 'shell', tier: 1, keys: ['shell'], make: split((c) => c.has.shell, 'Does it have a shell?', 'A-t-il une coquille ?') },
   { id: 'feathers', tier: 1, keys: ['feather', 'bird'], make: split((c) => c.has.feathers, 'Does it have feathers?', 'A-t-il des plumes ?') },
+  { id: 'fly', tier: 2, keys: ['fly', 'flying', 'flies'], make: split((c) => c.has.flies, 'Can it fly?', 'Peut-il voler ?') },
+  { id: 'big', tier: 2, keys: ['big', 'bigger', 'large', 'huge', 'giant', 'size'], make: split((c) => c.has.big, 'Is it bigger than a person?', 'Est-il plus grand qu’une personne ?') },
   { id: 'fourLegs', family: 'legs', tier: 2, test: (ws) => LEG(ws) && ws.includes('4'), make: split((c) => c.has.legs === 4, 'Does it have four legs?', 'A-t-il quatre pattes ?') },
   { id: 'insect', tier: 2, keys: ['insect', 'bug'], make: split((c) => c.has.insect, 'Is it an insect?', 'Est-ce un insecte ?') },
   { id: 'fish', tier: 2, keys: ['fish'], make: split((c) => c.has.fish, 'Is it a fish?', 'Est-ce un poisson ?') },

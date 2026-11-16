@@ -16,6 +16,18 @@
     "note": "cropped"
   },
   {
+    "name": "blue-whale.jpg",
+    "title": "File:Large Blue Whale Off Southern California Coast Photo Don Ramey Logan.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Large_Blue_Whale_Off_Southern_California_Coast_Photo_Don_Ramey_Logan.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "Don Ramey Logan",
+    "source": "Wikimedia Commons. CC BY-SA, not public domain - the attribution travels with it, which is why it is written here.",
+    "usage": "Unit 1 Finale, Animal Records 100 - the ANSWER picture for \"the largest animal that has ever lived\". Shot from above with the whole animal under clear water, so the length the answer talks about is the thing you actually see. Downscaled to 1280px via the Commons thumbnailer; not otherwise altered.",
+    "bytes": 201233,
+    "copiedFrom": "classroom/content/games/G02_jeopardy/images/blue-whale.jpg",
+    "note": "resized to 900x534 for PRA Learn Guess Who"
+  },
+  {
     "name": "butterfly.jpg",
     "title": "Danaus chrysippus Female by kadavoor.jpg",
     "descUrl": "https://commons.wikimedia.org/wiki/File:Danaus_chrysippus_Female_by_kadavoor.jpg",
@@ -32,12 +44,33 @@
     "note": "cropped"
   },
   {
+    "name": "cow.jpg",
+    "commonsName": "Bò vàng Đông Bắc Việt Nam.JPG",
+    "title": "A yellow cow in the north-east of Vietnam (bò vàng)",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:B%C3%B2_v%C3%A0ng_%C4%90%C3%B4ng_B%E1%BA%AFc_Vi%E1%BB%87t_Nam.JPG",
+    "license": "Public domain",
+    "artist": "Phương Huy",
+    "usage": "The 960px thumbnail (960x1000; original 1622x1690), cropped to x 20-960, y 0-742 (940x742).",
+    "copiedFrom": "classroom/content/y7-science/U04_3/images/cow.jpg"
+  },
+  {
     "name": "crab.jpg",
     "title": "Carcinus maenas.jpg",
     "descUrl": "https://commons.wikimedia.org/wiki/File:Carcinus_maenas.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Hans Hillewaert",
     "note": "cropped"
+  },
+  {
+    "name": "dog.jpg",
+    "title": "File:Golden-retriever-1827903 1920.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Golden-retriever-1827903_1920.jpg",
+    "license": "CC0",
+    "artist": "RetyiRetyi",
+    "source": "Wikimedia Commons. Byte-identical copy of content/games/G01_word-wall/images/dog.jpg — copied rather than imported across games so each folder carries its own licence, and Vite emits a single shared asset because the bytes match. Deliberately the same photograph the class sorted in Word Wall.",
+    "usage": "Living or Not Living? 100 — the ANSWER picture for a living thing. Unaltered copy of the Word Wall tile; see that folder for how it was originally downscaled.",
+    "bytes": 57035,
+    "copiedFrom": "classroom/content/games/G02_jeopardy/images/dog.jpg"
   },
   {
     "name": "dragonfly.jpg",
@@ -48,12 +81,34 @@
     "note": "cropped"
   },
   {
+    "name": "duck.jpg",
+    "title": "File:Anas platyrhynchos male female.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Anas_platyrhynchos_male_female.jpg",
+    "license": "CC BY-SA 2.5",
+    "artist": "This picture was realized by Richard Bartz by using a Canon EF 70-300mm f/4-5.6 IS USM Lens",
+    "source": "Wikimedia Commons. Byte-identical copy of content/games/G01_word-wall/images/duck.jpg — copied rather than imported across games so each folder carries its own licence, and Vite emits a single shared asset because the bytes match.",
+    "usage": "Year 1 board, Claps 300 (\"Which one has 1 clap?\"): the answer. Unaltered copy of the Word Wall tile; see that folder for how it was originally downscaled.",
+    "bytes": 51463,
+    "copiedFrom": "classroom/content/games/G02_jeopardy/images/duck.jpg"
+  },
+  {
     "name": "earthworm.jpg",
     "title": "Eisenia foetida R.H. (8).JPG",
     "descUrl": "https://commons.wikimedia.org/wiki/File:Eisenia_foetida_R.H._(8).JPG",
     "license": "CC BY-SA 3.0",
     "artist": "Rob Hille",
     "note": "cropped"
+  },
+  {
+    "name": "elephant.jpg",
+    "title": "File:African_Bush_Elephant.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:African_Bush_Elephant.jpg",
+    "license": "GFDL 1.2",
+    "artist": "Muhammad Mahdi Karim Facebook The making of this document was supported by Wikimedia CH. (Submit your project!) For all the files concerned, please see the category Supported by Wikimedia CH. العربية ∙ বাংলা ∙ čeština ∙ Deutsch ∙ English ∙ Esperanto ∙ español ∙ français ∙ galego ∙ हिन्दी ∙ magyar ∙ italiano ∙ 日本語 ∙ македонски ∙ Nederlands ∙ português do Brasil ∙ rumantsch ∙ русский ∙ sicilianu ∙ slovenščina ∙ தமிழ் ∙ українська ∙ 中文 ∙ +/−",
+    "source": "Wikimedia Commons. Byte-identical copy of content/games/G01_word-wall/images/elephant.jpg — copied rather than imported across games so each folder carries its own licence, and Vite emits a single shared asset because the bytes match.",
+    "usage": "Year 1 board, Claps 200 (\"How many claps?\"): the picture. Unaltered copy of the Word Wall tile; see that folder for how it was originally downscaled.",
+    "bytes": 94123,
+    "copiedFrom": "classroom/content/games/G02_jeopardy/images/elephant.jpg"
   },
   {
     "name": "fish-clownfish.jpg",
@@ -104,6 +159,39 @@
     "note": "cropped"
   },
   {
+    "name": "giraffe.jpg",
+    "title": "File:Giraffe Ithala KZN South Africa Luca Galuzzi 2004.JPG",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Giraffe_Ithala_KZN_South_Africa_Luca_Galuzzi_2004.JPG",
+    "license": "CC BY-SA 2.5",
+    "artist": "Luca Galuzzi (Lucag)",
+    "source": "Wikimedia Commons. CC BY-SA, not public domain - keep the attribution.",
+    "usage": "Unit 1 Finale, Animal Records 300 - the QUESTION picture, not the answer one: the clue already names the giraffe, so the photo is there to make two metres of neck vivid while the teams argue about how many bones are in it. Two animals with their necks crossed, which shows the length better than one standing straight. Downscaled to 1280px via the Commons thumbnailer; not otherwise altered.",
+    "bytes": 283153,
+    "copiedFrom": "classroom/content/games/G02_jeopardy/images/giraffe.jpg",
+    "note": "resized to 900x600 for PRA Learn Guess Who"
+  },
+  {
+    "name": "hippo.jpg",
+    "title": "File:Hipopótamo (Hippopotamus amphibius), parque nacional de Chobe, Botsuana, 2018-07-28, DD 82.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Hipop%C3%B3tamo_(Hippopotamus_amphibius),_parque_nacional_de_Chobe,_Botsuana,_2018-07-28,_DD_82.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Diego Delso",
+    "source": "Wikimedia Commons. CC BY-SA, not public domain - the attribution has to travel with it.",
+    "usage": "Year 1 board, Claps 400 (\"How many claps?\"): the picture. One whole hippo standing on dry ground, so the animal the long word names is unmistakable. Downscaled to 800px and re-encoded at quality 85; not otherwise altered.",
+    "bytes": 112634,
+    "copiedFrom": "classroom/content/games/G02_jeopardy/images/hippo.jpg"
+  },
+  {
+    "name": "horse.jpg",
+    "commonsName": "Mangalarga Marchador Conformação.jpg",
+    "title": "A grey horse standing side on",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Mangalarga_Marchador_Conforma%C3%A7%C3%A3o.jpg",
+    "license": "CC BY-SA 2.5",
+    "artist": "Pbicalho",
+    "usage": "The 960px thumbnail (960x802; original 1407x1176), cropped to x 80-960, y 160-802 (880x642).",
+    "copiedFrom": "classroom/content/y7-science/U04_3/images/horse.jpg"
+  },
+  {
     "name": "housefly.jpg",
     "title": "Common house fly, Musca domestica.jpg",
     "descUrl": "https://commons.wikimedia.org/wiki/File:Common_house_fly,_Musca_domestica.jpg",
@@ -126,6 +214,62 @@
     "license": "CC BY-SA 4.0",
     "artist": "RSC-KWC",
     "note": "cropped"
+  },
+  {
+    "name": "lion.jpg",
+    "commonsName": "A LION WALKING.jpg",
+    "title": "A male lion walking",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:A_LION_WALKING.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "DipaliLath",
+    "usage": "The 960px thumbnail (960x578; original 4928x2968), cropped to x 180-760, y 0-578 (580x578).",
+    "copiedFrom": "classroom/content/y7-science/U04_3/images/lion.jpg"
+  },
+  {
+    "name": "octopus.jpg",
+    "title": "File:Octopus2.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Octopus2.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "albert kok",
+    "source": "Wikimedia Commons. CC BY-SA, not public domain - keep the attribution. The same Commons file is the Word Wall's OCTOPUS tile; this is a larger copy of it, because a projected reveal needs more than a 500px thumbnail.",
+    "usage": "Unit 1 Finale, Animal Records 400 - the ANSWER picture for \"three hearts and blue blood\". Whole animal, arms and eye visible, not camouflaged into the rock - most octopus photographs on Commons are, and are useless at the front of a room. Downscaled to 1280px via the Commons thumbnailer; not otherwise altered.",
+    "bytes": 258180,
+    "copiedFrom": "classroom/content/games/G02_jeopardy/images/octopus.jpg",
+    "note": "resized to 900x685 for PRA Learn Guess Who"
+  },
+  {
+    "name": "penguin.jpg",
+    "title": "File:South_Shetland-2016-Deception_Island–Chinstrap_penguin_(Pygoscelis_antarctica)_04.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:South_Shetland-2016-Deception_Island%E2%80%93Chinstrap_penguin_(Pygoscelis_antarctica)_04.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Godot13",
+    "source": "Wikimedia Commons. Byte-identical copy of content/games/G01_word-wall/images/penguin.jpg — copied rather than imported across games so each folder carries its own licence, and Vite emits a single shared asset because the bytes match.",
+    "usage": "Year 1 board, Claps 300 (\"Which one has 1 clap?\"): another choice. Unaltered copy of the Word Wall tile; see that folder for how it was originally downscaled.",
+    "bytes": 92251,
+    "copiedFrom": "classroom/content/games/G02_jeopardy/images/penguin.jpg"
+  },
+  {
+    "name": "peregrine-falcon.jpg",
+    "title": "File:Peregrine falcon (Falco peregrinus) in flight, Cape Baily, Kamay Botany Bay NSW Jun 2022.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Peregrine_falcon_(Falco_peregrinus)_in_flight,_Cape_Baily,_Kamay_Botany_Bay_NSW_Jun_2022.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Kytabu",
+    "source": "Wikimedia Commons. CC BY-SA, not public domain - keep the attribution.",
+    "usage": "Unit 1 Finale, Animal Records 200 - the ANSWER picture for \"the fastest animal in the world\". Wings out against plain sky, which is what a bird has to be for a room to read it off a projector in one second. Downscaled to 1280px via the Commons thumbnailer; not otherwise altered.",
+    "bytes": 224987,
+    "copiedFrom": "classroom/content/games/G02_jeopardy/images/peregrine-falcon.jpg",
+    "note": "resized to 900x900 for PRA Learn Guess Who"
+  },
+  {
+    "name": "polar-bears.jpg",
+    "commonsName": "Polar Bear Mother and Cubs detail.jpg",
+    "title": "A polar bear mother and her two cubs walking along a snow bank below a rock cliff",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Polar_Bear_Mother_and_Cubs_detail.jpg",
+    "license": "CC BY-SA 2.0",
+    "artist": "Alastair Rae",
+    "usage": "The 1280px thumbnail (1280x960; original 1309x982) cropped to the bears (x 100-1201, y 120-854), resized to 1200x800.",
+    "copiedFrom": "classroom/content/y7-science/U04_1/images/polar-bears.jpg",
+    "note": "resized to 900x600 for PRA Learn Guess Who"
   },
   {
     "name": "saola.jpg",
@@ -165,5 +309,26 @@
     "license": "CC BY 2.0",
     "artist": "platycryptus",
     "note": "cropped"
+  },
+  {
+    "name": "tiger.jpg",
+    "commonsName": "Bengal-Tiger Corbett Uttarakhand Dec-2013.jpg",
+    "title": "A tigress walking on a track in Jim Corbett National Park, India",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Bengal-Tiger_Corbett_Uttarakhand_Dec-2013.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "Soumyajit Nandy",
+    "usage": "The 960px thumbnail (960x640; original 1024x683), cropped to x 300-900, y 40-640 (600x600).",
+    "copiedFrom": "classroom/content/y7-science/U04_3/images/tiger.jpg"
+  },
+  {
+    "name": "turtle.jpg",
+    "title": "File:Chelonia_mydas_is_going_for_the_air_edit.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Chelonia_mydas_is_going_for_the_air_edit.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "Brocken Inaglory",
+    "source": "Wikimedia Commons. Byte-identical copy of content/games/G01_word-wall/images/turtle.jpg — copied rather than imported across games so each folder carries its own licence, and Vite emits a single shared asset because the bytes match.",
+    "usage": "Year 1 board, Claps 300 (\"Which one has 1 clap?\"): another choice; Year 1 board, Which Is…? 200 (\"Which is the slowest?\"): another choice. Unaltered copy of the Word Wall tile; see that folder for how it was originally downscaled.",
+    "bytes": 83567,
+    "copiedFrom": "classroom/content/games/G02_jeopardy/images/turtle.jpg"
   }
 ]
