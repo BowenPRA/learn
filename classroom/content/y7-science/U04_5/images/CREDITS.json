@@ -1,0 +1,58 @@
+[
+  {
+    "name": "pallas-cat.jpg",
+    "title": "File:Manoel.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Manoel.jpg",
+    "license": "CC BY-SA 2.0",
+    "artist": "Sander van der Wel"
+  },
+  {
+    "name": "leopard.jpg",
+    "title": "File:African_leopard_male_(cropped).jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:African_leopard_male_(cropped).jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Sumeet Moghe"
+  },
+  {
+    "name": "lynx.jpg",
+    "title": "File:Lynx_Nationalpark_Bayerischer_Wald_01.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Lynx_Nationalpark_Bayerischer_Wald_01.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "Aconcagua (talk)"
+  },
+  {
+    "name": "tiger.jpg",
+    "title": "File:Bengal_tiger_(Panthera_tigris_tigris)_female_3_crop.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Bengal_tiger_(Panthera_tigris_tigris)_female_3_crop.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Charles J. Sharp"
+  },
+  {
+    "name": "rambutan.jpg",
+    "title": "File:Vietnam 08 - 164 - rambutam and fruit at the market (3186660549).jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Vietnam_08_-_164_-_rambutam_and_fruit_at_the_market_(3186660549).jpg",
+    "license": "CC BY 2.0",
+    "artist": "McKay Savage from London, UK"
+  },
+  {
+    "name": "dragon-fruit.jpg",
+    "title": "File:Fruit du dragon.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Fruit_du_dragon.jpg",
+    "license": "CC0",
+    "artist": "Dinkum"
+  },
+  {
+    "name": "banana.jpg",
+    "title": "File:Bananas white background DS.jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Bananas_white_background_DS.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "Augustus Binu : flickr"
+  },
+  {
+    "name": "lime.jpg",
+    "title": "File:Starr-140117-3997-Citrus_latifolia-Tahitian_fruit_and_leaves-Hawea_Pl_Olinda-Maui_(24612312943).jpg",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Starr-140117-3997-Citrus_latifolia-Tahitian_fruit_and_leaves-Hawea_Pl_Olinda-Maui_(24612312943).jpg",
+    "license": "CC BY 3.0 us",
+    "artist": "Forest and Kim Starr"
+  }
+]
