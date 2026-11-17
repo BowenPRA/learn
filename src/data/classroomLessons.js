@@ -124,6 +124,11 @@ export const CLASSROOM_LESSONS = [
     subtitle: 'Ask some, learn about everyone: a fair sample, chosen at random, and big enough to trust',
   },
   {
+    course: 'y7-math', slug: 'U07_1a', classKey: 'math:Year 7', unit: '7.1a', teacher: 'Mr. Bowen',
+    title: 'Fractions and Mixed Numbers',
+    subtitle: 'Say it, cut it, count the wholes: equivalent fractions, improper fractions and mixed numbers',
+  },
+  {
     course: 'y7-science', slug: 'U00_1', classKey: 'science:Year 7', unit: 'Day 1', teacher: 'Mr. Bowen', hidden: true,
     title: 'Day One: Welcome to Year 7',
     subtitle: 'Homeroom · Science — Tue 4 Aug 2026',

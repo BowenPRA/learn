@@ -204,10 +204,10 @@ Other scripts:
 
 Classroom decks (`src/data/classroomLessons.js`, 13 November 2026):
 
-- **y7-math**: 24 decks: Units 1 to 6 plus tasks T1 Formula Machine, T2 Girl Math, T3 The Maths Poster. `classroom/content/y7-math/`
+- **y7-math**: 25 decks: Units 1 to 6, 7.1 Part 1 (Fractions and Mixed Numbers, `U07_1a`), plus tasks T1 Formula Machine, T2 Girl Math, T3 The Maths Poster. `classroom/content/y7-math/`
 - **y7-science**: 34 decks: Units 1 to 4 (to 4.3), labs, models; Day 1 hidden. `classroom/content/y7-science/`
 - **games**: 2, Jeopardy and Guess Who (staff only, `CLASSROOM_GAMES`). `classroom/content/games/`
-- **Unit headings**: Maths units 1–5 and Science 1–3 have names; Maths 6 and Science 4 show a number only. `src/data/classroomLessons.js`
+- **Unit headings**: Maths units 1–5 and Science 1–3 have names; Maths 6 and 7 and Science 4 show a number only. `src/data/classroomLessons.js`
 
 Units (`src/data/units.js`), in order:
 

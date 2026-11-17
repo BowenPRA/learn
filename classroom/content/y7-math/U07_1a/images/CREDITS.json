@@ -1,0 +1,29 @@
+[
+  {
+    "file": "pizza.jpg",
+    "name": "Pizza-3007395.jpg",
+    "title": "A pizza cut into 8 slices, from above",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Pizza-3007395.jpg",
+    "license": "CC0",
+    "artist": "igorovsyannykov (Pixabay)",
+    "usage": "NUM_DEN (slide 3): 3 slices of 8 marked 1, 2, 3 for numerator and denominator. The 960 px Commons thumbnail, a glass of beer in the top-right corner painted over with the background colour, cropped to the 600 px square around the pizza, quality 82."
+  },
+  {
+    "file": "chocolate.jpg",
+    "name": "Hershey-bar-open.JPG",
+    "title": "An unwrapped chocolate bar of 12 equal pieces",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:Hershey-bar-open.JPG",
+    "license": "Public domain",
+    "artist": "Evan-Amos",
+    "usage": "BACK TO THE STARTER (slide 7): a real bar of 12 equal pieces; 3/4 of it is 9 pieces. The 960 px Commons thumbnail, trimmed to 920 × 400, quality 82."
+  },
+  {
+    "file": "banhchung.jpg",
+    "name": "Bánh chưng chấm mật mía.JPG",
+    "title": "A bánh chưng cut into 8 pieces, with a bowl of molasses",
+    "descUrl": "https://commons.wikimedia.org/wiki/File:B%C3%A1nh_ch%C6%B0ng_ch%E1%BA%A5m_m%E1%BA%ADt_m%C3%ADa.JPG",
+    "license": "CC BY-SA 3.0",
+    "artist": "Hungda",
+    "usage": "WORD PROBLEM (slide 21): a bánh chưng cut the usual way into 8 equal pieces, at Tết. The 960 px Commons thumbnail, cropped to the cake (490 × 475), quality 82."
+  }
+]
