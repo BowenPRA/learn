@@ -1,0 +1,1 @@
+var e=`/assets/earthworm-D3n_Qb11.jpg`,t=`/assets/chicken-D4rSpbX5.jpg`,n=`/assets/butterfly-Yhfr_YvT.jpg`,r=`/assets/spider-CY9xGlzr.jpg`,i=`/assets/snake-D-pUTZCa.jpg`,a=`/assets/snail-0OcgoV99.jpg`,o=`/assets/bee-HtaJ4uSw.jpg`,s=`/assets/ladybird-DTtAbMLF.jpg`;export{r as a,e as c,i,o as n,n as o,a as r,t as s,s as t};
