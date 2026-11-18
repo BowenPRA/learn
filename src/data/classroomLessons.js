@@ -292,6 +292,11 @@ export const CLASSROOM_LESSONS = [
     title: 'Constructing Keys',
     subtitle: 'Choose, build, test and fix: good key questions, splitting in two, and a key for four cats that a partner tests',
   },
+  {
+    course: 'y7-science', slug: 'U04_classkey', classKey: 'science:Year 7', unit: '4.5+', teacher: 'Mr. Bowen',
+    title: 'Our Class Key',
+    subtitle: 'Build, test and copy a dichotomous key for the people in our class',
+  },
 ]
 
 // Games the teacher runs on the projector, from classroom/content/games/<slug>/.
