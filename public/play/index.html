@@ -1,0 +1,14 @@
+<!doctype html>
+<!-- learn.pra.edu.vn/play: the short address on the Guess the Teacher TV screen.
+     Sends the phone on to the game's player page, where it types the code. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guess the Teacher · PRA Learn</title>
+<script>location.replace('/classroom/#/play' + (location.hash.length > 1 ? '/' + location.hash.slice(1) : ''))</script>
+</head>
+<body style="background:#2e1f8f;color:#fff;font-family:system-ui,sans-serif;text-align:center;padding:40px 16px">
+<p><a href="/classroom/#/play" style="color:#fde047">Guess the Teacher</a></p>
+</body>
+</html>

@@ -326,6 +326,13 @@ export const CLASSROOM_GAMES = [
     subtitle: 'Yes-or-no questions, one guess, Riverbucks: 36 animals (Science 4.4 Using keys and more) in a jungle, or 24 monsters under the stars. English and French; you answer on your phone',
     subtitleVn: 'Câu hỏi có-hay-không, một lần đoán, Riverbucks: 36 con vật (Science 4.4 Using keys và thêm nữa) trong rừng, hoặc 24 quái vật dưới bầu trời sao. Tiếng Anh và tiếng Pháp; giáo viên trả lời trên điện thoại',
   },
+  {
+    course: 'games', slug: 'G06_guess-the-teacher',
+    title: 'Guess the Teacher',
+    titleVn: 'Đoán giáo viên',
+    subtitle: 'Five emojis, one teacher: families join on their phones with the QR code and type the name. Faster answers score more, with a live leaderboard and a podium',
+    subtitleVn: 'Năm emoji, một giáo viên: phụ huynh và học viên quét mã QR, nhập tên giáo viên trên điện thoại. Trả lời càng nhanh càng nhiều điểm, có bảng xếp hạng',
+  },
 ]
 
 /** Where a classroom lesson opens: its own page, outside PRA Learn's hash routes.

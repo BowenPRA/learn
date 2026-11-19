@@ -23,6 +23,9 @@ import { CLASSROOM_GAMES, CLASSROOM_LESSONS } from '../src/data/classroomLessons
 const DeckRemote = lazy(() => import('./src/remote/DeckRemote.jsx'))
 // The teacher's plan: its own chunk, which a student never downloads.
 const Plan = lazy(() => import('./src/pages/Plan.jsx'))
+// Guess the Teacher's player screen (#/play/<room>, from the QR on the TV):
+// open to anyone, since parents have no login. It holds no answers.
+const TeacherGamePhone = lazy(() => import('./content/games/G06_guess-the-teacher/phone.jsx'))
 
 /** Back to PRA Learn's home page (a different page from this one). */
 function ToLearn() {
@@ -123,6 +126,8 @@ createRoot(document.getElementById('root')).render(
         <Route path="/plan/:courseId/:slug" element={<PlanView />} />
         <Route path="/remote" element={<Suspense fallback={null}><DeckRemote /></Suspense>} />
         <Route path="/remote/:room" element={<Suspense fallback={null}><DeckRemote /></Suspense>} />
+        <Route path="/play" element={<Suspense fallback={null}><TeacherGamePhone /></Suspense>} />
+        <Route path="/play/:room" element={<Suspense fallback={null}><TeacherGamePhone /></Suspense>} />
         {/* The deck's Back goes to #/course/<id>: here that is PRA Learn's home. */}
         <Route path="*" element={<ToLearn />} />
       </Routes>

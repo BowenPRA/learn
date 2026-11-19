@@ -41,7 +41,7 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **My classes (teacher home)**: classes by year group, with students, logins, packs, decks. `src/pages/TeacherHome.jsx` · `/`
 - **Units (teacher home)**: every unit, for staff to open. `src/pages/TeacherHome.jsx`, `src/components/UnitCards.jsx`
 - **Lessons from class (staff)**: every deck with its class, folded by unit, with Plan links. `src/components/ClassroomLessons.jsx`
-- **Classroom games**: staff-only list of games (Jeopardy, Guess Who). `src/components/ClassroomLessons.jsx`, `src/data/classroomLessons.js`
+- **Classroom games**: staff-only list of games (Jeopardy, Guess Who, Guess the Teacher). `src/components/ClassroomLessons.jsx`, `src/data/classroomLessons.js`
 - **Class page**: one class's packs, results, logins, unit XP and decks. `src/pages/ClassView.jsx` · `/t/:classKey`
 - **Open / Hide / Due date**: staff publish, hide and date a pack for the class. `src/pages/ClassView.jsx`, `src/lib/live.js`
 - **Most missed + Common slips**: the questions most of the class got wrong, slips and who hit them. `src/pages/ClassView.jsx`, `src/stepPractice/model.js`
@@ -80,6 +80,9 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **Jeopardy**: 14 boards, staff only, EN+FR setting, phone screen, sounds and pictures. `classroom/content/games/G02_jeopardy/` · `/classroom/#/lesson/games/G02_jeopardy`
 - **Jeopardy boards**: the boards' categories, clues and answers. `classroom/content/games/G02_jeopardy/boards.js`
 - **Guess Who**: yes-or-no questions and one guess, staff only, EN/FR; Animals (36, 24 a round: Science 4.4 and more, a fact on each reveal) or Monsters, in a jungle or a night-sky scene, with cards that deal in and flip; the secret and the answers on the phone; ideas under the box; Riverbucks by question count. `classroom/content/games/G05_guess-who/` · `/classroom/#/lesson/games/G05_guess-who`
+- **Guess the Teacher**: an emoji quiz for families on the TV: teams join on their phones by QR code with no sign-in, five emojis flip up one every 3 s, teams type the teacher's name (forgiving: accents, titles, a typo), 1000 to 100 points by time left with the last round double, a live leaderboard, reveal with confetti, podium; staff only for the TV. `classroom/content/games/G06_guess-the-teacher/` · `/classroom/#/lesson/games/G06_guess-the-teacher`
+- **Guess the Teacher's teachers**: the emoji sets and names (a set with no name is left out). `classroom/content/games/G06_guess-the-teacher/teachers.js`
+- **Guess the Teacher phone**: the players' screen, English with Vietnamese lines, no answers in it. `classroom/content/games/G06_guess-the-teacher/phone.jsx` · `/classroom/#/play/<room>`, short address `/play` (`public/play/index.html`)
 - **Guess Who boards and ideas**: the cards (animal photos with what a key asks about, emoji monsters) and the model questions. `classroom/content/games/G05_guess-who/boards.js`, `classroom/content/games/G05_guess-who/questions.js`
 - **Game phone screen**: shared pieces for a game's remote screen. `classroom/src/remote/GamePanel.jsx`, `classroom/content/games/G02_jeopardy/remote.jsx`, `classroom/content/games/G05_guess-who/remote.jsx`
 - **Games inside a deck**: a slide with `layout: 'game'`. `classroom/src/components/layouts/GameLayout.jsx`
@@ -206,7 +209,7 @@ Classroom decks (`src/data/classroomLessons.js`, 13 November 2026):
 
 - **y7-math**: 25 decks: Units 1 to 6, 7.1 Part 1 (Fractions and Mixed Numbers, `U07_1a`), plus tasks T1 Formula Machine, T2 Girl Math, T3 The Maths Poster. `classroom/content/y7-math/`
 - **y7-science**: 34 decks: Units 1 to 4 (to 4.3), labs, models; Day 1 hidden. `classroom/content/y7-science/`
-- **games**: 2, Jeopardy and Guess Who (staff only, `CLASSROOM_GAMES`). `classroom/content/games/`
+- **games**: 3, Jeopardy, Guess Who and Guess the Teacher (staff only, `CLASSROOM_GAMES`). `classroom/content/games/`
 - **Unit headings**: Maths units 1–5 and Science 1–3 have names; Maths 6 and 7 and Science 4 show a number only. `src/data/classroomLessons.js`
 
 Units (`src/data/units.js`), in order:
