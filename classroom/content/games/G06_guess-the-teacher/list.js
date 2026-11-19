@@ -7,7 +7,10 @@
 // so. Before anyone has saved a list, the game plays the starting list in
 // teachers.js.
 //
-//   { v: 1, shuffle, teachers: [{ id, emojis: ['🏠', …], name, also: ['…'], on }] }
+//   { v: 1, shuffle, teachers: [{ id, emojis: ['🏠', …], name, also: ['…'], on, photo }] }
+//
+// `photo` is which picture from pra.edu.vn the reveal shows (staff.js): '' to
+// match the name, 'none', or a website key such as 'seth'.
 import { api } from '../../../../src/lib/api.js'
 import { TEACHERS } from './teachers.js'
 import { EMOJI_MAX } from './protocol.js'
@@ -22,7 +25,7 @@ export const newId = () => Math.random().toString(36).slice(2, 10)
 export const startingList = () => ({
   v: 1,
   shuffle: false,
-  teachers: TEACHERS.map((t) => ({ id: newId(), emojis: [...t.emojis], name: t.name, also: [...(t.also || [])], on: Boolean(t.name) })),
+  teachers: TEACHERS.map((t) => ({ id: newId(), emojis: [...t.emojis], name: t.name, also: [...(t.also || [])], on: Boolean(t.name), photo: '' })),
 })
 
 const text = (s) => String(s ?? '').replace(/\s+/g, ' ').trim().slice(0, TEXT_MAX)
@@ -39,6 +42,7 @@ export function tidy(raw) {
       name: text(t?.name),
       also: (Array.isArray(t?.also) ? t.also : []).map(text).filter(Boolean).slice(0, 8),
       on: t?.on !== false,
+      photo: /^(none|[a-z0-9-]{1,40})$/.test(t?.photo || '') ? t.photo : '',
     })),
   }
 }
@@ -48,7 +52,7 @@ export const ready = (t) => t.on && Boolean(t.name) && t.emojis.length > 0
 
 /** The teachers a game starts with, in list order or shuffled. */
 export function setsFor(list) {
-  const sets = list.teachers.filter(ready).map((t) => ({ emojis: t.emojis, name: t.name, also: t.also }))
+  const sets = list.teachers.filter(ready).map((t) => ({ emojis: t.emojis, name: t.name, also: t.also, photo: t.photo || '' }))
   if (list.shuffle) {
     for (let i = sets.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));

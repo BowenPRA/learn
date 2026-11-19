@@ -1,58 +1,73 @@
 // content/games/G06_guess-the-teacher/editor.jsx
 // Edit teachers: the list the game plays, edited on the TV's laptop. One row a
-// teacher: an On switch, the emojis (typed or pasted; Windows + . opens the
+// teacher: an On switch, the photo from pra.edu.vn the reveal will show (found
+// by name, or picked), the emojis (typed or pasted; Windows + . opens the
 // emoji keyboard), the name shown at the reveal, and other names that also
 // count as right. Rows move up and down and can be deleted. Every change is
 // saved as it is made (list.js); the line at the top says where.
 import { useState } from 'react'
-import { ArrowDown, ArrowUp, Check, Plus, Shuffle, Trash2 } from 'lucide-react'
+import { ArrowDown, ArrowUp, Check, ImageOff, Plus, Shuffle, Trash2 } from 'lucide-react'
 import { newId, ready, splitEmojis } from './list.js'
 import { EMOJI_MAX } from './protocol.js'
+import { TONES, staffFor } from './staff.js'
 
 const U = (n) => `calc(var(--u) * ${n})`
 
 export const EDITOR_CSS = `
-.gt-ed { --u: min(1cqh, .5625cqw); position: absolute; inset: 0; z-index: 30; display: flex; padding: ${U(2.4)} ${U(3.4)}; background: rgba(13,8,51,.72); backdrop-filter: blur(6px) }
-.gt-ed-card { flex: 1; min-height: 0; display: flex; flex-direction: column; background: #fff; color: #1e1b4b; border-radius: ${U(2.6)};
-  box-shadow: 0 ${U(.8)} 0 #a5b4fc, 0 ${U(2)} ${U(5)} rgba(0,0,0,.4); overflow: hidden; user-select: text }
-.gt-ed-head { display: flex; align-items: center; gap: ${U(2)}; padding: ${U(2)} ${U(2.6)}; border-bottom: ${U(.3)} solid #e0e7ff; flex-wrap: wrap }
-.gt-ed-head h2 { margin: 0; font-size: ${U(4)}; font-weight: 800; line-height: 1 }
-.gt-ed-status { flex: 1; min-width: ${U(30)}; font-size: ${U(1.9)}; font-weight: 700; color: #6b7280; line-height: 1.25 }
-.gt-ed-status.ok { color: #047857 }
-.gt-ed-status.warn { color: #b45309 }
-.gt-ed-status small { display: block; font-weight: 600; color: #9ca3af; font-size: ${U(1.6)} }
-.gt-ed-btn { display: inline-flex; align-items: center; gap: ${U(.7)}; font: inherit; font-size: ${U(2.1)}; font-weight: 700; line-height: 1; cursor: pointer;
-  padding: ${U(1)} ${U(1.6)}; border-radius: ${U(1.4)}; border: ${U(.25)} solid #c7d2fe; background: #eef2ff; color: #3730a3 }
-.gt-ed-btn:hover { background: #e0e7ff }
-.gt-ed-btn svg { width: ${U(2.3)}; height: ${U(2.3)} }
-.gt-ed-btn.on { background: #4f46e5; border-color: #4f46e5; color: #fff }
-.gt-ed-btn.done { background: #fde047; border-color: #eab308; color: #3b0764; font-size: ${U(2.4)}; padding: ${U(1.1)} ${U(2.4)} }
-.gt-ed-cols, .gt-ed-row { display: grid; grid-template-columns: ${U(3)} ${U(7.5)} minmax(0, 1.25fr) minmax(0, 1fr) minmax(0, 1.1fr) ${U(15)}; gap: ${U(1.2)}; align-items: center }
-.gt-ed-cols { padding: ${U(1.2)} ${U(2.6)} ${U(.6)}; font-size: ${U(1.6)}; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #6b7280 }
-.gt-ed-list { flex: 1; min-height: 0; overflow-y: auto; padding: 0 ${U(2.6)} ${U(1.4)} }
-.gt-ed-row { padding: ${U(.9)} 0; border-bottom: 1px solid #eef2ff }
-.gt-ed-row.off > :not(.gt-ed-switchcell):not(.gt-ed-tools) { opacity: .45 }
-.gt-ed-num { font-size: ${U(2.2)}; font-weight: 800; color: #9ca3af; text-align: right }
-.gt-ed-in { width: 100%; font: inherit; font-size: ${U(2.2)}; font-weight: 700; color: #1e1b4b; padding: ${U(.9)} ${U(1.2)}; border-radius: ${U(1.2)};
-  border: ${U(.25)} solid #c7d2fe; background: #fff; outline: none }
-.gt-ed-in:focus { border-color: #6366f1 }
+.gt-ed { --u: min(1cqh, .5625cqw); position: absolute; inset: 0; z-index: 30; display: flex; padding: ${U(2.4)} ${U(3.4)}; background: rgba(14,42,92,.38); backdrop-filter: blur(6px) }
+.gt-ed-card { flex: 1; min-height: 0; display: flex; flex-direction: column; background: #fff; color: var(--ink); border-radius: ${U(2.8)};
+  box-shadow: var(--shadow-pop); overflow: hidden; user-select: text }
+.gt-ed-head { display: flex; align-items: center; gap: ${U(2)}; padding: ${U(2.2)} ${U(2.8)}; border-bottom: 1px solid var(--line); flex-wrap: wrap }
+.gt-ed-head h2 { margin: 0; font-size: ${U(3.8)}; font-weight: 800; letter-spacing: -.02em; color: var(--blue-ink); line-height: 1 }
+.gt-ed-status { flex: 1; min-width: ${U(30)}; font-size: ${U(1.85)}; font-weight: 600; color: var(--ink-soft); line-height: 1.3 }
+.gt-ed-status.ok { color: var(--green-deep) }
+.gt-ed-status.warn { color: var(--coral-deep) }
+.gt-ed-status small { display: block; font-weight: 500; color: var(--ink-soft); font-size: ${U(1.55)} }
+.gt-ed-btn { display: inline-flex; align-items: center; gap: ${U(.7)}; font: inherit; font-size: ${U(2)}; font-weight: 600; line-height: 1; cursor: pointer;
+  padding: ${U(1.05)} ${U(1.8)}; border-radius: 999px; border: 2px solid var(--line); background: #fff; color: var(--blue-ink); transition: background .2s, border-color .2s }
+.gt-ed-btn:hover { background: var(--blue-pale); border-color: var(--blue-tint) }
+.gt-ed-btn svg { width: ${U(2.2)}; height: ${U(2.2)}; color: var(--blue) }
+.gt-ed-btn.on { background: var(--blue-tint); border-color: var(--blue-tint); color: var(--blue-deep) }
+.gt-ed-btn.done { background: var(--blue); border-color: var(--blue); color: #fff; font-size: ${U(2.3)}; padding: ${U(1.15)} ${U(2.6)}; box-shadow: 0 ${U(.7)} ${U(1.8)} rgba(17,109,255,.3) }
+.gt-ed-btn.done svg { color: #fff }
+.gt-ed-btn.done:hover { background: var(--blue-deep); border-color: var(--blue-deep) }
+.gt-ed-cols, .gt-ed-row { display: grid; grid-template-columns: ${U(3)} ${U(7.5)} ${U(25)} minmax(0, 1.15fr) minmax(0, .9fr) minmax(0, 1fr) ${U(15)}; gap: ${U(1.2)}; align-items: center }
+.gt-ed-cols { padding: ${U(1.4)} ${U(2.8)} ${U(.6)}; font-size: ${U(1.5)}; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft) }
+.gt-ed-list { flex: 1; min-height: 0; overflow-y: auto; padding: 0 ${U(2.8)} ${U(1.4)} }
+.gt-ed-row { padding: ${U(.9)} 0; border-bottom: 1px solid var(--line) }
+.gt-ed-row.off > :not(.gt-ed-switchcell):not(.gt-ed-tools) { opacity: .42 }
+.gt-ed-num { font-size: ${U(2.1)}; font-weight: 700; color: var(--ink-soft); text-align: right }
+.gt-ed-in { width: 100%; font: inherit; font-size: ${U(2.1)}; font-weight: 600; color: var(--ink); padding: ${U(.9)} ${U(1.2)}; border-radius: ${U(1.2)};
+  border: 2px solid var(--line); background: #fff; outline: none; transition: border-color .15s, box-shadow .15s }
+.gt-ed-in:focus { border-color: var(--blue); box-shadow: 0 0 0 ${U(.45)} var(--blue-tint) }
 .gt-ed-in.emo { font-size: ${U(3)}; padding: ${U(.4)} ${U(1)}; letter-spacing: .05em }
-.gt-ed-tag { display: inline-block; margin-top: ${U(.4)}; font-size: ${U(1.5)}; font-weight: 800; color: #b45309; background: #fef3c7; padding: ${U(.2)} ${U(.8)}; border-radius: 999px }
-.gt-ed-switch { position: relative; width: ${U(6.4)}; height: ${U(3.6)}; border-radius: 999px; border: none; padding: 0; cursor: pointer; background: #d1d5db; transition: background .15s }
+.gt-ed-tag { display: inline-block; margin-top: ${U(.4)}; font-size: ${U(1.45)}; font-weight: 600; color: var(--sun-ink); background: var(--sun-pale); padding: ${U(.2)} ${U(.8)}; border-radius: 999px }
+.gt-ed-photo { display: flex; align-items: center; gap: ${U(1)}; min-width: 0 }
+.gt-ed-thumb { position: relative; width: ${U(5.2)}; height: ${U(5.2)}; flex: none; border-radius: 50%; overflow: hidden; background: linear-gradient(165deg, var(--a), var(--b));
+  box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--line) }
+.gt-ed-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 6% }
+.gt-ed-thumb.none { background: var(--row); color: var(--ink-soft); display: inline-flex; align-items: center; justify-content: center }
+.gt-ed-thumb.none svg { width: ${U(2.2)}; height: ${U(2.2)} }
+.gt-ed-pick { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: ${U(.25)} }
+.gt-ed-pick select { width: 100%; font: inherit; font-size: ${U(1.7)}; font-weight: 600; color: var(--ink); padding: ${U(.5)} ${U(.6)}; border-radius: ${U(1)};
+  border: 2px solid var(--line); background: #fff; outline: none; cursor: pointer }
+.gt-ed-pick select:focus { border-color: var(--blue) }
+.gt-ed-pick small { font-size: ${U(1.4)}; font-weight: 500; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.gt-ed-switch { position: relative; width: ${U(6.4)}; height: ${U(3.6)}; border-radius: 999px; border: none; padding: 0; cursor: pointer; background: #CBD5E1; transition: background .15s }
 .gt-ed-switch::after { content: ''; position: absolute; top: ${U(.45)}; left: ${U(.45)}; width: ${U(2.7)}; height: ${U(2.7)}; border-radius: 999px; background: #fff;
-  box-shadow: 0 1px 3px rgba(0,0,0,.3); transition: transform .15s }
-.gt-ed-switch[aria-checked="true"] { background: #10b981 }
+  box-shadow: 0 1px 3px rgba(14,42,92,.3); transition: transform .2s var(--bounce) }
+.gt-ed-switch[aria-checked="true"] { background: var(--green) }
 .gt-ed-switch[aria-checked="true"]::after { transform: translateX(${U(2.8)}) }
 .gt-ed-tools { display: flex; gap: ${U(.5)}; justify-content: flex-end }
-.gt-ed-icon { width: ${U(4.4)}; height: ${U(4.4)}; display: inline-flex; align-items: center; justify-content: center; border-radius: ${U(1.1)}; cursor: pointer;
-  border: ${U(.25)} solid #e0e7ff; background: #f8fafc; color: #4b5563; padding: 0 }
-.gt-ed-icon:hover:not(:disabled) { background: #eef2ff; color: #3730a3 }
+.gt-ed-icon { width: ${U(4.4)}; height: ${U(4.4)}; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; cursor: pointer;
+  border: none; background: var(--blue-pale); color: var(--blue-ink); padding: 0 }
+.gt-ed-icon:hover:not(:disabled) { background: var(--blue-tint) }
 .gt-ed-icon:disabled { opacity: .3; cursor: default }
-.gt-ed-icon.del:hover { background: #fee2e2; color: #b91c1c; border-color: #fecaca }
-.gt-ed-icon svg { width: ${U(2.3)}; height: ${U(2.3)} }
-.gt-ed-foot { display: flex; align-items: center; gap: ${U(2)}; padding: ${U(1.4)} ${U(2.6)}; border-top: ${U(.3)} solid #e0e7ff; flex-wrap: wrap }
-.gt-ed-foot p { flex: 1; min-width: ${U(40)}; margin: 0; font-size: ${U(1.75)}; font-weight: 600; color: #6b7280; line-height: 1.35 }
-.gt-ed-foot kbd { font-family: inherit; font-weight: 800; border: 1px solid #c7d2fe; border-radius: ${U(.5)}; padding: 0 ${U(.5)}; background: #eef2ff; color: #3730a3 }
+.gt-ed-icon.del:hover { background: var(--coral-pale); color: var(--coral-deep) }
+.gt-ed-icon svg { width: ${U(2.2)}; height: ${U(2.2)} }
+.gt-ed-foot { display: flex; align-items: center; gap: ${U(2)}; padding: ${U(1.4)} ${U(2.8)}; border-top: 1px solid var(--line); flex-wrap: wrap; background: var(--row) }
+.gt-ed-foot p { flex: 1; min-width: ${U(40)}; margin: 0; font-size: ${U(1.7)}; font-weight: 500; color: var(--ink-soft); line-height: 1.4 }
+.gt-ed-foot kbd { font-family: inherit; font-weight: 600; border: 1.5px solid var(--line); border-radius: ${U(.5)}; padding: 0 ${U(.5)}; background: #fff; color: var(--blue-ink) }
 `
 
 /** Where the list is saved, in a line: { cls, text, small }. */
@@ -71,7 +86,17 @@ function statusLine(status) {
   }
 }
 
-export function TeacherEditor({ list, status, onChange, onClose }) {
+/** Where the photos come from, for the foot of the editor. */
+function siteLine(where) {
+  switch (where) {
+    case 'site': return 'Photos come from the staff page on pra.edu.vn: add one there and it appears here.'
+    case 'copy': return 'pra.edu.vn could not be reached just now: these are the photos it had last time.'
+    case 'none': return 'pra.edu.vn could not be reached: the reveal will show names without photos.'
+    default: return 'Looking for photos on pra.edu.vn…'
+  }
+}
+
+export function TeacherEditor({ list, status, staff = [], site, onChange, onClose }) {
   const { teachers } = list
   const playing = teachers.filter(ready).length
   const line = statusLine(status)
@@ -86,7 +111,7 @@ export function TeacherEditor({ list, status, onChange, onClose }) {
   const remove = (t) => {
     if (window.confirm(`Delete ${t.name || 'this teacher'} from the list?`)) set(teachers.filter((x) => x.id !== t.id))
   }
-  const add = () => set([...teachers, { id: newId(), emojis: [], name: '', also: [], on: true }])
+  const add = () => set([...teachers, { id: newId(), emojis: [], name: '', also: [], on: true, photo: '' }])
 
   return (
     <div className="gt-ed" role="dialog" aria-label="Edit teachers">
@@ -111,6 +136,7 @@ export function TeacherEditor({ list, status, onChange, onClose }) {
         <div className="gt-ed-cols" aria-hidden="true">
           <span />
           <span>Play</span>
+          <span>Photo at the reveal</span>
           <span>Emojis (up to {EMOJI_MAX})</span>
           <span>Name on the TV</span>
           <span>Also counts as right</span>
@@ -123,6 +149,7 @@ export function TeacherEditor({ list, status, onChange, onClose }) {
               t={t}
               i={i}
               last={i === teachers.length - 1}
+              staff={staff}
               onPatch={(change) => patch(t.id, change)}
               onUp={() => move(i, -1)}
               onDown={() => move(i, 1)}
@@ -135,6 +162,7 @@ export function TeacherEditor({ list, status, onChange, onClose }) {
           <p>
             {playing} of {teachers.length} will be played. <kbd>Windows</kbd> + <kbd>.</kbd> opens the emoji keyboard.
             Capitals, accents and Mr / Ms / Thầy / Cô never matter; put other names under "Also counts as right", with commas between them.
+            {' '}{siteLine(site)}
           </p>
         </div>
       </div>
@@ -142,7 +170,30 @@ export function TeacherEditor({ list, status, onChange, onClose }) {
   )
 }
 
-function Row({ t, i, last, onPatch, onUp, onDown, onDelete }) {
+/** The photo a teacher gets: a round thumbnail of the website's portrait, and a choice of who it is. */
+function PhotoPick({ t, i, staff, onPatch }) {
+  const card = staffFor(t, staff)
+  const byName = staffFor({ ...t, photo: '' }, staff)
+  const [a, b] = card ? TONES[card.tone % TONES.length] : []
+  const count = card?.photos.length || 0
+  return (
+    <span className="gt-ed-photo">
+      {card
+        ? <span className="gt-ed-thumb" style={{ '--a': a, '--b': b }}><img src={card.portrait} alt="" /></span>
+        : <span className="gt-ed-thumb none"><ImageOff /></span>}
+      <span className="gt-ed-pick">
+        <select value={t.photo || ''} onChange={(e) => onPatch({ photo: e.target.value })} aria-label={`Photo for teacher ${i + 1}`}>
+          <option value="">{byName ? byName.name : 'Not on the website'}</option>
+          {staff.map((s) => <option key={s.key} value={s.key}>{s.name}</option>)}
+          <option value="none">No photo</option>
+        </select>
+        <small>{card ? `${t.photo ? 'Picked' : 'Found by name'} · ${count} ${count === 1 ? 'photo' : 'photos'}` : 'Name only at the reveal'}</small>
+      </span>
+    </span>
+  )
+}
+
+function Row({ t, i, last, staff, onPatch, onUp, onDown, onDelete }) {
   // What is in the two typed boxes, kept as typed while the box is in use, so a
   // space or a comma does not vanish under the cursor.
   const [emojiDraft, setEmojiDraft] = useState(null)
@@ -161,6 +212,7 @@ function Row({ t, i, last, onPatch, onUp, onDown, onDelete }) {
           onClick={() => onPatch({ on: !t.on })}
         />
       </span>
+      <PhotoPick t={t} i={i} staff={staff} onPatch={onPatch} />
       <span>
         <input
           className="gt-ed-in emo"
@@ -197,7 +249,7 @@ function Row({ t, i, last, onPatch, onUp, onDown, onDelete }) {
             onPatch({ also: e.target.value.split(',').map((s) => s.trim()).filter(Boolean).slice(0, 8) })
           }}
           onBlur={() => setAlsoDraft(null)}
-          placeholder="a nickname, a Vietnamese name"
+          placeholder="nickname, Vietnamese name"
           aria-label={`Other names for teacher ${i + 1}`}
           spellCheck={false}
           autoComplete="off"
@@ -211,4 +263,3 @@ function Row({ t, i, last, onPatch, onUp, onDown, onDelete }) {
     </div>
   )
 }
-

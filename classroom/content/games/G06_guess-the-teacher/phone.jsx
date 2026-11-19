@@ -4,9 +4,11 @@
 // have no PRA Learn login. A team picks a name and an animal, then for each
 // teacher sees the emojis, types a name and locks it in: one guess, and no
 // word of right or wrong until the reveal on the TV. Then the phone shows the
-// answer, what the team said, its points and its place.
+// teacher's portrait from pra.edu.vn, the answer, what the team said, its
+// points and its place.
 //
-// English with a short Vietnamese line under it, for the parents.
+// English with a short Vietnamese line under it, for the parents. The look is
+// the website's, as on the TV (look.jsx).
 //
 // The phone never holds a teacher's name before the reveal: it sends what was
 // typed, and the TV judges it and keeps the verdict (widgets.jsx). The team
@@ -14,11 +16,12 @@
 // locked screen comes back as the same team.
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { Lock, Timer } from 'lucide-react'
 import { openBus } from '../../../src/lib/remote/bus.js'
 import { cleanRoomCode } from '../../../src/lib/remote/room.js'
 import { buzz, useWakeLock } from '../../../src/lib/remote/phone.js'
-import { Avatar, BASE_CSS, Backdrop, Confetti } from './look.jsx'
-import { AVATARS, MEDALS, NAME_MAX, SUSPENSE_MS, TOPIC, cleanName, loadFont, ordinal, pointsFor, shownAt } from './protocol.js'
+import { Avatar, BASE_CSS, Backdrop, Confetti, Portrait } from './look.jsx'
+import { AVATARS, NAME_MAX, SUSPENSE_MS, TOPIC, cleanName, ordinal, pointsFor, shownAt } from './protocol.js'
 
 const ME_KEY = 'learn:teacher-game:me'
 const GUESS_KEY = 'learn:teacher-game:guess'
@@ -26,73 +29,88 @@ const GUESS_KEY = 'learn:teacher-game:guess'
 const LOST_MS = 9000
 
 const PHONE_CSS = `
-.gp { position: fixed; inset: 0; display: flex; flex-direction: column }
+.gp { position: fixed; inset: 0; display: flex; flex-direction: column; --vn-font: 'Be Vietnam Pro', Poppins, system-ui, sans-serif }
 .gp-in { position: relative; z-index: 1; flex: 1; min-height: 0; overflow-y: auto; width: 100%; max-width: 460px; margin: 0 auto;
   display: flex; flex-direction: column; gap: 14px; padding: max(12px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom)) }
-.gp-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px }
-.gp-logo { font-size: 23px }
-.gp-me { display: inline-flex; align-items: center; gap: 8px; min-width: 0; background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.18);
-  border-radius: 999px; padding: 4px 12px 4px 4px; font-weight: 700; font-size: 16px }
-.gp-me span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
-.gp-score { font-size: 17px; font-weight: 800; color: #fde047; white-space: nowrap; font-variant-numeric: tabular-nums }
-.gp-card { background: #fff; color: #1e1b4b; border-radius: 22px; padding: 20px; box-shadow: 0 6px 0 #a5b4fc, 0 14px 30px rgba(0,0,0,.28) }
-.gp-h { font-size: 26px; font-weight: 800; line-height: 1.08; margin: 0 }
-.gp-vn { display: block; font-size: 15px; font-weight: 600; color: #6b7280; line-height: 1.3; margin-top: 2px }
-.gp-dark .gp-vn, .gp-vn.d { color: #c7d2fe }
-.gp-label { display: block; font-size: 17px; font-weight: 800; margin: 16px 0 8px }
+.gp-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 48px; padding: 6px 8px 6px 14px;
+  background: rgba(255,255,255,.94); border: 1px solid var(--line); border-radius: 999px; box-shadow: var(--shadow-sm) }
+.gp-brand { display: flex; align-items: center; gap: 10px; min-width: 0 }
+.gp-brand img { height: 26px; width: auto; display: block }
+.gp-brand b { font-size: 15px; font-weight: 700; color: var(--blue-ink); padding-left: 10px; border-left: 2px solid var(--line); white-space: nowrap }
+.gp-me { display: inline-flex; align-items: center; gap: 8px; min-width: 0; font-weight: 600; font-size: 16px; color: var(--blue-ink); margin-left: -8px }
+.gp-me > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.gp-score { font-size: 15px; font-weight: 700; color: var(--blue-ink); background: var(--sun-pale); box-shadow: inset 0 0 0 1.5px var(--sun);
+  border-radius: 999px; padding: 5px 12px; white-space: nowrap; font-variant-numeric: tabular-nums }
+.gp-code-pill { font-size: 14px; font-weight: 700; letter-spacing: .12em; color: var(--blue-deep); background: var(--blue-tint); border-radius: 999px; padding: 5px 12px }
+.gp-card { background: #fff; color: var(--ink); border: 1px solid var(--line); border-radius: 22px; padding: 20px; box-shadow: var(--shadow) }
+.gp-h { font-size: 24px; font-weight: 800; line-height: 1.12; margin: 0; color: var(--blue-ink); letter-spacing: -.01em }
+.gp-vn { display: block; font-size: 14.5px; line-height: 1.35; margin-top: 3px }
+.gp-label { display: block; font-size: 16px; font-weight: 700; color: var(--blue-ink); margin: 18px 0 8px }
 .gp-label:first-child { margin-top: 0 }
-.gp-label .gp-vn { display: inline; margin-left: 6px; font-size: 14px }
-.gp-input { display: block; width: 100%; font: inherit; font-size: 22px; font-weight: 700; padding: 12px 16px; border-radius: 16px; border: 3px solid #c7d2fe;
-  color: #1e1b4b; background: #fff; outline: none; transition: border-color .15s }
-.gp-input:focus { border-color: #6366f1 }
-.gp-input.bad { border-color: #ef4444 }
-.gp-code { text-align: center; letter-spacing: .35em; text-transform: uppercase; font-size: 34px; font-weight: 800 }
-.gp-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin-top: 14px; font: inherit; font-size: 23px; font-weight: 800;
-  padding: 13px; border-radius: 16px; border: none; background: #fde047; color: #3b0764; box-shadow: 0 5px 0 #b45309; cursor: pointer }
-.gp-btn:active { transform: translateY(5px); box-shadow: none }
-.gp-btn:disabled { opacity: .45; cursor: default; transform: none; box-shadow: 0 5px 0 #b45309 }
-.gp-btn.ghost { background: transparent; color: #e0e7ff; box-shadow: none; font-size: 16px; font-weight: 700; padding: 8px; margin-top: 4px; text-decoration: underline }
+.gp-label .gp-vn { display: inline; margin-left: 6px; font-size: 13.5px }
+.gp-input { display: block; width: 100%; font: inherit; font-family: var(--vn-font); font-size: 21px; font-weight: 600; padding: 12px 16px; border-radius: 14px;
+  border: 2px solid var(--line); color: var(--ink); background: #fff; outline: none; transition: border-color .15s, box-shadow .15s }
+.gp-input:focus { border-color: var(--blue); box-shadow: 0 0 0 4px var(--blue-tint) }
+.gp-code { text-align: center; letter-spacing: .35em; text-transform: uppercase; font-family: inherit; font-size: 34px; font-weight: 800; color: var(--blue-ink) }
+.gp-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 56px; margin-top: 16px; font: inherit; font-size: 20px; font-weight: 700;
+  padding: 12px; border-radius: 999px; border: none; background: var(--blue); color: #fff; box-shadow: 0 8px 20px rgba(17,109,255,.3); cursor: pointer;
+  transition: background .2s, transform .2s var(--bounce) }
+.gp-btn:active { transform: scale(.97) }
+.gp-btn:disabled { opacity: .45; cursor: default; transform: none; box-shadow: none }
+.gp-btn svg { width: 22px; height: 22px }
+.gp-btn small { font-family: var(--vn-font); font-size: 15px; font-weight: 500; opacity: .85 }
+.gp-btn.ghost { background: transparent; color: var(--blue-deep); box-shadow: none; font-size: 15px; font-weight: 600; min-height: 0; padding: 8px; margin-top: 2px;
+  text-decoration: underline; text-underline-offset: 3px }
 .gp-avatars { display: grid; grid-template-columns: repeat(6, 1fr); gap: 7px }
-.gp-av { aspect-ratio: 1; border-radius: 14px; border: 3px solid transparent; background: #eef2ff; font-size: 27px; line-height: 1; padding: 0;
-  display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform .12s }
-.gp-av.on { border-color: #6366f1; background: #e0e7ff; transform: scale(1.08) }
-.gp-note { border-radius: 14px; padding: 10px 14px; font-size: 16px; font-weight: 700; background: rgba(255,255,255,.14) }
-.gp-note.warn { background: #fef3c7; color: #92400e }
-.gp-status { text-align: center; font-size: 14px; font-weight: 700; color: #c7d2fe }
-.gp-status i { display: inline-block; width: 9px; height: 9px; border-radius: 999px; margin-right: 6px; background: #fbbf24; vertical-align: 1px }
-.gp-status.live i { background: #34d399 }
-.gp-status.offline i { background: #ef4444 }
-.gp-center { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 10px }
-.gp-hero { font-size: 40px }
-.gp-sub { font-size: 19px; font-weight: 700; color: #e0e7ff; margin: 0 }
+.gp-av { aspect-ratio: 1; border-radius: 14px; border: 2px solid transparent; background: var(--blue-pale); font-size: 26px; line-height: 1; padding: 0;
+  display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform .2s var(--bounce), border-color .15s, background .15s }
+.gp-av.on { border-color: var(--blue); background: #fff; transform: scale(1.08); box-shadow: 0 4px 12px rgba(17,109,255,.22) }
+.gp-note { border-radius: 16px; padding: 12px 14px; font-size: 15px; font-weight: 600; background: #fff; border: 1px solid var(--line); color: var(--blue-ink) }
+.gp-note.warn { background: var(--sun-pale); border-color: var(--sun-tint); color: var(--sun-ink) }
+.gp-note.warn .gp-vn { color: var(--sun-ink) }
+.gp-status { text-align: center; font-size: 13.5px; font-weight: 600; color: var(--ink-soft); margin: 0 }
+.gp-status i { display: inline-block; width: 9px; height: 9px; border-radius: 999px; margin-right: 6px; background: var(--sun-deep); vertical-align: 1px }
+.gp-status.live i { background: var(--green) }
+.gp-status.offline i { background: var(--coral-deep) }
+.gp-center { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px }
+.gp-big { margin: 0; font-size: 38px; font-weight: 800; letter-spacing: -.03em; line-height: 1.05; color: var(--blue-ink) }
+.gp-sub { font-size: 18px; font-weight: 600; color: var(--blue-ink); margin: 0 }
 .gp-roundbar { display: flex; align-items: center; justify-content: space-between; gap: 8px }
-.gp-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 800; padding: 5px 12px; border-radius: 999px;
-  background: rgba(255,255,255,.14) }
-.gp-pill.hot { background: #fde047; color: #4c1d95 }
-.gp-secs { font-size: 30px; font-weight: 800; font-variant-numeric: tabular-nums; min-width: 2ch; text-align: right }
-.gp-timer { height: 12px; border-radius: 999px; background: rgba(255,255,255,.15); overflow: hidden }
+.gp-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; padding: 6px 13px; border-radius: 999px;
+  background: #fff; border: 1px solid var(--line); color: var(--blue-ink) }
+.gp-pill.hot { background: var(--sun); border-color: var(--sun); color: var(--sun-ink) }
+.gp-secs { font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; min-width: 2ch; text-align: right; color: var(--blue-ink); margin-left: auto }
+.gp-timer { height: 10px; border-radius: 999px; background: #fff; box-shadow: inset 0 0 0 1px var(--line); overflow: hidden }
 .gp-timer i { display: block; width: 100%; height: 100%; border-radius: 999px; transform-origin: left center; transition: background .4s; will-change: transform }
 .gp-emojis { display: grid; gap: 8px }
-.gp-emojis span { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background: #fff; font-size: min(9vw, 40px);
-  line-height: 1; box-shadow: 0 4px 0 #c7d2fe }
-.gp-emojis span.down { background: linear-gradient(145deg, #8b5cf6, #4f46e5); color: rgba(255,255,255,.6); font-weight: 800; box-shadow: 0 4px 0 #312e81 }
-.gp-worth { margin-top: 12px; text-align: center; font-size: 15px; font-weight: 700; color: #6b7280 }
+.gp-emojis span { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background: #fff; border: 1px solid var(--line);
+  font-size: min(9vw, 40px); line-height: 1; box-shadow: var(--shadow-sm) }
+.gp-emojis span.down { background: linear-gradient(165deg, var(--blue), var(--teal)); border: none; color: rgba(255,255,255,.85); font-weight: 800; font-size: min(7vw, 28px) }
+.gp-worth { margin-top: 12px; text-align: center; font-size: 14.5px; font-weight: 500; color: var(--ink-soft) }
 .gp-worth .gp-vn { font-size: 13px }
-.gp-worth b { color: #4338ca }
-.gp-good { background: linear-gradient(160deg, #34d399, #059669); color: #fff; text-align: center; box-shadow: 0 6px 0 #047857, 0 14px 30px rgba(0,0,0,.28) }
-.gp-good .gp-vn, .gp-bad .gp-vn { color: rgba(255,255,255,.88) }
-.gp-bad { background: linear-gradient(160deg, #94a3b8, #64748b); color: #fff; text-align: center; box-shadow: 0 6px 0 #475569, 0 14px 30px rgba(0,0,0,.28) }
-.gp-tick { font-size: 64px; line-height: 1 }
-.gp-locked { background: linear-gradient(160deg, #818cf8, #4f46e5); color: #fff; text-align: center; box-shadow: 0 6px 0 #3730a3, 0 14px 30px rgba(0,0,0,.28) }
-.gp-locked .gp-vn { color: rgba(255,255,255,.85) }
+.gp-worth b { color: var(--blue-ink); font-weight: 700 }
+.gp-locked { background: linear-gradient(165deg, var(--blue), var(--blue-deep)); border: none; color: #fff; text-align: center; box-shadow: 0 14px 32px rgba(17,109,255,.3) }
+.gp-locked .gp-h, .gp-good .gp-h, .gp-bad .gp-h { color: #fff }
+.gp-locked .gp-vn, .gp-good .gp-vn, .gp-bad .gp-vn { color: rgba(255,255,255,.88) }
+.gp-good { background: linear-gradient(165deg, var(--green), var(--green-deep)); border: none; color: #fff; text-align: center; box-shadow: 0 14px 32px rgba(47,125,20,.28) }
+.gp-bad { background: linear-gradient(165deg, #6B7C93, #4A5A70); border: none; color: #fff; text-align: center }
+.gp-badge { width: 60px; height: 60px; margin: 0 auto; border-radius: 50%; background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center }
+.gp-badge svg { width: 30px; height: 30px }
 .gp-said { margin: 12px auto 4px; display: inline-block; max-width: 100%; padding: 8px 16px; border-radius: 14px; background: rgba(255,255,255,.18);
-  font-size: 26px; font-weight: 800; overflow-wrap: anywhere }
-.gp-small { margin: 6px 0 0; font-size: 15px; font-weight: 700; opacity: .92 }
-.gp-pts { font-size: 46px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums }
-.gp-answer { font-size: 44px; text-align: center }
-.gp-place { font-size: 76px; line-height: 1 }
+  font-family: var(--vn-font); font-size: 24px; font-weight: 700; overflow-wrap: anywhere }
+.gp-small { margin: 6px 0 0; font-size: 14.5px; font-weight: 500; opacity: .92 }
+.gp-small b { font-family: var(--vn-font) }
+.gp-reveal { display: flex; align-items: center; gap: 16px; width: 100%; text-align: left }
+.gp-reveal .gt-portrait { width: 118px; flex: none; --frame: 5px; --radius: 18px; --q: 40px; transform: rotate(-2deg) }
+.gp-answer { margin: 6px 0 0; font-size: 34px; font-weight: 800; letter-spacing: -.03em; line-height: 1.02; color: var(--blue-ink); overflow-wrap: anywhere }
+.gp-rank { width: 92px; height: 92px; margin: 0 auto; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 30px; font-weight: 800; letter-spacing: -.02em; color: var(--ink-soft); background: var(--row); box-shadow: inset 0 0 0 1px var(--line) }
+.gp-rank.r1 { background: var(--sun); color: var(--sun-ink); box-shadow: 0 8px 20px rgba(245,166,35,.35) }
+.gp-rank.r2 { background: #CFD8E3; color: #3B4A5E }
+.gp-rank.r3 { background: #F4BC9A; color: #7A3412 }
+.gp-rank.big { width: 132px; height: 132px; font-size: 42px }
 .gp-paused { position: fixed; inset: 0; z-index: 20; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
-  background: rgba(13,8,51,.8); backdrop-filter: blur(5px); text-align: center; padding: 24px }
+  background: rgba(238,245,255,.84); backdrop-filter: blur(6px); text-align: center; padding: 24px }
 `
 
 const newPid = () => (globalThis.crypto?.randomUUID?.() || `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 10)}`).slice(0, 36)
@@ -112,17 +130,29 @@ function saveMe(room, me) {
   try { localStorage.setItem(ME_KEY, JSON.stringify({ room, pid: me.pid, name: me.name, avatar: me.avatar })) } catch { /* storage blocked */ }
 }
 
+/** The logo and the game's name, along the top before a team has joined. */
+function Brand({ children }) {
+  return (
+    <div className="gp-head">
+      <span className="gp-brand">
+        <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Palm River Academy" />
+        <b>Guess the Teacher</b>
+      </span>
+      {children}
+    </div>
+  )
+}
+
 export default function TeacherGamePhone() {
   const { room: raw } = useParams()
   const room = cleanRoomCode(raw)
   useEffect(() => {
-    loadFont()
     document.title = 'Guess the Teacher · PRA Learn'
   }, [])
   return (
     <div className="gt gp">
       <style>{BASE_CSS + PHONE_CSS}</style>
-      <Backdrop count={10} />
+      <Backdrop />
       {room.length === 4 ? <Player key={room} room={room} /> : <CodeEntry />}
     </div>
   )
@@ -134,15 +164,15 @@ function CodeEntry() {
   const ok = cleanRoomCode(code).length === 4
   return (
     <div className="gp-in">
-      <div className="gp-head"><span className="gp-logo gt-title">Guess the Teacher 🤔</span></div>
+      <Brand />
       <div className="gp-center">
         <form
           className="gp-card"
-          style={{ width: '100%' }}
+          style={{ width: '100%', textAlign: 'left' }}
           onSubmit={(e) => { e.preventDefault(); if (ok) navigate(`/play/${cleanRoomCode(code)}`) }}
         >
           <p className="gp-h">Game code</p>
-          <span className="gp-vn">Mã trò chơi: xem trên TV</span>
+          <span className="gp-vn gt-vn">Mã trò chơi: xem trên TV</span>
           <input
             className="gp-input gp-code"
             style={{ marginTop: 14 }}
@@ -156,7 +186,7 @@ function CodeEntry() {
             enterKeyHint="go"
             aria-label="Game code"
           />
-          <button type="submit" className="gp-btn" disabled={!ok}>Go <span aria-hidden="true">▶</span></button>
+          <button type="submit" className="gp-btn" disabled={!ok}>Go</button>
         </form>
       </div>
     </div>
@@ -321,14 +351,14 @@ function Player({ room }) {
   const head = (
     <div className="gp-head">
       <span className="gp-me">
-        <Avatar emoji={me.avatar} color={row?.c || '#6366f1'} size="34px" />
-        <span>{me.name}</span>
+        <Avatar emoji={me.avatar} color={row?.c || 'var(--blue-tint)'} size="36px" />
+        <span className="gt-team-name">{me.name}</span>
       </span>
       {row && s.phase !== 'lobby' && <span className="gp-score">{shownScore.toLocaleString('en-US')} pts</span>}
     </div>
   )
   const status = net !== 'live' && (
-    <div className={`gp-status ${net}`}><i />{net === 'offline' ? 'No connection. Trying again…' : 'Connecting…'}<span className="gp-vn d">{net === 'offline' ? 'Mất kết nối. Đang thử lại…' : 'Đang kết nối…'}</span></div>
+    <div className={`gp-status ${net}`}><i />{net === 'offline' ? 'No connection. Trying again…' : 'Connecting…'}<span className="gp-vn gt-vn">{net === 'offline' ? 'Mất kết nối. Đang thử lại…' : 'Đang kết nối…'}</span></div>
   )
 
   if (!s || !row) {
@@ -339,14 +369,14 @@ function Player({ room }) {
           {lost ? (
             <div className="gp-card" style={{ width: '100%' }}>
               <p className="gp-h">No game with code {room}</p>
-              <span className="gp-vn">Không tìm thấy trò chơi. Kiểm tra mã trên TV.</span>
+              <span className="gp-vn gt-vn">Không tìm thấy trò chơi. Kiểm tra mã trên TV.</span>
               <button type="button" className="gp-btn" onClick={() => navigate('/play')}>Change code</button>
             </div>
           ) : (
             <>
-              <span className="gt-blink" style={{ fontSize: 44 }}>📺</span>
+              <span className="gt-ellipsis" style={{ fontSize: 44, fontWeight: 800, color: 'var(--blue)', lineHeight: 0.6 }} aria-hidden="true"><i>•</i><i>•</i><i>•</i></span>
               <p className="gp-sub">Finding the TV…</p>
-              <span className="gp-vn d">Đang tìm TV…</span>
+              <span className="gp-vn gt-vn">Đang tìm TV…</span>
             </>
           )}
         </div>
@@ -376,24 +406,24 @@ function Player({ room }) {
   if (s.phase === 'lobby') {
     body = (
       <div className="gp-center">
-        <Avatar emoji={me.avatar} color={row.c} size="120px" className="gt-bob" />
-        <p className="gp-hero gt-title">You're in!</p>
-        <span className="gp-vn d" style={{ fontSize: 17 }}>Bạn đã vào game!</span>
-        <p className="gp-sub" style={{ marginTop: 12 }}>Watch the TV. The game starts soon.</p>
-        <span className="gp-vn d">Hãy nhìn lên TV. Trò chơi sắp bắt đầu.</span>
-        <p className="gp-sub" style={{ fontSize: 16, color: '#c7d2fe', marginTop: 8 }}>{total} {total === 1 ? 'team' : 'teams'} here · {total} đội</p>
+        <Avatar emoji={me.avatar} color={row.c} size="112px" className="gt-pop" style={{ boxShadow: '0 0 0 6px #fff, var(--shadow)' }} />
+        <p className="gp-big" style={{ marginTop: 18 }}>You're in!</p>
+        <span className="gp-vn gt-vn" style={{ fontSize: 16 }}>Bạn đã vào game!</span>
+        <p className="gp-sub" style={{ marginTop: 14 }}>Watch the TV. The game starts soon.</p>
+        <span className="gp-vn gt-vn">Hãy nhìn lên TV. Trò chơi sắp bắt đầu.</span>
+        <span className="gp-pill" style={{ marginTop: 10 }}>{total} {total === 1 ? 'team' : 'teams'} here · {total} đội</span>
         <button type="button" className="gp-btn ghost" onClick={() => setMe({ ...me, joined: false })}>Change name or animal</button>
       </div>
     )
   } else if (s.phase === 'intro') {
     body = (
       <div className="gp-center">
-        <p className="gp-sub" style={{ letterSpacing: '.2em', textTransform: 'uppercase' }}>{s.no === s.count ? 'Last teacher' : 'Teacher'}</p>
-        <p className="gt-title gt-stamp" style={{ fontSize: 120, margin: 0 }}>{s.no}</p>
-        <p className="gp-sub">of {s.count}</p>
-        {s.double && <span className="gp-pill hot gt-pulse" style={{ fontSize: 20, marginTop: 8 }}>×2 Double points!</span>}
+        <span className={`gt-eyebrow ${s.no === s.count ? 'sun' : ''}`} style={{ fontSize: 13 }}>{s.no === s.count ? 'Last teacher' : 'Next teacher'}</span>
+        <p className="gt-stamp" style={{ fontSize: 120, fontWeight: 800, color: 'var(--blue)', margin: 0, lineHeight: 0.95, letterSpacing: '-.04em' }}>{s.no}</p>
+        <p className="gp-sub" style={{ color: 'var(--ink-soft)' }}>of {s.count}</p>
+        {s.double && <span className="gp-pill hot gt-pulse" style={{ fontSize: 18, marginTop: 8 }}>Double points ×2</span>}
         <p className="gp-sub" style={{ marginTop: 14 }}>Get ready!</p>
-        <span className="gp-vn d">Chuẩn bị!</span>
+        <span className="gp-vn gt-vn">Chuẩn bị!</span>
       </div>
     )
   } else if (s.phase === 'round') {
@@ -432,24 +462,21 @@ function JoinForm({ room, me, note, net, lost, onJoin, onChangeCode }) {
   const ok = cleanName(name).length > 0
   return (
     <div className="gp-in">
-      <div className="gp-head">
-        <span className="gp-logo gt-title">Guess the Teacher 🤔</span>
-        <span className="gp-pill">{room}</span>
-      </div>
+      <Brand><span className="gp-code-pill">{room}</span></Brand>
       {note === 'kicked' && (
-        <div className="gp-note warn">The host took that name out. Please choose another name.<span className="gp-vn" style={{ color: '#b45309' }}>Vui lòng chọn tên khác.</span></div>
+        <div className="gp-note warn">The host took that name out. Please choose another name.<span className="gp-vn gt-vn">Vui lòng chọn tên khác.</span></div>
       )}
       {note === 'reset' && (
-        <div className="gp-note">The TV has started a new game. Join again!<span className="gp-vn d">TV đã bắt đầu trò chơi mới. Hãy tham gia lại!</span></div>
+        <div className="gp-note">The TV has started a new game. Join again!<span className="gp-vn gt-vn">TV đã bắt đầu trò chơi mới. Hãy tham gia lại!</span></div>
       )}
       {lost && (
         <div className="gp-note warn">
           No game with code {room} yet. Check the code on the TV.
-          <span className="gp-vn" style={{ color: '#b45309' }}>Chưa tìm thấy trò chơi. Kiểm tra mã trên TV.</span>
+          <span className="gp-vn gt-vn">Chưa tìm thấy trò chơi. Kiểm tra mã trên TV.</span>
         </div>
       )}
       <form className="gp-card" onSubmit={(e) => { e.preventDefault(); if (ok) onJoin(name, avatar) }}>
-        <label className="gp-label" htmlFor="gp-name">Team name <span className="gp-vn">Tên đội</span></label>
+        <label className="gp-label" htmlFor="gp-name">Team name <span className="gp-vn gt-vn">Tên đội</span></label>
         <input
           id="gp-name"
           className="gp-input"
@@ -462,13 +489,13 @@ function JoinForm({ room, me, note, net, lost, onJoin, onChangeCode }) {
           spellCheck={false}
           enterKeyHint="done"
         />
-        <span className="gp-label">Your animal <span className="gp-vn">Chọn con vật</span></span>
+        <span className="gp-label">Your animal <span className="gp-vn gt-vn">Chọn con vật</span></span>
         <div className="gp-avatars">
           {AVATARS.map((a) => (
             <button key={a} type="button" className={`gp-av ${a === avatar ? 'on' : ''}`} onClick={() => setAvatar(a)} aria-label={a} aria-pressed={a === avatar}>{a}</button>
           ))}
         </div>
-        <button type="submit" className="gp-btn" disabled={!ok}>Join <span className="gp-vn" style={{ display: 'inline', color: '#6b21a8', fontSize: 16 }}>Tham gia</span></button>
+        <button type="submit" className="gp-btn" disabled={!ok}>Join <small>Tham gia</small></button>
       </form>
       <div className={`gp-status ${net}`}><i />{net === 'live' ? 'Connected' : net === 'offline' ? 'No connection' : 'Connecting…'}</div>
       <button type="button" className="gp-btn ghost" onClick={onChangeCode}>Different game code</button>
@@ -484,7 +511,7 @@ function Emojis({ emojis, shown = emojis.length }) {
   )
 }
 
-const clockColor = (secs) => (secs > 20 ? '#34d399' : secs > 10 ? '#fbbf24' : '#f87171')
+const clockColor = (secs) => (secs > 20 ? '#116DFF' : secs > 10 ? '#F5A623' : '#D2452F')
 
 /** The time bar, shrinking on every screen frame rather than in steps (and on each re-render, should frames pause). */
 function TimerBar({ s, stateAt, left }) {
@@ -509,7 +536,6 @@ function TimerBar({ s, stateAt, left }) {
 function Round({ s, row, elapsed, stateAt, guess, draft, onDraft, onLock, inputRef }) {
   const left = Math.max(0, s.dur - elapsed)
   const secs = Math.ceil(left / 1000)
-  const color = clockColor(secs)
   const locked = Boolean(guess) || row.l
   const timeUp = left <= 0
 
@@ -517,37 +543,37 @@ function Round({ s, row, elapsed, stateAt, guess, draft, onDraft, onLock, inputR
   if (locked) {
     card = (
       <div className="gp-card gp-locked gt-pop">
-        <div className="gp-tick">🔒</div>
-        <p className="gp-h" style={{ marginTop: 6 }}>Locked in!</p>
+        <div className="gp-badge"><Lock /></div>
+        <p className="gp-h" style={{ marginTop: 10 }}>Locked in!</p>
         <span className="gp-vn">Đã chốt đáp án!</span>
         {guess && <div className="gp-said">{guess.text}</div>}
         <p className="gp-small">
           {guess && !guess.sure ? 'Sending to the TV…' : `If you're right: ${guess ? guess.pts : '?'} points`}
         </p>
-        <p style={{ margin: '12px 0 0', fontWeight: 800 }}>Find out at the end!</p>
+        <p style={{ margin: '12px 0 0', fontWeight: 700 }}>Find out at the end!</p>
         <span className="gp-vn">Đáp án sẽ có ở cuối!</span>
       </div>
     )
   } else if (timeUp) {
     card = (
       <div className="gp-card gp-bad gt-pop">
-        <div className="gp-tick">⏰</div>
-        <p className="gp-h" style={{ marginTop: 6 }}>Time's up!</p>
+        <div className="gp-badge"><Timer /></div>
+        <p className="gp-h" style={{ marginTop: 10 }}>Time's up!</p>
         <span className="gp-vn">Hết giờ!</span>
       </div>
     )
   } else {
     card = (
       <form className="gp-card" onSubmit={(e) => { e.preventDefault(); onLock() }}>
-        <p className="gp-h" style={{ fontSize: 22 }}>Who is this teacher?</p>
-        <span className="gp-vn">Đây là giáo viên nào?</span>
+        <p className="gp-h" style={{ fontSize: 21 }}>Who is this teacher?</p>
+        <span className="gp-vn gt-vn">Đây là giáo viên nào?</span>
         <input
           ref={inputRef}
           className="gp-input"
           style={{ marginTop: 12 }}
           value={draft}
           onChange={(e) => onDraft(e.target.value)}
-          placeholder="Teacher's name · Tên giáo viên"
+          placeholder="Teacher's name"
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="words"
@@ -556,10 +582,10 @@ function Round({ s, row, elapsed, stateAt, guess, draft, onDraft, onLock, inputR
           maxLength={40}
           aria-label="The teacher's name"
         />
-        <button type="submit" className="gp-btn" disabled={!draft.trim()}>🔒 Lock it in</button>
+        <button type="submit" className="gp-btn" disabled={!draft.trim()}><Lock /> Lock it in</button>
         <div className="gp-worth">
           One guess only. Lock in now for <b>{pointsFor(left, s.double)} points</b>
-          <span className="gp-vn">Chỉ được đoán một lần. Chốt càng sớm, càng nhiều điểm.</span>
+          <span className="gp-vn gt-vn">Chỉ được đoán một lần. Chốt càng sớm, càng nhiều điểm.</span>
         </div>
       </form>
     )
@@ -570,16 +596,16 @@ function Round({ s, row, elapsed, stateAt, guess, draft, onDraft, onLock, inputR
       <div className="gp-roundbar">
         <span className="gp-pill">Teacher {s.no} of {s.count}</span>
         {s.double && <span className="gp-pill hot">×2</span>}
-        <span className="gp-secs" style={{ color }}>{secs}</span>
+        <span className="gp-secs" style={{ color: secs <= 10 ? clockColor(secs) : undefined }}>{secs}</span>
       </div>
       <TimerBar s={s} stateAt={stateAt} left={left} />
       <Emojis emojis={s.emojis} shown={shownAt(elapsed, s.emojis.length)} />
       {card}
       {s.paused && (
         <div className="gp-paused">
-          <p className="gt-title" style={{ fontSize: 54, margin: 0 }}>Paused</p>
+          <p className="gp-big" style={{ fontSize: 52 }}>Paused</p>
           <p className="gp-sub">Look at the TV</p>
-          <span className="gp-vn d">Hãy nhìn lên TV</span>
+          <span className="gp-vn gt-vn">Hãy nhìn lên TV</span>
         </div>
       )}
     </>
@@ -596,14 +622,22 @@ function placeLine(row, players) {
   return { en: `${gap.toLocaleString('en-US')} points behind ${above.a} ${above.n}`, vn: `Kém đội trên ${gap.toLocaleString('en-US')} điểm` }
 }
 
+/** A place as a circle: gold, silver and bronze for the top three. */
+function Place({ row, big = false }) {
+  const top = row.s > 0 && row.k <= 3
+  return <div className={`gp-rank ${top ? `r${row.k}` : ''} ${big ? 'big' : ''}`}>{ordinal(row.k)}</div>
+}
+
 function Result({ s, row, guess, named }) {
   if (!named) {
     return (
       <div className="gp-center">
         <div style={{ width: '100%' }}><Emojis emojis={s.emojis} /></div>
-        {guess && <p className="gp-sub" style={{ marginTop: 16 }}>You said: <b>{guess.text}</b></p>}
-        <p className="gp-hero gt-title gt-blink" style={{ fontSize: 30, marginTop: 14 }}>And the teacher is…</p>
-        <span className="gp-vn d">Và giáo viên đó là…</span>
+        {guess && <p className="gp-sub" style={{ marginTop: 16, fontWeight: 500 }}>You said: <b className="gt-team-name">{guess.text}</b></p>}
+        <p className="gp-big" style={{ fontSize: 30, marginTop: 14 }}>
+          And the teacher is<span className="gt-ellipsis"><i>.</i><i>.</i><i>.</i></span>
+        </p>
+        <span className="gp-vn gt-vn">Và giáo viên đó là…</span>
       </div>
     )
   }
@@ -611,14 +645,17 @@ function Result({ s, row, guess, named }) {
   const line = placeLine(row, s.players)
   const last = s.no >= s.count
   return (
-    <div className="gp-center">
+    <div className="gp-center" style={{ gap: 12 }}>
       {s.answer && (
-        <>
-          <p className="gp-sub" style={{ letterSpacing: '.2em', textTransform: 'uppercase', fontSize: 15 }}>It's · Đó là</p>
-          <p className="gp-answer gt-title gt-stamp" style={{ margin: 0 }}>{s.answer}</p>
-        </>
+        <div className="gp-reveal">
+          {s.pic && <Portrait src={s.pic.src} tone={s.pic.tone} className="gt-pop" />}
+          <div style={{ minWidth: 0, flex: 1, textAlign: s.pic ? 'left' : 'center' }}>
+            <span className="gt-eyebrow green" style={{ fontSize: 12 }}>It's · Đó là</span>
+            <p className="gp-answer gt-stamp">{s.answer}</p>
+          </div>
+        </div>
       )}
-      <div className={`gp-card ${got ? 'gp-good' : 'gp-bad'} gt-rise`} style={{ width: '100%', marginTop: 10, animationDelay: '.3s' }}>
+      <div className={`gp-card ${got ? 'gp-good' : 'gp-bad'} gt-rise`} style={{ width: '100%', animationDelay: '.3s' }}>
         {guess && <p className="gp-small" style={{ margin: '0 0 4px' }}>You said: <b>{guess.text}</b></p>}
         {got ? (
           <>
@@ -638,12 +675,12 @@ function Result({ s, row, guess, named }) {
         )}
       </div>
       <div className="gp-card gt-rise" style={{ width: '100%', animationDelay: '.6s', textAlign: 'center' }}>
-        <div className="gp-place">{row.s <= 0 ? '⏱️' : row.k <= 3 ? MEDALS[row.k - 1] : ordinal(row.k)}</div>
-        <p className="gp-h" style={{ marginTop: 6 }}>{row.s.toLocaleString('en-US')} points</p>
-        <p style={{ margin: '6px 0 0', fontWeight: 700 }}>{line.en}</p>
-        <span className="gp-vn">{line.vn}</span>
+        <Place row={row} />
+        <p className="gp-h" style={{ marginTop: 10 }}>{row.s.toLocaleString('en-US')} points</p>
+        <p style={{ margin: '6px 0 0', fontWeight: 600, color: 'var(--blue-ink)' }}>{line.en}</p>
+        <span className="gp-vn gt-vn">{line.vn}</span>
       </div>
-      <p className="gp-sub" style={{ fontSize: 15, color: '#c7d2fe' }}>
+      <p className="gp-status">
         {last ? 'Final results next' : 'Next teacher soon'}: watch the TV · Hãy nhìn lên TV
       </p>
     </div>
@@ -651,15 +688,14 @@ function Result({ s, row, guess, named }) {
 }
 
 function Final({ row, total }) {
-  const top = row.k <= 3 && row.s > 0
   return (
     <div className="gp-center">
-      <div className="gp-place gt-pop" style={{ fontSize: 110 }}>{top ? MEDALS[row.k - 1] : '🎉'}</div>
-      <p className="gp-hero gt-title" style={{ margin: 0 }}>You came {ordinal(row.k)}!</p>
-      <span className="gp-vn d" style={{ fontSize: 17 }}>Bạn đứng hạng {row.k} / {total}</span>
+      <div className="gt-pop"><Place row={row} big /></div>
+      <p className="gp-big" style={{ marginTop: 14 }}>You came {ordinal(row.k)}!</p>
+      <span className="gp-vn gt-vn" style={{ fontSize: 16 }}>Bạn đứng hạng {row.k} / {total}</span>
       <p className="gp-sub" style={{ marginTop: 8 }}>{row.s.toLocaleString('en-US')} points</p>
       <p className="gp-sub" style={{ marginTop: 16 }}>Thanks for playing!</p>
-      <span className="gp-vn d">Cảm ơn bạn đã chơi!</span>
+      <span className="gp-vn gt-vn">Cảm ơn bạn đã chơi!</span>
     </div>
   )
 }

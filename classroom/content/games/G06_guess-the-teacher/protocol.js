@@ -39,7 +39,8 @@ export function shownAt(elapsed, count) {
 export const AVATARS = ['🦊', '🐼', '🐨', '🐯', '🦁', '🐸', '🐵', '🐧', '🦄', '🐙', '🐢', '🦋', '🐝', '🐬', '🦖', '🐳', '🦉', '🐰', '🐶', '🐱', '🐮', '🐷', '🦒', '🦩']
 
 // A colour per team, by the order they joined.
-export const COLORS = ['#f472b6', '#60a5fa', '#34d399', '#fbbf24', '#a78bfa', '#fb923c', '#22d3ee', '#f87171', '#a3e635', '#e879f9', '#2dd4bf', '#facc15']
+// The website's colours, light enough for the animal to read on them.
+export const COLORS = ['#9CC4FF', '#B9DC7E', '#FFD785', '#FFB0A3', '#BFAEFF', '#86D2BC', '#7FB2FF', '#D6EBA8', '#FFE4A0', '#FFD2C9', '#DDD3FF', '#B5E3D5']
 
 export const NAME_MAX = 20
 
@@ -57,17 +58,8 @@ export function ordinal(n) {
 
 export const MEDALS = ['🥇', '🥈', '🥉']
 
-// The game's font: rounded, and it has every Vietnamese letter, so a team
-// called "Minh & Mẹ" reads as one word. Added on arrival, so no other page
-// fetches it; system fonts if offline.
-const FONTS_ID = 'teacher-game-fonts'
-export const FONT = "'Baloo 2', 'Be Vietnam Pro', ui-rounded, system-ui, sans-serif"
-
-export function loadFont() {
-  if (document.getElementById(FONTS_ID)) return
-  const link = document.createElement('link')
-  link.id = FONTS_ID
-  link.rel = 'stylesheet'
-  link.href = 'https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&display=swap'
-  document.head.appendChild(link)
-}
+// The website's fonts (src/fonts.css, imported by look.jsx): Poppins, and Be
+// Vietnam Pro for anything a family types or reads in Vietnamese, because
+// Poppins has no Vietnamese letters and "Minh & Mẹ" should read as one word.
+export const FONT = "Poppins, 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', sans-serif"
+export const VN_FONT = "'Be Vietnam Pro', Poppins, system-ui, -apple-system, 'Segoe UI', sans-serif"

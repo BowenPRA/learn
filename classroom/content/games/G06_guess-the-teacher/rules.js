@@ -23,7 +23,7 @@ export const fresh = () => ({
   v: 2,
   phase: 'lobby',
   phaseAt: Date.now(),
-  sets: [], // { emojis, name, also }: this game's teachers, in the order they are played
+  sets: [], // { emojis, name, also, photo, pic }: this game's teachers, in the order they are played (pic: staff.js)
   r: 0, // the round being played, an index into `sets`
   players: [], // { pid, name, avatar, color, score, time, joinedAt }, in the order they joined
   removed: [], // pids the TV took out: they cannot come back under that pid
@@ -178,6 +178,8 @@ export function publicState(g, now) {
     elapsed: inRound ? elapsedOf(round, now) : 0,
     paused: g.phase === 'round' && !round?.runFrom,
     answer: (g.phase === 'reveal' || g.phase === 'board') && t ? t.name : '',
+    // The teacher's portrait from pra.edu.vn (staff.js), with the name and no sooner.
+    pic: (g.phase === 'reveal' || g.phase === 'board') && t?.pic ? { src: t.pic.portrait, tone: t.pic.tone } : null,
     locked: inRound ? lockedOf(round) : 0,
     players: ranked(g.players).map((p) => ({
       p: p.pid, n: p.name, a: p.avatar, c: p.color, s: p.score, k: p.rank,
