@@ -14,8 +14,8 @@
 export const TOPIC = (room) => `teacher-game-${room}`
 
 // The clock, in milliseconds.
-export const ROUND_MS = 30000 // a round, before any +10 s
-export const REVEAL_EVERY_MS = 3000 // a new emoji, until all of them are up
+export const ROUND_MS = 60000 // a round, before any +10 s
+export const ALL_UP_MS = 45000 // by now every emoji is up, evenly spaced from the first at 0 s
 export const INTRO_MS = 2800 // the "Round 2 of 5" splash
 export const SUSPENSE_MS = 2200 // "And the teacher is…" before the name
 export const EMOJI_MAX = 6 // a teacher has one to six emojis; five is the usual
@@ -27,8 +27,13 @@ export function pointsFor(left, double = false) {
   return double ? pts * 2 : pts
 }
 
-/** How many of a teacher's `count` emojis are up after `elapsed` ms of a round. */
-export const shownAt = (elapsed, count) => Math.max(1, Math.min(count, Math.floor(elapsed / REVEAL_EVERY_MS) + 1))
+/** How many of a teacher's `count` emojis are up after `elapsed` ms of a round: the
+ *  first at once, the last at ALL_UP_MS (five emojis: 0, 11, 22, 34 and 45 s). */
+export function shownAt(elapsed, count) {
+  if (count <= 1) return 1
+  const every = ALL_UP_MS / (count - 1)
+  return Math.max(1, Math.min(count, Math.floor(elapsed / every) + 1))
+}
 
 // The animals a team picks from on the phone.
 export const AVATARS = ['🦊', '🐼', '🐨', '🐯', '🦁', '🐸', '🐵', '🐧', '🦄', '🐙', '🐢', '🦋', '🐝', '🐬', '🦖', '🐳', '🦉', '🐰', '🐶', '🐱', '🐮', '🐷', '🦒', '🦩']

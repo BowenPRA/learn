@@ -71,7 +71,7 @@ const PHONE_CSS = `
 .gp-pill.hot { background: #fde047; color: #4c1d95 }
 .gp-secs { font-size: 30px; font-weight: 800; font-variant-numeric: tabular-nums; min-width: 2ch; text-align: right }
 .gp-timer { height: 12px; border-radius: 999px; background: rgba(255,255,255,.15); overflow: hidden }
-.gp-timer i { display: block; height: 100%; border-radius: 999px; transition: width .25s linear, background .3s }
+.gp-timer i { display: block; width: 100%; height: 100%; border-radius: 999px; transform-origin: left center; transition: background .4s; will-change: transform }
 .gp-emojis { display: grid; gap: 8px }
 .gp-emojis span { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background: #fff; font-size: min(9vw, 40px);
   line-height: 1; box-shadow: 0 4px 0 #c7d2fe }
@@ -402,6 +402,7 @@ function Player({ room }) {
         s={s}
         row={row}
         elapsed={elapsed}
+        stateAt={stateAt}
         guess={myGuess}
         draft={draft}
         onDraft={setDraft}
@@ -483,10 +484,32 @@ function Emojis({ emojis, shown = emojis.length }) {
   )
 }
 
-function Round({ s, row, elapsed, guess, draft, onDraft, onLock, inputRef }) {
+const clockColor = (secs) => (secs > 20 ? '#34d399' : secs > 10 ? '#fbbf24' : '#f87171')
+
+/** The time bar, shrinking on every screen frame rather than in steps (and on each re-render, should frames pause). */
+function TimerBar({ s, stateAt, left }) {
+  const barRef = useRef(null)
+  const at = useRef({ s, stateAt })
+  useEffect(() => { at.current = { s, stateAt } }, [s, stateAt])
+  useEffect(() => {
+    let frame = 0
+    const draw = () => {
+      const { s: st, stateAt: t0 } = at.current
+      const elapsed = st.paused ? st.elapsed : st.elapsed + (Date.now() - t0)
+      const ms = Math.max(0, st.dur - elapsed)
+      if (barRef.current) barRef.current.style.transform = `scaleX(${ms / st.dur})`
+      frame = requestAnimationFrame(draw)
+    }
+    draw()
+    return () => cancelAnimationFrame(frame)
+  }, [])
+  return <div className="gp-timer"><i ref={barRef} style={{ transform: `scaleX(${left / s.dur})`, background: clockColor(Math.ceil(left / 1000)) }} /></div>
+}
+
+function Round({ s, row, elapsed, stateAt, guess, draft, onDraft, onLock, inputRef }) {
   const left = Math.max(0, s.dur - elapsed)
   const secs = Math.ceil(left / 1000)
-  const color = secs > 10 ? '#34d399' : secs > 5 ? '#fbbf24' : '#f87171'
+  const color = clockColor(secs)
   const locked = Boolean(guess) || row.l
   const timeUp = left <= 0
 
@@ -549,7 +572,7 @@ function Round({ s, row, elapsed, guess, draft, onDraft, onLock, inputRef }) {
         {s.double && <span className="gp-pill hot">×2</span>}
         <span className="gp-secs" style={{ color }}>{secs}</span>
       </div>
-      <div className="gp-timer"><i style={{ width: `${(left / s.dur) * 100}%`, background: color }} /></div>
+      <TimerBar s={s} stateAt={stateAt} left={left} />
       <Emojis emojis={s.emojis} shown={shownAt(elapsed, s.emojis.length)} />
       {card}
       {s.paused && (

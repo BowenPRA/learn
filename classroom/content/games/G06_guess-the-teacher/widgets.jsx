@@ -1,7 +1,7 @@
 // content/games/G06_guess-the-teacher/widgets.jsx
 // Guess the Teacher on the TV, run from the laptop plugged into it. Families
 // scan the QR code and join as teams on their phones (phone.jsx); the TV shows
-// a teacher's emojis, one every three seconds, and each team locks in one
+// a teacher's emojis, the last one up at 45 of the 60 seconds, and each team locks in one
 // guess. Nobody learns who was right until the reveal, when the points land:
 // the sooner a right guess was locked in, the more it is worth (1000 down to
 // 100; the last teacher counts double). A leaderboard runs down the side the
@@ -175,7 +175,7 @@ const TV_CSS = `
 .gt-ring svg { width: 100%; height: 100%; transform: rotate(-90deg) }
 .gt-ring circle { fill: none; stroke-width: 9 }
 .gt-ring .track { stroke: rgba(255,255,255,.14) }
-.gt-ring .bar { stroke-linecap: round; transition: stroke-dashoffset .12s linear, stroke .3s }
+.gt-ring .bar { stroke-linecap: round; transition: stroke .4s }
 .gt-ring b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: ${U(6.6)}; font-weight: 800;
   font-variant-numeric: tabular-nums }
 .gt-worth { text-align: left }
@@ -781,15 +781,35 @@ function Cards({ emojis, shown, small = false }) {
   )
 }
 
-function Ring({ left, dur }) {
+const RING = 2 * Math.PI * 44
+const clockColor = (secs) => (secs > 20 ? '#34d399' : secs > 10 ? '#fbbf24' : '#f87171')
+
+/**
+ * The clock. The ring drains on every screen frame, so it moves smoothly; the
+ * game's own tick sets it too, so it never stands still if frames pause.
+ */
+function Ring({ round, left }) {
+  const barRef = useRef(null)
+  const roundRef = useRef(round)
+  useEffect(() => { roundRef.current = round }, [round])
+  useEffect(() => {
+    let frame = 0
+    const draw = () => {
+      const r = roundRef.current
+      const ms = Math.max(0, leftOf(r, Date.now()))
+      if (barRef.current) barRef.current.style.strokeDashoffset = String(RING * (1 - ms / r.dur))
+      frame = requestAnimationFrame(draw)
+    }
+    draw()
+    return () => cancelAnimationFrame(frame)
+  }, [])
   const secs = Math.ceil(left / 1000)
-  const c = 2 * Math.PI * 44
-  const color = secs > 10 ? '#34d399' : secs > 5 ? '#fbbf24' : '#f87171'
+  const color = clockColor(secs)
   return (
     <div className={`gt-ring ${secs <= 5 && secs > 0 ? 'gt-pulse' : ''}`}>
       <svg viewBox="0 0 100 100" aria-hidden="true">
         <circle className="track" cx="50" cy="50" r="44" />
-        <circle className="bar" cx="50" cy="50" r="44" stroke={color} strokeDasharray={c} strokeDashoffset={c * (1 - Math.max(0, left) / dur)} />
+        <circle ref={barRef} className="bar" cx="50" cy="50" r="44" strokeDasharray={RING} style={{ stroke: color, strokeDashoffset: RING * (1 - left / round.dur) }} />
       </svg>
       <b style={{ color }}>{secs}</b>
     </div>
@@ -814,7 +834,7 @@ function RoundView({ game, now }) {
         </div>
         <Cards emojis={t.emojis} shown={shownAt(elapsed, t.emojis.length)} />
         <div className="gt-clock">
-          <Ring left={left} dur={round.dur} />
+          <Ring round={round} left={left} />
           <div className="gt-worth">
             <small>Lock in now for</small>
             <b>{pointsFor(left, isDouble(game))}</b>
