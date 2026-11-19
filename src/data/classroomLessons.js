@@ -297,6 +297,11 @@ export const CLASSROOM_LESSONS = [
     title: 'Our Class Key',
     subtitle: 'Build, test and copy a dichotomous key for the people in our class',
   },
+  {
+    course: 'y7-science', slug: 'U05_1', classKey: 'science:Year 7', unit: '5.1', teacher: 'Mr. Bowen',
+    title: 'Metals and Non-metals',
+    subtitle: 'Test, name and use: what metals can do, how non-metals are different, and the right material for a job',
+  },
 ]
 
 // Games the teacher runs on the projector, from classroom/content/games/<slug>/.
