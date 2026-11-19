@@ -15,7 +15,7 @@ Both apps use The Current's Supabase project. PRA Learn has no project of its ow
 | Owned by | Names | Defined in |
 |---|---|---|
 | The Current | every `adm_*` table and function (students, teachers, roles, lesson requests, book list) | `C:\Users\sbowe\admin\supabase\` |
-| PRA Learn | `learn_accounts`, `learn_packs`, `learn_progress`, `learn_unit_progress`, `learn_arcade_wallet`, `learn_arcade_scores`, every `learn_*` function, the `learn-packs` bucket | `supabase\*.sql` here |
+| PRA Learn | `learn_accounts`, `learn_packs`, `learn_progress`, `learn_unit_progress`, `learn_arcade_wallet`, `learn_arcade_scores`, `learn_game_sets` (a classroom game's list, staff only), every `learn_*` function, the `learn-packs` bucket | `supabase\*.sql` here |
 | PRA Learn | the `learn-accounts` Edge Function (makes, resets and blocks student logins) | `supabase\functions\learn-accounts\` |
 | PRA Learn | `learn_essays` (timed writing, every attempt kept) and the `learn-grade-essay` Edge Function (the AI marker; secret `GEMINI_API_KEY`) | `supabase\learn-essays.sql`, `supabase\functions\learn-grade-essay\` |
 

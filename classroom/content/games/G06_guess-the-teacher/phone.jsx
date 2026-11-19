@@ -2,15 +2,16 @@
 // Guess the Teacher on a player's phone, at /classroom/#/play/<ROOM> (the QR
 // code on the TV), or /classroom/#/play to type the code. No sign-in: parents
 // have no PRA Learn login. A team picks a name and an animal, then for each
-// round sees the emojis, types a teacher's name and is told right or wrong at
-// once. A wrong guess freezes the Guess button for three seconds. Between
-// rounds the phone shows the answer, the team's points and its place.
+// teacher sees the emojis, types a name and locks it in: one guess, and no
+// word of right or wrong until the reveal on the TV. Then the phone shows the
+// answer, what the team said, its points and its place.
 //
 // English with a short Vietnamese line under it, for the parents.
 //
 // The phone never holds a teacher's name before the reveal: it sends what was
-// typed, and the TV judges (widgets.jsx). The team is remembered on this
-// phone, so a reload or a locked screen comes back as the same team.
+// typed, and the TV judges it and keeps the verdict (widgets.jsx). The team
+// and its locked-in guess are remembered on this phone, so a reload or a
+// locked screen comes back as the same team.
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { openBus } from '../../../src/lib/remote/bus.js'
@@ -20,6 +21,7 @@ import { Avatar, BASE_CSS, Backdrop, Confetti } from './look.jsx'
 import { AVATARS, MEDALS, NAME_MAX, SUSPENSE_MS, TOPIC, cleanName, loadFont, ordinal, pointsFor, shownAt } from './protocol.js'
 
 const ME_KEY = 'learn:teacher-game:me'
+const GUESS_KEY = 'learn:teacher-game:guess'
 // No word from the TV in this long: the code is probably wrong.
 const LOST_MS = 9000
 
@@ -70,18 +72,22 @@ const PHONE_CSS = `
 .gp-secs { font-size: 30px; font-weight: 800; font-variant-numeric: tabular-nums; min-width: 2ch; text-align: right }
 .gp-timer { height: 12px; border-radius: 999px; background: rgba(255,255,255,.15); overflow: hidden }
 .gp-timer i { display: block; height: 100%; border-radius: 999px; transition: width .25s linear, background .3s }
-.gp-emojis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px }
+.gp-emojis { display: grid; gap: 8px }
 .gp-emojis span { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background: #fff; font-size: min(9vw, 40px);
   line-height: 1; box-shadow: 0 4px 0 #c7d2fe }
 .gp-emojis span.down { background: linear-gradient(145deg, #8b5cf6, #4f46e5); color: rgba(255,255,255,.6); font-weight: 800; box-shadow: 0 4px 0 #312e81 }
-.gp-worth { margin-top: 10px; text-align: center; font-size: 15px; font-weight: 700; color: #6b7280 }
+.gp-worth { margin-top: 12px; text-align: center; font-size: 15px; font-weight: 700; color: #6b7280 }
+.gp-worth .gp-vn { font-size: 13px }
 .gp-worth b { color: #4338ca }
-.gp-wrong { margin-top: 10px; text-align: center; font-size: 17px; font-weight: 800; color: #dc2626 }
-.gp-wrong .gp-vn { color: #ef4444 }
 .gp-good { background: linear-gradient(160deg, #34d399, #059669); color: #fff; text-align: center; box-shadow: 0 6px 0 #047857, 0 14px 30px rgba(0,0,0,.28) }
 .gp-good .gp-vn, .gp-bad .gp-vn { color: rgba(255,255,255,.88) }
 .gp-bad { background: linear-gradient(160deg, #94a3b8, #64748b); color: #fff; text-align: center; box-shadow: 0 6px 0 #475569, 0 14px 30px rgba(0,0,0,.28) }
 .gp-tick { font-size: 64px; line-height: 1 }
+.gp-locked { background: linear-gradient(160deg, #818cf8, #4f46e5); color: #fff; text-align: center; box-shadow: 0 6px 0 #3730a3, 0 14px 30px rgba(0,0,0,.28) }
+.gp-locked .gp-vn { color: rgba(255,255,255,.85) }
+.gp-said { margin: 12px auto 4px; display: inline-block; max-width: 100%; padding: 8px 16px; border-radius: 14px; background: rgba(255,255,255,.18);
+  font-size: 26px; font-weight: 800; overflow-wrap: anywhere }
+.gp-small { margin: 6px 0 0; font-size: 15px; font-weight: 700; opacity: .92 }
 .gp-pts { font-size: 46px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums }
 .gp-answer { font-size: 44px; text-align: center }
 .gp-place { font-size: 76px; line-height: 1 }
@@ -90,7 +96,6 @@ const PHONE_CSS = `
 `
 
 const newPid = () => (globalThis.crypto?.randomUUID?.() || `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 10)}`).slice(0, 36)
-const SHAKE = [0, -10, 10, -8, 8, -4, 0].map((x) => ({ transform: `translateX(${x}px)` }))
 const randomAvatar = () => AVATARS[Math.floor(Math.random() * AVATARS.length)]
 
 /** This phone's team for `room`: saved if it joined before, else a new one. */
@@ -158,13 +163,26 @@ function CodeEntry() {
   )
 }
 
+/** The guess this phone locked in, kept through a reload: { room, gid, no, pid, text, pts, sure }. */
+function loadGuess(room) {
+  try {
+    const g = JSON.parse(localStorage.getItem(GUESS_KEY))
+    return g?.room === room ? g : null
+  } catch {
+    return null
+  }
+}
+
+function saveGuess(g) {
+  try { localStorage.setItem(GUESS_KEY, JSON.stringify(g)) } catch { /* storage blocked */ }
+}
+
 function Player({ room }) {
   const navigate = useNavigate()
   const [me, setMe] = useState(() => loadMe(room))
   const [s, setS] = useState(null) // the TV's last state
   const [stateAt, setStateAt] = useState(0) // when it arrived, on this phone's clock
-  const [verdict, setVerdict] = useState(null)
-  const [pending, setPending] = useState(false)
+  const [mine, setMine] = useState(() => loadGuess(room)) // this team's locked-in guess
   const [net, setNet] = useState('connecting')
   const [note, setNote] = useState(null) // 'kicked' | 'reset' | null
   const [lost, setLost] = useState(false)
@@ -172,13 +190,17 @@ function Player({ room }) {
   const [draft, setDraft] = useState('')
   const busRef = useRef(null)
   const meRef = useRef(me)
+  const mineRef = useRef(mine)
   const helloAt = useRef(0)
-  const roundNo = useRef(0)
+  const roundKey = useRef('')
   const guessRef = useRef(null)
-  const pendingTimer = useRef(null)
   const [from] = useState(() => `phone-${newPid().slice(0, 8)}`)
 
   useEffect(() => { meRef.current = me }, [me])
+  useEffect(() => {
+    mineRef.current = mine
+    if (mine) saveGuess(mine)
+  }, [mine])
   useWakeLock(me.joined)
 
   const hello = useCallback(() => {
@@ -188,37 +210,34 @@ function Player({ room }) {
     busRef.current.send('hello', { pid: m.pid, name: m.name, avatar: m.avatar })
   }, [])
 
+  // The locked-in guess, (re)sent until the TV says it has it.
+  const sendMine = useCallback(() => {
+    const g = mineRef.current
+    if (!g || g.sure || !busRef.current) return
+    busRef.current.send('guess', { pid: g.pid, no: g.no, text: g.text })
+  }, [])
+
   const onMessage = useCallback((msg) => {
     const m = meRef.current
     if (msg.type === 'state') {
       setS(msg)
       setStateAt(Date.now())
       setLost(false)
-      if (msg.no !== roundNo.current || msg.phase === 'lobby') {
-        roundNo.current = msg.no
-        if (msg.phase !== 'round') {
-          setVerdict(null)
-          setDraft('')
-        }
+      const key = `${msg.gid}:${msg.no}`
+      if (key !== roundKey.current) {
+        roundKey.current = key
+        setDraft('')
       }
+      // The TV lists this team as locked in: the guess arrived.
+      const row = msg.players.find((p) => p.p === m.pid)
+      if (row?.l) setMine((g) => (g && g.gid === msg.gid && g.no === msg.no && !g.sure ? { ...g, sure: true } : g))
       // The TV started again with new teams: back to the join screen, name kept.
-      if (m.joined && !msg.players.some((p) => p.p === m.pid) && Date.now() - helloAt.current > 4000) {
+      if (m.joined && !row && Date.now() - helloAt.current > 4000) {
         setMe({ ...m, pid: newPid(), joined: false })
         setNote('reset')
       }
-    } else if (msg.type === 'verdict' && msg.to === m.pid) {
-      clearTimeout(pendingTimer.current)
-      setPending(false)
-      setVerdict({ ...msg, lockUntil: Date.now() + (msg.lock || 0) })
-      if (msg.ok) buzz([40, 50, 90])
-      else {
-        buzz(160)
-        // Shake the box (without remounting it, which would drop the
-        // keyboard), and leave the guess selected, ready to retype.
-        const box = guessRef.current
-        box?.animate?.(SHAKE, { duration: 420, easing: 'ease-in-out' })
-        setTimeout(() => box?.select(), 0)
-      }
+    } else if (msg.type === 'locked' && msg.to === m.pid) {
+      setMine((g) => (g && g.no === msg.no && !g.sure ? { ...g, sure: true } : g))
     } else if (msg.type === 'kick' && msg.to === m.pid) {
       try { localStorage.removeItem(ME_KEY) } catch { /* storage blocked */ }
       setMe({ pid: newPid(), name: '', avatar: m.avatar, joined: false })
@@ -229,11 +248,18 @@ function Player({ room }) {
   useEffect(() => {
     const bus = openBus(TOPIC(room), from, (msg) => onMessage(msg), (status) => {
       setNet(status)
-      if (status === 'live') hello()
+      if (status === 'live') {
+        hello()
+        sendMine()
+      }
     })
     busRef.current = bus
     hello()
-    const onShow = () => { if (document.visibilityState !== 'hidden') hello() }
+    const onShow = () => {
+      if (document.visibilityState === 'hidden') return
+      hello()
+      sendMine()
+    }
     document.addEventListener('visibilitychange', onShow)
     window.addEventListener('pageshow', onShow)
     return () => {
@@ -242,7 +268,14 @@ function Player({ room }) {
       bus.close()
       busRef.current = null
     }
-  }, [room, from, onMessage, hello])
+  }, [room, from, onMessage, hello, sendMine])
+
+  const waiting = Boolean(mine && !mine.sure)
+  useEffect(() => {
+    if (!waiting) return undefined
+    const t = setInterval(sendMine, 2500)
+    return () => clearInterval(t)
+  }, [waiting, sendMine])
 
   // No word from the TV at all: say so, and offer to change the code.
   useEffect(() => {
@@ -251,8 +284,7 @@ function Player({ room }) {
     return () => clearTimeout(t)
   }, [s])
 
-  const inRound = s?.phase === 'round'
-  const fastTick = inRound || s?.phase === 'reveal' || Boolean(verdict && verdict.lockUntil > now)
+  const fastTick = s?.phase === 'round' || s?.phase === 'reveal'
   useEffect(() => {
     const t = setInterval(() => setNow(Date.now()), fastTick ? 200 : 1000)
     return () => clearInterval(t)
@@ -265,16 +297,6 @@ function Player({ room }) {
     setNote(null)
     saveMe(room, next)
     hello()
-  }
-
-  const sendGuess = () => {
-    const text = draft.trim()
-    if (!text || !s || pending) return
-    setPending(true)
-    busRef.current?.send('guess', { pid: me.pid, no: s.no, text })
-    // No answer from the TV (the guess was too late, say): let them try again.
-    clearTimeout(pendingTimer.current)
-    pendingTimer.current = setTimeout(() => setPending(false), 3000)
   }
 
   if (!me.joined) {
@@ -292,13 +314,17 @@ function Player({ room }) {
   }
 
   const row = s?.players.find((p) => p.p === me.pid)
+  const since = s ? s.ago + (now - stateAt) : 0
+  // At the reveal the points land on the TV after the drumroll; so do they here.
+  const named = s?.phase === 'board' || (s?.phase === 'reveal' && since >= SUSPENSE_MS)
+  const shownScore = row ? (s.phase === 'reveal' && !named ? row.s - (row.g || 0) : row.s) : 0
   const head = (
     <div className="gp-head">
       <span className="gp-me">
         <Avatar emoji={me.avatar} color={row?.c || '#6366f1'} size="34px" />
         <span>{me.name}</span>
       </span>
-      {row && s.phase !== 'lobby' && <span className="gp-score">{row.s.toLocaleString('en-US')} pts</span>}
+      {row && s.phase !== 'lobby' && <span className="gp-score">{shownScore.toLocaleString('en-US')} pts</span>}
     </div>
   )
   const status = net !== 'live' && (
@@ -329,9 +355,22 @@ function Player({ room }) {
     )
   }
 
-  const since = s.ago + (now - stateAt)
   const elapsed = s.phase === 'round' && !s.paused ? s.elapsed + (now - stateAt) : s.elapsed
   const total = s.players.length
+  // This team's guess for the teacher on screen, if it locked one in.
+  const myGuess = mine && mine.gid === s.gid && mine.no === s.no && mine.pid === me.pid ? mine : null
+
+  const lockIn = () => {
+    const text = draft.trim().slice(0, 40)
+    if (!text || s.phase !== 'round' || myGuess || row.l) return
+    const left = Math.max(0, s.dur - elapsed)
+    const g = { room, gid: s.gid, no: s.no, pid: me.pid, text, pts: pointsFor(left, s.double), sure: false }
+    mineRef.current = g
+    setMine(g)
+    busRef.current?.send('guess', { pid: g.pid, no: g.no, text })
+    buzz([30, 40, 60])
+    guessRef.current?.blur()
+  }
 
   let body = null
   if (s.phase === 'lobby') {
@@ -349,7 +388,7 @@ function Player({ room }) {
   } else if (s.phase === 'intro') {
     body = (
       <div className="gp-center">
-        <p className="gp-sub" style={{ letterSpacing: '.2em', textTransform: 'uppercase' }}>{s.no === s.count ? 'Last round' : 'Round'}</p>
+        <p className="gp-sub" style={{ letterSpacing: '.2em', textTransform: 'uppercase' }}>{s.no === s.count ? 'Last teacher' : 'Teacher'}</p>
         <p className="gt-title gt-stamp" style={{ fontSize: 120, margin: 0 }}>{s.no}</p>
         <p className="gp-sub">of {s.count}</p>
         {s.double && <span className="gp-pill hot gt-pulse" style={{ fontSize: 20, marginTop: 8 }}>×2 Double points!</span>}
@@ -363,17 +402,15 @@ function Player({ room }) {
         s={s}
         row={row}
         elapsed={elapsed}
-        now={now}
-        verdict={verdict?.no === s.no ? verdict : null}
-        pending={pending}
+        guess={myGuess}
         draft={draft}
         onDraft={setDraft}
-        onGuess={sendGuess}
+        onLock={lockIn}
         inputRef={guessRef}
       />
     )
   } else if (s.phase === 'reveal' || s.phase === 'board') {
-    body = <Result s={s} row={row} named={s.phase === 'board' || since >= SUSPENSE_MS} />
+    body = <Result s={s} row={row} guess={myGuess} named={named} />
   } else if (s.phase === 'final') {
     body = <Final row={row} total={total} />
   }
@@ -383,7 +420,7 @@ function Player({ room }) {
       {head}
       {body}
       {status}
-      {s.phase === 'final' && row.k <= 3 && <Confetti rain count={60} seed={row.k} />}
+      {s.phase === 'final' && row.k <= 3 && row.s > 0 && <Confetti rain count={60} seed={row.k} />}
     </div>
   )
 }
@@ -438,27 +475,34 @@ function JoinForm({ room, me, note, net, lost, onJoin, onChangeCode }) {
   )
 }
 
-function Round({ s, row, elapsed, now, verdict, pending, draft, onDraft, onGuess, inputRef }) {
+function Emojis({ emojis, shown = emojis.length }) {
+  return (
+    <div className="gp-emojis" style={{ gridTemplateColumns: `repeat(${Math.max(1, emojis.length)}, 1fr)` }}>
+      {emojis.map((e, i) => (i < shown ? <span key={i} className="gt-pop">{e}</span> : <span key={i} className="down">?</span>))}
+    </div>
+  )
+}
+
+function Round({ s, row, elapsed, guess, draft, onDraft, onLock, inputRef }) {
   const left = Math.max(0, s.dur - elapsed)
   const secs = Math.ceil(left / 1000)
-  const shown = shownAt(elapsed)
   const color = secs > 10 ? '#34d399' : secs > 5 ? '#fbbf24' : '#f87171'
-  const got = row.g != null || verdict?.ok
-  const lockLeft = verdict && !verdict.ok ? Math.ceil((verdict.lockUntil - now) / 1000) : 0
-  const locked = lockLeft > 0
+  const locked = Boolean(guess) || row.l
   const timeUp = left <= 0
 
   let card
-  if (got) {
-    const pts = row.g ?? verdict?.pts ?? 0
+  if (locked) {
     card = (
-      <div className="gp-card gp-good gt-pop">
-        <div className="gp-tick">✓</div>
-        <p className="gp-h" style={{ marginTop: 6 }}>Correct!</p>
-        <span className="gp-vn">Chính xác!</span>
-        <div className="gp-pts" style={{ marginTop: 10 }}>+{pts}</div>
-        <p style={{ margin: '12px 0 0', fontWeight: 700 }}>Wait for the other teams…</p>
-        <span className="gp-vn">Chờ các đội khác…</span>
+      <div className="gp-card gp-locked gt-pop">
+        <div className="gp-tick">🔒</div>
+        <p className="gp-h" style={{ marginTop: 6 }}>Locked in!</p>
+        <span className="gp-vn">Đã chốt đáp án!</span>
+        {guess && <div className="gp-said">{guess.text}</div>}
+        <p className="gp-small">
+          {guess && !guess.sure ? 'Sending to the TV…' : `If you're right: ${guess ? guess.pts : '?'} points`}
+        </p>
+        <p style={{ margin: '12px 0 0', fontWeight: 800 }}>Find out at the end!</p>
+        <span className="gp-vn">Đáp án sẽ có ở cuối!</span>
       </div>
     )
   } else if (timeUp) {
@@ -471,12 +515,12 @@ function Round({ s, row, elapsed, now, verdict, pending, draft, onDraft, onGuess
     )
   } else {
     card = (
-      <form className="gp-card" onSubmit={(e) => { e.preventDefault(); if (!locked) onGuess() }}>
+      <form className="gp-card" onSubmit={(e) => { e.preventDefault(); onLock() }}>
         <p className="gp-h" style={{ fontSize: 22 }}>Who is this teacher?</p>
         <span className="gp-vn">Đây là giáo viên nào?</span>
         <input
           ref={inputRef}
-          className={`gp-input ${locked ? 'bad' : ''}`}
+          className="gp-input"
           style={{ marginTop: 12 }}
           value={draft}
           onChange={(e) => onDraft(e.target.value)}
@@ -485,21 +529,15 @@ function Round({ s, row, elapsed, now, verdict, pending, draft, onDraft, onGuess
           autoCorrect="off"
           autoCapitalize="words"
           spellCheck={false}
-          enterKeyHint="send"
+          enterKeyHint="done"
           maxLength={40}
           aria-label="The teacher's name"
         />
-        <button type="submit" className="gp-btn" disabled={locked || pending || !draft.trim()}>
-          {locked ? `Wait ${lockLeft}…` : pending ? 'Checking…' : 'Guess!'}
-        </button>
-        {verdict && !verdict.ok ? (
-          <div className="gp-wrong">
-            Not quite. Try again!
-            <span className="gp-vn">Chưa đúng. Thử lại nhé!</span>
-          </div>
-        ) : (
-          <div className="gp-worth">Right now: <b>{pointsFor(left, s.double)} points</b></div>
-        )}
+        <button type="submit" className="gp-btn" disabled={!draft.trim()}>🔒 Lock it in</button>
+        <div className="gp-worth">
+          One guess only. Lock in now for <b>{pointsFor(left, s.double)} points</b>
+          <span className="gp-vn">Chỉ được đoán một lần. Chốt càng sớm, càng nhiều điểm.</span>
+        </div>
       </form>
     )
   }
@@ -507,14 +545,12 @@ function Round({ s, row, elapsed, now, verdict, pending, draft, onDraft, onGuess
   return (
     <>
       <div className="gp-roundbar">
-        <span className="gp-pill">Round {s.no} of {s.count}</span>
+        <span className="gp-pill">Teacher {s.no} of {s.count}</span>
         {s.double && <span className="gp-pill hot">×2</span>}
         <span className="gp-secs" style={{ color }}>{secs}</span>
       </div>
       <div className="gp-timer"><i style={{ width: `${(left / s.dur) * 100}%`, background: color }} /></div>
-      <div className="gp-emojis">
-        {s.emojis.map((e, i) => (i < shown ? <span key={i} className="gt-pop">{e}</span> : <span key={i} className="down">?</span>))}
-      </div>
+      <Emojis emojis={s.emojis} shown={shownAt(elapsed, s.emojis.length)} />
       {card}
       {s.paused && (
         <div className="gp-paused">
@@ -529,7 +565,7 @@ function Round({ s, row, elapsed, now, verdict, pending, draft, onDraft, onGuess
 
 function placeLine(row, players) {
   // No points yet: no place to boast or worry about.
-  if (row.s <= 0) return { en: 'Be quick next round!', vn: 'Vòng sau nhanh tay nhé!' }
+  if (row.s <= 0) return { en: 'Get the next one!', vn: 'Cố lên ở lượt sau!' }
   if (row.k === 1) return { en: 'You are in the lead!', vn: 'Bạn đang dẫn đầu!' }
   const above = players.find((p) => p.k === row.k - 1)
   const gap = above ? above.s - row.s : 0
@@ -537,20 +573,20 @@ function placeLine(row, players) {
   return { en: `${gap.toLocaleString('en-US')} points behind ${above.a} ${above.n}`, vn: `Kém đội trên ${gap.toLocaleString('en-US')} điểm` }
 }
 
-function Result({ s, row, named }) {
+function Result({ s, row, guess, named }) {
   if (!named) {
     return (
       <div className="gp-center">
-        <div className="gp-emojis" style={{ width: '100%' }}>
-          {s.emojis.map((e, i) => <span key={i}>{e}</span>)}
-        </div>
-        <p className="gp-hero gt-title gt-blink" style={{ fontSize: 30, marginTop: 18 }}>And the teacher is…</p>
+        <div style={{ width: '100%' }}><Emojis emojis={s.emojis} /></div>
+        {guess && <p className="gp-sub" style={{ marginTop: 16 }}>You said: <b>{guess.text}</b></p>}
+        <p className="gp-hero gt-title gt-blink" style={{ fontSize: 30, marginTop: 14 }}>And the teacher is…</p>
         <span className="gp-vn d">Và giáo viên đó là…</span>
       </div>
     )
   }
   const got = row.g != null
   const line = placeLine(row, s.players)
+  const last = s.no >= s.count
   return (
     <div className="gp-center">
       {s.answer && (
@@ -560,15 +596,21 @@ function Result({ s, row, named }) {
         </>
       )}
       <div className={`gp-card ${got ? 'gp-good' : 'gp-bad'} gt-rise`} style={{ width: '100%', marginTop: 10, animationDelay: '.3s' }}>
+        {guess && <p className="gp-small" style={{ margin: '0 0 4px' }}>You said: <b>{guess.text}</b></p>}
         {got ? (
           <>
-            <p className="gp-h">You got it! +{row.g}</p>
-            <span className="gp-vn">Bạn đã đoán đúng!</span>
+            <p className="gp-h">Right! +{row.g}</p>
+            <span className="gp-vn">Chính xác!</span>
           </>
-        ) : (
+        ) : row.l || guess ? (
           <>
             <p className="gp-h">Not this time</p>
             <span className="gp-vn">Lần này chưa đúng</span>
+          </>
+        ) : (
+          <>
+            <p className="gp-h">No answer locked in</p>
+            <span className="gp-vn">Bạn chưa chốt đáp án</span>
           </>
         )}
       </div>
@@ -579,7 +621,7 @@ function Result({ s, row, named }) {
         <span className="gp-vn">{line.vn}</span>
       </div>
       <p className="gp-sub" style={{ fontSize: 15, color: '#c7d2fe' }}>
-        {s.no >= s.count ? 'Final results next' : 'Next round soon'}: watch the TV · Hãy nhìn lên TV
+        {last ? 'Final results next' : 'Next teacher soon'}: watch the TV · Hãy nhìn lên TV
       </p>
     </div>
   )

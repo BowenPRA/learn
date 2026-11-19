@@ -5,9 +5,9 @@
 //
 // The wire (src/lib/remote/bus.js, topic `teacher-game-<ROOM>`):
 //   phone → TV  hello { pid, name, avatar }     join, or come back after a reload
-//               guess { pid, no, text }         a typed name for round `no`
+//               guess { pid, no, text }         a team's one locked-in guess for round `no`
 //   TV → phone  state { … }                     the whole public game, after every change
-//               verdict { to, no, ok, pts, lock }  the answer to one guess
+//               locked { to, no }                the guess arrived (never whether it is right)
 //               kick { to }                     the TV took this team out
 // Nothing is stored anywhere: when the TV closes, the teams are gone.
 
@@ -15,11 +15,10 @@ export const TOPIC = (room) => `teacher-game-${room}`
 
 // The clock, in milliseconds.
 export const ROUND_MS = 30000 // a round, before any +10 s
-export const REVEAL_EVERY_MS = 3000 // a new emoji, until all five are up
-export const LOCK_MS = 3000 // a wrong guess freezes the phone this long
+export const REVEAL_EVERY_MS = 3000 // a new emoji, until all of them are up
 export const INTRO_MS = 2800 // the "Round 2 of 5" splash
 export const SUSPENSE_MS = 2200 // "And the teacher is…" before the name
-export const EMOJI_COUNT = 5
+export const EMOJI_MAX = 6 // a teacher has one to six emojis; five is the usual
 
 /** Points for a right answer with `left` ms on the clock: 1000 at once, 100 at the buzzer, doubled in the last round. */
 export function pointsFor(left, double = false) {
@@ -28,8 +27,8 @@ export function pointsFor(left, double = false) {
   return double ? pts * 2 : pts
 }
 
-/** How many emojis are up after `elapsed` ms of a round. */
-export const shownAt = (elapsed) => Math.max(1, Math.min(EMOJI_COUNT, Math.floor(elapsed / REVEAL_EVERY_MS) + 1))
+/** How many of a teacher's `count` emojis are up after `elapsed` ms of a round. */
+export const shownAt = (elapsed, count) => Math.max(1, Math.min(count, Math.floor(elapsed / REVEAL_EVERY_MS) + 1))
 
 // The animals a team picks from on the phone.
 export const AVATARS = ['🦊', '🐼', '🐨', '🐯', '🦁', '🐸', '🐵', '🐧', '🦄', '🐙', '🐢', '🦋', '🐝', '🐬', '🦖', '🐳', '🦉', '🐰', '🐶', '🐱', '🐮', '🐷', '🦒', '🦩']

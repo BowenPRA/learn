@@ -281,4 +281,14 @@ export const demo = {
     const slug = CONTENT[packId]?.slug
     return Object.fromEntries((files || []).map((f) => [f, ASSET_URLS[`${slug}/${f}`]]).filter(([, u]) => u))
   },
+
+  // A classroom game's edited list, kept in this browser.
+  async gameSet(game) {
+    try { return JSON.parse(localStorage.getItem(`learn-demo-game-${game}`)) } catch { return null }
+  },
+  async saveGameSet(game, data) {
+    const at = iso(Date.now())
+    try { localStorage.setItem(`learn-demo-game-${game}`, JSON.stringify({ data, updated_at: at, updated_by: 'demo' })) } catch { /* private window */ }
+    return at
+  },
 }

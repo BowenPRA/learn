@@ -95,6 +95,12 @@ const SOUNDS = {
     tone(a, { freq: 1568, start: 0.3, length: 0.7, type: 'sine', gain: 0.1 })
   },
   whoosh: (a) => noise(a, { length: 0.35, gain: 0.14, from: 400, to: 2400 }),
+  // A team locks in a guess: a padlock's clunk, the same for right and wrong.
+  lock: (a) => {
+    tone(a, { freq: 520, to: 360, length: 0.07, type: 'square', gain: 0.08 })
+    noise(a, { start: 0.05, length: 0.06, gain: 0.12, from: 2500, to: 1200 })
+    tone(a, { freq: 780, start: 0.08, length: 0.12, type: 'sine', gain: 0.1 })
+  },
   fanfare: (a) => {
     const notes = [[523, 0], [523, 0.14], [523, 0.28], [698, 0.42], [880, 0.78], [784, 1.0], [1047, 1.2]]
     notes.forEach(([f, s], i) => tone(a, { freq: f, start: s, length: i === notes.length - 1 ? 1.1 : 0.22, type: 'square', gain: 0.07 }))

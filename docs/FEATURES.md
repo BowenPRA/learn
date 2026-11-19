@@ -41,7 +41,7 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **My classes (teacher home)**: classes by year group, with students, logins, packs, decks. `src/pages/TeacherHome.jsx` · `/`
 - **Units (teacher home)**: every unit, for staff to open. `src/pages/TeacherHome.jsx`, `src/components/UnitCards.jsx`
 - **Lessons from class (staff)**: every deck with its class, folded by unit, with Plan links. `src/components/ClassroomLessons.jsx`
-- **Classroom games**: staff-only list of games (Jeopardy, Guess Who, Guess the Teacher). `src/components/ClassroomLessons.jsx`, `src/data/classroomLessons.js`
+- **Classroom games**: staff-only list of games (Jeopardy, Guess Who, Guess the Teacher), with a shortcut down to it under the staff home's title (office logins see every class above it). `src/components/ClassroomLessons.jsx`, `src/data/classroomLessons.js`, `src/pages/TeacherHome.jsx`
 - **Class page**: one class's packs, results, logins, unit XP and decks. `src/pages/ClassView.jsx` · `/t/:classKey`
 - **Open / Hide / Due date**: staff publish, hide and date a pack for the class. `src/pages/ClassView.jsx`, `src/lib/live.js`
 - **Most missed + Common slips**: the questions most of the class got wrong, slips and who hit them. `src/pages/ClassView.jsx`, `src/stepPractice/model.js`
@@ -80,8 +80,8 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **Jeopardy**: 14 boards, staff only, EN+FR setting, phone screen, sounds and pictures. `classroom/content/games/G02_jeopardy/` · `/classroom/#/lesson/games/G02_jeopardy`
 - **Jeopardy boards**: the boards' categories, clues and answers. `classroom/content/games/G02_jeopardy/boards.js`
 - **Guess Who**: yes-or-no questions and one guess, staff only, EN/FR; Animals (36, 24 a round: Science 4.4 and more, a fact on each reveal) or Monsters, in a jungle or a night-sky scene, with cards that deal in and flip; the secret and the answers on the phone; ideas under the box; Riverbucks by question count. `classroom/content/games/G05_guess-who/` · `/classroom/#/lesson/games/G05_guess-who`
-- **Guess the Teacher**: an emoji quiz for families on the TV: teams join on their phones by QR code with no sign-in, five emojis flip up one every 3 s, teams type the teacher's name (forgiving: accents, titles, a typo), 1000 to 100 points by time left with the last round double, a live leaderboard, reveal with confetti, podium; staff only for the TV. `classroom/content/games/G06_guess-the-teacher/` · `/classroom/#/lesson/games/G06_guess-the-teacher`
-- **Guess the Teacher's teachers**: the emoji sets and names (a set with no name is left out). `classroom/content/games/G06_guess-the-teacher/teachers.js`
+- **Guess the Teacher**: an emoji quiz for families on the TV, on its own full-window page (no deck bars): teams join on their phones by QR code with no sign-in (the QR stays on screen all game), a teacher's emojis flip up one every 3 s, each team locks in one typed guess (forgiving: accents, titles, a typo) and learns right or wrong only at the reveal, 1000 to 100 points by time left with the last teacher double, a live leaderboard with padlocks, one Next button (Space, Enter, →), Skip teacher, numbered teacher dots, reveal with confetti, final leaderboard, podium; staff only for the TV. `classroom/content/games/G06_guess-the-teacher/` · `/classroom/#/lesson/games/G06_guess-the-teacher`
+- **Guess the Teacher's list**: Edit teachers on the start screen (emojis, name, other names, on/off, order, shuffle), saved for every staff login in `learn_game_sets`, else on that laptop; teachers.js is the starting list. `classroom/content/games/G06_guess-the-teacher/editor.jsx`, `classroom/content/games/G06_guess-the-teacher/list.js`, `classroom/content/games/G06_guess-the-teacher/teachers.js`
 - **Guess the Teacher phone**: the players' screen, English with Vietnamese lines, no answers in it. `classroom/content/games/G06_guess-the-teacher/phone.jsx` · `/classroom/#/play/<room>`, short address `/play` (`public/play/index.html`)
 - **Guess Who boards and ideas**: the cards (animal photos with what a key asks about, emoji monsters) and the model questions. `classroom/content/games/G05_guess-who/boards.js`, `classroom/content/games/G05_guess-who/questions.js`
 - **Game phone screen**: shared pieces for a game's remote screen. `classroom/src/remote/GamePanel.jsx`, `classroom/content/games/G02_jeopardy/remote.jsx`, `classroom/content/games/G05_guess-who/remote.jsx`
@@ -169,6 +169,7 @@ runs; nothing in this repo runs SQL against the live database.
 - **learn-essays.sql**: learn_essays (every attempt kept), `learn_essay_save` (server clock, late hand-in), `learn_essay_revise`, `learn_essay_note`. `supabase/learn-essays.sql`
 - **learn-grade-essay function**: the AI marker; writes the mark itself; needs the GEMINI_API_KEY secret. `supabase/functions/learn-grade-essay/`
 - **learn-arcade.sql**: learn_arcade_wallet, learn_arcade_scores, `learn_arcade_spend`, `learn_arcade_score`, `learn_arcade_board`. `supabase/learn-arcade.sql`
+- **learn-games.sql**: learn_game_sets (a classroom game's edited list), `learn_game_set`, `learn_save_game_set`, `learn_game_staff` (office, head or on the Teachers page). Tested in `tests/games.test.mjs`. `supabase/learn-games.sql`
 - **Test stand-ins**: fake Supabase and The Current for PGlite; first units version. `tests/sql/stubs.sql`, `tests/sql/learn-units-v1.sql`
 
 Order: hardening, then schema, then names, then units and arcade (each after the schema).

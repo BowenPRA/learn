@@ -94,10 +94,24 @@ function LessonView() {
   if (!ok || viewer === 'out' || (got && !got.failed && !got.lesson)) return <ToLearn />
   if (!got || got.failed) return <Waiting failed={Boolean(got?.failed)} onRetry={retry} />
   const { lesson } = got
+  // A game that is its own page (Guess the Teacher): the whole window, none of the deck's bars.
+  if (lesson.slides.length === 1 && lesson.slides[0].bare) return <BareGame slide={lesson.slides[0]} />
   // The deck as it is, never with the old Dashboard link. The teacher's plan (and
   // its button) only for staff: it holds the answers.
   const plan = viewer === 'staff' ? lesson.plan : null
   return <Deck key={`${courseId}/${slug}`} lesson={{ ...lesson, plan, dashboard: null }} course={getCourse(courseId)} />
+}
+
+/** A one-slide game marked `bare`, filling the window, with its own Exit back to PRA Learn's home. */
+function BareGame({ slide }) {
+  const Widget = slide.widget
+  // ?demo comes back too, so a demo stays in demo mode.
+  const exit = () => window.location.assign(import.meta.env.BASE_URL + window.location.search)
+  return (
+    <div className="app-screen flex flex-col bg-[#160d4d]">
+      <Widget lang="en" isDisplayMode onExit={exit} />
+    </div>
+  )
 }
 
 /** The teacher's plan, for staff only: anyone else goes to the PRA Learn home. */

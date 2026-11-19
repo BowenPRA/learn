@@ -117,4 +117,10 @@ export const live = {
     if (error) return {}
     return Object.fromEntries((data || []).filter((d) => d.signedUrl).map((d) => [d.path.split('/').slice(1).join('/'), d.signedUrl]))
   },
+
+  /** A classroom game's list as its host edited it (supabase/learn-games.sql), staff only:
+   *  { data, updated_at, updated_by }, or null when nobody has saved one yet. */
+  async gameSet(game) { return must(await supabase.rpc('learn_game_set', { p_game: game })) },
+  /** Save a game's list for every staff login. Returns when it was saved. */
+  async saveGameSet(game, data) { return must(await supabase.rpc('learn_save_game_set', { p_game: game, p_data: data })) },
 }

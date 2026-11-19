@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronRight, Gamepad2, KeyRound, Layers, Presentation, Sparkles, Users } from 'lucide-react'
+import { ChevronDown, ChevronRight, Gamepad2, KeyRound, Layers, Presentation, Sparkles, Users } from 'lucide-react'
 import { Loading, Notice, SectionHead, SubjectTile } from '../components/ui.jsx'
 import { ClassroomGameList, ClassroomLessonList, classroomLessonsFor } from '../components/ClassroomLessons.jsx'
 import { CLASSROOM_GAMES } from '../data/classroomLessons.js'
@@ -33,7 +33,17 @@ export default function TeacherHome() {
   return (
     <main className="mx-auto max-w-5xl px-4 pb-16 pt-6">
       <p className="eyebrow mb-1">{me?.name}</p>
-      <h1 className="page-title mb-6">{t('myClassesStaff')}</h1>
+      <h1 className="page-title mb-4">{t('myClassesStaff')}</h1>
+      {/* The games sit at the foot of a long page (office logins see every class): one click down to them. */}
+      {CLASSROOM_GAMES.length > 0 && (
+        <button
+          type="button"
+          onClick={() => document.getElementById('h-games')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+          className="mb-6 inline-flex items-center gap-2 rounded-full border-2 border-pra-line bg-white px-4 py-2 text-sm font-extrabold text-pra-ink transition hover:border-pra-blue"
+        >
+          <Gamepad2 className="h-5 w-5 text-[#F5A623]" aria-hidden /> {t('classGames')} <ChevronDown className="h-4 w-4 text-slate-400" aria-hidden />
+        </button>
+      )}
       {[...groups.entries()].map(([yg, list]) => (
         <section key={yg} className="mb-6">
           <h2 className="eyebrow mb-2">{yg}</h2>
