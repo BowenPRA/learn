@@ -5,9 +5,9 @@
 // All CSS here, so the scene is the same in the deck's light and dark modes.
 // Sizes on the TV are in container units (widgets.jsx), so one set of rules
 // fits a laptop window and a TV.
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import '../../../../src/fonts.css'
-import { FONT, VN_FONT } from './protocol.js'
+import { FONT, PTS_MARKS, VN_FONT, markAt } from './protocol.js'
 import { TONES } from './staff.js'
 
 export const BASE_CSS = `
@@ -75,6 +75,23 @@ export const BASE_CSS = `
 .gt-tier.hi { color: var(--green-deep) }
 .gt-tier.mid { color: var(--sun-deep) }
 .gt-tier.lo { color: var(--coral-deep) }
+/* The points ticker: a mechanical counter, one navy wheel per digit, ticking down. */
+.gt-tick { --tk: #fff; display: inline-flex; gap: .07em; line-height: 1; letter-spacing: 0; font-variant-numeric: tabular-nums; transform-origin: 50% 60% }
+.gt-tier.hi .gt-tick { --tk: #B6E874 }
+.gt-tier.mid .gt-tick { --tk: #FFD166 }
+.gt-tier.lo .gt-tick { --tk: #FF9A87 }
+.gt-tick-d { position: relative; flex: none; width: .78em; height: 1.18em; overflow: hidden; border-radius: .16em; color: var(--tk);
+  background: linear-gradient(180deg, #1A3E7C 0%, #0E2A5C 49%, #0A2251 51%, #13336D 100%);
+  box-shadow: inset 0 .04em 0 rgba(255,255,255,.14), inset 0 -.05em .08em rgba(0,0,0,.3), 0 .07em .16em rgba(14,42,92,.28);
+  transition: width .4s var(--ease-out), opacity .3s, margin .4s var(--ease-out), color .5s }
+.gt-tick-d.off { width: 0; opacity: 0; margin-right: -.07em }
+.gt-tick-d::before { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; border-radius: inherit;
+  background: linear-gradient(180deg, rgba(4,14,36,.62) 0%, rgba(4,14,36,0) 30%, rgba(4,14,36,0) 70%, rgba(4,14,36,.62) 100%) }
+.gt-tick-d::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; z-index: 2; height: max(1px, .028em); pointer-events: none;
+  background: rgba(0,0,0,.42); box-shadow: 0 max(1px, .02em) 0 rgba(255,255,255,.07) }
+.gt-tick-s { display: block; will-change: transform }
+.gt-tick-s > span { display: block; font-size: .9em; height: calc(1.18em / .9); line-height: calc(1.18em / .9); text-align: center;
+  text-shadow: 0 0 .28em color-mix(in srgb, var(--tk) 45%, transparent) }
 .gt-meter { position: relative; height: .5em; border-radius: 999px; background: var(--blue-pale); overflow: hidden; box-shadow: inset 0 1px 2px rgba(14,42,92,.12) }
 .gt-meter > i { position: absolute; inset: 0; border-radius: inherit; transform-origin: left center; will-change: transform;
   background-image: linear-gradient(180deg, rgba(255,255,255,.45), rgba(255,255,255,0) 60%) }
@@ -117,13 +134,111 @@ export function Odometer({ value, className = '' }) {
   )
 }
 
+const WHEEL = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0] // a 0 at each end, so 0 → 9 rolls on round
+const CELL = 1.18 // a digit's height, em
+const TICK_MS = 240
+const BIG_MS = 650
+/** Ease out with a small overshoot: the wheel clicks past and settles. */
+const clunk = (t) => {
+  const c = 1.7
+  const x = t - 1
+  return 1 + (c + 1) * x * x * x + c * x * x
+}
+const calm = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches
+
+/**
+ * A number on a mechanical counter: one wheel per digit, read through a
+ * window. Each step down rolls the wheel down one digit with a small click,
+ * and the wheel to its left turns with it as it passes 0, as on a real
+ * counter. `step` (10 for points) is the smallest change: its zeros are fixed
+ * wheels. `max` sets how many wheels there are; a wheel that would show a
+ * leading 0 folds away. With `getValue` the counter reads the value every
+ * screen frame, and `value` is what it shows until then.
+ */
+export function Ticker({ value, getValue, step = 10, max = value, className = '' }) {
+  const unit = Math.max(1, step)
+  const fixed = Math.max(0, Math.round(Math.log10(unit)))
+  const moving = String(Math.max(1, Math.round(max / unit))).length
+  const root = useRef(null)
+  const wheels = useRef([])
+  const read = useRef(getValue)
+  const fallback = useRef(value)
+  useEffect(() => { read.current = getValue }, [getValue])
+  useEffect(() => { fallback.current = value }, [value])
+
+  useLayoutEffect(() => {
+    const target = () => Math.max(0, Math.round((read.current ? read.current() : fallback.current) / unit))
+    const still = calm()
+    const start = target()
+    const s = { from: start, to: start, w: start, t0: 0, dur: TICK_MS, last: 0, hundreds: Math.floor((start * unit) / 100) }
+    const paint = () => {
+      for (let i = 0; i < moving; i++) {
+        const tile = wheels.current[i]
+        if (!tile) continue
+        const p = 10 ** i
+        const whole = Math.floor(s.w / p)
+        // The wheel turns with the one to its right only while that one passes 0.
+        const turn = whole + Math.max(0, s.w - whole * p - (p - 1))
+        const at = ((turn % 10) + 10) % 10
+        tile.firstChild.style.transform = `translateY(${(-at * CELL).toFixed(4)}em)`
+        tile.classList.toggle('off', i > 0 && s.to < p)
+      }
+    }
+    paint()
+    let frame = 0
+    const draw = (now) => {
+      const v = target()
+      if (v !== s.to) {
+        // Quick ticks roll quicker, so the wheel is never behind.
+        const gap = s.last ? now - s.last : Infinity
+        s.dur = Math.abs(v - s.w) > 1.5 ? BIG_MS : Math.max(90, Math.min(TICK_MS, gap * 0.8))
+        s.from = s.w
+        s.to = v
+        s.t0 = now
+        s.last = now
+        const hundreds = Math.floor((v * unit) / 100)
+        if (hundreds < s.hundreds && !still) {
+          root.current?.animate?.(
+            [{ transform: 'scale(1)' }, { transform: 'scale(1.08) translateY(-.03em)' }, { transform: 'scale(1)' }],
+            { duration: 300, easing: 'cubic-bezier(.2,.9,.3,1.3)' },
+          )
+        }
+        s.hundreds = hundreds
+      }
+      const k = still ? 1 : Math.min(1, (now - s.t0) / s.dur)
+      const w = k >= 1 ? s.to : s.from + (s.to - s.from) * clunk(k)
+      if (w !== s.w) {
+        s.w = w
+        paint()
+      }
+      frame = requestAnimationFrame(draw)
+    }
+    frame = requestAnimationFrame(draw)
+    return () => cancelAnimationFrame(frame)
+  }, [unit, moving])
+
+  const shown = Math.max(0, Math.round(value / unit) * unit)
+  return (
+    <span ref={root} className={`gt-tick ${className}`} role="img" aria-label={String(shown)}>
+      {Array.from({ length: moving }, (_, j) => moving - 1 - j).map((i) => (
+        <span key={i} ref={(el) => { wheels.current[i] = el }} className="gt-tick-d" aria-hidden="true">
+          <span className="gt-tick-s">{WHEEL.map((n, k) => <span key={k}>{n}</span>)}</span>
+        </span>
+      ))}
+      {Array.from({ length: fixed }, (_, k) => (
+        <span key={`z${k}`} className="gt-tick-d" aria-hidden="true"><span className="gt-tick-s"><span>0</span></span></span>
+      ))}
+    </span>
+  )
+}
+
 /** Green at full, through gold, to coral when nearly empty. */
 const meterColor = (share) => `hsl(${Math.round(8 + 92 * Math.max(0, Math.min(1, share)))} 72% 50%)`
 
 /**
  * The points meter: drains on every screen frame (`getShare()` gives 1 to 0),
  * with `share` as the value to show between frames or while frames are paused.
- * Marks at 750, 500 and 250 points.
+ * Marks at 800, 600 and 400 points (PTS_MARKS).
  */
 export function Meter({ share, getShare, className = '', style }) {
   const fill = useRef(null)
@@ -146,7 +261,7 @@ export function Meter({ share, getShare, className = '', style }) {
   return (
     <div className={`gt-meter ${className}`} style={style} aria-hidden="true">
       <i ref={fill} style={{ transform: `scaleX(${k})`, backgroundColor: meterColor(k) }} />
-      {[750, 500, 250].map((p) => <b key={p} style={{ left: `${((p - 100) / 900) * 100}%` }} />)}
+      {PTS_MARKS.map((p) => <b key={p} style={{ left: `${markAt(p) * 100}%` }} />)}
     </div>
   )
 }

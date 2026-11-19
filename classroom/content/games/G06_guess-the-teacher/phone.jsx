@@ -20,8 +20,8 @@ import { Lock, Timer } from 'lucide-react'
 import { openBus } from '../../../src/lib/remote/bus.js'
 import { cleanRoomCode } from '../../../src/lib/remote/room.js'
 import { buzz, useWakeLock } from '../../../src/lib/remote/phone.js'
-import { Avatar, BASE_CSS, Backdrop, Confetti, Meter, Odometer, Portrait } from './look.jsx'
-import { AVATARS, NAME_MAX, ROUND_MS, SUSPENSE_MS, TOPIC, cardsUp, cleanName, ordinal, pointsFor, tierOf } from './protocol.js'
+import { Avatar, BASE_CSS, Backdrop, Confetti, Meter, Portrait, Ticker } from './look.jsx'
+import { AVATARS, NAME_MAX, ROUND_MS, SUSPENSE_MS, TOPIC, cardsUp, cleanName, ordinal, pointsFor, pointsShare, tierOf } from './protocol.js'
 import { isRude } from './words.js'
 
 const ME_KEY = 'learn:teacher-game:me'
@@ -557,24 +557,26 @@ function TimerBar({ s, stateAt, left }) {
   return <div className="gp-timer"><i ref={barRef} style={{ transform: `scaleX(${left / s.dur})`, background: clockColor(Math.ceil(left / 1000)) }} /></div>
 }
 
-/** What a right guess is worth now, rolling down like a counter over a meter that drains every frame. */
+/** What a right guess is worth now, ticking down like a counter over a meter that drains every frame. */
 function PhoneWorth({ s, stateAt, left }) {
   const base = s.base || ROUND_MS
   const pts = pointsFor(left, s.double, base)
   const at = useRef({ s, stateAt })
   useEffect(() => { at.current = { s, stateAt } }, [s, stateAt])
-  const getShare = useCallback(() => {
+  const leftNow = useCallback(() => {
     const { s: st, stateAt: t0 } = at.current
     const elapsed = st.paused || st.allInAgo != null ? st.elapsed : st.elapsed + (Date.now() - t0)
-    return Math.max(0, st.dur - elapsed) / (st.base || ROUND_MS)
+    return Math.max(0, st.dur - elapsed)
   }, [])
+  const getPoints = useCallback(() => pointsFor(leftNow(), at.current.s.double, at.current.s.base || ROUND_MS), [leftNow])
+  const getShare = useCallback(() => pointsShare(leftNow(), at.current.s.base || ROUND_MS), [leftNow])
   return (
     <div className="gp-worth">
       <div className="gp-worth-row">
         <span>⚡ Lock in now for</span>
-        <b className={`gt-tier ${tierOf(pts, s.double)}`}><Odometer value={pts} /><small>points</small>{s.double && <em>×2</em>}</b>
+        <b className={`gt-tier ${tierOf(pts, s.double)}`}><Ticker value={pts} getValue={getPoints} max={pointsFor(Infinity, s.double, base)} /><small>points</small>{s.double && <em>×2</em>}</b>
       </div>
-      <Meter share={left / base} getShare={getShare} />
+      <Meter share={pointsShare(left, base)} getShare={getShare} />
       <p>One guess only.<span className="gp-vn gt-vn">Chỉ được đoán một lần. Chốt càng sớm, càng nhiều điểm.</span></p>
     </div>
   )

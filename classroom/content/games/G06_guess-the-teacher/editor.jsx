@@ -274,7 +274,7 @@ function Row({ t, i, last, staff, onPatch, onUp, onDown, onDelete }) {
 function RoundTime({ secs, onSecs }) {
   const lastAt = Math.round(secs * ALL_UP_SHARE)
   return (
-    <div className="gt-ed-time" title={`Each teacher gets ${secs} seconds. The last emoji goes up at ${lastAt} s; points fall from 1000 to 100 over the round.`}>
+    <div className="gt-ed-time" title={`Each teacher gets ${secs} seconds. The last emoji goes up at ${lastAt} s; points fall from 1000 to 300 by the last second.`}>
       <Timer aria-hidden="true" />
       <button type="button" className="gt-ed-icon" onClick={() => onSecs(roundSecsOf(secs - ROUND_SECS.step))} disabled={secs <= ROUND_SECS.min} aria-label="Shorter rounds"><Minus /></button>
       <span><b>{secs} s a round</b><small>all emojis up at {lastAt} s</small></span>

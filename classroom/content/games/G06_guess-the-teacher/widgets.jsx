@@ -4,7 +4,7 @@
 // a teacher's emojis, the last one up at 45 of the 60 seconds, and each team locks in one
 // guess. Nobody learns who was right until the reveal, when the points land:
 // the sooner a right guess was locked in, the more it is worth (1000 down to
-// 100; the last teacher counts double). A leaderboard runs down the side the
+// 300; the last teacher counts double). A leaderboard runs down the side the
 // whole way through, and the QR code stays on screen for late joiners.
 //
 //   lobby   QR code, room code, teams popping in, Edit teachers
@@ -29,10 +29,10 @@ import { ArrowRight, CircleCheck, Home, Lock, LogOut, Maximize, MessageCircleQue
 import { QrCode } from '../../../src/lib/remote/QrCode.jsx'
 import { openBus } from '../../../src/lib/remote/bus.js'
 import { keptRoom } from '../../../src/lib/remote/room.js'
-import { Avatar, BASE_CSS, Backdrop, Confetti, Meter, Odometer, Portrait } from './look.jsx'
+import { Avatar, BASE_CSS, Backdrop, Confetti, Meter, Odometer, Portrait, Ticker } from './look.jsx'
 import { EDITOR_CSS, TeacherEditor } from './editor.jsx'
 import { loadList, ready, saveList, setsFor } from './list.js'
-import { INTRO_MS, ROUND_MS, SUSPENSE_MS, TOPIC, allInLasts, cardsUp, ordinal, pointsFor, tierOf } from './protocol.js'
+import { INTRO_MS, ROUND_MS, SUSPENSE_MS, TOPIC, allInLasts, cardsUp, ordinal, pointsFor, pointsShare, tierOf } from './protocol.js'
 import { check, elapsedOf, isDouble, isLast, leftOf, loadGame, lockedOf, publicState, ranked, reduce, rightOf, roundMsOf, saveGame, teacherOf } from './rules.js'
 import { isMuted, play, setMuted, unlockAudio } from './sfx.js'
 import { loadStaff, preload, staffFor } from './staff.js'
@@ -199,7 +199,7 @@ const TV_CSS = `
 .gt-worth { min-width: ${U(19)} }
 .gt-worth b { display: block; font-size: ${U(5.2)}; font-weight: 800; color: var(--blue-ink); line-height: 1.05; font-variant-numeric: tabular-nums; letter-spacing: -.02em }
 .gt-worth b { display: flex; align-items: baseline }
-.gt-worth b > span:not(.gt-odo) { font-size: .4em; font-weight: 600; color: var(--ink-soft); margin-left: .35em; letter-spacing: 0 }
+.gt-worth b > span:not(.gt-odo):not(.gt-tick) { font-size: .4em; font-weight: 600; color: var(--ink-soft); margin-left: .35em; letter-spacing: 0 }
 .gt-worth .gt-meter { font-size: ${U(1.8)}; margin-top: ${U(.9)} }
 .gt-x2 { align-self: center; margin-left: .45em; font-style: normal; font-size: .36em; font-weight: 800; color: var(--sun-ink); background: var(--sun-tint);
   padding: .15em .5em; border-radius: 999px }
@@ -959,22 +959,24 @@ function Ring({ round, left }) {
 }
 
 /**
- * What a right guess is worth now: digits that roll down like a counter, in
- * green, gold then coral, over a meter that drains every frame.
+ * What a right guess is worth now: a counter whose wheels tick down ten
+ * points at a time, its digits green, gold then coral, over a meter that
+ * drains every frame.
  */
 function Worth({ round, left, base, double }) {
   const pts = pointsFor(left, double, base)
   const roundRef = useRef(round)
   useEffect(() => { roundRef.current = round }, [round])
-  const getShare = useCallback(() => leftOf(roundRef.current, Date.now()) / base, [base])
+  const getPoints = useCallback(() => pointsFor(leftOf(roundRef.current, Date.now()), double, base), [double, base])
+  const getShare = useCallback(() => pointsShare(leftOf(roundRef.current, Date.now()), base), [base])
   return (
     <div className="gt-worth">
       <small>⚡ Lock in now for</small>
       <b className={`gt-tier ${tierOf(pts, double)}`}>
-        <Odometer value={pts} /><span>points</span>
+        <Ticker value={pts} getValue={getPoints} max={pointsFor(Infinity, double, base)} /><span>points</span>
         {double && <em className="gt-x2">×2</em>}
       </b>
-      <Meter share={left / base} getShare={getShare} />
+      <Meter share={pointsShare(left, base)} getShare={getShare} />
     </div>
   )
 }

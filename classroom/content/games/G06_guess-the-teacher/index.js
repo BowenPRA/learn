@@ -11,7 +11,7 @@ export default {
     unit: 'G6',
     id: 'G06',
     title: 'Guess the Teacher',
-    objective: 'Five emojis describe a teacher. Families scan the QR code, join as teams on their phones and type the teacher\'s name. The faster a right answer, the more points (1000 down to 100; the last round counts double), with a live leaderboard and a podium at the end.',
+    objective: 'Five emojis describe a teacher. Families scan the QR code, join as teams on their phones and type the teacher\'s name. The faster a right answer, the more points (1000 down to 300; the last round counts double), with a live leaderboard and a podium at the end.',
     order: 6,
     // The TV is in English; the phones carry their own Vietnamese lines for
     // parents. No language switch on the deck.

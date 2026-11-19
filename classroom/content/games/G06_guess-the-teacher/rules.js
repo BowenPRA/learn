@@ -17,7 +17,7 @@ import { AVATARS, COLORS, ROUND_MS, cleanName, pointsFor } from './protocol.js'
 import { isRude } from './words.js'
 
 const SAVE_KEY = 'learn:teacher-game:game'
-// A guess that set off just before the buzzer still counts, for 100 points.
+// A guess that set off just before the buzzer still counts, for 300 points.
 const GRACE_MS = 600
 
 export const fresh = () => ({

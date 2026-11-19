@@ -28,17 +28,32 @@ export const INTRO_MS = 2800 // the "Round 2 of 5" splash
 export const SUSPENSE_MS = 2200 // "And the teacher is…" before the name
 export const EMOJI_MAX = 6 // a teacher has one to six emojis; five is the usual
 
-/** Points for a right answer with `left` ms of a `roundMs` round: 1000 at once, 100 at the buzzer, doubled in the last round. */
+// The points: 1000 with the whole round to go, falling evenly to 300 with one
+// second left, and 300 through that last second (doubled in the last round).
+export const PTS_TOP = 1000
+export const PTS_FLOOR = 300
+export const FLOOR_LEFT_MS = 1000
+export const PTS_MARKS = [800, 600, 400] // the lines on the points meter
+
+/** How much of the fall is still to come with `left` ms of a `roundMs` round: 1 at once, 0 with a second left. */
+export function pointsShare(left, roundMs = ROUND_MS) {
+  const span = Math.max(1, roundMs - FLOOR_LEFT_MS)
+  return Math.max(0, Math.min(1, (left - FLOOR_LEFT_MS) / span))
+}
+
+/** Where `pts` (one round's points, before doubling) sits on the meter, 0 to 1. */
+export const markAt = (pts) => (pts - PTS_FLOOR) / (PTS_TOP - PTS_FLOOR)
+
+/** Points for a right answer with `left` ms of a `roundMs` round, in tens: 1000 at once, 300 with a second left, doubled in the last round. */
 export function pointsFor(left, double = false, roundMs = ROUND_MS) {
-  const share = Math.max(0, Math.min(1, left / roundMs))
-  const pts = Math.round((100 + 900 * share) / 10) * 10
+  const pts = Math.round((PTS_FLOOR + (PTS_TOP - PTS_FLOOR) * pointsShare(left, roundMs)) / 10) * 10
   return double ? pts * 2 : pts
 }
 
-/** Points left as a colour tier: plenty (green), half (gold), little (coral). */
+/** Points left as a colour tier: the top third (green), the middle (gold), the bottom (coral). */
 export const tierOf = (pts, double = false) => {
-  const p = double ? pts / 2 : pts
-  return p >= 700 ? 'hi' : p >= 400 ? 'mid' : 'lo'
+  const k = markAt(double ? pts / 2 : pts)
+  return k >= 2 / 3 ? 'hi' : k >= 1 / 3 ? 'mid' : 'lo'
 }
 
 /** How many of a teacher's `count` emojis are up after `elapsed` ms of a `roundMs` round:
