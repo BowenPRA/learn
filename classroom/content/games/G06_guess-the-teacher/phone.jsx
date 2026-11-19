@@ -22,6 +22,7 @@ import { cleanRoomCode } from '../../../src/lib/remote/room.js'
 import { buzz, useWakeLock } from '../../../src/lib/remote/phone.js'
 import { Avatar, BASE_CSS, Backdrop, Confetti, Portrait } from './look.jsx'
 import { AVATARS, NAME_MAX, SUSPENSE_MS, TOPIC, cleanName, ordinal, pointsFor, shownAt } from './protocol.js'
+import { isRude } from './words.js'
 
 const ME_KEY = 'learn:teacher-game:me'
 const GUESS_KEY = 'learn:teacher-game:guess'
@@ -51,6 +52,9 @@ const PHONE_CSS = `
 .gp-input { display: block; width: 100%; font: inherit; font-family: var(--vn-font); font-size: 21px; font-weight: 600; padding: 12px 16px; border-radius: 14px;
   border: 2px solid var(--line); color: var(--ink); background: #fff; outline: none; transition: border-color .15s, box-shadow .15s }
 .gp-input:focus { border-color: var(--blue); box-shadow: 0 0 0 4px var(--blue-tint) }
+.gp-input.bad, .gp-input.bad:focus { border-color: var(--coral-deep); box-shadow: 0 0 0 4px var(--coral-pale) }
+.gp-hint { margin: 8px 0 0; font-size: 14.5px; font-weight: 600; color: var(--coral-deep) }
+.gp-hint .gp-vn { color: var(--coral-deep) }
 .gp-code { text-align: center; letter-spacing: .35em; text-transform: uppercase; font-family: inherit; font-size: 34px; font-weight: 800; color: var(--blue-ink) }
 .gp-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 56px; margin-top: 16px; font: inherit; font-size: 20px; font-weight: 700;
   padding: 12px; border-radius: 999px; border: none; background: var(--blue); color: #fff; box-shadow: 0 8px 20px rgba(17,109,255,.3); cursor: pointer;
@@ -271,7 +275,7 @@ function Player({ room }) {
     } else if (msg.type === 'kick' && msg.to === m.pid) {
       try { localStorage.removeItem(ME_KEY) } catch { /* storage blocked */ }
       setMe({ pid: newPid(), name: '', avatar: m.avatar, joined: false })
-      setNote('kicked')
+      setNote(msg.why === 'name' ? 'rude' : 'kicked')
     }
   }, [])
 
@@ -459,12 +463,17 @@ function Player({ room }) {
 function JoinForm({ room, me, note, net, lost, onJoin, onChangeCode }) {
   const [name, setName] = useState(me.name)
   const [avatar, setAvatar] = useState(me.avatar)
-  const ok = cleanName(name).length > 0
+  // A rude name cannot join (words.js); the TV checks again.
+  const rude = isRude(name)
+  const ok = cleanName(name).length > 0 && !rude
   return (
     <div className="gp-in">
       <Brand><span className="gp-code-pill">{room}</span></Brand>
       {note === 'kicked' && (
         <div className="gp-note warn">The host took that name out. Please choose another name.<span className="gp-vn gt-vn">Vui lòng chọn tên khác.</span></div>
+      )}
+      {note === 'rude' && (
+        <div className="gp-note warn">That team name is not allowed. Please choose another.<span className="gp-vn gt-vn">Tên đội này không được phép. Vui lòng chọn tên khác.</span></div>
       )}
       {note === 'reset' && (
         <div className="gp-note">The TV has started a new game. Join again!<span className="gp-vn gt-vn">TV đã bắt đầu trò chơi mới. Hãy tham gia lại!</span></div>
@@ -479,7 +488,7 @@ function JoinForm({ room, me, note, net, lost, onJoin, onChangeCode }) {
         <label className="gp-label" htmlFor="gp-name">Team name <span className="gp-vn gt-vn">Tên đội</span></label>
         <input
           id="gp-name"
-          className="gp-input"
+          className={`gp-input ${rude ? 'bad' : ''}`}
           value={name}
           maxLength={NAME_MAX + 4}
           onChange={(e) => setName(e.target.value)}
@@ -488,7 +497,15 @@ function JoinForm({ room, me, note, net, lost, onJoin, onChangeCode }) {
           autoCorrect="off"
           spellCheck={false}
           enterKeyHint="done"
+          aria-invalid={rude}
+          aria-describedby={rude ? 'gp-name-hint' : undefined}
         />
+        {rude && (
+          <p className="gp-hint" id="gp-name-hint">
+            Please choose a kinder team name.
+            <span className="gp-vn gt-vn">Vui lòng chọn tên đội lịch sự hơn.</span>
+          </p>
+        )}
         <span className="gp-label">Your animal <span className="gp-vn gt-vn">Chọn con vật</span></span>
         <div className="gp-avatars">
           {AVATARS.map((a) => (

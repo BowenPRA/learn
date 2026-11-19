@@ -36,6 +36,7 @@ import { INTRO_MS, SUSPENSE_MS, TOPIC, ordinal, pointsFor, shownAt } from './pro
 import { check, elapsedOf, isDouble, isLast, leftOf, loadGame, lockedOf, publicState, ranked, reduce, rightOf, saveGame, teacherOf } from './rules.js'
 import { isMuted, play, setMuted, unlockAudio } from './sfx.js'
 import { loadStaff, preload, staffFor } from './staff.js'
+import { isRude } from './words.js'
 
 const ROOM_KEY = 'learn:teacher-game:room'
 // The leaderboards' row heights, in the scene's unit (1% of its height).
@@ -486,6 +487,11 @@ export function TeacherGame({ onExit }) {
     if (msg.type === 'hello') {
       if (g.removed.includes(msg.pid)) {
         busRef.current?.send('kick', { to: msg.pid })
+        return
+      }
+      // A name the phone should not have let through (words.js): back to the join screen.
+      if (isRude(msg.name)) {
+        busRef.current?.send('kick', { to: msg.pid, why: 'name' })
         return
       }
       const next = apply({ type: 'hello', pid: msg.pid, name: msg.name, avatar: msg.avatar })

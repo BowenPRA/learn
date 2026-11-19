@@ -14,6 +14,7 @@
 // worth what was left on the TV's clock when it was locked in.
 import { judge } from './match.js'
 import { AVATARS, COLORS, ROUND_MS, cleanName, pointsFor } from './protocol.js'
+import { isRude } from './words.js'
 
 const SAVE_KEY = 'learn:teacher-game:game'
 // A guess that set off just before the buzzer still counts, for 100 points.
@@ -101,7 +102,8 @@ export function reduce(g, a) {
     case 'hello': {
       if (g.removed.includes(a.pid)) return g
       const name = cleanName(a.name)
-      if (!a.pid || !name) return g
+      // A rude name never reaches the TV (words.js); widgets.jsx tells the phone.
+      if (!a.pid || !name || isRude(name)) return g
       const avatar = AVATARS.includes(a.avatar) ? a.avatar : AVATARS[0]
       const known = g.players.find((p) => p.pid === a.pid)
       if (known) {

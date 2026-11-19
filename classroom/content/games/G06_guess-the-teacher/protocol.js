@@ -8,7 +8,7 @@
 //               guess { pid, no, text }         a team's one locked-in guess for round `no`
 //   TV → phone  state { … }                     the whole public game, after every change
 //               locked { to, no }                the guess arrived (never whether it is right)
-//               kick { to }                     the TV took this team out
+//               kick { to, why }                the TV took this team out (why 'name': a rude team name, words.js)
 // Nothing is stored anywhere: when the TV closes, the teams are gone.
 
 export const TOPIC = (room) => `teacher-game-${room}`
