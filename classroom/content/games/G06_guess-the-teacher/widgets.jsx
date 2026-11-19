@@ -29,10 +29,10 @@ import { ArrowRight, CircleCheck, Home, Lock, LogOut, Maximize, MessageCircleQue
 import { QrCode } from '../../../src/lib/remote/QrCode.jsx'
 import { openBus } from '../../../src/lib/remote/bus.js'
 import { keptRoom } from '../../../src/lib/remote/room.js'
-import { Avatar, BASE_CSS, Backdrop, Confetti, Portrait } from './look.jsx'
+import { Avatar, BASE_CSS, Backdrop, Confetti, Meter, Odometer, Portrait } from './look.jsx'
 import { EDITOR_CSS, TeacherEditor } from './editor.jsx'
 import { loadList, ready, saveList, setsFor } from './list.js'
-import { INTRO_MS, ROUND_MS, SUSPENSE_MS, TOPIC, allInLasts, cardsUp, ordinal, pointsFor } from './protocol.js'
+import { INTRO_MS, ROUND_MS, SUSPENSE_MS, TOPIC, allInLasts, cardsUp, ordinal, pointsFor, tierOf } from './protocol.js'
 import { check, elapsedOf, isDouble, isLast, leftOf, loadGame, lockedOf, publicState, ranked, reduce, rightOf, roundMsOf, saveGame, teacherOf } from './rules.js'
 import { isMuted, play, setMuted, unlockAudio } from './sfx.js'
 import { loadStaff, preload, staffFor } from './staff.js'
@@ -198,14 +198,38 @@ const TV_CSS = `
 .gt-dock small { display: block; font-size: ${U(1.55)}; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); white-space: nowrap }
 .gt-worth { min-width: ${U(19)} }
 .gt-worth b { display: block; font-size: ${U(5.2)}; font-weight: 800; color: var(--blue-ink); line-height: 1.05; font-variant-numeric: tabular-nums; letter-spacing: -.02em }
-.gt-worth b span { font-size: .4em; font-weight: 600; color: var(--ink-soft); margin-left: .35em; letter-spacing: 0 }
+.gt-worth b { display: flex; align-items: baseline }
+.gt-worth b > span:not(.gt-odo) { font-size: .4em; font-weight: 600; color: var(--ink-soft); margin-left: .35em; letter-spacing: 0 }
+.gt-worth .gt-meter { font-size: ${U(1.8)}; margin-top: ${U(.9)} }
+.gt-x2 { align-self: center; margin-left: .45em; font-style: normal; font-size: .36em; font-weight: 800; color: var(--sun-ink); background: var(--sun-tint);
+  padding: .15em .5em; border-radius: 999px }
 .gt-have > b { display: block; font-size: ${U(2.5)}; font-weight: 700; color: var(--blue-ink); line-height: 1.2; margin: ${U(.2)} 0 ${U(.9)}; white-space: nowrap }
 .gt-avs { display: flex; gap: ${U(.6)}; align-items: center }
 .gt-av { position: relative; display: inline-flex }
-.gt-av .gt-avatar { opacity: .3; filter: grayscale(1); transition: opacity .3s, filter .3s }
-.gt-av.in .gt-avatar { opacity: 1; filter: none; animation: gt-pop .45s var(--bounce) both }
-.gt-av.in::after { content: ''; position: absolute; right: ${U(-.4)}; bottom: ${U(-.4)}; width: ${U(1.8)}; height: ${U(1.8)}; border-radius: 50%; border: 2px solid #fff;
-  background: var(--green-deep) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / 64% no-repeat }
+.gt-av .gt-avatar { opacity: .3; filter: grayscale(1); transition: opacity .3s, filter .3s; animation: gt-wait 2.4s ease-in-out infinite }
+.gt-av.in .gt-avatar { opacity: 1; filter: none; box-shadow: 0 0 0 ${U(.3)} #fff, 0 0 0 ${U(.65)} var(--green), 0 ${U(.5)} ${U(1.6)} rgba(72,151,29,.45);
+  animation: gt-lockpop .6s var(--bounce) both }
+.gt-av.in::before { content: ''; position: absolute; inset: -35%; border-radius: 50%; border: ${U(.45)} solid var(--sun); pointer-events: none;
+  animation: gt-burst .8s ease-out both }
+.gt-av.in::after { content: ''; position: absolute; right: ${U(-.6)}; bottom: ${U(-.6)}; width: ${U(2.2)}; height: ${U(2.2)}; border-radius: 50%; border: 2px solid #fff;
+  box-shadow: 0 ${U(.2)} ${U(.6)} rgba(0,0,0,.2); animation: gt-pop .4s var(--bounce) .15s both;
+  background: var(--sun) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237A5000' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='11' width='14' height='10' rx='2'/%3E%3Cpath d='M8 11V7a4 4 0 0 1 8 0v4'/%3E%3C/svg%3E") center / 62% no-repeat }
+.gt-lockn { color: var(--green-deep) }
+@keyframes gt-wait { 0%, 100% { opacity: .26 } 50% { opacity: .5 } }
+@keyframes gt-lockpop { 0% { transform: scale(.6) rotate(-14deg) } 55% { transform: scale(1.22) rotate(6deg) } 100% { transform: scale(1) rotate(0) } }
+@keyframes gt-burst { 0% { transform: scale(.55); opacity: 1 } 100% { transform: scale(1.6); opacity: 0 } }
+@keyframes gt-sweep { 0% { transform: translateX(-110%) } 100% { transform: translateX(110%) } }
+@keyframes gt-toast { 0% { opacity: 0; transform: translateX(-1.5em) scale(.9) } 12% { opacity: 1; transform: none } 85% { opacity: 1; transform: none } 100% { opacity: 0; transform: translateY(-.6em) } }
+.gt-toasts { position: absolute; top: 0; left: 0; z-index: 4; display: flex; flex-direction: column; gap: ${U(.8)}; pointer-events: none }
+.gt-toast { display: flex; align-items: center; gap: ${U(1)}; font-size: ${U(2)}; font-weight: 500; color: var(--blue-ink); background: #fff;
+  padding: ${U(.6)} ${U(1.4)} ${U(.6)} ${U(.6)}; border-radius: 999px; box-shadow: 0 ${U(.6)} ${U(2)} rgba(14,42,92,.16), inset ${U(.5)} 0 0 var(--green);
+  animation: gt-toast 2.8s var(--ease-out) both; max-width: ${U(42)} }
+.gt-toast span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.gt-toast b { font-weight: 700 }
+.gt-toast i { display: inline-flex; width: ${U(2.6)}; height: ${U(2.6)}; flex: none; border-radius: 50%; align-items: center; justify-content: center;
+  background: var(--sun); color: var(--sun-ink) }
+.gt-toast i svg { width: ${U(1.5)}; height: ${U(1.5)} }
+@media (prefers-reduced-motion: reduce) { .gt-av .gt-avatar, .gt-av.in::before { animation: none } }
 .gt-avmore { font-size: ${U(1.8)}; font-weight: 600; color: var(--ink-soft); margin-left: ${U(.4)}; white-space: nowrap }
 .gt-paused { position: absolute; inset: 0; z-index: 5; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: ${U(1)};
   background: rgba(238,245,255,.78); backdrop-filter: blur(8px); border-radius: ${U(3)} }
@@ -262,8 +286,11 @@ const TV_CSS = `
 .gt-rk.r3 { background: #F4BC9A; color: #7A3412 }
 .gt-row .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600 }
 .gt-row .sc { font-weight: 700; color: var(--blue-ink); font-variant-numeric: tabular-nums }
-.gt-row .lk { flex: none; width: ${U(2.8)}; height: ${U(2.8)}; border-radius: 50%; background: var(--green-pale); color: var(--green-deep);
-  display: inline-flex; align-items: center; justify-content: center }
+.gt-row .lk { flex: none; width: ${U(2.8)}; height: ${U(2.8)}; border-radius: 50%; background: var(--sun); color: var(--sun-ink);
+  display: inline-flex; align-items: center; justify-content: center; animation: gt-stamp .45s var(--ease-out) both }
+.gt-row.in { overflow: hidden; background: var(--green-pale); box-shadow: inset ${U(.5)} 0 0 var(--green) }
+.gt-row.in::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(100deg, transparent 30%, rgba(255,255,255,.8) 50%, transparent 70%); animation: gt-sweep .9s ease-out .1s both }
 .gt-row .lk svg { width: ${U(1.6)}; height: ${U(1.6)} }
 .gt-plus { flex: none; font-size: ${U(1.7)}; font-weight: 700; color: var(--green-deep); background: var(--green-pale); padding: ${U(.25)} ${U(.8)}; border-radius: 999px }
 .gt-more { margin-top: auto; padding-top: ${U(1)}; font-size: ${U(1.9)}; font-weight: 500; color: var(--ink-soft); text-align: center }
@@ -350,6 +377,8 @@ export function TeacherGame({ onExit }) {
   const [net, setNet] = useState('connecting')
   const [muted, setMutedState] = useState(isMuted)
   const [burst, setBurst] = useState(0)
+  // "🔒 The Foxes locked in": a pop-up a team at a time, gone after a few seconds.
+  const [toasts, setToasts] = useState([])
   const [full, toggleFull] = useFullscreen()
   const busRef = useRef(null)
   const sendTimer = useRef(null)
@@ -508,6 +537,12 @@ export function TeacherGame({ onExit }) {
       const next = apply({ type: 'locked', pid: msg.pid, ok: res.ok, pts: res.pts, ms: res.ms, other: res.other, now: t })
       busRef.current?.send('locked', { to: msg.pid, no: msg.no })
       play('lock')
+      const who = next.players.find((p) => p.pid === msg.pid)
+      if (who) {
+        const id = `${msg.pid}.${t}`
+        setToasts((list) => [...list, { id, name: who.name, avatar: who.avatar, color: who.color }].slice(-3))
+        setTimeout(() => setToasts((list) => list.filter((x) => x.id !== id)), 2800)
+      }
       // Every team has locked in: the clock stops, the cards still face down
       // flip one by one (the clock tick below), then the answer.
       if (next.players.length && lockedOf(next.round) >= next.players.length) apply({ type: 'allIn' })
@@ -685,7 +720,7 @@ export function TeacherGame({ onExit }) {
             />
           )}
           {phase === 'intro' && <Intro game={game} />}
-          {phase === 'round' && <RoundView game={game} now={now} />}
+          {phase === 'round' && <RoundView game={game} now={now} toasts={toasts} />}
           {phase === 'reveal' && <RevealView game={game} now={now} staff={site.staff} />}
           {phase === 'board' && <BoardView game={game} now={now} onRemove={removeTeam} />}
           {phase === 'final' && <FinalView game={game} />}
@@ -923,7 +958,28 @@ function Ring({ round, left }) {
   )
 }
 
-function RoundView({ game, now }) {
+/**
+ * What a right guess is worth now: digits that roll down like a counter, in
+ * green, gold then coral, over a meter that drains every frame.
+ */
+function Worth({ round, left, base, double }) {
+  const pts = pointsFor(left, double, base)
+  const roundRef = useRef(round)
+  useEffect(() => { roundRef.current = round }, [round])
+  const getShare = useCallback(() => leftOf(roundRef.current, Date.now()) / base, [base])
+  return (
+    <div className="gt-worth">
+      <small>⚡ Lock in now for</small>
+      <b className={`gt-tier ${tierOf(pts, double)}`}>
+        <Odometer value={pts} /><span>points</span>
+        {double && <em className="gt-x2">×2</em>}
+      </b>
+      <Meter share={left / base} getShare={getShare} />
+    </div>
+  )
+}
+
+function RoundView({ game, now, toasts = [] }) {
   const t = teacherOf(game)
   const round = game.round
   if (!t || !round) return null
@@ -954,14 +1010,11 @@ function RoundView({ game, now }) {
         <Cards emojis={t.emojis} shown={cardsUp(elapsed, t.emojis.length, base, allIn)} />
         <div className="gt-dock gt-card">
           <Ring round={round} left={left} />
-          <div className="gt-worth">
-            <small>Lock in now for</small>
-            <b>{pointsFor(left, isDouble(game), base)}<span>points</span></b>
-          </div>
+          <Worth round={round} left={left} base={base} double={isDouble(game)} />
           <span className="gt-dock-sep" />
           <div className="gt-have">
             <small>Locked in · Đã chốt</small>
-            <b>{locked} of {total} {total === 1 ? 'team' : 'teams'}</b>
+            <b><Odometer value={locked} className="gt-lockn" /> of {total} {total === 1 ? 'team' : 'teams'}</b>
             <div className="gt-avs">
               {shownTeams.map((p) => (
                 <span key={p.pid} className={`gt-av ${round.guesses[p.pid] ? 'in' : ''}`}>
@@ -972,6 +1025,17 @@ function RoundView({ game, now }) {
             </div>
           </div>
         </div>
+        {toasts.length > 0 && (
+          <div className="gt-toasts" aria-live="polite">
+            {toasts.map((x) => (
+              <div key={x.id} className="gt-toast">
+                <Avatar emoji={x.avatar} color={x.color} size="1.9em" />
+                <span><b className="gt-team-name">{x.name}</b> locked in</span>
+                <i><Lock /></i>
+              </div>
+            ))}
+          </div>
+        )}
         {paused && (
           <div className="gt-paused">
             <b>Paused</b>
@@ -1149,7 +1213,7 @@ function Rail({ game, hold = false }) {
         {top.map((p) => {
           const guess = round?.guesses[p.pid]
           return (
-            <div key={p.pid} className={`gt-row ${p.rank === 1 && anyPoints ? 'lead' : ''}`} style={{ transform: `translateY(${U((p.rank - 1) * RAIL_ROW)})` }}>
+            <div key={p.pid} className={`gt-row ${p.rank === 1 && anyPoints ? 'lead' : ''} ${game.phase === 'round' && guess ? 'in' : ''}`} style={{ transform: `translateY(${U((p.rank - 1) * RAIL_ROW)})` }}>
               <Rank rank={p.rank} medal={anyPoints} />
               <Avatar emoji={p.avatar} color={p.color} size={U(3.9)} />
               <span className="nm gt-team-name">{p.name}</span>

@@ -5,7 +5,7 @@
 // All CSS here, so the scene is the same in the deck's light and dark modes.
 // Sizes on the TV are in container units (widgets.jsx), so one set of rules
 // fits a laptop window and a TV.
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import '../../../../src/fonts.css'
 import { FONT, VN_FONT } from './protocol.js'
 import { TONES } from './staff.js'
@@ -66,10 +66,90 @@ export const BASE_CSS = `
 .gt-ellipsis i { font-style: normal; animation: gt-dot 1.2s ease-in-out infinite both }
 .gt-ellipsis i:nth-child(2) { animation-delay: .2s }
 .gt-ellipsis i:nth-child(3) { animation-delay: .4s }
+/* The points: digits that roll like a counter, a meter that drains, a colour by how much is left. */
+.gt-odo { display: inline-flex; line-height: 1.2; font-variant-numeric: tabular-nums }
+.gt-odo-d { display: inline-block; height: 1.2em; overflow: hidden }
+.gt-odo-col { display: flex; flex-direction: column; transition: transform .38s cubic-bezier(.2,.9,.25,1.15) }
+.gt-odo-col > span { display: block; height: 1.2em; line-height: 1.2; text-align: center }
+.gt-tier { transition: color .5s }
+.gt-tier.hi { color: var(--green-deep) }
+.gt-tier.mid { color: var(--sun-deep) }
+.gt-tier.lo { color: var(--coral-deep) }
+.gt-meter { position: relative; height: .5em; border-radius: 999px; background: var(--blue-pale); overflow: hidden; box-shadow: inset 0 1px 2px rgba(14,42,92,.12) }
+.gt-meter > i { position: absolute; inset: 0; border-radius: inherit; transform-origin: left center; will-change: transform;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.45), rgba(255,255,255,0) 60%) }
+.gt-meter > b { position: absolute; top: 0; bottom: 0; width: 2px; background: rgba(255,255,255,.85) }
 @media (prefers-reduced-motion: reduce) {
   .gt-pulse, .gt-ellipsis i { animation: none }
+  .gt-odo-col { transition: none }
 }
 `
+
+/**
+ * A number whose digits roll to their new values, like a game-show counter.
+ * Each column is keyed by its place (ones, tens…), so a digit rolls rather
+ * than jumps; a drop below another hundred gives the whole number a bump.
+ */
+export function Odometer({ value, className = '' }) {
+  const ref = useRef(null)
+  const digits = String(Math.max(0, Math.round(value)))
+  const hundreds = Math.floor(value / 100)
+  const last = useRef(hundreds)
+  useEffect(() => {
+    if (hundreds < last.current) {
+      ref.current?.animate?.(
+        [{ transform: 'scale(1)' }, { transform: 'scale(1.12) translateY(-.04em)' }, { transform: 'scale(1)' }],
+        { duration: 320, easing: 'cubic-bezier(.2,.9,.3,1.3)' },
+      )
+    }
+    last.current = hundreds
+  }, [hundreds])
+  return (
+    <span ref={ref} className={`gt-odo ${className}`} aria-label={digits} role="text">
+      {digits.split('').map((d, i) => (
+        <span key={digits.length - i} className="gt-odo-d" aria-hidden="true">
+          <span className="gt-odo-col" style={{ transform: `translateY(${-Number(d) * 1.2}em)` }}>
+            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => <span key={n}>{n}</span>)}
+          </span>
+        </span>
+      ))}
+    </span>
+  )
+}
+
+/** Green at full, through gold, to coral when nearly empty. */
+const meterColor = (share) => `hsl(${Math.round(8 + 92 * Math.max(0, Math.min(1, share)))} 72% 50%)`
+
+/**
+ * The points meter: drains on every screen frame (`getShare()` gives 1 to 0),
+ * with `share` as the value to show between frames or while frames are paused.
+ * Marks at 750, 500 and 250 points.
+ */
+export function Meter({ share, getShare, className = '', style }) {
+  const fill = useRef(null)
+  const read = useRef(getShare)
+  useEffect(() => { read.current = getShare }, [getShare])
+  useEffect(() => {
+    let frame = 0
+    const draw = () => {
+      const k = Math.max(0, Math.min(1, read.current?.() ?? 0))
+      if (fill.current) {
+        fill.current.style.transform = `scaleX(${k})`
+        fill.current.style.backgroundColor = meterColor(k)
+      }
+      frame = requestAnimationFrame(draw)
+    }
+    frame = requestAnimationFrame(draw)
+    return () => cancelAnimationFrame(frame)
+  }, [])
+  const k = Math.max(0, Math.min(1, share))
+  return (
+    <div className={`gt-meter ${className}`} style={style} aria-hidden="true">
+      <i ref={fill} style={{ transform: `scaleX(${k})`, backgroundColor: meterColor(k) }} />
+      {[750, 500, 250].map((p) => <b key={p} style={{ left: `${((p - 100) / 900) * 100}%` }} />)}
+    </div>
+  )
+}
 
 // A small seeded random, so the confetti falls the same way on every render.
 function seeded(seed) {

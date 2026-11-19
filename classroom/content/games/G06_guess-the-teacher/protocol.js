@@ -35,6 +35,12 @@ export function pointsFor(left, double = false, roundMs = ROUND_MS) {
   return double ? pts * 2 : pts
 }
 
+/** Points left as a colour tier: plenty (green), half (gold), little (coral). */
+export const tierOf = (pts, double = false) => {
+  const p = double ? pts / 2 : pts
+  return p >= 700 ? 'hi' : p >= 400 ? 'mid' : 'lo'
+}
+
 /** How many of a teacher's `count` emojis are up after `elapsed` ms of a `roundMs` round:
  *  the first at once, the last at ALL_UP_SHARE of it (35 s, five emojis: 0, 7.5, 15, 22.5, 30 s). */
 export function shownAt(elapsed, count, roundMs = ROUND_MS) {

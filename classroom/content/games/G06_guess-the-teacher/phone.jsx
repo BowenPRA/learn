@@ -20,8 +20,8 @@ import { Lock, Timer } from 'lucide-react'
 import { openBus } from '../../../src/lib/remote/bus.js'
 import { cleanRoomCode } from '../../../src/lib/remote/room.js'
 import { buzz, useWakeLock } from '../../../src/lib/remote/phone.js'
-import { Avatar, BASE_CSS, Backdrop, Confetti, Portrait } from './look.jsx'
-import { AVATARS, NAME_MAX, SUSPENSE_MS, TOPIC, cardsUp, cleanName, ordinal, pointsFor } from './protocol.js'
+import { Avatar, BASE_CSS, Backdrop, Confetti, Meter, Odometer, Portrait } from './look.jsx'
+import { AVATARS, NAME_MAX, ROUND_MS, SUSPENSE_MS, TOPIC, cardsUp, cleanName, ordinal, pointsFor, tierOf } from './protocol.js'
 import { isRude } from './words.js'
 
 const ME_KEY = 'learn:teacher-game:me'
@@ -90,9 +90,14 @@ const PHONE_CSS = `
 .gp-emojis span { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background: #fff; border: 1px solid var(--line);
   font-size: min(9vw, 40px); line-height: 1; box-shadow: var(--shadow-sm) }
 .gp-emojis span.down { background: linear-gradient(165deg, var(--blue), var(--teal)); border: none; color: rgba(255,255,255,.85); font-weight: 800; font-size: min(7vw, 28px) }
-.gp-worth { margin-top: 12px; text-align: center; font-size: 14.5px; font-weight: 500; color: var(--ink-soft) }
+.gp-worth { margin-top: 14px; font-size: 14.5px; font-weight: 500; color: var(--ink-soft) }
 .gp-worth .gp-vn { font-size: 13px }
-.gp-worth b { color: var(--blue-ink); font-weight: 700 }
+.gp-worth-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-weight: 600 }
+.gp-worth-row b { display: flex; align-items: baseline; font-size: 30px; font-weight: 800; letter-spacing: -.02em }
+.gp-worth-row b small { font-size: 13px; font-weight: 600; color: var(--ink-soft); margin-left: 5px; letter-spacing: 0 }
+.gp-worth-row b em { align-self: center; margin-left: 6px; font-style: normal; font-size: 12px; font-weight: 800; color: var(--sun-ink); background: var(--sun-tint); padding: 2px 7px; border-radius: 999px }
+.gp-worth .gt-meter { font-size: 14px; margin: 8px 0 10px }
+.gp-worth p { margin: 0; text-align: center }
 .gp-locked { background: linear-gradient(165deg, var(--blue), var(--blue-deep)); border: none; color: #fff; text-align: center; box-shadow: 0 14px 32px rgba(17,109,255,.3) }
 .gp-locked .gp-h, .gp-good .gp-h, .gp-bad .gp-h { color: #fff }
 .gp-locked .gp-vn, .gp-good .gp-vn, .gp-bad .gp-vn { color: rgba(255,255,255,.88) }
@@ -552,6 +557,29 @@ function TimerBar({ s, stateAt, left }) {
   return <div className="gp-timer"><i ref={barRef} style={{ transform: `scaleX(${left / s.dur})`, background: clockColor(Math.ceil(left / 1000)) }} /></div>
 }
 
+/** What a right guess is worth now, rolling down like a counter over a meter that drains every frame. */
+function PhoneWorth({ s, stateAt, left }) {
+  const base = s.base || ROUND_MS
+  const pts = pointsFor(left, s.double, base)
+  const at = useRef({ s, stateAt })
+  useEffect(() => { at.current = { s, stateAt } }, [s, stateAt])
+  const getShare = useCallback(() => {
+    const { s: st, stateAt: t0 } = at.current
+    const elapsed = st.paused || st.allInAgo != null ? st.elapsed : st.elapsed + (Date.now() - t0)
+    return Math.max(0, st.dur - elapsed) / (st.base || ROUND_MS)
+  }, [])
+  return (
+    <div className="gp-worth">
+      <div className="gp-worth-row">
+        <span>⚡ Lock in now for</span>
+        <b className={`gt-tier ${tierOf(pts, s.double)}`}><Odometer value={pts} /><small>points</small>{s.double && <em>×2</em>}</b>
+      </div>
+      <Meter share={left / base} getShare={getShare} />
+      <p>One guess only.<span className="gp-vn gt-vn">Chỉ được đoán một lần. Chốt càng sớm, càng nhiều điểm.</span></p>
+    </div>
+  )
+}
+
 function Round({ s, row, elapsed, now, stateAt, guess, draft, onDraft, onLock, inputRef }) {
   const left = Math.max(0, s.dur - elapsed)
   const secs = Math.ceil(left / 1000)
@@ -602,10 +630,7 @@ function Round({ s, row, elapsed, now, stateAt, guess, draft, onDraft, onLock, i
           aria-label="The teacher's name"
         />
         <button type="submit" className="gp-btn" disabled={!draft.trim()}><Lock /> Lock it in</button>
-        <div className="gp-worth">
-          One guess only. Lock in now for <b>{pointsFor(left, s.double, s.base)} points</b>
-          <span className="gp-vn gt-vn">Chỉ được đoán một lần. Chốt càng sớm, càng nhiều điểm.</span>
-        </div>
+        <PhoneWorth s={s} stateAt={stateAt} left={left} />
       </form>
     )
   }
