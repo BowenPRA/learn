@@ -14,25 +14,52 @@
 export const TOPIC = (room) => `teacher-game-${room}`
 
 // The clock, in milliseconds.
-export const ROUND_MS = 60000 // a round, before any +10 s
-export const ALL_UP_MS = 45000 // by now every emoji is up, evenly spaced from the first at 0 s
+// A round's length is a setting (Edit teachers, saved with the list): ROUND_MS
+// unless the host picks another. Everything inside a round scales with it.
+export const ROUND_MS = 35000
+export const ROUND_SECS = { min: 15, max: 120, step: 5 }
+export const ALL_UP_SHARE = 30 / 35 // the last emoji goes up here: 30 s of a 35 s round
+// Every team has locked in: the cards still face down flip one by one, a
+// beat, then the answer.
+export const ALL_IN_FIRST_MS = 600
+export const ALL_IN_GAP_MS = 900
+export const ALL_IN_HOLD_MS = 1600
 export const INTRO_MS = 2800 // the "Round 2 of 5" splash
 export const SUSPENSE_MS = 2200 // "And the teacher is…" before the name
 export const EMOJI_MAX = 6 // a teacher has one to six emojis; five is the usual
 
-/** Points for a right answer with `left` ms on the clock: 1000 at once, 100 at the buzzer, doubled in the last round. */
-export function pointsFor(left, double = false) {
-  const share = Math.max(0, Math.min(1, left / ROUND_MS))
+/** Points for a right answer with `left` ms of a `roundMs` round: 1000 at once, 100 at the buzzer, doubled in the last round. */
+export function pointsFor(left, double = false, roundMs = ROUND_MS) {
+  const share = Math.max(0, Math.min(1, left / roundMs))
   const pts = Math.round((100 + 900 * share) / 10) * 10
   return double ? pts * 2 : pts
 }
 
-/** How many of a teacher's `count` emojis are up after `elapsed` ms of a round: the
- *  first at once, the last at ALL_UP_MS (five emojis: 0, 11, 22, 34 and 45 s). */
-export function shownAt(elapsed, count) {
+/** How many of a teacher's `count` emojis are up after `elapsed` ms of a `roundMs` round:
+ *  the first at once, the last at ALL_UP_SHARE of it (35 s, five emojis: 0, 7.5, 15, 22.5, 30 s). */
+export function shownAt(elapsed, count, roundMs = ROUND_MS) {
   if (count <= 1) return 1
-  const every = ALL_UP_MS / (count - 1)
+  const every = (roundMs * ALL_UP_SHARE) / (count - 1)
   return Math.max(1, Math.min(count, Math.floor(elapsed / every) + 1))
+}
+
+/** The cards up now, counting the ones flipped since every team locked in (`allInAgo` ms ago, or null). */
+export function cardsUp(elapsed, count, roundMs, allInAgo = null) {
+  const base = shownAt(elapsed, count, roundMs)
+  if (allInAgo == null || allInAgo < ALL_IN_FIRST_MS) return base
+  return Math.min(count, base + Math.floor((allInAgo - ALL_IN_FIRST_MS) / ALL_IN_GAP_MS) + 1)
+}
+
+/** How long after every team locks in the answer comes: the hidden cards flip, then a beat. */
+export function allInLasts(elapsed, count, roundMs) {
+  const hidden = count - shownAt(elapsed, count, roundMs)
+  return hidden > 0 ? ALL_IN_FIRST_MS + (hidden - 1) * ALL_IN_GAP_MS + ALL_IN_HOLD_MS : ALL_IN_HOLD_MS - 400
+}
+
+/** A round length from the settings, in whole steps within the limits. */
+export function roundSecsOf(value) {
+  const n = Math.round(Number(value) / ROUND_SECS.step) * ROUND_SECS.step
+  return Number.isFinite(n) && n > 0 ? Math.max(ROUND_SECS.min, Math.min(ROUND_SECS.max, n)) : ROUND_MS / 1000
 }
 
 // The animals a team picks from on the phone.

@@ -32,8 +32,8 @@ import { keptRoom } from '../../../src/lib/remote/room.js'
 import { Avatar, BASE_CSS, Backdrop, Confetti, Portrait } from './look.jsx'
 import { EDITOR_CSS, TeacherEditor } from './editor.jsx'
 import { loadList, ready, saveList, setsFor } from './list.js'
-import { INTRO_MS, SUSPENSE_MS, TOPIC, ordinal, pointsFor, shownAt } from './protocol.js'
-import { check, elapsedOf, isDouble, isLast, leftOf, loadGame, lockedOf, publicState, ranked, reduce, rightOf, saveGame, teacherOf } from './rules.js'
+import { INTRO_MS, ROUND_MS, SUSPENSE_MS, TOPIC, allInLasts, cardsUp, ordinal, pointsFor } from './protocol.js'
+import { check, elapsedOf, isDouble, isLast, leftOf, loadGame, lockedOf, publicState, ranked, reduce, rightOf, roundMsOf, saveGame, teacherOf } from './rules.js'
 import { isMuted, play, setMuted, unlockAudio } from './sfx.js'
 import { loadStaff, preload, staffFor } from './staff.js'
 import { isRude } from './words.js'
@@ -505,11 +505,12 @@ export function TeacherGame({ onExit }) {
         if (g.round?.guesses[msg.pid] && msg.no === g.r + 1) busRef.current?.send('locked', { to: msg.pid, no: msg.no })
         return
       }
-      apply({ type: 'locked', pid: msg.pid, ok: res.ok, pts: res.pts, ms: res.ms, other: res.other, now: t })
+      const next = apply({ type: 'locked', pid: msg.pid, ok: res.ok, pts: res.pts, ms: res.ms, other: res.other, now: t })
       busRef.current?.send('locked', { to: msg.pid, no: msg.no })
-      // The round always runs its full minute, even once every team has
-      // locked in: only the clock or Show the answer ends it.
       play('lock')
+      // Every team has locked in: the clock stops, the cards still face down
+      // flip one by one (the clock tick below), then the answer.
+      if (next.players.length && lockedOf(next.round) >= next.players.length) apply({ type: 'allIn' })
     }
   }, [apply, sendState])
 
@@ -534,13 +535,22 @@ export function TeacherGame({ onExit }) {
       const tnow = Date.now()
       setNow(tnow)
       const g = gameRef.current
-      if (g.phase !== 'round' || !g.round?.runFrom) return
-      const left = leftOf(g.round, tnow)
-      const shown = shownAt(elapsedOf(g.round, tnow), teacherOf(g)?.emojis.length || 1)
+      if (g.phase !== 'round' || !g.round) return
+      const count = teacherOf(g)?.emojis.length || 1
+      const base = roundMsOf(g)
+      const allInAt = g.round.allInAt
+      const shown = cardsUp(elapsedOf(g.round, tnow), count, base, allInAt ? tnow - allInAt : null)
       if (shown > heard.current.shown) {
         heard.current.shown = shown
         play('card')
       }
+      // Every team locked in: once the last card is up and has had its moment, the answer.
+      if (allInAt) {
+        if (tnow - allInAt >= allInLasts(g.round.elapsed, count, base)) endRound()
+        return
+      }
+      if (!g.round.runFrom) return
+      const left = leftOf(g.round, tnow)
       const sec = Math.ceil(left / 1000)
       if (sec <= 5 && sec >= 1 && sec !== heard.current.sec) {
         heard.current.sec = sec
@@ -569,7 +579,7 @@ export function TeacherGame({ onExit }) {
     if (!list) return
     // Each teacher's pictures go into the game with them, so the phones get the portrait at the reveal.
     const sets = setsFor(list).map((t) => ({ ...t, pic: staffFor(t, staffRef.current) }))
-    if (sets.length) apply({ type: 'start', sets })
+    if (sets.length) apply({ type: 'start', sets, roundMs: (list.roundSecs || ROUND_MS / 1000) * 1000 })
   }, [apply, list])
 
   const togglePause = useCallback(() => {
@@ -666,6 +676,7 @@ export function TeacherGame({ onExit }) {
               joinUrl={joinUrl}
               joinText={joinText}
               playable={playable}
+              roundSecs={list?.roundSecs || ROUND_MS / 1000}
               pictured={pictured}
               site={site}
               listStatus={listStatus}
@@ -703,7 +714,7 @@ export function TeacherGame({ onExit }) {
             {(phase === 'intro' || phase === 'round') && (
               <button type="button" className="gt-btn" onClick={skipTeacher}><SkipForward /> Skip teacher</button>
             )}
-            {phase === 'round' && (
+            {phase === 'round' && !game.round?.allInAt && (
               <>
                 <button type="button" className="gt-btn" onClick={() => apply({ type: 'more' })}><Plus /> 10 s</button>
                 <button type="button" className="gt-btn" onClick={togglePause}>{running ? <Pause /> : <Play />} {running ? 'Pause' : 'Carry on'} <kbd>P</kbd></button>
@@ -762,7 +773,7 @@ function Mark({ children }) {
   )
 }
 
-function Lobby({ game, room, joinUrl, joinText, playable, pictured, site, listStatus, onEdit, onRemove }) {
+function Lobby({ game, room, joinUrl, joinText, playable, roundSecs, pictured, site, listStatus, onEdit, onRemove }) {
   const n = game.players.length
   const size = n > 30 ? 'small' : n > 14 ? 'mid' : ''
   const saved = listStatus.state === 'laptop'
@@ -821,7 +832,7 @@ function Lobby({ game, room, joinUrl, joinText, playable, pictured, site, listSt
         )}
         <div className="gt-setlist">
           <p>
-            {listStatus.state === 'loading' ? 'Teachers…' : `${playable} ${playable === 1 ? 'teacher' : 'teachers'} to guess`}
+            {listStatus.state === 'loading' ? 'Teachers…' : `${playable} ${playable === 1 ? 'teacher' : 'teachers'} to guess · ${roundSecs} seconds each`}
             <small className={saved.cls}>{saved.text}</small>
             <small className={photos.cls}>{photos.text}</small>
           </p>
@@ -920,22 +931,32 @@ function RoundView({ game, now }) {
   const left = Math.max(0, round.dur - elapsed)
   const locked = lockedOf(round)
   const total = game.players.length
-  const paused = !round.runFrom
+  const allIn = round.allInAt ? now - round.allInAt : null
+  const paused = !round.runFrom && allIn == null
+  const base = roundMsOf(game)
   const shownTeams = game.players.slice(0, DOCK_MAX)
   return (
     <div className="gt-play">
       <div className="gt-stage">
-        <div className="gt-q">
-          {isDouble(game) && <span className="gt-eyebrow sun">Double points</span>}
-          <h2>Who is this teacher?</h2>
-          <span className="gt-vn">Đây là giáo viên nào?</span>
-        </div>
-        <Cards emojis={t.emojis} shown={shownAt(elapsed, t.emojis.length)} />
+        {allIn == null ? (
+          <div className="gt-q">
+            {isDouble(game) && <span className="gt-eyebrow sun">Double points</span>}
+            <h2>Who is this teacher?</h2>
+            <span className="gt-vn">Đây là giáo viên nào?</span>
+          </div>
+        ) : (
+          <div className="gt-q gt-pop">
+            <span className="gt-eyebrow green">🔒 Every team</span>
+            <h2>Everyone has locked in!</h2>
+            <span className="gt-vn">Tất cả các đội đã chốt đáp án!</span>
+          </div>
+        )}
+        <Cards emojis={t.emojis} shown={cardsUp(elapsed, t.emojis.length, base, allIn)} />
         <div className="gt-dock gt-card">
           <Ring round={round} left={left} />
           <div className="gt-worth">
             <small>Lock in now for</small>
-            <b>{pointsFor(left, isDouble(game))}<span>points</span></b>
+            <b>{pointsFor(left, isDouble(game), base)}<span>points</span></b>
           </div>
           <span className="gt-dock-sep" />
           <div className="gt-have">

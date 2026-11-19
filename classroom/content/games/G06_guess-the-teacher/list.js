@@ -7,13 +7,13 @@
 // so. Before anyone has saved a list, the game plays the starting list in
 // teachers.js.
 //
-//   { v: 1, shuffle, teachers: [{ id, emojis: ['🏠', …], name, also: ['…'], on, photo }] }
+//   { v: 1, shuffle, roundSecs, teachers: [{ id, emojis: ['🏠', …], name, also: ['…'], on, photo }] }
 //
 // `photo` is which picture from pra.edu.vn the reveal shows (staff.js): '' to
 // match the name, 'none', or a website key such as 'seth'.
 import { api } from '../../../../src/lib/api.js'
 import { TEACHERS } from './teachers.js'
-import { EMOJI_MAX } from './protocol.js'
+import { EMOJI_MAX, ROUND_MS, roundSecsOf } from './protocol.js'
 
 const GAME = 'guess-the-teacher'
 const COPY_KEY = 'learn:teacher-game:list'
@@ -25,6 +25,7 @@ export const newId = () => Math.random().toString(36).slice(2, 10)
 export const startingList = () => ({
   v: 1,
   shuffle: false,
+  roundSecs: ROUND_MS / 1000,
   teachers: TEACHERS.map((t) => ({ id: newId(), emojis: [...t.emojis], name: t.name, also: [...(t.also || [])], on: Boolean(t.name), photo: '' })),
 })
 
@@ -36,6 +37,7 @@ export function tidy(raw) {
   return {
     v: 1,
     shuffle: Boolean(raw.shuffle),
+    roundSecs: raw.roundSecs == null ? ROUND_MS / 1000 : roundSecsOf(raw.roundSecs),
     teachers: raw.teachers.slice(0, TEACHERS_MAX).map((t) => ({
       id: String(t?.id || newId()).slice(0, 12),
       emojis: (Array.isArray(t?.emojis) ? t.emojis : []).map(String).filter(Boolean).slice(0, EMOJI_MAX),

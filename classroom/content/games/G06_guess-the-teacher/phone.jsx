@@ -21,7 +21,7 @@ import { openBus } from '../../../src/lib/remote/bus.js'
 import { cleanRoomCode } from '../../../src/lib/remote/room.js'
 import { buzz, useWakeLock } from '../../../src/lib/remote/phone.js'
 import { Avatar, BASE_CSS, Backdrop, Confetti, Portrait } from './look.jsx'
-import { AVATARS, NAME_MAX, SUSPENSE_MS, TOPIC, cleanName, ordinal, pointsFor, shownAt } from './protocol.js'
+import { AVATARS, NAME_MAX, SUSPENSE_MS, TOPIC, cardsUp, cleanName, ordinal, pointsFor } from './protocol.js'
 import { isRude } from './words.js'
 
 const ME_KEY = 'learn:teacher-game:me'
@@ -389,7 +389,8 @@ function Player({ room }) {
     )
   }
 
-  const elapsed = s.phase === 'round' && !s.paused ? s.elapsed + (now - stateAt) : s.elapsed
+  // The clock stands still while paused, and once every team has locked in.
+  const elapsed = s.phase === 'round' && !s.paused && s.allInAgo == null ? s.elapsed + (now - stateAt) : s.elapsed
   const total = s.players.length
   // This team's guess for the teacher on screen, if it locked one in.
   const myGuess = mine && mine.gid === s.gid && mine.no === s.no && mine.pid === me.pid ? mine : null
@@ -398,7 +399,7 @@ function Player({ room }) {
     const text = draft.trim().slice(0, 40)
     if (!text || s.phase !== 'round' || myGuess || row.l) return
     const left = Math.max(0, s.dur - elapsed)
-    const g = { room, gid: s.gid, no: s.no, pid: me.pid, text, pts: pointsFor(left, s.double), sure: false }
+    const g = { room, gid: s.gid, no: s.no, pid: me.pid, text, pts: pointsFor(left, s.double, s.base), sure: false }
     mineRef.current = g
     setMine(g)
     busRef.current?.send('guess', { pid: g.pid, no: g.no, text })
@@ -436,6 +437,7 @@ function Player({ room }) {
         s={s}
         row={row}
         elapsed={elapsed}
+        now={now}
         stateAt={stateAt}
         guess={myGuess}
         draft={draft}
@@ -539,7 +541,7 @@ function TimerBar({ s, stateAt, left }) {
     let frame = 0
     const draw = () => {
       const { s: st, stateAt: t0 } = at.current
-      const elapsed = st.paused ? st.elapsed : st.elapsed + (Date.now() - t0)
+      const elapsed = st.paused || st.allInAgo != null ? st.elapsed : st.elapsed + (Date.now() - t0)
       const ms = Math.max(0, st.dur - elapsed)
       if (barRef.current) barRef.current.style.transform = `scaleX(${ms / st.dur})`
       frame = requestAnimationFrame(draw)
@@ -550,7 +552,7 @@ function TimerBar({ s, stateAt, left }) {
   return <div className="gp-timer"><i ref={barRef} style={{ transform: `scaleX(${left / s.dur})`, background: clockColor(Math.ceil(left / 1000)) }} /></div>
 }
 
-function Round({ s, row, elapsed, stateAt, guess, draft, onDraft, onLock, inputRef }) {
+function Round({ s, row, elapsed, now, stateAt, guess, draft, onDraft, onLock, inputRef }) {
   const left = Math.max(0, s.dur - elapsed)
   const secs = Math.ceil(left / 1000)
   const locked = Boolean(guess) || row.l
@@ -601,7 +603,7 @@ function Round({ s, row, elapsed, stateAt, guess, draft, onDraft, onLock, inputR
         />
         <button type="submit" className="gp-btn" disabled={!draft.trim()}><Lock /> Lock it in</button>
         <div className="gp-worth">
-          One guess only. Lock in now for <b>{pointsFor(left, s.double)} points</b>
+          One guess only. Lock in now for <b>{pointsFor(left, s.double, s.base)} points</b>
           <span className="gp-vn gt-vn">Chỉ được đoán một lần. Chốt càng sớm, càng nhiều điểm.</span>
         </div>
       </form>
@@ -616,7 +618,7 @@ function Round({ s, row, elapsed, stateAt, guess, draft, onDraft, onLock, inputR
         <span className="gp-secs" style={{ color: secs <= 10 ? clockColor(secs) : undefined }}>{secs}</span>
       </div>
       <TimerBar s={s} stateAt={stateAt} left={left} />
-      <Emojis emojis={s.emojis} shown={shownAt(elapsed, s.emojis.length)} />
+      <Emojis emojis={s.emojis} shown={cardsUp(elapsed, s.emojis.length, s.base, s.allInAgo == null ? null : s.allInAgo + (now - stateAt))} />
       {card}
       {s.paused && (
         <div className="gp-paused">

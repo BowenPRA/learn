@@ -6,9 +6,9 @@
 // count as right. Rows move up and down and can be deleted. Every change is
 // saved as it is made (list.js); the line at the top says where.
 import { useState } from 'react'
-import { ArrowDown, ArrowUp, Check, ImageOff, Plus, Shuffle, Trash2 } from 'lucide-react'
+import { ArrowDown, ArrowUp, Check, ImageOff, Minus, Plus, Shuffle, Timer, Trash2 } from 'lucide-react'
 import { newId, ready, splitEmojis } from './list.js'
-import { EMOJI_MAX } from './protocol.js'
+import { ALL_UP_SHARE, EMOJI_MAX, ROUND_MS, ROUND_SECS, roundSecsOf } from './protocol.js'
 import { TONES, staffFor } from './staff.js'
 
 const U = (n) => `calc(var(--u) * ${n})`
@@ -63,6 +63,11 @@ export const EDITOR_CSS = `
   border: none; background: var(--blue-pale); color: var(--blue-ink); padding: 0 }
 .gt-ed-icon:hover:not(:disabled) { background: var(--blue-tint) }
 .gt-ed-icon:disabled { opacity: .3; cursor: default }
+.gt-ed-time { display: inline-flex; align-items: center; gap: ${U(.8)}; padding: ${U(.4)} ${U(.6)}; border-radius: 999px; border: 1px solid var(--line) }
+.gt-ed-time > svg { width: ${U(2.3)}; height: ${U(2.3)}; margin-left: ${U(.6)}; color: var(--ink-soft) }
+.gt-ed-time span { display: flex; flex-direction: column; align-items: center; min-width: ${U(11)}; line-height: 1.1 }
+.gt-ed-time b { font-size: ${U(2.2)}; font-weight: 800; color: var(--blue-ink) }
+.gt-ed-time small { font-size: ${U(1.4)}; font-weight: 500; color: var(--ink-soft) }
 .gt-ed-icon.del:hover { background: var(--coral-pale); color: var(--coral-deep) }
 .gt-ed-icon svg { width: ${U(2.2)}; height: ${U(2.2)} }
 .gt-ed-foot { display: flex; align-items: center; gap: ${U(2)}; padding: ${U(1.4)} ${U(2.8)}; border-top: 1px solid var(--line); flex-wrap: wrap; background: var(--row) }
@@ -131,6 +136,7 @@ export function TeacherEditor({ list, status, staff = [], site, onChange, onClos
           >
             <Shuffle /> {list.shuffle ? 'Shuffled' : 'In this order'}
           </button>
+          <RoundTime secs={list.roundSecs || ROUND_MS / 1000} onSecs={(roundSecs) => onChange({ ...list, roundSecs })} />
           <button type="button" className="gt-ed-btn done" onClick={onClose}><Check /> Done</button>
         </div>
         <div className="gt-ed-cols" aria-hidden="true">
@@ -260,6 +266,19 @@ function Row({ t, i, last, staff, onPatch, onUp, onDown, onDelete }) {
         <button type="button" className="gt-ed-icon" onClick={onDown} disabled={last} aria-label="Move down" title="Move down"><ArrowDown /></button>
         <button type="button" className="gt-ed-icon del" onClick={onDelete} aria-label="Delete" title="Delete"><Trash2 /></button>
       </span>
+    </div>
+  )
+}
+
+/** The round length, in steps of five seconds. The emojis and the points scale with it. */
+function RoundTime({ secs, onSecs }) {
+  const lastAt = Math.round(secs * ALL_UP_SHARE)
+  return (
+    <div className="gt-ed-time" title={`Each teacher gets ${secs} seconds. The last emoji goes up at ${lastAt} s; points fall from 1000 to 100 over the round.`}>
+      <Timer aria-hidden="true" />
+      <button type="button" className="gt-ed-icon" onClick={() => onSecs(roundSecsOf(secs - ROUND_SECS.step))} disabled={secs <= ROUND_SECS.min} aria-label="Shorter rounds"><Minus /></button>
+      <span><b>{secs} s a round</b><small>all emojis up at {lastAt} s</small></span>
+      <button type="button" className="gt-ed-icon" onClick={() => onSecs(roundSecsOf(secs + ROUND_SECS.step))} disabled={secs >= ROUND_SECS.max} aria-label="Longer rounds"><Plus /></button>
     </div>
   )
 }

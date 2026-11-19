@@ -62,17 +62,21 @@ export function ranked(players) {
 const snapshot = (players) => Object.fromEntries(ranked(players).map((p) => [p.pid, { score: p.score, rank: p.rank }]))
 
 // `guesses`: pid → { ok, pts, ms, other }, one a team, locked in.
-const newRound = (t, now) => ({ t, dur: ROUND_MS, elapsed: 0, runFrom: now, guesses: {} })
+// `allInAt`: when every team had locked in (the clock stops, the hidden cards flip, then the answer).
+const newRound = (t, now, ms) => ({ t, dur: ms, elapsed: 0, runFrom: now, guesses: {}, allInAt: null })
+
+/** This game's round length (set in Edit teachers, copied in at Start). */
+export const roundMsOf = (g) => g.roundMs || ROUND_MS
 
 /** The right guesses of a round, as [pid, guess] pairs, fastest first. */
 export const rightOf = (round) => Object.entries(round?.guesses || {}).filter(([, x]) => x.ok).sort((a, b) => a[1].ms - b[1].ms)
 /** How many teams have locked in a guess. */
 export const lockedOf = (round) => Object.keys(round?.guesses || {}).length
 
-function startGame(g, sets, now) {
+function startGame(g, sets, now, roundMs) {
   if (!sets?.length) return g
   const players = g.players.map((p) => ({ ...p, score: 0, time: 0 }))
-  return { ...g, phase: 'intro', phaseAt: now, gid: now, sets, r: 0, round: null, players, prev: snapshot(players) }
+  return { ...g, phase: 'intro', phaseAt: now, gid: now, sets, roundMs: roundMs || ROUND_MS, r: 0, round: null, players, prev: snapshot(players) }
 }
 
 // After a teacher: the next one, or, after the last, the leaderboard.
@@ -92,7 +96,7 @@ export function check(g, pid, no, text, now) {
   if (left < -GRACE_MS) return { ignore: true }
   const { ok, other } = judge(text, round.t, g.sets)
   const ms = Math.min(round.dur, Math.max(0, elapsedOf(round, now)))
-  return { ok, other, ms, pts: ok ? pointsFor(Math.max(0, left), isDouble(g)) : 0 }
+  return { ok, other, ms, pts: ok ? pointsFor(Math.max(0, left), isDouble(g), roundMsOf(g)) : 0 }
 }
 
 export function reduce(g, a) {
@@ -116,24 +120,27 @@ export function reduce(g, a) {
     case 'remove':
       return { ...g, players: g.players.filter((p) => p.pid !== a.pid), removed: [...g.removed, a.pid].slice(-200) }
     case 'start':
-      return startGame(g, a.sets, now)
+      return startGame(g, a.sets, now, a.roundMs)
     case 'go':
       if (g.phase !== 'intro') return g
-      return { ...g, phase: 'round', phaseAt: now, round: newRound(g.r, now), prev: snapshot(g.players) }
+      return { ...g, phase: 'round', phaseAt: now, round: newRound(g.r, now, roundMsOf(g)), prev: snapshot(g.players) }
     case 'pause':
       if (g.phase !== 'round' || !round?.runFrom) return g
       return { ...g, round: { ...round, elapsed: elapsedOf(round, now), runFrom: null } }
     case 'resume':
-      if (g.phase !== 'round' || !round || round.runFrom) return g
+      if (g.phase !== 'round' || !round || round.runFrom || round.allInAt) return g
       return { ...g, round: { ...round, runFrom: now } }
     case 'more':
-      if (g.phase !== 'round' || !round) return g
+      if (g.phase !== 'round' || !round || round.allInAt) return g
       return { ...g, round: { ...round, dur: round.dur + 10000 } }
     case 'locked': {
       if (g.phase !== 'round' || !round || round.guesses[a.pid]) return g
       const guess = { ok: Boolean(a.ok), pts: a.ok ? a.pts : 0, ms: a.ms, other: a.other ?? null }
       return { ...g, round: { ...round, guesses: { ...round.guesses, [a.pid]: guess } } }
     }
+    case 'allIn': // every team has locked in: stop the clock; the TV flips the rest, then ends the round
+      if (g.phase !== 'round' || !round || round.allInAt) return g
+      return { ...g, round: { ...round, elapsed: Math.min(round.dur, elapsedOf(round, now)), runFrom: null, allInAt: now } }
     case 'end': { // the reveal: the right guesses' points land now
       if (g.phase !== 'round' || !round) return g
       const players = g.players.map((p) => {
@@ -178,7 +185,9 @@ export function publicState(g, now) {
     emojis: inRound && t ? t.emojis : [],
     dur: round?.dur || 0,
     elapsed: inRound ? elapsedOf(round, now) : 0,
-    paused: g.phase === 'round' && !round?.runFrom,
+    paused: g.phase === 'round' && !round?.runFrom && !round?.allInAt,
+    base: roundMsOf(g), // the round length the points and the emoji times are set by
+    allInAgo: g.phase === 'round' && round?.allInAt ? Math.max(0, now - round.allInAt) : null,
     answer: (g.phase === 'reveal' || g.phase === 'board') && t ? t.name : '',
     // The teacher's portrait from pra.edu.vn (staff.js), with the name and no sooner.
     pic: (g.phase === 'reveal' || g.phase === 'board') && t?.pic ? { src: t.pic.portrait, tone: t.pic.tone } : null,
