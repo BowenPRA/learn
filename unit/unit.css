@@ -20,3 +20,8 @@
 .pra-ui :focus-visible { outline: 3px solid #116DFF; outline-offset: 2px; }
 /* Poppins is wider and closes up more than a system font: ease the tight tracking. */
 .pra-ui .tracking-tight { letter-spacing: -0.01em; }
+
+/* The green and red answer boxes in the lessons (#d7ffb8, #ffdfe0) stay light in dark
+   mode, but bold text turns near-white there (dark:text-slate-100) and vanished inside
+   them. Bold in those boxes takes the box's own green or red. */
+.dark :is(.bg-\[\#d7ffb8\], .bg-\[\#ffdfe0\]) strong { color: inherit !important; }

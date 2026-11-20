@@ -71,6 +71,39 @@ it ("From the classroom").
 | Maths 5.3 Drawing Lines and Quadrilaterals | Lesson 25, Protractor 30, Workbook 25, Quadrilaterals 20 |
 | Science 5.2 Comparing Metals and Non-metals (`hidden`: no lesson yet) | Key words 20, Metal or non-metal? 20, Test it 15, Mystery substances 25, Quiz 20 |
 | Upper Secondary English 1 Complete Sentences | Lesson 15, Key words 10, Grammar edit 20, Find & Fix 15, Fix it your way 15, Quiz 15, Timed writing 30; finished only with the quiz and the timed writing done |
+| Maths 7.1 Ordering Fractions | Lesson 20, Mixed ↔ improper 20, Which is bigger? 20, Fractions to decimals 25, Quiz 15 |
+
+Maths 7.1 (20 November 2026, built on the Workbook's Exercise 7.1 at Mr. Bowen's request;
+every number is new):
+
+- **Lesson** (`src/data/Y7_MATH/U07_1/notes.js`): 19 slides written for working alone, in
+  the style of English 1's notes: 8 numbered "Write this down" boxes, red and green
+  example strips for the two traps (adding to the top and the bottom; a big top read as a
+  big fraction), 13 questions, two "Try it in your notebook" slides with the answers
+  behind a button. It covers the Part 1 classroom deck (`U07_1a`) and what Part 2 will
+  teach: which is bigger, a common denominator, the division method, order of size. The
+  pictures are the classroom deck's own `diagrams.js`, imported; Cut Every Piece and
+  Slice by Slice are copies in the unit folder (`cut.jsx`, `slices.jsx`, with a plain
+  button in `ui.jsx`), since the unit's CSS only sees `unit/src`.
+- **Mixed ↔ improper** (`content/Y7_MATH/U07_1/mixed.js`): Workbook Q4 both ways, 10
+  problems built from their numbers: divide, the remainder, then the mixed number; or
+  multiply, add, then the improper fraction.
+- **Which is bigger?** (`content/Y7_MATH/U07_1/bigger.js`): Q5 and Q8–10 and order of
+  size, 10 problems. The student changes each improper fraction to a mixed number as a
+  step of its own; the same whole number then needs a common denominator and an
+  equivalent fraction for each part before the sign.
+- **Fractions to decimals** (engine `BusStop`, `src/tasks/ShortDivision.jsx`, the unit's
+  `shortDiv`): the Dashboard's Bus Stop task (Maths 3.2), copied 20 November 2026 with
+  `src/utils/shortDivExtras.js` and `src/components/math/ShortDivExtras.jsx`; the rest
+  it uses was already here and identical. Three item switches added for 7.1:
+  `fraction: true` (asked as "Write 13/8 as a decimal", with 13/8 = 13 ÷ 8 under it),
+  `watch: true` (a worked example, a column a press with a sentence for each, not
+  scored) and `table: 'always'` (the times table first for any divisor). Levels: Watch
+  me (3/4, 13/8), With help (the table first), On your own, and two that never stop,
+  rounded to 3 d.p. The whole fraction is divided (13 ÷ 8 = 1.625), not split into a
+  mixed number first as the Workbook does (Mr. Bowen, 20 November 2026).
+- **Quiz**: 10 questions, two typed and one put in order; the questions are in English
+  (the quiz has no French question text), every explanation has its French twin.
 
 Maths 5.3:
 

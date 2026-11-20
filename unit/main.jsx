@@ -176,7 +176,8 @@ function UnitRoute() {
   if (task.kind === 'steps') {
     const set = got.sets[task.id]
     if (!set) return <ToLearn />
-    return <Workbook set={set} record={rec} langs={langs} title={name}
+    // key: a fresh screen for each set, so one set's answers never show in the next.
+    return <Workbook key={task.id} set={set} record={rec} langs={langs} title={name}
       onSave={(patch) => save(task.id, patch)} onDone={toUnit} onQuit={toUnit} />
   }
 

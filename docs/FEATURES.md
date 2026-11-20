@@ -110,6 +110,8 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **Tide Lab**: Science 3.4 river tide task. `unit/src/tasks/TideLab.jsx`
 - **Protractor**: drag and turn a protractor onto 8 angles, read and type the size. `unit/app/tasks/ProtractorTask.jsx`
 - **Quadrilaterals (QuadCheck)**: draw from a sketch, fourth angle, 360° check. `unit/src/tasks/ZeroLine.jsx`
+- **Bus Stop (short division)**: the Dashboard's Maths 3.2 task, a column at a time with hints and Show me; items may be fractions ("Write 13/8 as a decimal"), worked examples to watch a column a press (`watch`), or start with the times table (`table: 'always'`). Maths 7.1's Fractions to decimals (engine BusStop). `unit/src/tasks/ShortDivision.jsx`, `unit/src/utils/shortDivision.js`
+- **Maths 7.1 Ordering fractions**: lesson notes for working alone, Mixed ↔ improper and Which is bigger? (Workbook-style step sets), Fractions to decimals, quiz. `unit/src/data/Y7_MATH/U07_1/`, `unit/content/Y7_MATH/U07_1/` · `/unit/#/Y7_MATH/U07_1`
 - **Task kind steps (Workbook)**: fresh Workbook-style problems on the step engine. `unit/app/Workbook.jsx`, `unit/content/<TRACK>/<UNIT>/`
 - **Task kind quiz**: end-of-unit quiz. `unit/src/tasks/Assessment.jsx`
 - **Task kind writing (Timed writing)**: prompt bank, 5-minute plan, 30+ minutes against the server's clock, paste blocked, leaving the page counted, AI mark /12, then the corrections. `unit/app/writing/WritingTask.jsx` · `/unit/#/<TRACK>/<UNIT>/writing`
