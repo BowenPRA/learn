@@ -119,6 +119,20 @@ export function checkFix(input, error) {
 /** How many wrong clicks a passage tolerates before the rest is revealed. */
 export const missAllowance = (errorCount) => Math.max(3, errorCount + 2);
 
+/** From this many mistakes in a task, one of them may be missed for full marks. */
+export const ONE_MISS_FROM = 4;
+
+/**
+ * The task's mark out of 10: mistakes fixed over mistakes in every passage. Missing
+ * just one across the whole task still earns 10 (Bowen, 20 November 2026: a little
+ * more forgiving, the challenge kept), once there are at least ONE_MISS_FROM to find.
+ */
+export function proofreadScore(fixed, total) {
+  if (!(total > 0)) return 0;
+  if (total >= ONE_MISS_FROM && fixed >= total - 1) return 10;
+  return Math.round((fixed / total) * 10);
+}
+
 /* -------------------------------------------------------------------------- *
  * Validation (run by scripts/validate-entry.js)
  * -------------------------------------------------------------------------- */

@@ -121,7 +121,7 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **My Writing**: marks over time, mistakes that keep coming back, unfinished writing, every essay. `unit/app/writing/MyWriting.jsx` · `/unit/#/writing`, `/unit/#/writing/<id>`
 - **Essay store**: save, hand in, mark, revise; demo marker and sample history. `src/lib/essays.js`
 - **Grammar edit**: choose the right word inside a passage (engine GrammarEdit). `unit/src/tasks/GrammarEdit.jsx`
-- **Find & Fix**: click the mistakes in a passage and type the fixes (engine FindFix). `unit/src/tasks/Proofread.jsx`, `unit/src/utils/proofread.js`
+- **Find & Fix**: click the mistakes in a passage and type the fixes (engine FindFix); one mistake missed across the task still earns full marks. `unit/src/tasks/Proofread.jsx`, `unit/src/utils/proofread.js`
 - **Fix it your way**: type a new version of a faulty sentence (splice, run-on, fragment, missing verb); a rule checker, no AI, names each wrong join and accepts every correct one (engine Rewrite). `unit/app/tasks/RewriteTask.jsx`, `unit/app/tasks/rewrite.js`
 - **Fix N / Fix my mistakes**: redo only the wrong answers of a finished lesson. `unit/src/utils/notesReview.js`
 - **Unit data**: a unit's meta, notes, words, quiz and engine pools. `unit/src/data/<TRACK>/<UNIT>/data.js`

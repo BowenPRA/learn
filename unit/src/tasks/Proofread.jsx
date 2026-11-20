@@ -3,7 +3,7 @@ import { ArrowRight, Check, CheckCircle2, Eye, Lightbulb, SearchCheck, X, XCircl
 import TopBar from '../components/TopBar';
 import { sfx } from '../arcade/sfx.js';
 import { EmptyState } from '../components/EmptyState.jsx';
-import { checkFix, errorAt, missAllowance, placeErrors, tokenize } from '../utils/proofread';
+import { checkFix, errorAt, missAllowance, placeErrors, proofreadScore, tokenize } from '../utils/proofread';
 
 /**
  * Find & Fix — read a passage, click the mistakes, type the corrections.
@@ -21,7 +21,8 @@ import { checkFix, errorAt, missAllowance, placeErrors, tokenize } from '../util
  * what is left so the passage always ends with the corrected text in view.
  *
  * Resumable: a finished passage is remembered as { status:'done', fixed, total }
- * and skipped on re-entry; the score is the fixed count over every error.
+ * and skipped on re-entry; the score is the fixed count over every error, and
+ * one error missed across the whole task still scores full marks (proofreadScore).
  */
 
 const STATUS = { TODO: 'todo', FIXED: 'fixed', REVEALED: 'revealed' };
@@ -62,7 +63,7 @@ export default function Proofread({ pool, savedData = {}, onComplete, onProgress
       if (it.id === item?.id && extra[it.id] !== undefined) return s + extra[it.id];
       return s + (saved[it.id]?.status === 'done' ? saved[it.id].fixed || 0 : 0);
     }, 0);
-  const scoreOf = (fixed) => (totalErrors ? Math.round((fixed / totalErrors) * 10) : 0);
+  const scoreOf = (fixed) => proofreadScore(fixed, totalErrors);
 
   // A fresh passage resets the working state; a finished one comes back solved.
   useEffect(() => {
@@ -299,6 +300,16 @@ export default function Proofread({ pool, savedData = {}, onComplete, onProgress
                 <><XCircle className="w-6 h-6 text-amber-500" /><span className="text-amber-700 dark:text-amber-300">{fixedHere} of {placed.length} fixed yourself — read the rest</span></>
               )}
             </div>
+            {/* The whole task, under the last passage: one miss is still full marks. */}
+            {index + 1 === items.length && items.every((it) => saved[it.id]?.status === 'done') && (() => {
+              const all = fixedSoFar();
+              const full = scoreOf(all) === 10;
+              return (
+                <p className={`mb-4 rounded-xl px-4 py-3 font-extrabold ${full ? 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200' : 'bg-slate-50 text-slate-700 dark:bg-slate-800 dark:text-slate-200'}`}>
+                  {all} of {totalErrors} fixed across the passages{full ? (all < totalErrors ? ': full marks. One miss is allowed.' : ': full marks.') : '.'}
+                </p>
+              );
+            })()}
             <ul className="space-y-3">
               {placed.map((e, n) => (
                 <li key={e.id} className="rounded-xl bg-slate-50 dark:bg-slate-800/70 p-3">
