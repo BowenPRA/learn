@@ -8,6 +8,7 @@ import {
   assembleEssay, buildRevisionPlan, checkSentence, countWords, essayDiff,
   summariseKinds, wordDiff,
 } from './revision.js';
+import { NO_ADDONS } from './noAddOns.js';
 
 /**
  * Part 2 of the timed writing task: the student makes every correction themselves.
@@ -402,11 +403,7 @@ export default function RevisionWorkshop({
               }}
               onPaste={(e) => e.preventDefault()}
               disabled={isFixed}
-              spellCheck={false}
-              autoCorrect="off"
-              autoCapitalize="off"
-              data-gramm="false"
-              data-enable-grammarly="false"
+              {...NO_ADDONS}
               rows={3}
               className={`w-full px-4 py-3 rounded-2xl border-2 text-lg font-medium leading-relaxed resize-y focus:outline-none focus:ring-2 transition-colors ${
                 isFixed
@@ -539,7 +536,7 @@ export default function RevisionWorkshop({
           <textarea
             value={finalText}
             onChange={(e) => setFinalEdit(e.target.value)}
-            spellCheck={false}
+            {...NO_ADDONS}
             className="w-full h-[26rem] px-6 sm:px-8 py-6 bg-transparent text-lg font-medium text-slate-800 dark:text-slate-100 leading-[1.9] focus:outline-none resize-none"
           />
         ) : (

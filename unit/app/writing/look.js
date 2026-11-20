@@ -31,6 +31,7 @@ export function flagLines(essay) {
   if (f.tabAways > 0) out.push({ warn: f.tabAways >= 3, text: `Left the writing page ${f.tabAways} time${f.tabAways === 1 ? '' : 's'}${f.secondsAway ? ` (${fmtMinutes(f.secondsAway)} away)` : ''}.` })
   if (f.pasteTries > 0) out.push({ warn: true, text: `Tried to paste ${f.pasteTries} time${f.pasteTries === 1 ? '' : 's'} (blocked).` })
   if (f.bigInserts > 0) out.push({ warn: true, text: `${f.bigInserts} large block${f.bigInserts === 1 ? '' : 's'} of text appeared at once.` })
+  if (f.addOns?.length) out.push({ warn: true, text: `A writing add-on was working in the box: ${f.addOns.join(', ')}.` })
   if (f.timedOut) out.push({ warn: false, text: 'Handed in when the time ran out.' })
   if (f.late) out.push({ warn: true, text: 'The page was closed before the end; handed in as last saved.' })
   if (r.classmateMatch >= 0.3) out.push({ warn: true, text: `About ${Math.round(r.classmateMatch * 100)}% matches another student's essay. Your teacher will look at this.` })

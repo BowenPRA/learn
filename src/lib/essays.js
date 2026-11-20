@@ -290,7 +290,7 @@ export async function noteEssay(id, { score = null, note = '', by = '' } = {}) {
 /** Whether an essay is worth a teacher's look: flags that warn, a classmate match, or not marked. */
 export function needsALook(e) {
   const f = e?.flags || {}
-  return (f.tabAways >= 3) || f.pasteTries > 0 || f.bigInserts > 0 || f.late || (e?.report?.classmateMatch >= 0.3) || !!e?.report?.notMarked || e?.status === 'error'
+  return (f.tabAways >= 3) || f.pasteTries > 0 || f.bigInserts > 0 || f.addOns?.length > 0 || f.late || (e?.report?.classmateMatch >= 0.3) || !!e?.report?.notMarked || e?.status === 'error'
 }
 
 /* ---- what the essays add up to ---------------------------------------- */

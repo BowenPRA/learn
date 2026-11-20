@@ -4,7 +4,8 @@
 // My Writing (/unit/#/writing).
 //
 // The rules while writing, as on the Dashboard and stricter:
-//   - paste, cut, copy and drag-and-drop are blocked, and spell check and autocomplete off;
+//   - paste, cut, copy and drag-and-drop are blocked, and spell check, autocomplete and
+//     writing add-ons (Grammarly, LanguageTool, Chrome's suggestions) off (noAddOns.js);
 //   - leaving the page, paste tries and big blocks of text appearing at once are counted
 //     and shown to the teacher (and the student) beside the essay;
 //   - the clock is the server's: it starts when the essay is started and keeps running if
@@ -18,6 +19,8 @@ import TopBar from '../../src/components/TopBar.jsx'
 import { essayScore } from '../../../supabase/functions/learn-grade-essay/marking.js'
 import { markEssay, markOf, mistakeKinds, myEssays, newEssayId, saveEssay, saveRevision } from '../../../src/lib/essays.js'
 import EssayReport from './EssayReport.jsx'
+import { NO_ADDONS, addNames } from './noAddOns.js'
+import { useAddOnWatch } from './useAddOnWatch.js'
 import RevisionWorkshop from './RevisionWorkshop.jsx'
 import { FramesPane, Planner } from './Planner.jsx'
 import { kindOf } from './frames.js'
@@ -192,6 +195,13 @@ export default function WritingTask({ unit, data, task, onSave, onQuit, onOpenEs
     return () => document.removeEventListener('visibilitychange', onVis)
   }, [running])
 
+  // A writing add-on working in the box anyway (Grammarly, LanguageTool): the student
+  // is told to turn it off, and it is noted for the teacher (flags.addOns).
+  const addOns = useAddOnWatch(boxRef, stage === 'write')
+  useEffect(() => {
+    if (addOns.length) flags.current.addOns = addNames(flags.current.addOns || [], addOns)
+  }, [addOns])
+
   /* ---- starting and going back ---- */
   const start = async () => {
     setProblem('')
@@ -339,7 +349,7 @@ export default function WritingTask({ unit, data, task, onSave, onQuit, onOpenEs
             <p className="mb-3 text-[11px] font-black uppercase tracking-widest text-slate-500">The rules</p>
             <ul className="grid gap-3 text-[15px] font-semibold text-slate-700 sm:grid-cols-2 dark:text-slate-200">
               <li className="flex gap-3"><Clock className="h-5 w-5 shrink-0 text-violet-500" strokeWidth={2.5} />{`${minutes} minutes, with about 5 to plan. The clock keeps going if you leave.`}</li>
-              <li className="flex gap-3"><Lock className="h-5 w-5 shrink-0 text-violet-500" strokeWidth={2.5} />No copy and paste, no spell check.</li>
+              <li className="flex gap-3"><Lock className="h-5 w-5 shrink-0 text-violet-500" strokeWidth={2.5} />No copy and paste, no spell check, no Grammarly or other add-ons.</li>
               <li className="flex gap-3"><EyeOff className="h-5 w-5 shrink-0 text-violet-500" strokeWidth={2.5} />Leaving this page is noted for your teacher.</li>
               <li className="flex gap-3"><PenLine className="h-5 w-5 shrink-0 text-violet-500" strokeWidth={2.5} />At 0:00 your writing is handed in as it is.</li>
             </ul>
@@ -451,7 +461,7 @@ export default function WritingTask({ unit, data, task, onSave, onQuit, onOpenEs
                   <button type="button" onClick={undo} title="Undo (Ctrl+Z)" className="rounded-lg p-2 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700"><Undo2 className="h-4 w-4" strokeWidth={2.5} /></button>
                   <button type="button" onClick={redo} title="Redo (Ctrl+Y)" className="rounded-lg p-2 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700"><Redo2 className="h-4 w-4" strokeWidth={2.5} /></button>
                   <span className="mx-1.5 h-5 w-px bg-slate-200 dark:bg-slate-700" />
-                  <span className="flex items-center text-[10px] font-black uppercase tracking-widest text-slate-400"><Lock className="mr-1.5 h-3.5 w-3.5" strokeWidth={2.5} />No paste · no spell check</span>
+                  <span className="flex items-center text-[10px] font-black uppercase tracking-widest text-slate-400"><Lock className="mr-1.5 h-3.5 w-3.5" strokeWidth={2.5} />No paste · no spell check · no add-ons</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className={`text-[11px] font-black uppercase tracking-widest tabular-nums ${words >= minWords ? 'text-emerald-600' : 'text-slate-400'}`}>{words} / {minWords}</span>
@@ -460,6 +470,12 @@ export default function WritingTask({ unit, data, task, onSave, onQuit, onOpenEs
                   </span>
                 </div>
               </div>
+              {addOns.length > 0 && (
+                <div role="alert" className="flex items-start gap-2 border-b border-amber-200 bg-amber-50 px-4 py-2.5 text-sm font-bold text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-200">
+                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={2.5} />
+                  <span>{`${addOns.join(' and ')} ${addOns.length > 1 ? 'are' : 'is'} working in this box. Turn it off for this site: your writing must be your own. Your teacher sees this on the report.`}</span>
+                </div>
+              )}
               <textarea
                 ref={boxRef}
                 data-role="response"
@@ -469,8 +485,7 @@ export default function WritingTask({ unit, data, task, onSave, onQuit, onOpenEs
                 onBeforeInput={onBeforeInput}
                 onPaste={block} onCopy={block} onCut={block} onDrop={block} onDragOver={(e) => e.preventDefault()}
                 onContextMenu={(e) => e.preventDefault()}
-                spellCheck={false} autoCorrect="off" autoCapitalize="sentences" autoComplete="off"
-                data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false"
+                {...NO_ADDONS}
                 placeholder={'Start writing here…'}
                 className="h-[28rem] w-full resize-none bg-transparent px-6 py-6 text-lg font-medium leading-[1.9] text-slate-800 placeholder:text-slate-400 focus:outline-none sm:px-8 dark:text-slate-100"
               />

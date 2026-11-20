@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { ArrowRight, ClipboardList, Plus } from 'lucide-react'
 import { framesByStage, planFields } from './frames.js'
+import { NO_ADDONS } from './noAddOns.js'
 
 const noPaste = (e) => e.preventDefault()
 
@@ -27,7 +28,7 @@ export function Planner({ type, plan, onChange, onStart, compact = false }) {
               value={plan?.[f.id] || ''}
               onChange={(e) => onChange({ ...plan, [f.id]: e.target.value })}
               onPaste={noPaste} onDrop={noPaste}
-              spellCheck={false} autoComplete="off" data-gramm="false"
+              {...NO_ADDONS}
               placeholder={f.placeholder}
               className="w-full resize-none rounded-xl border-2 border-slate-200 bg-slate-50 px-4 py-2.5 text-[15px] font-medium text-slate-800 placeholder:text-slate-400 focus:border-violet-400 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
             />

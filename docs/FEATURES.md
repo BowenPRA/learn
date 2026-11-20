@@ -113,6 +113,7 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **Task kind steps (Workbook)**: fresh Workbook-style problems on the step engine. `unit/app/Workbook.jsx`, `unit/content/<TRACK>/<UNIT>/`
 - **Task kind quiz**: end-of-unit quiz. `unit/src/tasks/Assessment.jsx`
 - **Task kind writing (Timed writing)**: prompt bank, 5-minute plan, 30+ minutes against the server's clock, paste blocked, leaving the page counted, AI mark /12, then the corrections. `unit/app/writing/WritingTask.jsx` · `/unit/#/<TRACK>/<UNIT>/writing`
+- **No writing add-ons**: the essay, plan and correction boxes ask Grammarly, LanguageTool, spell check, autocorrect and Chrome's writing suggestions to stay out; one that works in the essay box anyway brings up a warning and a line on the report. `unit/app/writing/noAddOns.js`, `unit/app/writing/useAddOnWatch.js`
 - **Revision workshop (corrections)**: the student retypes each sentence the marker corrected. `unit/app/writing/RevisionWorkshop.jsx`, `unit/app/writing/revision.js`
 - **Sentence frames and plan**: frames and plan questions by kind of writing (story, description, explanation, argument, letter, summary). `unit/app/writing/frames.js`, `unit/app/writing/Planner.jsx`
 - **Essay report**: mark, three parts, unit focus, next step, caps, flags, teacher note, mistakes marked in the text. `unit/app/writing/EssayReport.jsx`, `unit/app/writing/look.js`
