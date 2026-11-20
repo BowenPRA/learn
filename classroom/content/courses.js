@@ -36,6 +36,20 @@ export const COURSES = [
       3: 'Forces and energy',
     },
   },
+  // Upper Secondary English (class english:Upper Secondary): Mr Bowen's class decks
+  // for the freshman English track, from 20 November 2026. English only, so no
+  // language switch. Each unit's self-study side is /unit/#/UPPER_ENG/<unit>.
+  {
+    id: 'upper-english',
+    title: 'Upper Secondary English',
+    subtitle: 'Grammar and writing',
+    color: '#e11d48',
+    icon: 'PenLine',
+    bilingual: false,
+    units: {
+      1: 'Complete Sentences',
+    },
+  },
   // Games the teacher runs on the projector. Staff only: a game holds its own
   // answers, so it is listed in CLASSROOM_GAMES (src/data/classroomLessons.js), not
   // with the lessons, and classroom/main.jsx turns students away from it. Moved from

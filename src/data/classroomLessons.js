@@ -16,6 +16,8 @@
 //   title, subtitle  as in the deck's meta (the check fails when they drift);
 //             titleVn / subtitleVn for the Vietnamese page, when there are any
 //   teacher   who teaches it, shown on the card
+//   staffOnly true: listed for staff only, never on a student's home (the class
+//             follows along on the unit's own notes instead)
 export const CLASSROOM_LESSONS = [
   {
     course: 'y7-math', slug: 'U01_1', classKey: 'math:Year 7', unit: '1.1', teacher: 'Mr. Bowen',
@@ -302,6 +304,13 @@ export const CLASSROOM_LESSONS = [
     title: 'Metals and Non-metals',
     subtitle: 'Test, name and use: what metals can do, how non-metals are different, and the right material for a job',
   },
+  // Upper Secondary English: Mr Bowen's class deck for each unit's notes (20 Nov 2026).
+  // Staff only (Bowen: no new task for students; they follow on the unit's notes).
+  {
+    course: 'upper-english', slug: 'U01', classKey: 'english:Upper Secondary', unit: '1', teacher: 'Mr. Bowen', staffOnly: true,
+    title: 'Complete Sentences',
+    subtitle: 'Fragments, run-ons and comma splices, and four ways to fix them',
+  },
 ]
 
 // Games the teacher runs on the projector, from classroom/content/games/<slug>/.
@@ -363,6 +372,10 @@ export const CLASSROOM_UNIT_NAMES = {
     1: ['Cells', 'Tế bào'],
     2: ['Materials and their structure', 'Vật liệu và cấu tạo của chúng'],
     3: ['Forces and energy', 'Lực và năng lượng'],
+  },
+  // English only: the same name on the Vietnamese page.
+  'upper-english': {
+    1: ['Complete Sentences', 'Complete Sentences'],
   },
 }
 

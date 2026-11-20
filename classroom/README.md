@@ -17,7 +17,7 @@ Tailwind theme and never mix with PRA Learn's.
 | Path | What |
 |---|---|
 | `content/<course>/<slug>/` | One lesson: `index.js` (meta, slides, plan) and the files it imports (slides, diagrams, widgets, pictures, film). Some lessons import shared kits from another lesson's folder; that is fine. |
-| `content/courses.js` | The courses: `y7-math` and `y7-science`, with their colours and unit names. |
+| `content/courses.js` | The courses: `y7-math`, `y7-science` and `upper-english` (English only, from 20 Nov 2026), with their colours and unit names. |
 | `content/registry.js` | Finds the lesson folders and loads one lesson's code when it is opened. |
 | `src/` | The deck player: `components/Deck.jsx`, layouts, chrome, the phone remote (`remote/`) and the teacher's plan page (`pages/Plan.jsx`). |
 | `tailwind.config.js` | The classroom's Tailwind theme. |
@@ -78,7 +78,9 @@ out of the lesson's code would close that.
 - **Students**: "Lessons from class" on their home page, newest first, for their year
   group (the class key's year group against the student's level). With no review
   pack waiting, the welcome card's big button opens the newest one. Their class also
-  appears under "My classes".
+  appears under "My classes". A lesson marked `staffOnly: true` is never on a
+  student's home: the Upper Secondary English class decks, whose class follows along
+  on the unit's own notes instead.
 - **Staff**: "Lessons from class" at the foot of My classes (every lesson, with its
   class), "N from class" on that class's card, and the class page lists its own under
   Lessons ("always open, nothing to set"). Lessons from class have no due dates,

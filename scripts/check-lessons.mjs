@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Checks that the list of classroom lessons (src/data/classroomLessons.js) and the
-// lesson folders (classroom/content/y7-*/<slug>/index.js) agree:
+// lesson folders (classroom/content/y7-* and upper-*/<slug>/index.js) agree:
 //   - every lesson folder has an entry in the list, and every entry has a folder;
 //   - each entry's unit, title and subtitle are the deck's own (meta in its index.js),
 //     so the home pages say what the deck says;
@@ -19,7 +19,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const CONTENT = path.join(ROOT, 'classroom', 'content')
-const COURSE_FOLDER = /^y7-/
+// Year 7 Maths and Science, and Upper Secondary English (20 Nov 2026); not games.
+const COURSE_FOLDER = /^(y7-|upper-)/
 
 /** The text of the object literal after `meta:` in a lesson's index.js, or null. */
 export function metaText(src) {

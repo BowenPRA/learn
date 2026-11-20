@@ -59,7 +59,9 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **Classroom page**: plays Mr Bowen's decks exactly as taught, after a PRA Learn sign-in. `classroom/main.jsx`, `classroom/index.html` · `/classroom/#/lesson/<course>/<slug>`
 - **Lesson list**: what can be opened and where it is listed, in teaching order. `src/data/classroomLessons.js`
 - **Hidden lesson**: `hidden: true` keeps a deck off every list; its address still opens it. `src/data/classroomLessons.js`
-- **Courses**: `y7-math`, `y7-science`, `games`, with colours and unit names. `classroom/content/courses.js`
+- **Staff-only lesson**: `staffOnly: true` lists a deck for staff and never on a student's home. `src/data/classroomLessons.js`, `src/components/ClassroomLessons.jsx`
+- **Courses**: `y7-math`, `y7-science`, `upper-english` (English only), `games`, with colours and unit names. `classroom/content/courses.js`
+- **Upper Secondary English class deck**: Unit 1 Complete Sentences, 16 slides for about 30 minutes, staff only; the class follows on the Unit 1 notes, and the plan says which notes slide goes with each part. `classroom/content/upper-english/U01/` · `/classroom/#/lesson/upper-english/U01`
 - **Lesson folder**: an index.js exporting meta, slides, plan, plus its files. `classroom/content/<course>/<slug>/`
 - **One lesson at a time**: lazy registry, each deck its own download. `classroom/content/registry.js`
 - **Viewer**: out, student, staff or other; only staff get plans and games. `classroom/viewer.js`

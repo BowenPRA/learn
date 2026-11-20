@@ -11,9 +11,11 @@ const norm = (s) => String(s || '').trim().replace(/\s+/g, ' ').toLowerCase()
 
 /** The classroom decks someone sees, newest first: a student, their year group's;
  *  staff and the demo, all of them. `classKey` narrows to one class (a class page).
- *  A lesson with `hidden: true` is never listed (its address still opens it). */
+ *  A lesson with `hidden: true` is never listed (its address still opens it), and
+ *  one with `staffOnly: true` is never listed for a student, demo or live. */
 export function classroomLessonsFor(me, classKey = null) {
   let list = CLASSROOM_LESSONS.filter(isListedLesson)
+  if (me?.kind === 'student') list = list.filter((l) => !l.staffOnly)
   if (classKey) list = list.filter((l) => l.classKey === classKey)
   else if (!DEMO && me?.kind === 'student') list = list.filter((l) => norm(splitClass(l.classKey)[1]) === norm(me.year_group))
   return [...list].reverse()
