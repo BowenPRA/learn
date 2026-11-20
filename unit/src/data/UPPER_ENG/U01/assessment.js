@@ -1,7 +1,8 @@
 // unit/src/data/UPPER_ENG/U01/assessment.js (from the Dashboard's GED_ENG/ENG_4)
 // Lesson 4 check — complete sentences, fragments, run-ons, comma splices and
 // the four fixes. Six items sit on a numbered-sentence notice, four stand
-// alone. Answer key: A ×3, B ×2, C ×2, D ×3.
+// alone. Eight are multiple choice, one is typed (q8) and one is a sort (q9, a drag-and-drop
+// the student can also tap). Multiple-choice key: q1 C, q2 A, q3 B, q4 A, q5 D, q6 B, q7 D, q10 D.
 export const assessment = {
   timeLimit: 1200,
   passages: [
@@ -119,30 +120,32 @@ export const assessment = {
       expEn: "D has a subject (the bus), a real verb (was) and a complete idea. A has no subject or real verb, and B and C start with subordinators, so they cannot stand alone.",
     },
     {
+      // Typed, not chosen: the student has to come up with the joining word, and pick it by
+      // meaning (a contrast, so not the "so" or "and" a guess would give). Not the lesson's example.
       id: "q8",
-      type: "mcq",
-      title: "8. \"The shop was closed, ______ we went home.\" Which word makes the sentence correct?",
-      options: [
-        { val: "A", text: "A. so" },
-        { val: "B", text: "B. then" },
-        { val: "C", text: "C. however" },
-        { val: "D", text: "D. also" }
-      ],
-      correct: "A",
-      expEn: "\"So\" is a FANBOYS conjunction, so comma + so joins two complete sentences correctly. \"Then\", \"however\" and \"also\" are not conjunctions — with only a comma they leave a splice.",
+      type: "fill_blank",
+      title: "8. Type one joining word that fits the meaning.",
+      textParts: ["The film was very long, ", " nobody left early."],
+      blanks: { "1": { correct: "but", accept: ["yet"] } },
+      expEn: "The two ideas are a contrast: the film was long, but people stayed. \"But\" (or \"yet\") is a FANBOYS word, so comma + but joins two complete sentences. \"However\" and \"then\" are not FANBOYS words: with only a comma they leave a splice.",
     },
     {
+      // Sorted, not chosen: three sentences, three different problems.
       id: "q9",
-      type: "mcq",
-      title: "9. Which sentence contains a comma splice?",
-      options: [
-        { val: "A", text: "A. I called, but nobody answered." },
-        { val: "B", text: "B. I called; nobody answered." },
-        { val: "C", text: "C. I called, nobody answered." },
-        { val: "D", text: "D. Although I called, nobody answered." }
+      type: "dnd",
+      title: "9. Sort each sentence by its problem.",
+      bank: [
+        { id: "b1", val: "frag", text: "Because the road was closed." },
+        { id: "b2", val: "runon", text: "The road was closed we took another way." },
+        { id: "b3", val: "splice", text: "The road was closed, we took another way." }
       ],
-      correct: "C",
-      expEn: "C joins two complete sentences with only a comma. A uses comma + but, B uses a semicolon, and D uses the subordinator \"although\" — all three are correct.",
+      targets: [
+        { id: "t_frag", title: "Fragment" },
+        { id: "t_runon", title: "Run-on" },
+        { id: "t_splice", title: "Comma splice" }
+      ],
+      correctSets: { t_frag: ["frag"], t_runon: ["runon"], t_splice: ["splice"] },
+      expEn: "\"Because the road was closed.\" cannot stand alone: a fragment. The second has two complete sentences with nothing between them: a run-on. The third has only a comma between them: a comma splice.",
     },
     {
       id: "q10",

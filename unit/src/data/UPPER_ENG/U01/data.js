@@ -462,6 +462,105 @@ export const U01_DATA = {
       ]
     }
   ],
+  // "Fix it your way" (engine Rewrite, unit/app/tasks/RewriteTask.jsx): the student types
+  // a new version of a faulty sentence. The checker (unit/app/tasks/rewrite.js) judges only the
+  // join between the two ideas `a` and `b`; `checkRewriteItems` runs every `model` and `also`
+  // through it (tests/rewrite.test.mjs). Fresh sentences: none repeats an example in the lesson.
+  // `weak` words are correct but say less ("and" for a result): accepted, with a note.
+  rewrite: [
+    {
+      id: "rw1", label: "Comma splice",
+      given: "My phone battery died, I could not call you.",
+      a: "My phone battery died", b: "I could not call you",
+      fanboys: ["so"], weak: ["and"], subs: [{ w: "because", dep: "a" }, { w: "since", dep: "a" }],
+      model: "My phone battery died, so I could not call you.",
+      also: "I could not call you because my phone battery died.",
+    },
+    {
+      id: "rw2", label: "Fragment",
+      given: "We stayed inside. Because the storm was getting worse.",
+      a: "We stayed inside", b: "the storm was getting worse",
+      subs: [{ w: "because", dep: "b" }, { w: "since", dep: "b" }], allow: ["sub"],
+      holdHint: "That is a correct sentence, but it drops \"because\". Keep \"because\" and join the idea to the sentence before it.",
+      model: "We stayed inside because the storm was getting worse.",
+      also: "Because the storm was getting worse, we stayed inside.",
+    },
+    {
+      id: "rw3", label: "Run-on",
+      given: "The test was hard most students passed.",
+      a: "The test was hard", b: "most students passed",
+      fanboys: ["but", "yet"], subs: [{ w: "although", dep: "a" }, { w: "though", dep: "a" }, { w: "even though", dep: "a" }],
+      model: "The test was hard, but most students passed.",
+      also: "Although the test was hard, most students passed.",
+    },
+    {
+      id: "rw4", kind: "exact", label: "Missing verb",
+      given: "My cousin working at the airport.",
+      right: "My cousin works at the airport.",
+      accept: ["My cousin is working at the airport.", "My cousin worked at the airport.", "My cousin was working at the airport.", "My cousin has worked at the airport.", "My cousin will work at the airport."],
+      hint: "Put is or was in front of \"working\", or change \"working\" to works or worked.",
+      note: "\"Working\" on its own is not a full verb. The sentence needs works, is working, or worked.",
+    },
+    {
+      id: "rw5", label: "Comma splice",
+      given: "The library opens at nine, it closes at five.",
+      a: "The library opens at nine", b: "it closes at five",
+      fanboys: ["and", "but"],
+      accept: ["The library opens at nine and closes at five."],
+      model: "The library opens at nine, and it closes at five.",
+      also: "The library opens at nine; it closes at five.",
+    },
+    {
+      id: "rw6", label: "Fragment",
+      given: "My brother cannot swim. Although he lives by the sea.",
+      a: "My brother cannot swim", b: "he lives by the sea",
+      subs: [{ w: "although", dep: "b" }, { w: "though", dep: "b" }, { w: "even though", dep: "b" }], allow: ["sub"],
+      holdHint: "That is a correct sentence, but it drops \"although\". Keep \"although\" and join the idea to the sentence before it.",
+      model: "My brother cannot swim although he lives by the sea.",
+      also: "Although he lives by the sea, my brother cannot swim.",
+    },
+    {
+      id: "rw7", label: "Run-on",
+      given: "I was late for class the traffic was terrible.",
+      a: "I was late for class", b: "the traffic was terrible",
+      fanboys: ["for"], weak: ["and"], subs: [{ w: "because", dep: "b" }, { w: "since", dep: "b" }],
+      model: "I was late for class because the traffic was terrible.",
+      also: "Because the traffic was terrible, I was late for class.",
+    },
+    {
+      id: "rw8", kind: "exact", label: "Missing verb",
+      given: "The students waiting outside the library.",
+      right: "The students wait outside the library.",
+      accept: ["The students are waiting outside the library.", "The students waited outside the library.", "The students were waiting outside the library."],
+      hint: "Put are or were in front of \"waiting\", or change \"waiting\" to wait or waited.",
+      note: "\"Waiting\" on its own is not a full verb. The sentence needs wait, are waiting, or waited.",
+    },
+    {
+      id: "rw9", label: "Comma splice",
+      given: "She finished her homework, she watched a film.",
+      a: "She finished her homework", b: "she watched a film",
+      fanboys: ["and"], subs: [{ w: "after", dep: "a" }, { w: "once", dep: "a" }, { w: "when", dep: "a" }, { w: "as soon as", dep: "a" }, { w: "before", dep: "b" }],
+      model: "After she finished her homework, she watched a film.",
+      also: "She finished her homework, and she watched a film.",
+    },
+    {
+      id: "rw10", label: "Fragment",
+      given: "The meeting will start. When everyone arrives.",
+      a: "The meeting will start", b: "everyone arrives",
+      subs: [{ w: "when", dep: "b" }, { w: "once", dep: "b" }, { w: "as soon as", dep: "b" }, { w: "after", dep: "b" }], allow: ["sub"],
+      holdHint: "That is a correct sentence, but it drops \"when\". Keep it and join the idea to the sentence before it.",
+      model: "The meeting will start when everyone arrives.",
+      also: "When everyone arrives, the meeting will start.",
+    },
+    {
+      id: "rw11", kind: "exact", label: "Missing verb",
+      given: "A small shop on the corner of our street.",
+      right: "There is a small shop on the corner of our street.",
+      accept: ["A small shop is on the corner of our street.", "There was a small shop on the corner of our street.", "A small shop was on the corner of our street.", "A small shop stands on the corner of our street."],
+      hint: "This needs a verb. Start with \"There is\", or put \"is\" after \"shop\".",
+      note: "A sentence needs a real verb. \"A small shop on the corner\" says where it is, but there is no verb.",
+    },
+  ],
   shortQA: [
     {
       id: "q1",
@@ -538,6 +637,59 @@ export const U01_DATA = {
           "Paragraph 2: what happened, step by step.",
           "Paragraph 3: how it ended and what changed.",
           "Use at least one semicolon and one sentence joined with but or so."
+        ],
+      }
+    ]
+  },
+  // The short practice write before the 30-minute story (task `paragraph` in src/data/units.js):
+  // one paragraph in complete sentences. `practice: true` lets it be shorter than 30 minutes and
+  // keeps its mark out of the marks-over-time line. A prompt's `plan` gives the plan's example
+  // answers for that prompt (frames.js KINDS.paragraph has the questions).
+  paragraph: {
+    type: "paragraph",
+    practice: true,
+    minutes: 10,
+    minWords: 60,
+    paragraphs: 1,
+    focus: {
+      label: "Complete sentences",
+      look: "fragments, run-on sentences and comma splices"
+    },
+    prompts: [
+      {
+        id: "u1p1",
+        title: "A place I like",
+        task: "Write one paragraph about a place you like to go. Say where it is, what you do there, and why you like it.",
+        plan: { start: "the park near my home is my favourite place", detail: "quiet in the morning · I run there with my dad · the old trees", end: "it is where I feel calm" },
+        guidelines: [
+          "Sentence 1: say the main idea.",
+          "Next 3 or 4 sentences: give two or three details. Each one is a complete sentence.",
+          "Last sentence: finish the idea.",
+          "Check every sentence. No fragments, and no comma joining two sentences."
+        ],
+      },
+      {
+        id: "u1p2",
+        title: "A meal I remember",
+        task: "Write one paragraph about a meal you remember well. Say what you ate, who was with you, and why you remember it.",
+        plan: { start: "my birthday dinner last year was the best meal I remember", detail: "grilled fish and rice · my whole family · my uncle told funny stories", end: "it was the first time we were all together" },
+        guidelines: [
+          "Sentence 1: say the main idea.",
+          "Next 3 or 4 sentences: give two or three details. Each one is a complete sentence.",
+          "Last sentence: finish the idea.",
+          "Check every sentence. No fragments, and no comma joining two sentences."
+        ],
+      },
+      {
+        id: "u1p3",
+        title: "Something I want to learn",
+        task: "Write one paragraph about something you want to learn. Say what it is, how you will learn it, and why it matters to you.",
+        plan: { start: "I want to learn to play the guitar", detail: "videos online · practise every evening · play songs for my friends", end: "music makes me happy" },
+        guidelines: [
+          "Sentence 1: say the main idea.",
+          "Next 3 or 4 sentences: give two or three details. Each one is a complete sentence.",
+          "Last sentence: finish the idea.",
+          "Check every sentence. No fragments, and no comma joining two sentences."
         ],
       }
     ]

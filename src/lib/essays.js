@@ -79,11 +79,18 @@ function demoList() {
 }
 
 // The stand-in marker's rules: each finds one kind of mistake and says how to fix it.
+// A comma splice is only guessed at when the words before the comma could be a sentence: at
+// least four of them, not opening with a word like "When" (After school, I ... is fine).
+const SPLICE_VERBS = 'was|were|went|had|felt|saw|could|did|said|is|are|am|have|has|go|goes|like|likes|love|loves|play|plays|played|eat|eats|ate|want|wants|wanted|can|will|think|thought|feel|get|got|see|watch|watched|live|lives|lived|come|came|make|made|need|needs|help|helped|walk|walked'
+const OPENERS = /^(because|when|after|before|although|though|if|while|since|as|once|until|in|on|at|for|during)\b/i
+const sentenceBefore = (text, at) => text.slice(Math.max(text.lastIndexOf('.', at), text.lastIndexOf('!', at), text.lastIndexOf('?', at), text.lastIndexOf('\n', at)) + 1, at).trim()
 const RULES = [
-  { re: /,\s(I|we|he|she|they|it|my \w+|the \w+)\s(was|were|went|had|felt|saw|could|did|said|is|are|have|go|like|love)\b/g, kind: 'Comma splice', focus: true,
+  { re: new RegExp(`,\\s(I|we|he|she|they|it|you|my \\w+|our \\w+|the \\w+)\\s(${SPLICE_VERBS})\\b`, 'g'), kind: 'Comma splice', focus: true,
+    when: (m, text) => { const s = sentenceBefore(text, m.index); return s.split(/\s+/).length >= 4 && !OPENERS.test(s) },
     fix: (m, who, verb) => `. ${who.charAt(0).toUpperCase()}${who.slice(1)} ${verb}`, why: 'A comma cannot join two full sentences.', rule: 'Two sentences: use a full stop.' },
-  { re: /(^|[.!?]\s+)(Because [^.!?]{3,60}[.!?])/g, kind: 'Fragment', focus: true,
-    fix: (m, lead, frag) => `${lead}${frag}`, skip: true, why: 'A because-clause cannot stand alone as a sentence.', rule: 'Join because-clauses to a full sentence.' },
+  // "...friends. Because it is big." -> "...friends because it is big."
+  { re: /([.!?])\s+(Because [^.!?]{3,60}[.!?])/g, kind: 'Fragment', focus: true,
+    fix: (m, stop, frag) => ` b${frag.slice(1)}`, why: 'A because-clause cannot stand alone as a sentence.', rule: 'Join a because-clause to the sentence before it.' },
   { re: /\bi\b/g, kind: 'Capital letter', fix: () => 'I', why: 'The word I is always a capital letter.', rule: 'Always write I as a capital.' },
   { re: /\balot\b/gi, kind: 'Spelling', fix: () => 'a lot', why: 'A lot is two words.', rule: 'A lot is two words.' },
   { re: /\b(dont|cant|wont|didnt|isnt)\b/gi, kind: 'Apostrophe', fix: (m) => ({ dont: "don't", cant: "can't", wont: "won't", didnt: "didn't", isnt: "isn't" }[m.toLowerCase()]), why: 'A short form needs an apostrophe.', rule: "Short forms take an apostrophe: don't." },
@@ -94,8 +101,8 @@ const RULES = [
 export function demoMark(text, prompt = {}) {
   const raw = []
   for (const r of RULES) {
-    if (r.skip) continue
     for (const m of text.matchAll(r.re)) {
+      if (r.when && !r.when(m, text)) continue
       const start = Math.max(0, text.lastIndexOf(' ', Math.max(0, m.index - 2)) + 1)
       const quote = text.slice(start, m.index + m[0].length)
       const correction = text.slice(start, m.index) + r.fix(...m)
@@ -107,15 +114,19 @@ export function demoMark(text, prompt = {}) {
   const found = usableRevisions(raw, text).length
   const min = Number(prompt.minWords) || 150
   const ideas = wordCount >= min * 1.5 ? 4 : wordCount >= min ? 3 : 2
-  const organisation = paragraphs >= (prompt.paragraphs || 1) + 1 ? 4 : paragraphs >= (prompt.paragraphs || 1) ? 3 : 2
+  const wanted = prompt.paragraphs || 1
+  const organisation = prompt.practice ? (paragraphs === 1 ? 3 : 2) : paragraphs >= wanted + 1 ? 4 : paragraphs >= wanted ? 3 : 2
   const language = Math.max(1, 4 - Math.floor(found / 2))
+  const focusFound = raw.filter((r) => r.focus)
   const ai = {
     ideas, organisation, language, revisions: raw,
     strengths: [words(text).slice(0, 6).join(' ') + '…'],
     ideasFeedback: ideas >= 3 ? 'You answer the task with real detail.' : 'Add more specific detail: names, places, what you saw and felt.',
-    organisationFeedback: organisation >= 3 ? 'Your paragraphs are in a clear order.' : `Use ${prompt.paragraphs || 3} paragraphs: a beginning, a middle and an end.`,
+    organisationFeedback: prompt.practice
+      ? (organisation >= 3 ? 'One paragraph, in a clear order.' : 'Keep it to one paragraph: a topic sentence, two or three details, a closing sentence.')
+      : (organisation >= 3 ? 'Your paragraphs are in a clear order.' : `Use ${wanted} paragraphs: a beginning, a middle and an end.`),
     languageFeedback: found ? `There ${found === 1 ? 'is 1 mistake' : `are ${found} mistakes`} to fix; look at the list below.` : 'Your sentences are complete and correct.',
-    focusNote: raw.some((r) => r.focus) ? 'Some sentences are still joined with a comma.' : 'Every sentence ends where it should.',
+    focusNote: focusFound.length ? `${focusFound.length === 1 ? 'One sentence does not end where it should' : `${focusFound.length} sentences do not end where they should`}: ${[...new Set(focusFound.map((r) => r.kind.toLowerCase()))].join(' and ')}.` : 'Every sentence ends where it should.',
     nextStep: found ? 'Read each sentence alone: if it is two sentences, use a full stop.' : 'Try joining some short sentences with because, when or although.',
   }
   return buildReport(ai, text, prompt, counts)
@@ -295,9 +306,12 @@ export function needsALook(e) {
 
 /* ---- what the essays add up to ---------------------------------------- */
 
-/** The marked essays, oldest first, for a trend. */
-export const markedOldestFirst = (list = []) =>
-  list.filter((e) => e.status === 'marked' && e.report && !e.report.notMarked)
+/**
+ * The marked essays, oldest first, for a trend. A short practice paragraph (`prompt.practice`)
+ * is left out unless `withPractice`: its mark is not comparable with a 30-minute essay's.
+ */
+export const markedOldestFirst = (list = [], withPractice = false) =>
+  list.filter((e) => e.status === 'marked' && e.report && !e.report.notMarked && (withPractice || !e.prompt?.practice))
     .sort((a, b) => String(a.submittedAt || a.startedAt).localeCompare(String(b.submittedAt || b.startedAt)))
 
 /** The kinds of mistake across essays, most common first: [{ kind, count, essays, focus }]. */

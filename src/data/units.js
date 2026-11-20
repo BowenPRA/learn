@@ -93,14 +93,18 @@ export const UNITS = [
     // Every unit ends with timed writing, marked by the AI and kept in My Writing (/unit/#/writing).
     track: 'UPPER_ENG', unit: 'U01', classKey: 'english:Upper Secondary', label: '1', teacher: 'Mr. Bowen',
     title: 'Complete Sentences',
-    subtitle: 'Fragments, run-ons and comma splices, and four ways to fix them. Then a 30-minute story.',
+    subtitle: 'Fragments, run-ons and comma splices, and four ways to fix them. Then one paragraph and a 30-minute story.',
+    // 110 XP on offer. Every task but the story adds up to 75, under the 80 that finishes a
+    // unit with its quiz, so the 30-minute story is still needed (19 November 2026).
     tasks: [
-      { id: 'lesson', kind: 'notes', xp: 15 },
-      { id: 'words', kind: 'words', xp: 10 },
-      { id: 'edit', kind: 'engine', engine: 'GrammarEdit', xp: 20, title: 'Grammar edit', icon: 'PenLine', tone: 'sky' },
-      { id: 'findfix', kind: 'engine', engine: 'FindFix', xp: 15, title: 'Find & Fix', icon: 'Search', tone: 'orange' },
-      { id: 'quiz', kind: 'quiz', xp: 15 },
-      { id: 'writing', kind: 'writing', xp: 30, note: '30 minutes' },
+      { id: 'lesson', kind: 'notes', xp: 10 },
+      { id: 'words', kind: 'words', xp: 5 },
+      { id: 'edit', kind: 'engine', engine: 'GrammarEdit', xp: 15, title: 'Grammar edit', icon: 'PenLine', tone: 'sky' },
+      { id: 'findfix', kind: 'engine', engine: 'FindFix', xp: 10, title: 'Find & Fix', icon: 'Search', tone: 'orange' },
+      { id: 'rewrite', kind: 'engine', engine: 'Rewrite', xp: 15, title: 'Fix it your way', icon: 'Wrench', tone: 'rose', note: '11 sentences' },
+      { id: 'quiz', kind: 'quiz', xp: 10 },
+      { id: 'paragraph', kind: 'writing', writing: 'paragraph', xp: 10, title: 'One paragraph', note: '10 minutes' },
+      { id: 'writing', kind: 'writing', xp: 35, note: '30 minutes' },
     ],
   },
 ]

@@ -7,14 +7,16 @@ import { NO_ADDONS } from './noAddOns.js'
 
 const noPaste = (e) => e.preventDefault()
 
-export function Planner({ type, plan, onChange, onStart, compact = false }) {
+// `examples` ({ [plan question id]: text }, a prompt's own `plan`) replaces the kind's example
+// answers, so a prompt about a meal does not show an example about a beach.
+export function Planner({ type, plan, onChange, onStart, compact = false, minutes = 5, examples = null }) {
   const fields = planFields(type)
   return (
     <div className={compact ? '' : 'rounded-[1.5rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8 dark:border-slate-800 dark:bg-slate-900'}>
       {!compact && (
         <>
           <p className="mb-1 flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-violet-600 dark:text-violet-400">
-            <ClipboardList className="h-4 w-4" strokeWidth={2.5} /> Plan · about 5 minutes
+            <ClipboardList className="h-4 w-4" strokeWidth={2.5} /> Plan · about {minutes} {minutes === 1 ? 'minute' : 'minutes'}
           </p>
           <h2 className="mb-5 text-2xl font-black text-slate-800 dark:text-white">A few words for each line. Each line becomes part of your writing.</h2>
         </>
@@ -29,7 +31,7 @@ export function Planner({ type, plan, onChange, onStart, compact = false }) {
               onChange={(e) => onChange({ ...plan, [f.id]: e.target.value })}
               onPaste={noPaste} onDrop={noPaste}
               {...NO_ADDONS}
-              placeholder={f.placeholder}
+              placeholder={examples?.[f.id] || f.placeholder}
               className="w-full resize-none rounded-xl border-2 border-slate-200 bg-slate-50 px-4 py-2.5 text-[15px] font-medium text-slate-800 placeholder:text-slate-400 focus:border-violet-400 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
             />
           </label>

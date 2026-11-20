@@ -68,7 +68,7 @@ it ("From the classroom").
 | Science 3.4 Tides | Lesson 20, Key words 10, Tide Lab 30, Workbook 20, Quiz 20 |
 | Maths 5.3 Drawing Lines and Quadrilaterals | Lesson 25, Protractor 30, Workbook 25, Quadrilaterals 20 |
 | Science 5.2 Comparing Metals and Non-metals (`hidden`: no lesson yet) | Key words 20, Metal or non-metal? 20, Test it 15, Mystery substances 25, Quiz 20 |
-| Upper Secondary English 1 Complete Sentences | Lesson 15, Key words 10, Grammar edit 20, Find & Fix 15, Quiz 15, Timed writing 30 |
+| Upper Secondary English 1 Complete Sentences | Lesson 10, Key words 5, Grammar edit 15, Find & Fix 10, Fix it your way 15, Quiz 10, One paragraph 10, Timed writing 35 |
 
 Maths 5.3:
 
@@ -85,6 +85,21 @@ Maths 5.3:
 - **Quadrilaterals** (`src/tasks/ZeroLine.jsx`, the unit's `quads`): draw a quadrilateral
   from a sketch, measure its fourth angle, check the four add up to 360°; then a square
   and a quadrilateral on paper, which can be skipped.
+
+English 1 (the XP above are a proposal of 19 November 2026, not yet approved by Mr. Bowen;
+everything but the story adds up to 75, so the story is needed to reach 80):
+
+- **Fix it your way** (`app/tasks/RewriteTask.jsx`, engine `Rewrite`, the unit's `rewrite`):
+  11 faulty sentences (comma splices, run-ons, fragments, a missing verb). The box starts
+  with the faulty sentence and the student changes it. The checker (`app/tasks/rewrite.js`,
+  rules, no AI) judges only the join: it accepts every correct one it can name (full stop,
+  semicolon, comma + FANBOYS, a subordinator, "; however,"), checks the joining word against
+  the meaning and the order of the ideas ("A, so B" is "B, for A"), and names each wrong
+  join. A correct but weaker word ("and" for a result) passes with a note naming the better
+  one. An item's `accept` lists whole sentences that are right though the rules cannot see
+  why. Right first time 1, after a hint ½, after "Show me" 0. `tests/rewrite.test.mjs`.
+- **Quiz**: q8 is typed (a joining word that fits a contrast) and q9 a sort (fragment,
+  run-on, comma splice; drag or tap). The other eight are multiple choice.
 
 ## Timed writing and My Writing
 
@@ -124,15 +139,24 @@ A unit's `writing` in its `data.js`:
 
 ```js
 writing: {
-  type: 'narrative',            // narrative, descriptive, explanatory, argument, letter, summary (app/writing/frames.js)
+  type: 'narrative',            // narrative, descriptive, explanatory, argument, letter, summary, paragraph (app/writing/frames.js)
   minutes: 30, minWords: 150, paragraphs: 3,
   focus: { label: 'Complete sentences', look: 'fragments, run-on sentences and comma splices' },
   frames: [],                   // optional extra frames { stage, text }
-  prompts: [{ id: 'u1w1', title, task, guidelines: [] }],
+  prompts: [{ id: 'u1w1', title, task, guidelines: [], plan: {} }],   // plan: example answers for this prompt's plan
 }
 ```
 
 A prompt's `id` is saved with every essay: never change it once used.
+
+**A practice write** is a second writing task in the same unit: a task
+`{ id: 'paragraph', kind: 'writing', writing: 'paragraph', xp, title, note }` in
+`../src/data/units.js` reads `paragraph` from the unit's `data.js` instead of `writing`.
+With `practice: true` it may be shorter than 30 minutes (5 at the least), plans for about 2
+minutes, tells the marker it is one paragraph (`rubric.js`; live only once
+`learn-grade-essay` is redeployed), and is left out of the marks-over-time line and the
+home card's latest mark (`essays.js` `markedOldestFirst`); its mistakes still count in
+"what keeps coming back". English 1 has one: 10 minutes, 60 words, one paragraph.
 
 The English track is English only (15 November 2026): no `…Vn` twins, no language
 switch (`unit/main.jsx` gives `UPPER_ENG` English alone), and examples that do not lean on
@@ -186,7 +210,8 @@ the task's id. Demo mode keeps it in the browser. The live site keeps it in
 The live database ran its first version on 6 November, which allowed only five task
 names (lesson, words, practice, workbook, quiz). Until the current version is run there,
 a task with any other id (5.3's `protractor` and `quads`, 5.2's `sort`, `test` and
-`mystery`) cannot be saved on the live site, and the unit page says so.
+`mystery`, English 1's `edit`, `findfix`, `rewrite`, `paragraph` and `writing`) cannot be
+saved on the live site, and the unit page says so.
 `tests/units.test.mjs` checks the upgrade keeps what was saved.
 
 ## Adding a unit

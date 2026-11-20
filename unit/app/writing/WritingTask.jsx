@@ -39,7 +39,7 @@ function promptRecord(cfg, p) {
   return {
     id: p.id, title: p.title, task: p.task, guidelines: p.guidelines || [],
     type: cfg.type, focus: cfg.focus ? { label: cfg.focus.label, look: cfg.focus.look } : null,
-    minWords: cfg.minWords || 150, paragraphs: cfg.paragraphs || 1,
+    minWords: cfg.minWords || 150, paragraphs: cfg.paragraphs || 1, practice: !!cfg.practice,
   }
 }
 
@@ -58,11 +58,17 @@ function Button({ children, onClick, disabled, tone = 'violet', className = '' }
 }
 
 export default function WritingTask({ unit, data, task, onSave, onQuit, onOpenEssay }) {
-  const cfg = useMemo(() => data.writing || {}, [data])
+  // A unit's end-of-unit writing is `writing`; a short practice write (`practice: true`) is
+  // named by its task (`task.writing`), may be shorter than 30 minutes, and is left out of
+  // the marks-over-time line (essays.js markedOldestFirst).
+  const cfg = useMemo(() => data[task.writing] || data.writing || {}, [data, task.writing])
   const prompts = useMemo(() => cfg.prompts || [], [cfg])
   const kind = kindOf(cfg.type)
   const unitKey = `${unit.track}/${unit.unit}`
-  const minutes = Math.max(30, cfg.minutes || 30)
+  const minutes = Math.max(cfg.practice ? 5 : 30, cfg.minutes || 30)
+  const planMinutes = cfg.practice ? 2 : 5
+  const paras = cfg.paragraphs || 1
+  const lengthLine = `At least ${cfg.minWords || 150} words in ${paras === 1 ? 'one paragraph' : `${paras} paragraphs`}.`
 
   const [stage, setStage] = useState('loading')   // loading start plan write marking report revise error
   const [mine, setMine] = useState([])
@@ -298,7 +304,7 @@ export default function WritingTask({ unit, data, task, onSave, onQuit, onOpenEs
   const quitLabel = running ? 'Save & leave' : stage === 'start' ? 'Back' : 'Done'
   const top = (
     <TopBar onQuit={quit} current={0} total={1} progress={running ? Math.min(100, 100 - (secondsLeft / (minutes * 60)) * 100) : stage === 'report' || stage === 'revise' ? 100 : 0}
-      modeTitle={'Timed writing'} timeLeft={running ? Math.max(0, secondsLeft) : undefined}
+      modeTitle={cfg.practice ? 'One paragraph' : 'Timed writing'} timeLeft={running ? Math.max(0, secondsLeft) : undefined}
       quitLabel={quitLabel} />
   )
 
@@ -327,7 +333,7 @@ export default function WritingTask({ unit, data, task, onSave, onQuit, onOpenEs
               </ul>
             )}
             <p className="mt-5 border-t border-slate-100 pt-4 text-sm font-bold text-slate-500 dark:border-slate-800 dark:text-slate-400">
-              {`At least ${minWords} words in ${cfg.paragraphs || 1} paragraphs.`}
+              {lengthLine}
               {cfg.focus && <> This unit: <span className="text-violet-600 dark:text-violet-400">{cfg.focus.label}</span>.</>}
             </p>
             {prompts.length > 1 && (
@@ -348,7 +354,7 @@ export default function WritingTask({ unit, data, task, onSave, onQuit, onOpenEs
           <section className="rounded-[1.5rem] border-2 border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
             <p className="mb-3 text-[11px] font-black uppercase tracking-widest text-slate-500">The rules</p>
             <ul className="grid gap-3 text-[15px] font-semibold text-slate-700 sm:grid-cols-2 dark:text-slate-200">
-              <li className="flex gap-3"><Clock className="h-5 w-5 shrink-0 text-violet-500" strokeWidth={2.5} />{`${minutes} minutes, with about 5 to plan. The clock keeps going if you leave.`}</li>
+              <li className="flex gap-3"><Clock className="h-5 w-5 shrink-0 text-violet-500" strokeWidth={2.5} />{`${minutes} minutes, with about ${planMinutes} to plan. The clock keeps going if you leave.`}</li>
               <li className="flex gap-3"><Lock className="h-5 w-5 shrink-0 text-violet-500" strokeWidth={2.5} />No copy and paste, no spell check, no Grammarly or other add-ons.</li>
               <li className="flex gap-3"><EyeOff className="h-5 w-5 shrink-0 text-violet-500" strokeWidth={2.5} />Leaving this page is noted for your teacher.</li>
               <li className="flex gap-3"><PenLine className="h-5 w-5 shrink-0 text-violet-500" strokeWidth={2.5} />At 0:00 your writing is handed in as it is.</li>
@@ -416,7 +422,7 @@ export default function WritingTask({ unit, data, task, onSave, onQuit, onOpenEs
             <p className="mt-2 text-[17px] font-bold leading-relaxed text-slate-800 dark:text-white">{taskText(promptSrc)}</p>
             <ul className="mt-3 space-y-1">{guide(promptSrc).map((g, i) => <li key={i} className="text-[14px] font-semibold text-slate-500 dark:text-slate-400">· {g}</li>)}</ul>
           </section>
-          <Planner type={cfg.type} plan={plan} onChange={setPlan} onStart={() => { setStage('write'); setTimeout(() => boxRef.current?.focus(), 50) }} />
+          <Planner type={cfg.type} minutes={planMinutes} examples={promptSrc.plan} plan={plan} onChange={setPlan} onStart={() => { setStage('write'); setTimeout(() => boxRef.current?.focus(), 50) }} />
         </div>
       </div>
     )
@@ -445,11 +451,11 @@ export default function WritingTask({ unit, data, task, onSave, onQuit, onOpenEs
                     <p className="text-[11px] font-black uppercase tracking-widest text-slate-400">{p.title}</p>
                     <p className="mt-2 text-[17px] font-bold leading-relaxed text-slate-800 dark:text-white">{taskText(promptSrc)}</p>
                     <ul className="mt-3 space-y-1.5">{guide(promptSrc).map((g, i) => <li key={i} className="flex gap-2 text-[15px] font-semibold text-slate-600 dark:text-slate-300"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-violet-500" />{g}</li>)}</ul>
-                    <p className="mt-4 border-t border-slate-100 pt-3 text-xs font-bold text-slate-400 dark:border-slate-800">{`At least ${minWords} words in ${cfg.paragraphs || 1} paragraphs. Press Enter to start a new paragraph.`}</p>
+                    <p className="mt-4 border-t border-slate-100 pt-3 text-xs font-bold text-slate-400 dark:border-slate-800">{paras === 1 ? lengthLine : `${lengthLine} Press Enter to start a new paragraph.`}</p>
                   </div>
                 )}
                 {pane === 'frames' && <FramesPane type={cfg.type} extra={cfg.frames} onInsert={insertFrame} />}
-                {pane === 'plan' && <div className="px-6 py-5"><Planner type={cfg.type} plan={plan} onChange={setPlan} compact /></div>}
+                {pane === 'plan' && <div className="px-6 py-5"><Planner type={cfg.type} examples={promptSrc.plan} plan={plan} onChange={setPlan} compact /></div>}
               </div>
             </div>
           </aside>

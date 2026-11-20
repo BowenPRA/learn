@@ -63,7 +63,7 @@ ${p.task || '(none)'}
 ${g.length ? `\nTHE STUDENT WAS ASKED TO:\n${g.map((x, i) => `  ${i + 1}. ${x}`).join('\n')}\n` : ''}
 Asked for: at least ${p.minWords || 150} words in ${p.paragraphs || 1} paragraph${(p.paragraphs || 1) === 1 ? '' : 's'}.
 Written in ${minutes} minutes. Judge it as a timed first draft; that does not raise a band.
-${focus ? `\nTHIS UNIT TAUGHT: ${focus}. Look hard for these.\n` : ''}
+${p.practice ? `\nTHIS IS A SHORT PRACTICE PARAGRAPH, not an essay. Judge it as one paragraph: a topic sentence that says the main idea, details that stay on it, and a closing sentence. Do not ask for a beginning, middle and end in separate paragraphs.\n` : ''}${focus ? `\nTHIS UNIT TAUGHT: ${focus}. Look hard for these.\n` : ''}
 THE STUDENT'S WRITING (${counts.wordCount ?? '?'} words, ${counts.paragraphs ?? '?'} paragraph${counts.paragraphs === 1 ? '' : 's'}):
 ${asData(text)}
 

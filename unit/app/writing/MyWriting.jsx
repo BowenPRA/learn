@@ -110,7 +110,8 @@ export default function MyWriting({ id, onOpen, onBack, essays = null, title = '
 
   const marked = useMemo(() => markedOldestFirst(list || []), [list])
   const stats = useMemo(() => essayStats(list || []), [list])
-  const kinds = useMemo(() => mistakeKinds(marked.slice(-5)).slice(0, 5), [marked])
+  // The mistakes that keep coming back count every marked piece, practice paragraphs too.
+  const kinds = useMemo(() => mistakeKinds(markedOldestFirst(list || [], true).slice(-5)).slice(0, 5), [list])
   const waiting = teacher ? [] : (list || []).filter((e) => e.status !== 'marked')
   const done = (list || []).filter((e) => e.status === 'marked')
   const one = id ? (list || []).find((e) => e.id === id) : null

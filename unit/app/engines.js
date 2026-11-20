@@ -65,6 +65,14 @@ export const ENGINES = {
     pool: (u) => ({ exercises: u.grammarEdit || [] }),
     props: ({ pool, saved, onComplete, onQuit }) => ({ pool, savedData: saved || {}, onComplete, onQuit }),
   },
+  // Upper Secondary English: type a new, correct version of a faulty sentence (a splice, a
+  // run-on, a fragment, a missing verb). The checker is rules, not AI: app/tasks/rewrite.js.
+  Rewrite: {
+    nativeMax: 10,
+    component: ours(() => import('./tasks/RewriteTask.jsx')),
+    pool: (u) => u.rewrite || [],
+    props: ({ pool, saved, onComplete, onProgress, onQuit }) => ({ pool, savedData: saved || {}, onComplete, onProgress, onQuit }),
+  },
   // Upper Secondary English: find the mistakes in a passage and type the fixes.
   FindFix: {
     nativeMax: 10,

@@ -105,6 +105,34 @@ export const KINDS = {
   },
 }
 
+// One paragraph: a topic sentence, details, a closing sentence (the short practice write).
+// The detail frames are the joins a unit teaches (comma + so / but, because first), so a
+// writer practises them in their own sentences. Each prompt gives its own plan examples
+// (`plan` on the prompt), since one example cannot fit every topic.
+KINDS.paragraph = {
+  label: 'Paragraph',
+  stages: [
+    S('start', 'Topic sentence', 'One sentence that says the main idea.'),
+    S('detail', 'Details', 'Two or three details. Each one is a complete sentence.'),
+    S('end', 'Closing sentence', 'Finish the idea.'),
+  ],
+  frames: [
+    F('start', '___ is important to me because ___.'),
+    F('start', 'I remember ___ well.'),
+    F('detail', 'First, ___.'),
+    F('detail', '___, so ___.'),
+    F('detail', '___, but ___.'),
+    F('detail', 'Because ___, ___.'),
+    F('detail', 'For example, ___.'),
+    F('end', 'That is why ___.'),
+  ],
+  plan: [
+    Q('start', 'What is the main idea, in one sentence?', 'the park near my home is my favourite place'),
+    Q('detail', 'Two or three details', 'quiet in the morning · I run there with my dad · the old trees'),
+    Q('end', 'How will you finish the idea?', 'it is where I feel calm'),
+  ],
+}
+
 KINDS.letter = {
   ...KINDS.explanatory, label: 'Letter',
   frames: [
