@@ -51,9 +51,12 @@ import {
   // Biology (COORD_SCI B10, B11): the nervous system, hormones, flowers,
   // human reproduction and infection.
   Brain, Flower2, Baby, HeartPulse, Syringe, CalendarDays, Egg, Wheat, Biohazard, NotebookPen, Copy, Shuffle,
+  // Upper Secondary English (UPPER_ENG U01): the sentence puzzle, the fixes,
+  // the run-on that never stops, the splice, a missing verb, the checklist.
+  Puzzle, Wrench, ScanSearch, Infinity as InfinityIcon, Slash, Ban, SpellCheck,
 } from 'lucide-react';
 import WidgetRenderer from '../../WidgetRenderer.jsx';
-import { parseInlineText, renderContent, NOTE_TONES } from './helpers.jsx';
+import { parseInlineText, renderContent, renderStrip, isStripLine, NOTE_TONES } from './helpers.jsx';
 import { field, tr } from '../../../utils/lang';
 
 // A local error boundary so a crashing widget never takes the slide with it.
@@ -98,6 +101,7 @@ const ICONS = {
   Trash2, Download, Save, Search, Wifi, Monitor, Laptop, Bookmark, Link, Type,
   TriangleRight, Combine, LandPlot, Navigation, Clock, ScatterChart, Hexagon, TrendingUp, Crosshair,
   Brain, Flower2, Baby, HeartPulse, Syringe, CalendarDays, Egg, Wheat, Biohazard, NotebookPen, Copy, Shuffle,
+  Puzzle, Wrench, ScanSearch, Infinity: InfinityIcon, Slash, Ban, SpellCheck,
 };
 
 /** Render a lucide icon by name (falls back to Info). */
@@ -132,11 +136,11 @@ export function Note({ note, lang = 'en', isDisplayMode = false }) {
         </div>
       )}
       <div className={`${tone.card} ${tone.text} font-semibold leading-relaxed space-y-2 ${isDisplayMode ? 'p-[clamp(1rem,1.7vw,1.6rem)]' : 'p-3.5 sm:p-5'}`}>
-        {lines.map((line, i) => (
+        {lines.map((line, i) => (isStripLine(line) ? renderStrip(line, i, { isDisplayMode }) : (
           <p key={i} className={isDisplayMode ? 'text-[clamp(1.05rem,1.7vw,1.55rem)]' : 'text-[15px] sm:text-base lg:text-lg'}>
             {parseInlineText(line, { strongClass: tone.strong })}
           </p>
-        ))}
+        )))}
       </div>
     </div>
   );

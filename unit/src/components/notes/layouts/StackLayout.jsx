@@ -34,6 +34,11 @@ export default function StackLayout({ slide: s, ctx }) {
                   </div>
                 );
               })}
+              {/* Note cards under a checklist (a trap to watch for); none on
+                  the decks written before 20 November 2026. */}
+              {s.notes?.length > 0 && s.notes.map((note, i) => (
+                <div key={`n-${i}`} className={columns > 1 ? 'md:col-span-full' : ''}><Note note={note} lang={lang} isDisplayMode={isDisplayMode} /></div>
+              ))}
             </div>
           ) : (
             <div className={`grid gap-3 sm:gap-4 ${grid}`}>

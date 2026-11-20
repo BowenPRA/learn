@@ -25,12 +25,15 @@ export default function HeroLayout({ slide: s, ctx }) {
   // hero colour. So the emphasis colour has to be pinned to the surface.
   const STRONG_ON_CARD = 'font-black text-slate-900';
   const STRONG_ON_FIELD = 'font-black text-white underline decoration-white/40 underline-offset-4';
+  // `compact: true` tightens the spacing so a title slide carrying an
+  // objective, chips and a card fits a 1366×768 laptop (English track).
+  const tight = !!s.compact && !isDisplayMode;
 
   return (
     // The content is centred with an inner `my-auto`, not `justify-center`:
     // a centred flex child that outgrows a scroll box is clipped at the TOP,
     // which is where the icon and the unit line sat on a laptop screen.
-    <div className="flex-1 flex flex-col text-center text-white overflow-y-auto custom-scrollbar min-h-0 p-6 sm:p-8 lg:p-10" style={bgStyle}>
+    <div className={`flex-1 flex flex-col text-center text-white overflow-y-auto custom-scrollbar min-h-0 ${tight ? 'p-5 sm:p-6 lg:p-7' : 'p-6 sm:p-8 lg:p-10'}`} style={bgStyle}>
     <div className="my-auto w-full flex flex-col items-center">
       {(brand || s.date) && (
         <div className={`flex items-center justify-center gap-2 flex-wrap ${isDisplayMode ? 'mb-5' : 'mb-4'}`}>
@@ -43,18 +46,18 @@ export default function HeroLayout({ slide: s, ctx }) {
         </div>
       )}
 
-      <div className={`bg-white/20 mx-auto rounded-[2rem] flex items-center justify-center shadow-inner border-4 border-white/30 ${isDisplayMode ? 'w-32 h-32 mb-8' : 'w-20 h-20 mb-5 sm:mb-6'}`}>
-        <Ic name={s.icon || 'BookOpen'} className={isDisplayMode ? 'w-16 h-16' : 'w-10 h-10'} strokeWidth={2.5} />
+      <div className={`bg-white/20 mx-auto rounded-[2rem] flex items-center justify-center shadow-inner border-4 border-white/30 ${isDisplayMode ? 'w-32 h-32 mb-8' : tight ? 'w-14 h-14 mb-3' : 'w-20 h-20 mb-5 sm:mb-6'}`}>
+        <Ic name={s.icon || 'BookOpen'} className={isDisplayMode ? 'w-16 h-16' : tight ? 'w-7 h-7' : 'w-10 h-10'} strokeWidth={2.5} />
       </div>
 
       {eyebrow && (
-        <div className={`inline-block bg-white/20 text-white font-black uppercase tracking-[0.2em] rounded-full mb-4 border border-white/30 shadow-inner ${isDisplayMode ? 'text-[clamp(0.9rem,1.4vw,1.4rem)] px-6 py-2' : 'text-[11px] sm:text-xs px-4 py-1.5'}`}>{eyebrow}</div>
+        <div className={`inline-block bg-white/20 text-white font-black uppercase tracking-[0.2em] rounded-full ${tight ? 'mb-3' : 'mb-4'} border border-white/30 shadow-inner ${isDisplayMode ? 'text-[clamp(0.9rem,1.4vw,1.4rem)] px-6 py-2' : 'text-[11px] sm:text-xs px-4 py-1.5'}`}>{eyebrow}</div>
       )}
 
-      <h1 className={`font-black tracking-tight mb-5 drop-shadow-md leading-tight ${isDisplayMode ? 'text-[clamp(3rem,6vw,7rem)]' : 'text-3xl sm:text-4xl lg:text-5xl'}`}>{title || 'Introduction'}</h1>
+      <h1 className={`font-black tracking-tight ${tight ? 'mb-3' : 'mb-5'} drop-shadow-md leading-tight ${isDisplayMode ? 'text-[clamp(3rem,6vw,7rem)]' : 'text-3xl sm:text-4xl lg:text-5xl'}`}>{title || 'Introduction'}</h1>
 
       {objective ? (
-        <div className={`bg-white/15 backdrop-blur-sm rounded-2xl border-2 border-white/25 shadow-inner max-w-3xl mx-auto ${isDisplayMode ? 'px-8 py-6' : 'px-5 py-4'}`}>
+        <div className={`bg-white/15 backdrop-blur-sm rounded-2xl border-2 border-white/25 shadow-inner max-w-3xl mx-auto ${isDisplayMode ? 'px-8 py-6' : tight ? 'px-5 py-3' : 'px-5 py-4'}`}>
           <div className={`font-black uppercase tracking-[0.2em] opacity-80 mb-1.5 ${isDisplayMode ? 'text-[clamp(0.8rem,1.1vw,1.1rem)]' : 'text-[10px] sm:text-xs'}`}>{tr(lang, 'Objective', 'Mục tiêu', 'Objectif')}</div>
           <p className={`font-bold opacity-95 drop-shadow-sm leading-snug ${isDisplayMode ? 'text-[clamp(1.4rem,2.6vw,2.6rem)]' : 'text-lg lg:text-2xl'}`}>{objective}</p>
         </div>
@@ -62,8 +65,21 @@ export default function HeroLayout({ slide: s, ctx }) {
         <p className={`font-bold opacity-90 drop-shadow-sm max-w-4xl mx-auto ${isDisplayMode ? 'text-[clamp(1.5rem,3vw,3rem)]' : 'text-xl lg:text-2xl'}`}>{parseInlineText(subtitle, { strongClass: STRONG_ON_FIELD })}</p>
       ) : null}
 
+      {/* What the lesson asks of the student, as a row of chips
+          (`chips: [{ icon, text }]`): "7 things to write down", "5 questions". */}
+      {s.chips?.length > 0 && (
+        <div className={`flex flex-wrap items-center justify-center gap-2 ${isDisplayMode ? 'mt-6' : 'mt-4'}`}>
+          {s.chips.map((chip, i) => (
+            <span key={i} className={`inline-flex items-center gap-2 rounded-full bg-white text-slate-800 font-black shadow-sm ${isDisplayMode ? 'text-[clamp(0.9rem,1.4vw,1.4rem)] px-5 py-2.5' : 'text-sm sm:text-[15px] px-4 py-2'}`}>
+              <Ic name={chip.icon || 'CheckCircle2'} className={isDisplayMode ? 'w-5 h-5' : 'w-4 h-4'} strokeWidth={3} style={{ color: accent }} />
+              {pick(chip.text, chip.textVn, chip.textFr)}
+            </span>
+          ))}
+        </div>
+      )}
+
       {cardText && (
-        <div className={`bg-white rounded-2xl shadow-xl border-2 border-white/60 text-left max-w-3xl mx-auto ${isDisplayMode ? 'mt-8 px-8 py-6' : 'mt-6 px-5 py-4'}`}>
+        <div className={`bg-white rounded-2xl shadow-xl border-2 border-white/60 text-left max-w-3xl mx-auto ${isDisplayMode ? 'mt-8 px-8 py-6' : tight ? 'mt-4 px-5 py-3.5' : 'mt-6 px-5 py-4'}`}>
           <div className={`flex items-center gap-2 font-black uppercase tracking-[0.15em] mb-2 ${isDisplayMode ? 'text-[clamp(0.8rem,1.1vw,1.15rem)]' : 'text-[11px] sm:text-xs'}`} style={{ color: accent }}>
             <Ic name={card.icon || 'Pencil'} className={isDisplayMode ? 'w-5 h-5' : 'w-4 h-4'} strokeWidth={3} />
             {cardBadge || tr(lang, 'Task', 'Nhiệm vụ', 'Activité')}

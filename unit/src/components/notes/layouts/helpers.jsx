@@ -4,7 +4,7 @@
 // can use the same classroom slide language, adapted for autonomous self-study.
 // Kept out of primitives.jsx so each component file only exports components
 // (fast-refresh / eslint clean).
-import { Pencil } from 'lucide-react';
+import { Pencil, XCircle, CheckCircle2 } from 'lucide-react';
 import { SafeInlineMath, SafeBlockMath } from '../SafeMath.jsx';
 import { splitInlineMath } from '../splitInlineMath.js';
 
@@ -66,6 +66,62 @@ function italicise(text, key) {
   );
 }
 
+// ── Example sentences ───────────────────────────────────────────────────────
+// A line that starts with ✗ or ✓ is an example sentence, not explanation: it
+// gets its own strip, red for wrong and green for right, so a student can tell
+// the rule from the example and the wrong one from the fixed one at a glance.
+// **Bold** inside a strip marks the part that matters: the mistake on a ✗ line
+// (wavy red underline), the fix on a ✓ line (green). Text after a final " | "
+// is a small tag on the strip ("comma + FANBOYS"). Written for the English
+// track (20 November 2026); no other deck starts a line with ✗ or ✓.
+const STRIP = {
+  bad: {
+    box: 'bg-[#fdecee] dark:bg-rose-950/40 border-[#f0bcc3] dark:border-rose-800/60',
+    icon: 'text-[#c8102e] dark:text-rose-400',
+    strong: 'font-black text-[#c8102e] dark:text-rose-300 bg-[#c8102e]/10 dark:bg-rose-400/15 rounded px-[2px] underline decoration-wavy decoration-2 decoration-[#c8102e]/50 dark:decoration-rose-400/60 underline-offset-[5px]',
+    tag: 'bg-[#c8102e]/10 text-[#a50d26] dark:bg-rose-400/15 dark:text-rose-200',
+  },
+  good: {
+    box: 'bg-[#eef6e6] dark:bg-green-950/40 border-[#c4dcae] dark:border-green-800/60',
+    icon: 'text-[#4a8b23] dark:text-green-400',
+    strong: 'font-black text-[#3d731c] dark:text-green-300 bg-[#4a8b23]/15 dark:bg-green-400/20 rounded px-[2px]',
+    tag: 'bg-[#4a8b23]/10 text-[#3d731c] dark:bg-green-400/15 dark:text-green-200',
+  },
+};
+
+/** True when a line is an example sentence (starts with ✗ or ✓). */
+export function isStripLine(line) {
+  const t = String(line || '').trim();
+  return t.startsWith('✗') || t.startsWith('✓');
+}
+
+/** True when any line of `text` is an example sentence. */
+export function hasStrips(text) {
+  return String(text || '').split('\n').some(isStripLine);
+}
+
+/** One example sentence as a red (✗) or green (✓) strip. */
+export function renderStrip(line, key, { isDisplayMode = false, tight = false } = {}) {
+  const t = String(line).trim();
+  const look = t.startsWith('✗') ? STRIP.bad : STRIP.good;
+  const Icon = t.startsWith('✗') ? XCircle : CheckCircle2;
+  let body = t.slice(1).trim();
+  let tag = null;
+  const bar = body.lastIndexOf(' | ');
+  if (bar > 0) { tag = body.slice(bar + 3).trim(); body = body.slice(0, bar).trim(); }
+  return (
+    <div key={key} className={`flex items-start gap-2.5 rounded-xl border-2 ${look.box} ${isDisplayMode ? 'px-[clamp(1rem,1.5vw,1.5rem)] py-[clamp(0.6rem,1vw,1rem)]' : tight ? 'px-3 py-1.5' : 'px-3 sm:px-3.5 py-2 sm:py-2.5'}`}>
+      <Icon className={`shrink-0 ${look.icon} ${isDisplayMode ? 'w-7 h-7 mt-0.5' : 'w-5 h-5 mt-[3px]'}`} strokeWidth={2.75} />
+      <div className={`flex-1 min-w-0 flex flex-wrap items-baseline gap-x-3 gap-y-1 ${isDisplayMode ? 'text-[clamp(1.1rem,1.8vw,1.65rem)]' : 'text-[15px] sm:text-base lg:text-[17px]'}`}>
+        <span className="font-semibold text-slate-800 dark:text-slate-100 leading-snug">{parseInlineText(body, { strongClass: look.strong })}</span>
+        {tag && (
+          <span className={`ml-auto shrink-0 rounded-md px-2 py-0.5 font-black uppercase tracking-wider ${look.tag} ${isDisplayMode ? 'text-[clamp(0.7rem,1vw,1rem)]' : 'text-[10px] sm:text-[11px]'}`}>{tag}</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // The `>` bumper: the "copy this into your notebook" cue. Styled as the
 // textbook's orange key-word rule so it reads as the same instruction
 // everywhere it appears (body copy, reveals, steps).
@@ -112,6 +168,9 @@ export function renderContent(text, { isDisplayMode = false, isExample = false }
           elements.push(<div key={`sp-${i}-${j}`} className={isDisplayMode ? 'h-[clamp(0.75rem,1.5vh,1.5rem)]' : 'h-3'} />);
         } else if (line.trim().startsWith('>')) {
           bumpers.push(line.replace('>', '').trim());
+        } else if (isStripLine(line)) {
+          flush();
+          elements.push(<div key={`ex-${i}-${j}`} className={isDisplayMode ? 'mb-3' : 'mb-2'}>{renderStrip(line, `s-${i}-${j}`, { isDisplayMode })}</div>);
         } else {
           flush();
           elements.push(
@@ -171,6 +230,16 @@ export const NOTE_TONES = {
     text: 'text-slate-800 dark:text-blue-50',
     strong: 'font-black text-[#1a5fa8] dark:text-blue-300',
     icon: 'Sparkles', label: 'Think Deeper', labelVn: 'Suy nghĩ sâu hơn', labelFr: 'Pour aller plus loin',
+  },
+  // A quiet reminder: a list or a tip worth keeping, but not a warning and not
+  // the thing to copy. Lets "Watch Out" mean a real trap (English track).
+  tip: {
+    accent: '#1a5fa8',
+    card: 'bg-[#e9f1fa] dark:bg-blue-950/35',
+    border: 'border-[#bcd3ea] dark:border-blue-800/60',
+    text: 'text-slate-800 dark:text-blue-50',
+    strong: 'font-black text-[#1a5fa8] dark:text-blue-300',
+    icon: 'Lightbulb', label: 'Remember', labelVn: 'Ghi nhớ', labelFr: 'À retenir',
   },
   info: {
     accent: '#0087a8',

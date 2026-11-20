@@ -2,16 +2,28 @@
 // Upper Secondary English Unit 1 — Complete Sentences (from the Dashboard's GED
 // Grammar Foundations 4, Sentence Boundaries), on the layout system. The whole deck is
 // one idea: a comma cannot hold two sentences together. Checks on five slides.
+//
+// How it reads (reworked 20 November 2026 so students can follow it on their own):
+// - A line starting ✗ or ✓ is an example sentence and gets a red or green strip;
+//   **bold** in it marks the mistake (✗) or the fix (✓); " | tag" adds a label.
+//   Never wrap a strip in *italics*: the formatter cannot nest bold inside them.
+// - One orange "Write this down" box per slide at most, numbered across the deck
+//   by `numbered()` below. "Watch out" (homework tone) is only for a real trap;
+//   lists and tips use the quiet blue `tip` tone.
+// - Nothing scrolls at 1366×768: a slide that does is two slides.
+// Twelve slides; a save made on the old ten-slide deck starts the notes afresh
+// (restoreNotes drops a blob whose `total` differs), and the best score stays.
 
-export const notes = [
+const slides = [
   {
     layout: "hero",
     color: "#e11d48",
     icon: "Scissors",
-    brand: "PRA English",
     eyebrow: "Unit 1",
     title: "Complete Sentences",
+    compact: true,
     objective: "Know what a complete sentence needs, spot a fragment, a run-on and a comma splice, and fix each one four different ways.",
+    // chips: filled in by numbered() — how many notes to write and questions to answer.
     card: {
       icon: "Scissors",
       badge: "The big idea",
@@ -20,15 +32,13 @@ export const notes = [
   },
   {
     layout: "statement",
-    icon: "Puzzle",
     accent: "#0087a8",
-    eyebrow: "The rule",
     title: "What a Sentence Needs",
     text: "Subject + verb + a complete idea.",
     sub: "\"The bus **was** late.\" — who? *the bus* · what happened? *was late* · finished? **yes**.",
     notes: [
       { tone: "write", text: "**Subject** = who or what the sentence is about. **Verb** = what they do or are. A real verb, not just an *-ing* word." },
-      { tone: "homework", text: "**The test:** read it alone. Does the reader wait for more? Then it is **not complete**." },
+      { tone: "tip", badge: false, text: "**Test it:** read it alone. Does the reader wait for more? Then it is **not complete**." },
     ],
     check: {
       id: "chk_complete",
@@ -52,15 +62,15 @@ export const notes = [
         heading: "Independent clause",
         accent: "#4a8b23",
         icon: "CheckCircle2",
-        content: "Subject + verb + complete idea. It **can stand alone**.\n\n*The bus was late.*  ·  *We missed the meeting.*",
+        content: "Subject + verb + complete idea. It **can stand alone**.\n✓ The bus was late.\n✓ We missed the meeting.",
         notes: [{ tone: "write", text: "Every complete sentence has **at least one** independent clause." }],
       },
       {
         heading: "Dependent clause",
         accent: "#c8102e",
         icon: "Link",
-        content: "Subject + verb — but it starts with a **subordinator**, so it **cannot stand alone**.\n\n***Because** the bus was late* … (and then?)",
-        notes: [{ tone: "homework", text: "**Subordinators:** because, although, when, while, if, since, until, after, before, unless." }],
+        content: "Subject + verb, but it starts with a **subordinator**, so it **cannot stand alone**.\n✗ **Because** the bus was late … | and then?",
+        notes: [{ tone: "tip", badge: "Subordinators", icon: "Link", text: "because, although, when, while, if, since, until, after, before, unless" }],
       },
     ],
     check: {
@@ -75,25 +85,25 @@ export const notes = [
     },
   },
   {
-    layout: "compare",
-    icon: "Puzzle",
+    layout: "split",
+    icon: "Link",
     accent: "#c25e12",
-    title: "Two Kinds of Fragment",
-    columns: [
-      {
-        heading: "Dependent-clause fragment",
-        accent: "#c8102e",
-        icon: "Link",
-        content: "✗ *We missed the meeting. **Because the bus was late.***\n\n**Fix:** join it to the sentence it belongs to.\n\n✓ *We missed the meeting **because** the bus was late.*\n✓ ***Because** the bus was late**,** we missed the meeting.*",
-        notes: [{ tone: "write", text: "Dependent clause **first** → comma after it. Dependent clause **second** → no comma." }],
-      },
-      {
-        heading: "Missing-verb fragment",
-        accent: "#c25e12",
-        icon: "Ban",
-        content: "✗ *My brother **working** at the port.*\n✗ *The manager, **a tall woman with a loud voice.***\n\n**Fix:** give it a real verb.\n\n✓ *My brother **works** at the port.*\n✓ *The manager **is** a tall woman with a loud voice.*",
-        notes: [{ tone: "homework", text: "An **-ing** word alone is not a verb. It needs *is / was / are* — or change it: *working → works*." }],
-      },
+    eyebrow: "Fragment 1 of 2",
+    title: "Dependent-Clause Fragment",
+    content: "✗ We missed the meeting. **Because the bus was late.** | fragment\n\n**Fix:** join it to the sentence it belongs to.\n✓ We missed the meeting **because** the bus was late.\n✓ **Because** the bus was late**,** we missed the meeting.",
+    notes: [
+      { tone: "write", text: "Dependent clause **first** → comma after it. Dependent clause **second** → no comma." },
+    ],
+  },
+  {
+    layout: "split",
+    icon: "Ban",
+    accent: "#c25e12",
+    eyebrow: "Fragment 2 of 2",
+    title: "Missing-Verb Fragment",
+    content: "✗ My brother **working** at the port.\n✗ The manager, **a tall woman with a loud voice.**\n\n**Fix:** give it a real verb.\n✓ My brother **works** at the port.\n✓ The manager **is** a tall woman with a loud voice.",
+    notes: [
+      { tone: "write", text: "An **-ing** word alone is not a verb. It needs *is / was / are*, or change it: *working → works*." },
     ],
     check: {
       id: "chk_fragment_fix",
@@ -117,14 +127,14 @@ export const notes = [
         heading: "Run-on",
         accent: "#c8102e",
         icon: "Infinity",
-        content: "Two complete sentences with **nothing** between them.\n\n✗ *The bus was late **we** missed the meeting.*",
+        content: "Two complete sentences with **nothing** between them.\n✗ The bus was late **we** missed the meeting.",
         notes: [{ tone: "write", text: "Find the spot where a **new subject** starts a **new idea**. That spot needs a boundary." }],
       },
       {
         heading: "Comma splice",
         accent: "#e11d48",
         icon: "Slash",
-        content: "Two complete sentences with **only a comma** between them.\n\n✗ *The bus was late**,** we missed the meeting.*",
+        content: "Two complete sentences with **only a comma** between them.\n✗ The bus was late**,** we missed the meeting.",
         notes: [{ tone: "homework", text: "The most common one. A comma is **not** a boundary. Neither is *then*, *however* or *also* after a comma." }],
       },
     ],
@@ -134,18 +144,17 @@ export const notes = [
     icon: "Wrench",
     accent: "#4a8b23",
     title: "The Four Fixes",
-    content: "Every run-on and every comma splice can be fixed in the same four ways. Start from: ✗ *The bus was late, we missed the meeting.*",
+    dense: true,
+    content: "✗ The bus was late**,** we missed the meeting. | comma splice",
     steps: [
-      { text: "**Full stop.** Two sentences. → *The bus was late**.** **W**e missed the meeting.*" },
-      { text: "**Semicolon**, when the ideas are closely linked. → *The bus was late**;** we missed the meeting.*" },
-      { text: "**Comma + FANBOYS** (for, and, nor, but, or, yet, so). → *The bus was late**, so** we missed the meeting.*" },
-      { text: "**Subordinator** (because, although, when …). → ***Because** the bus was late, we missed the meeting.*" },
+      { text: "**Full stop**\nTwo sentences.\n✓ The bus was late**.** **W**e missed the meeting." },
+      { text: "**Semicolon**\nIdeas closely linked.\n✓ The bus was late**;** we missed the meeting." },
+      { text: "**Comma + FANBOYS**\nfor, and, nor, but, or, yet, so\n✓ The bus was late**, so** we missed the meeting." },
+      { text: "**Subordinator**\nbecause, although, when …\n✓ **Because** the bus was late, we missed the meeting." },
     ],
-    reveal: {
-      label: "Try it",
-      prompt: "✗ \"The shop was closed, we went home.\" — fix it two different ways.",
-      answer: "*The shop was closed**, so** we went home.* (comma + FANBOYS) · ***Because** the shop was closed, we went home.* (subordinator) · *The shop was closed**;** we went home.* · *The shop was closed**.** We went home.*",
-    },
+    notes: [
+      { tone: "write", text: "**Four fixes:** full stop · semicolon · comma + FANBOYS · subordinator." },
+    ],
     check: {
       id: "chk_four_fixes",
       q: "Which version is correct?",
@@ -159,19 +168,47 @@ export const notes = [
     },
   },
   {
-    layout: "split",
+    layout: "callout",
+    icon: "PenLine",
+    accent: "#4a8b23",
+    eyebrow: "Try it",
+    title: "Fix It Two Ways",
+    content: "✗ The shop was closed**,** we went home. | comma splice\nFix it **two different ways** in your notebook. Then check.",
+    reveal: {
+      label: "Show the answers",
+      answer: "✓ The shop was closed**, so** we went home. | comma + FANBOYS\n✓ **Because** the shop was closed, we went home. | subordinator\n✓ The shop was closed**;** we went home. | semicolon\n✓ The shop was closed**.** **W**e went home. | full stop",
+    },
+  },
+  {
+    layout: "compare",
     icon: "PenLine",
     accent: "#7c3aed",
-    title: "Join Ideas the Way the Essay Rewards",
-    ratio: 55,
-    content: "The essay scorer rewards **varied, correctly joined sentences** — not a list of short ones, and never a chain of commas. Two tools:",
-    notes: [
-      { tone: "write", badge: "Coordination", text: "Two **equal** ideas → comma + **FANBOYS**. *The plan saves money**, but** it costs jobs.*" },
-      { tone: "theory", badge: "Subordination", text: "One idea **depends** on the other → a **subordinator**. ***Although** the plan saves money, it costs jobs.*" },
-      { tone: "homework", text: "Pick the joiner by **meaning**: *because* = reason · *although / but* = contrast · *so* = result · *when / while* = time." },
+    title: "Join Your Ideas",
+    content: "The essay marker rewards **varied, correctly joined sentences**, not a list of short ones.\n✗ Free buses help workers. They are expensive. The city should try them. | choppy\n✓ **Although** free buses are expensive, they help workers**, so** the city should try them. | joined",
+    columns: [
+      {
+        heading: "Coordination",
+        accent: "#c25e12",
+        icon: "Equal",
+        content: "Two **equal** ideas → comma + **FANBOYS**.\n✓ The plan saves money**, but** it costs jobs.",
+      },
+      {
+        heading: "Subordination",
+        accent: "#1a5fa8",
+        icon: "GitMerge",
+        content: "One idea **depends** on the other → a **subordinator**.\n✓ **Although** the plan saves money, it costs jobs.",
+      },
     ],
-    example: "✗ *Free buses help workers. They are expensive. The city should try them.*\n\n✓ ***Although** free buses are expensive, they help workers**, so** the city should try them.*",
-    exampleLabel: "Choppy → joined",
+  },
+  {
+    layout: "statement",
+    icon: "Scale",
+    accent: "#7c3aed",
+    eyebrow: "Joining words",
+    text: "Pick the joiner by **meaning**.",
+    notes: [
+      { tone: "write", text: "**because** = reason\n**although / but** = contrast\n**so** = result\n**when / while** = time" },
+    ],
     check: {
       id: "chk_joiner",
       q: "\"______ the clinic opens at eight, the queue starts at seven.\" Which joiner gives the right meaning?",
@@ -185,29 +222,20 @@ export const notes = [
     },
   },
   {
-    layout: "callout",
-    icon: "ScanSearch",
-    accent: "#e11d48",
-    eyebrow: "In a quiz",
-    title: "Spotting It in a Drop-Down",
-    content: "A boundary item gives you a blank between two ideas and three or four ways to join them. Do this:\n\n1. Read the words **before** the blank and **after** it. Is each part a **complete sentence** (subject + verb + finished idea)?\n2. **Two complete sentences?** Then a comma alone is wrong and nothing at all is wrong. Pick the full stop, the semicolon, or comma + FANBOYS.\n3. **One part starts with because / although / when?** Then it is dependent — keep it **attached**, and use a comma only if it comes **first**.",
-    notes: [
-      { tone: "homework", text: "A comma + **however / then / also / therefore** is still a splice. Those words are not FANBOYS." },
-    ],
-  },
-  {
     layout: "stack",
     icon: "ListChecks",
     accent: "#e11d48",
-    title: "Before You Trust a Sentence",
+    title: "Check Every Sentence",
     variant: "checklist",
     columns: 1,
-    content: "Run every drop-down, and every sentence of your own writing, through these questions.",
     items: [
       { text: "Does it have a **subject**, a **real verb**, and a **complete idea**?" },
       { text: "Does it start with **because / although / when**? Then it must be **attached** to a complete sentence." },
       { text: "Are there **two complete sentences** inside it? Then a comma alone is a **splice** and nothing at all is a **run-on**." },
-      { text: "Fix with **. ; , + FANBOYS** or a **subordinator** — and pick the joiner by meaning." },
+      { text: "Fix with **. ; , + FANBOYS** or a **subordinator**, and pick the joiner by meaning." },
+    ],
+    notes: [
+      { tone: "homework", text: "A comma + **however / then / also / therefore** is still a splice. Those words are not FANBOYS." },
     ],
   },
   {
@@ -218,3 +246,21 @@ export const notes = [
     subtitle: "You can tell a **complete sentence** from a **fragment**, spot a **run-on** and a **comma splice**, and fix them with a **full stop, a semicolon, comma + FANBOYS, or a subordinator**.",
   },
 ];
+
+// Number the "Write this down" boxes through the deck ("Write this down · 3 of 7")
+// and put the counts on the title slide, so a student knows what the lesson asks
+// of them and where they are in it. Counted here so they never drift.
+function numbered(deck) {
+  // `columns` is an array on a compare slide and a number on a stack slide.
+  const writes = deck.flatMap((s) => [...(s.notes || []), ...(Array.isArray(s.columns) ? s.columns : []).flatMap((c) => c.notes || [])])
+    .filter((n) => n.tone === "write");
+  writes.forEach((n, i) => { n.badge = `Write this down · ${i + 1} of ${writes.length}`; });
+  const questions = deck.filter((s) => s.check || s.activity).length;
+  deck[0].chips = [
+    { icon: "Pencil", text: `${writes.length} things to write down` },
+    { icon: "HelpCircle", text: `${questions} questions to answer` },
+  ];
+  return deck;
+}
+
+export const notes = numbered(slides);

@@ -66,7 +66,7 @@ class WidgetErrorBoundary extends Component {
  * full marks, which taught the student that clicking Next is the goal; the deck
  * now has to ask, and the answer has to be right.
  */
-function CheckBlock({ check, lang, answer, onAnswer, isDisplayMode, parseText, compact = false, side = false, badge = null }) {
+function CheckBlock({ check, lang, answer, onAnswer, isDisplayMode, parseText, compact = false, side = false, badge = null, number = null }) {
   const question = field(check, 'q', lang);
   const explanation = tr(lang, check.expEn || check.expVn, check.expVn || check.expEn, check.expFr || check.expEn || check.expVn);
 
@@ -82,7 +82,11 @@ function CheckBlock({ check, lang, answer, onAnswer, isDisplayMode, parseText, c
     <div className={shell}>
       <div className={`flex flex-wrap items-center gap-y-1 text-[#1899d6] dark:text-[#5cc8ff] font-black uppercase tracking-widest ${compact ? 'mb-2' : 'mb-3'} ${isDisplayMode ? 'text-[clamp(0.75rem,1.1vw,1.1rem)]' : 'text-[10px] lg:text-xs'}`}>
         <HelpCircle className={isDisplayMode ? 'w-5 h-5 mr-2' : 'w-4 h-4 mr-2'} strokeWidth={3} />
-        {tr(lang, 'Quick Check', 'Kiểm tra nhanh', 'Vérification rapide')}
+        {/* "Question 3 of 5": where this question sits among the deck's
+            scored items, so a student knows how many are left. */}
+        {number
+          ? tr(lang, `Question ${number.n} of ${number.of}`, `Câu hỏi ${number.n} / ${number.of}`, `Question ${number.n} sur ${number.of}`)
+          : tr(lang, 'Quick Check', 'Kiểm tra nhanh', 'Vérification rapide')}
         {badge}
       </div>
 
@@ -617,6 +621,8 @@ export default function Notes({ slides, onComplete, onProgress, onQuit, savedDat
   const slideAnswer = answerOf(currentIndex);
   const slideStored = checkAnswers[currentIndex] || null;
   const slideRetrying = !!reopened[currentIndex];
+  const checkPos = items.findIndex((x) => x.i === currentIndex);
+  const checkNumber = checkPos >= 0 ? { n: checkPos + 1, of: items.length } : null;
 
   // Flexible lesson layouts ported from the classroom Lessons project. A slide
   // with a `layout` renders through one of these; slides with only a `type`
@@ -925,6 +931,7 @@ export default function Notes({ slides, onComplete, onProgress, onQuit, savedDat
                       compact
                       side
                       badge={retryBadge()}
+                      number={checkNumber}
                     />
                     {itemFooter()}
                   </div>
@@ -1069,6 +1076,7 @@ export default function Notes({ slides, onComplete, onProgress, onQuit, savedDat
                             isDisplayMode={isDisplayMode}
                             parseText={parseInlineText}
                             badge={retryBadge()}
+                            number={checkNumber}
                           />
                           {itemFooter()}
                         </>
@@ -1197,6 +1205,7 @@ export default function Notes({ slides, onComplete, onProgress, onQuit, savedDat
                           isDisplayMode={isDisplayMode}
                           parseText={parseInlineText}
                           badge={retryBadge()}
+                          number={checkNumber}
                         />
                         {itemFooter()}
                       </>
