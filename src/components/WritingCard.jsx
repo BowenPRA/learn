@@ -4,7 +4,7 @@
 // only, like the English track it belongs to.
 import { useEffect, useState } from 'react'
 import { ArrowDownRight, ArrowUpRight, ChevronRight, Minus, PenLine } from 'lucide-react'
-import { essayStats, myEssays } from '../lib/essays.js'
+import { essayStats, myEssays, shownEssays } from '../lib/essays.js'
 
 const LOOK = { face: '#7C5CFF', edge: '#4B2FCF' }
 
@@ -12,7 +12,7 @@ export default function WritingCard() {
   const [list, setList] = useState(null)
   useEffect(() => {
     let alive = true
-    myEssays().then((l) => alive && setList(l)).catch(() => alive && setList([]))
+    myEssays().then((l) => alive && setList(shownEssays(l))).catch(() => alive && setList([]))
     return () => { alive = false }
   }, [])
   const stats = essayStats(list || [])

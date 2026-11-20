@@ -154,7 +154,7 @@ Added 14 November 2026 for the Upper Secondary English track (`UPPER_ENG`, class
 `english:Upper Secondary`), from the Dashboard's GED essay task. Every English unit ends
 with one.
 
-- **The task** (`app/writing/WritingTask.jsx`): a prompt from the unit's bank, about 5
+- **The task** (`app/writing/WritingTask.jsx`): the unit's one prompt, about 5
   minutes to plan with the questions for that kind of writing, then the writing box with
   sentence frames beside it. 30 minutes at the least (`writing.minutes`). Paste, cut, copy
   and drag are blocked and spell check is off; leaving the page, paste tries and big
@@ -169,17 +169,25 @@ with one.
   student retypes it until it matches. The task's XP is 8 parts the mark and 2 parts the
   corrections.
 - **My Writing** (`/unit/#/writing`, `app/writing/MyWriting.jsx`): the marks as a line
-  over time, the mistakes that keep coming back, unfinished writing and every essay with
-  its report and the teacher's note. The student home page has a card for it.
+  over time, the mistakes that keep coming back, unfinished writing and the best essay for
+  each unit with its report and the teacher's note. The student home page has a card for it.
+- **Best piece only** (Bowen, 20 November 2026; `../src/lib/essays.js` `shownEssays`): a
+  student may write a unit's task more than once, and English 1 offered three prompts
+  until then. Of each student's marked writing for one task only the best piece is shown
+  (the higher mark, the teacher's if they gave one; the later on a tie), on the task, in
+  My Writing, on the home card and to teachers. Drafts and writing waiting to be marked
+  still show, so they can be finished. Writing from a task taken off its unit (English 1's
+  One paragraph) is shown to nobody. Nothing is deleted.
 - **Saved** in `learn_essays` (`supabase/learn-essays.sql`), one row an attempt, through
   `../src/lib/essays.js`. Demo mode keeps essays in the browser, marks them with a
   stand-in that finds a few mistakes by rule, and starts with three sample essays.
 - **Teachers** see a class's writing on the class page (`../src/components/ClassWriting.jsx`):
-  a row a student, a column a prompt, flags and notes marked, "Needs a look" and "No note
-  yet" filters. A cell opens the reader (`/unit/#/writing/class/<class>/<essay>`,
+  a row a student, a column a writing task, each cell the student's best piece and "×n"
+  for how many they handed in, flags and notes marked, "Needs a look" and "No note yet"
+  filters. A cell opens the reader (`/unit/#/writing/class/<class>/<essay>`,
   `app/writing/ClassReader.jsx`): the essay and report, the teacher's own mark (0-12, or the
-  AI's) and a note the student reads in My Writing, and Previous / Next through the class's
-  essays on the same prompt. A student's name opens their writing over time
+  AI's) and a note the student reads in My Writing, and Previous / Next through each
+  student's best piece for the same task. A student's name opens their writing over time
   (`.../student/<id>`). Saved through `learn_essay_note`.
 
 A unit's `writing` in its `data.js`:
@@ -190,11 +198,13 @@ writing: {
   minutes: 30, minWords: 150, paragraphs: 3,
   focus: { label: 'Complete sentences', look: 'fragments, run-on sentences and comma splices' },
   frames: [],                   // optional extra frames { stage, text }
-  prompts: [{ id: 'u1w1', title, task, guidelines: [], plan: {} }],   // plan: example answers for this prompt's plan
+  prompt: { id: 'u1w1', title, task, guidelines: [], plan: {} },   // plan: example answers for the plan
 }
 ```
 
-A prompt's `id` is saved with every essay: never change it once used.
+One prompt a unit (Bowen, 20 November 2026: three prompts read as three assignments). A
+prompt's `id` is saved with every essay: never change it once used. Writing begun on an
+earlier prompt is finished from the prompt saved with it.
 
 **A practice write** is a second writing task in the same unit: a task
 `{ id: 'paragraph', kind: 'writing', writing: 'paragraph', xp, title, note }` in
@@ -203,7 +213,8 @@ With `practice: true` it may be shorter than 30 minutes (5 at the least), plans 
 minutes, tells the marker it is one paragraph (`rubric.js`; live only once
 `learn-grade-essay` is redeployed), and is left out of the marks-over-time line and the
 home card's latest mark (`essays.js` `markedOldestFirst`); its mistakes still count in
-"what keeps coming back". No unit has one since 20 November 2026 (Bowen took English 1's off).
+"what keeps coming back". No unit has one since 20 November 2026 (Bowen took English 1's off;
+the pieces written for it are kept and shown to nobody).
 
 The English track is English only (15 November 2026): no `…Vn` twins, no language
 switch (`unit/main.jsx` gives `UPPER_ENG` English alone), and examples that do not lean on

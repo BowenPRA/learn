@@ -49,8 +49,8 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **Logins on the class page**: make logins, Reset code, Block / Unblock, last seen. `src/pages/ClassView.jsx`
 - **Login cards**: print name, login name, secret code and address; Done forgets them. `src/pages/LoginCards.jsx`, `src/lib/cards.js` · `/t/:classKey/cards`
 - **Unit XP table**: a class's XP task by task, one table a unit. `src/components/UnitXPTable.jsx`
-- **Writing (class page)**: a class's timed writing, a row a student and a column a prompt, with flags, notes, averages and filters (needs a look, no note yet). `src/components/ClassWriting.jsx`
-- **Writing reader (teacher)**: one essay with the AI's report, the teacher's own mark and note, Previous and Next through the class on the same prompt; one student's writing over time. `unit/app/writing/ClassReader.jsx` · `/unit/#/writing/class/<class>/<essay>`, `/unit/#/writing/class/<class>/student/<id>`
+- **Writing (class page)**: a class's timed writing, a row a student and a column a writing task, each cell the student's best piece (×n for how many they wrote), with flags, notes, averages and filters (needs a look, no note yet). `src/components/ClassWriting.jsx`
+- **Writing reader (teacher)**: one essay with the AI's report, the teacher's own mark and note, Previous and Next through each student's best piece for the same task; one student's writing over time. `unit/app/writing/ClassReader.jsx` · `/unit/#/writing/class/<class>/<essay>`, `/unit/#/writing/class/<class>/student/<id>`
 - **Class gate**: a class page for a non-PRA Learn class goes home. `src/App.jsx`
 - **Teacher's plan**: staff-only printable plan of a deck (one A4 page). `classroom/src/pages/Plan.jsx` · `/classroom/#/plan/<course>/<slug>`
 
@@ -115,13 +115,14 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **Maths 7.1 Ordering fractions**: lesson notes for working alone (five typed fill-in questions, a how-to for bus stop division), Mixed ↔ improper and Which is bigger? (Workbook-style step sets), Fractions to decimals, quiz. `unit/src/data/Y7_MATH/U07_1/`, `unit/content/Y7_MATH/U07_1/` · `/unit/#/Y7_MATH/U07_1`
 - **Task kind steps (Workbook)**: fresh Workbook-style problems on the step engine. `unit/app/Workbook.jsx`, `unit/content/<TRACK>/<UNIT>/`
 - **Task kind quiz**: end-of-unit quiz. `unit/src/tasks/Assessment.jsx`
-- **Task kind writing (Timed writing)**: prompt bank, 5-minute plan, 30+ minutes against the server's clock, paste blocked, leaving the page counted, AI mark /12, then the corrections. `unit/app/writing/WritingTask.jsx` · `/unit/#/<TRACK>/<UNIT>/writing`
+- **Task kind writing (Timed writing)**: one prompt a unit, 5-minute plan, 30+ minutes against the server's clock, paste blocked, leaving the page counted, AI mark /12, then the corrections; the student's best piece is shown under the task. `unit/app/writing/WritingTask.jsx` · `/unit/#/<TRACK>/<UNIT>/writing`
 - **No writing add-ons**: the essay, plan and correction boxes ask Grammarly, LanguageTool, spell check, autocorrect and Chrome's writing suggestions to stay out; one that works in the essay box anyway brings up a warning and a line on the report. `unit/app/writing/noAddOns.js`, `unit/app/writing/useAddOnWatch.js`
-- **Practice write (One paragraph)**: a shorter timed write on the same screen (`practice: true`, 10 minutes, 2-minute plan), marked and corrected the same way, left out of the marks-over-time line; no unit uses it since 20 November 2026. `unit/app/writing/WritingTask.jsx`
+- **Practice write (One paragraph)**: a shorter timed write on the same screen (`practice: true`, 10 minutes, 2-minute plan), marked and corrected the same way, left out of the marks-over-time line; no unit uses it since 20 November 2026, and the pieces written for English 1's are kept but shown to nobody. `unit/app/writing/WritingTask.jsx`
 - **Revision workshop (corrections)**: the student retypes each sentence the marker corrected. `unit/app/writing/RevisionWorkshop.jsx`, `unit/app/writing/revision.js`
 - **Sentence frames and plan**: frames and plan questions by kind of writing (story, description, explanation, argument, letter, summary, one paragraph); a prompt may give its own plan examples. `unit/app/writing/frames.js`, `unit/app/writing/Planner.jsx`
 - **Essay report**: mark, three parts, unit focus, next step, caps, flags, teacher note, mistakes marked in the text. `unit/app/writing/EssayReport.jsx`, `unit/app/writing/look.js`
-- **My Writing**: marks over time, mistakes that keep coming back, unfinished writing, every essay. `unit/app/writing/MyWriting.jsx` · `/unit/#/writing`, `/unit/#/writing/<id>`
+- **Best piece only**: of a student's writing for one unit task only the best piece is shown, on the task, in My Writing, on the home card and to teachers; writing from a task taken off its unit is not shown; nothing is deleted. `src/lib/essays.js` (`shownEssays`)
+- **My Writing**: marks over time, mistakes that keep coming back, unfinished writing, the best piece for each unit. `unit/app/writing/MyWriting.jsx` · `/unit/#/writing`, `/unit/#/writing/<id>`
 - **Essay store**: save, hand in, mark, revise; demo marker and sample history. `src/lib/essays.js`
 - **Grammar edit**: choose the right word inside a passage (engine GrammarEdit). `unit/src/tasks/GrammarEdit.jsx`
 - **Find & Fix**: click the mistakes in a passage and type the fixes (engine FindFix); one mistake missed across the task still earns full marks. `unit/src/tasks/Proofread.jsx`, `unit/src/utils/proofread.js`

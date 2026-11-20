@@ -1,13 +1,13 @@
 // A teacher reading a class's writing (/unit/#/writing/class/<class>/<essay>): the essay
 // and the AI's report on the left; the teacher's own mark and note on the right; Previous
-// and Next through the class's latest essays on the same prompt, by student name, so a
-// set can be marked in one sitting. /unit/#/writing/class/<class>/student/<id> is one
+// and Next through each student's best piece for the same writing task (essays.js
+// shownEssays), by student name, so a set can be marked in one sitting. /unit/#/writing/class/<class>/student/<id> is one
 // student's writing over time (My Writing, read by the teacher).
 import { useEffect, useMemo, useState } from 'react'
 import { AlertTriangle, ArrowLeft, ArrowRight, Check, ChevronLeft, Loader2, Moon, PenLine, Save, Sun, UserRound } from 'lucide-react'
 import useDarkMode from '../../src/hooks/useDarkMode.js'
 import { api } from '../../../src/lib/api.js'
-import { classEssays, markOf, needsALook, noteEssay } from '../../../src/lib/essays.js'
+import { classEssays, markOf, needsALook, noteEssay, shownEssays } from '../../../src/lib/essays.js'
 import { className } from '../../../src/data/subjects.js'
 import EssayReport from './EssayReport.jsx'
 import MyWriting from './MyWriting.jsx'
@@ -85,11 +85,12 @@ export default function ClassReader({ classKey, id, studentId, onOpen, onStudent
   const [got, setGot] = useClass(classKey)
   const essay = got?.list.find((e) => e.id === id) || null
   const nameOf = (sid) => got?.students.find((s) => s.id === sid)?.name || 'Student'
-  // The class's latest essay from each student on the same prompt, by name.
+  // Each student's best piece for the same writing task, by name (the open one too, if it is not).
   const set = useMemo(() => {
     if (!got || !essay) return []
     const latest = new Map()
-    for (const e of got.list) if (e.unitKey === essay.unitKey && e.promptId === essay.promptId && !latest.has(e.studentId)) latest.set(e.studentId, e)
+    for (const e of shownEssays(got.list)) if (e.unitKey === essay.unitKey && e.taskId === essay.taskId && e.status === 'marked' && !latest.has(e.studentId)) latest.set(e.studentId, e)
+    for (const e of got.list) if (e.unitKey === essay.unitKey && e.taskId === essay.taskId && !latest.has(e.studentId)) latest.set(e.studentId, e)
     if (!latest.has(essay.studentId) || latest.get(essay.studentId).id !== essay.id) latest.set(`${essay.studentId}:${essay.id}`, essay)
     const name = (e) => got.students.find((s) => s.id === e.studentId)?.name || ''
     return [...latest.values()].sort((a, b) => name(a).localeCompare(name(b)) || String(a.submittedAt).localeCompare(String(b.submittedAt)))

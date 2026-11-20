@@ -1,11 +1,12 @@
-// My Writing (/unit/#/writing): every piece of timed writing the student has done, read
-// back. The marks over time, the mistakes that keep coming back, writing still waiting
+// My Writing (/unit/#/writing): the student's timed writing, read back: the best piece
+// for each unit's writing task (essays.js shownEssays; the others are kept, not shown).
+// The marks over time, the mistakes that keep coming back, writing still waiting
 // (a draft, or handed in and not marked), and each essay with its report and any note
 // from the teacher (/unit/#/writing/<id>). Reads src/lib/essays.js; never writes.
 import { useEffect, useMemo, useState } from 'react'
 import { ArrowDownRight, ArrowRight, ArrowUpRight, ChevronLeft, Clock, FileText, Loader2, MessageSquare, Minus, Moon, PenLine, Sun, Trophy } from 'lucide-react'
 import useDarkMode from '../../src/hooks/useDarkMode.js'
-import { essayStats, markOf, markedOldestFirst, mistakeKinds, myEssays } from '../../../src/lib/essays.js'
+import { essayStats, markOf, markedOldestFirst, mistakeKinds, myEssays, shownEssays } from '../../../src/lib/essays.js'
 import { UNITS, unitHref, unitKey } from '../../../src/data/units.js'
 import Pip from '../../../src/components/Pip.jsx'
 import EssayReport from './EssayReport.jsx'
@@ -105,7 +106,8 @@ export default function MyWriting({ id, onOpen, onBack, essays = null, title = '
     myEssays().then((l) => alive && setFetched(l)).catch((e) => { if (alive) { setError(e.message); setFetched([]) } })
     return () => { alive = false }
   }, [essays])
-  const list = essays || fetched
+  const all = essays || fetched
+  const list = useMemo(() => (all ? shownEssays(all) : null), [all])
   useEffect(() => { document.title = `${title || 'My Writing'} · PRA Learn`; window.scrollTo(0, 0) }, [id, title])
 
   const marked = useMemo(() => markedOldestFirst(list || []), [list])
@@ -114,7 +116,7 @@ export default function MyWriting({ id, onOpen, onBack, essays = null, title = '
   const kinds = useMemo(() => mistakeKinds(markedOldestFirst(list || [], true).slice(-5)).slice(0, 5), [list])
   const waiting = teacher ? [] : (list || []).filter((e) => e.status !== 'marked')
   const done = (list || []).filter((e) => e.status === 'marked')
-  const one = id ? (list || []).find((e) => e.id === id) : null
+  const one = id ? (all || []).find((e) => e.id === id) : null
   const writingUnits = UNITS.filter((u) => !u.hidden && u.tasks.some((t) => t.kind === 'writing'))
   const search = window.location.search
 
@@ -183,7 +185,7 @@ export default function MyWriting({ id, onOpen, onBack, essays = null, title = '
             {kinds.length > 0 && (
               <section className="rounded-[2rem] border-2 border-b-4 border-amber-200 bg-amber-50 p-5 sm:p-6 dark:border-amber-900 dark:bg-amber-950/30">
                 <h2 className="text-lg font-black text-amber-900 dark:text-amber-100">What keeps coming back</h2>
-                <p className="mb-3 text-sm font-semibold text-amber-800/80 dark:text-amber-300/80">{teacher ? `In the last ${Math.min(5, marked.length)} pieces of writing.` : `In your last ${Math.min(5, marked.length)} pieces of writing.`}</p>
+                <p className="mb-3 text-sm font-semibold text-amber-800/80 dark:text-amber-300/80">{`In ${teacher ? 'the' : 'your'} last ${Math.min(5, marked.length) === 1 ? 'piece' : `${Math.min(5, marked.length)} pieces`} of writing.`}</p>
                 <ul className="space-y-2">
                   {kinds.map((k) => (
                     <li key={k.kind} className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 rounded-2xl bg-white/70 px-4 py-2.5 dark:bg-slate-900/50">

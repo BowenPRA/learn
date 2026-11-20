@@ -6,7 +6,7 @@
 //
 // `writing` is the unit's timed writing task (unit/app/writing/WritingTask.jsx): the
 // kind of writing, the time (30 minutes at the least), the length, the grammar the
-// marker looks hard for, and a bank of prompts. Prompts keep their ids once used.
+// marker looks hard for, and one prompt. A prompt keeps its id once used.
 import { assessment } from './assessment.js';
 import { notes } from './notes.js';
 
@@ -605,94 +605,21 @@ export const U01_DATA = {
       label: "Complete sentences",
       look: "fragments, run-on sentences and comma splices"
     },
-    prompts: [
-      {
-        id: "u1w1",
-        title: "A day that went wrong",
-        task: "Write a true story about a day when something went wrong. Tell what happened, how you felt, and how the day ended.",
-        guidelines: [
-          "Paragraph 1: where and when it happened, and who was there.",
-          "Paragraph 2: what went wrong, in the order it happened.",
-          "Paragraph 3: how it ended and what you learned.",
-          "Use the past tense. End every sentence with a full stop: never join two sentences with a comma."
-        ],
-      },
-      {
-        id: "u1w2",
-        title: "Someone who helped me",
-        task: "Write about a time someone helped you learn something or get through a hard moment. Who were they, what did they do, and why do you still remember it?",
-        guidelines: [
-          "Paragraph 1: who the person is and how you know them.",
-          "Paragraph 2: the moment they helped you, with details.",
-          "Paragraph 3: why it still matters to you.",
-          "Join some ideas with because, when or although, and keep each joined idea attached to a full sentence."
-        ],
-      },
-      {
-        id: "u1w3",
-        title: "My first time",
-        task: "Write about the first time you did something new: riding a motorbike, cooking a meal, speaking in front of a class, travelling alone. What happened, and how did it change you?",
-        guidelines: [
-          "Paragraph 1: what you were about to do and how you felt before.",
-          "Paragraph 2: what happened, step by step.",
-          "Paragraph 3: how it ended and what changed.",
-          "Use at least one semicolon and one sentence joined with but or so."
-        ],
-      }
-    ]
-  },
-  // The short practice write before the 30-minute story (task `paragraph` in src/data/units.js):
-  // one paragraph in complete sentences. `practice: true` lets it be shorter than 30 minutes and
-  // keeps its mark out of the marks-over-time line. A prompt's `plan` gives the plan's example
-  // answers for that prompt (frames.js KINDS.paragraph has the questions).
-  paragraph: {
-    type: "paragraph",
-    practice: true,
-    minutes: 10,
-    minWords: 60,
-    paragraphs: 1,
-    focus: {
-      label: "Complete sentences",
-      look: "fragments, run-on sentences and comma splices"
-    },
-    prompts: [
-      {
-        id: "u1p1",
-        title: "A place I like",
-        task: "Write one paragraph about a place you like to go. Say where it is, what you do there, and why you like it.",
-        plan: { start: "the park near my home is my favourite place", detail: "quiet in the morning · I run there with my dad · the old trees", end: "it is where I feel calm" },
-        guidelines: [
-          "Sentence 1: say the main idea.",
-          "Next 3 or 4 sentences: give two or three details. Each one is a complete sentence.",
-          "Last sentence: finish the idea.",
-          "Check every sentence. No fragments, and no comma joining two sentences."
-        ],
-      },
-      {
-        id: "u1p2",
-        title: "A meal I remember",
-        task: "Write one paragraph about a meal you remember well. Say what you ate, who was with you, and why you remember it.",
-        plan: { start: "my birthday dinner last year was the best meal I remember", detail: "grilled fish and rice · my whole family · my uncle told funny stories", end: "it was the first time we were all together" },
-        guidelines: [
-          "Sentence 1: say the main idea.",
-          "Next 3 or 4 sentences: give two or three details. Each one is a complete sentence.",
-          "Last sentence: finish the idea.",
-          "Check every sentence. No fragments, and no comma joining two sentences."
-        ],
-      },
-      {
-        id: "u1p3",
-        title: "Something I want to learn",
-        task: "Write one paragraph about something you want to learn. Say what it is, how you will learn it, and why it matters to you.",
-        plan: { start: "I want to learn to play the guitar", detail: "videos online · practise every evening · play songs for my friends", end: "music makes me happy" },
-        guidelines: [
-          "Sentence 1: say the main idea.",
-          "Next 3 or 4 sentences: give two or three details. Each one is a complete sentence.",
-          "Last sentence: finish the idea.",
-          "Check every sentence. No fragments, and no comma joining two sentences."
-        ],
-      }
-    ]
+    // One prompt (Bowen, 20 November 2026). Until then Unit 1 offered three, and many
+    // students wrote more than one: "Someone who helped me" (u1w2) and "My first time"
+    // (u1w3) stay in their saved essays, and each student is shown only their best piece
+    // (src/lib/essays.js shownEssays).
+    prompt: {
+      id: "u1w1",
+      title: "A day that went wrong",
+      task: "Write a true story about a day when something went wrong. Tell what happened, how you felt, and how the day ended.",
+      guidelines: [
+        "Paragraph 1: where and when it happened, and who was there.",
+        "Paragraph 2: what went wrong, in the order it happened.",
+        "Paragraph 3: how it ended and what you learned.",
+        "Use the past tense. End every sentence with a full stop: never join two sentences with a comma."
+      ],
+    }
   },
   assessment,
   notes

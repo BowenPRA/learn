@@ -1,7 +1,7 @@
-// A unit's timed writing task (kind 'writing' in src/data/units.js): pick a prompt from
-// the unit's bank, plan, write against the clock, have it marked, then fix every mistake
-// in the revision workshop. Every attempt is kept (src/lib/essays.js) and read back in
-// My Writing (/unit/#/writing).
+// A unit's timed writing task (kind 'writing' in src/data/units.js): the unit's one
+// prompt, plan, write against the clock, have it marked, then fix every mistake in the
+// revision workshop. Every attempt is kept (src/lib/essays.js); the student is shown their
+// best one here and in My Writing (/unit/#/writing).
 //
 // The rules while writing, as on the Dashboard and stricter:
 //   - paste, cut, copy and drag-and-drop are blocked, and spell check, autocomplete and
@@ -17,7 +17,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { AlertTriangle, ArrowRight, Bot, CheckCircle2, ClipboardList, Clock, EyeOff, FileText, Lock, PenLine, Redo2, RotateCcw, ScrollText, Sparkles, Undo2 } from 'lucide-react'
 import TopBar from '../../src/components/TopBar.jsx'
 import { essayScore } from '../../../supabase/functions/learn-grade-essay/marking.js'
-import { markEssay, markOf, mistakeKinds, myEssays, newEssayId, saveEssay, saveRevision } from '../../../src/lib/essays.js'
+import { bestOf, markEssay, markOf, mistakeKinds, myEssays, newEssayId, saveEssay, saveRevision, shownEssays } from '../../../src/lib/essays.js'
 import EssayReport from './EssayReport.jsx'
 import { NO_ADDONS, addNames } from './noAddOns.js'
 import { useAddOnWatch } from './useAddOnWatch.js'
@@ -62,7 +62,6 @@ export default function WritingTask({ unit, data, task, onSave, onQuit, onOpenEs
   // named by its task (`task.writing`), may be shorter than 30 minutes, and is left out of
   // the marks-over-time line (essays.js markedOldestFirst).
   const cfg = useMemo(() => data[task.writing] || data.writing || {}, [data, task.writing])
-  const prompts = useMemo(() => cfg.prompts || [], [cfg])
   const kind = kindOf(cfg.type)
   const unitKey = `${unit.track}/${unit.unit}`
   const minutes = Math.max(cfg.practice ? 5 : 30, cfg.minutes || 30)
@@ -72,7 +71,6 @@ export default function WritingTask({ unit, data, task, onSave, onQuit, onOpenEs
 
   const [stage, setStage] = useState('loading')   // loading start plan write marking report revise error
   const [mine, setMine] = useState([])
-  const [pick, setPick] = useState(0)
   const [essay, setEssay] = useState(null)          // the saved row being written or read
   const [body, setBody] = useState('')
   const [plan, setPlan] = useState({})
@@ -93,8 +91,12 @@ export default function WritingTask({ unit, data, task, onSave, onQuit, onOpenEs
   const latest = useRef({})
 
   const attempts = useMemo(() => mine.filter((e) => e.unitKey === unitKey && e.taskId === task.id), [mine, unitKey, task.id])
-  const watch = useMemo(() => mistakeKinds(mine.filter((e) => e.status === 'marked').slice(0, 5)).slice(0, 3), [mine])
-  const current = prompts[pick]
+  const marked = attempts.filter((e) => e.status === 'marked')
+  const best = bestOf(marked)
+  const watch = useMemo(() => mistakeKinds(shownEssays(mine).filter((e) => e.status === 'marked').slice(0, 5)).slice(0, 3), [mine])
+  // One prompt a unit (Bowen, 20 November 2026). Writing begun on an earlier prompt is
+  // finished on its own, from the prompt saved with it.
+  const current = cfg.prompt || null
 
   /* ---- loading: past attempts, and a draft or unmarked essay to go back to ---- */
   useEffect(() => {
@@ -102,13 +104,9 @@ export default function WritingTask({ unit, data, task, onSave, onQuit, onOpenEs
     myEssays().then((list) => {
       if (!alive) return
       setMine(list)
-      const done = new Set(list.filter((e) => e.unitKey === unitKey && e.taskId === task.id).map((e) => e.promptId))
-      const fresh = prompts.findIndex((p) => !done.has(p.id))
-      setPick(fresh >= 0 ? fresh : 0)
       setStage('start')
     }).catch((e) => { if (alive) { setProblem(e.message); setStage('start') } })
     return () => { alive = false }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [unitKey, task.id])
 
   const pending = attempts.find((e) => e.status === 'draft' || e.status === 'submitted' || e.status === 'error')
@@ -228,7 +226,6 @@ export default function WritingTask({ unit, data, task, onSave, onQuit, onOpenEs
     const end = Date.parse(e.startedAt) + e.minutesAllowed * 60000
     flags.current = { pasteTries: 0, tabAways: 0, secondsAway: 0, bigInserts: 0, ...e.flags }
     setEssay(e); setBody(e.body || ''); setPlan(e.plan || {}); setHist({ stack: [e.body || ''], i: 0 })
-    setPick(Math.max(0, prompts.findIndex((p) => p.id === e.promptId)))
     setDeadline(end); setNow(Date.now())
     if (end <= Date.now()) {
       flags.current.timedOut = true
@@ -300,7 +297,8 @@ export default function WritingTask({ unit, data, task, onSave, onQuit, onOpenEs
   const p = essay?.prompt || (current ? promptRecord(cfg, current) : {})
   const taskText = (pr) => pr.task
   const guide = (pr) => pr.guidelines || []
-  const promptSrc = prompts.find((x) => x.id === p.id) || current || {}
+  // The prompt as written in the data (it has the plan's examples), or as saved with the essay.
+  const promptSrc = current && current.id === p.id ? current : p
   const quitLabel = running ? 'Save & leave' : stage === 'start' ? 'Back' : 'Done'
   const top = (
     <TopBar onQuit={quit} current={0} total={1} progress={running ? Math.min(100, 100 - (secondsLeft / (minutes * 60)) * 100) : stage === 'report' || stage === 'revise' ? 100 : 0}
@@ -336,19 +334,6 @@ export default function WritingTask({ unit, data, task, onSave, onQuit, onOpenEs
               {lengthLine}
               {cfg.focus && <> This unit: <span className="text-violet-600 dark:text-violet-400">{cfg.focus.label}</span>.</>}
             </p>
-            {prompts.length > 1 && (
-              <div className="mt-5 flex flex-wrap gap-2">
-                {prompts.map((x, i) => {
-                  const tries = attempts.filter((e) => e.promptId === x.id && e.status === 'marked')
-                  return (
-                    <button key={x.id} type="button" onClick={() => setPick(i)}
-                      className={`rounded-xl border-2 px-3 py-2 text-left text-sm font-bold transition ${i === pick ? 'border-violet-500 bg-violet-50 text-violet-800 dark:bg-violet-950/40 dark:text-violet-200' : 'border-slate-200 text-slate-600 hover:border-violet-300 dark:border-slate-700 dark:text-slate-300'}`}>
-                      {x.title}{tries.length > 0 && <span className="ml-2 text-xs text-slate-400">✓ {Math.max(...tries.map(markOf))}/12</span>}
-                    </button>
-                  )
-                })}
-              </div>
-            )}
           </section>
 
           <section className="rounded-[1.5rem] border-2 border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
@@ -389,22 +374,18 @@ export default function WritingTask({ unit, data, task, onSave, onQuit, onOpenEs
             </div>
           )}
 
-          {attempts.filter((e) => e.status === 'marked').length > 0 && (
+          {best && (
             <section>
-              <p className="mb-2 px-1 text-[11px] font-black uppercase tracking-widest text-slate-400">Your writing in this unit</p>
-              <div className="space-y-2">
-                {attempts.filter((e) => e.status === 'marked').map((e) => (
-                  <button key={e.id} type="button" onClick={() => onOpenEssay?.(e.id)}
-                    className="flex w-full items-center gap-4 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-left transition hover:border-violet-300 dark:border-slate-800 dark:bg-slate-900">
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-lg font-black text-white" style={{ background: markTone(markOf(e)).face }}>{markOf(e)}</span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate font-black text-slate-800 dark:text-white">{e.prompt?.title}</span>
-                      <span className="text-sm font-semibold text-slate-500">{fmtDate(e.submittedAt)} · {e.wordCount} words</span>
-                    </span>
-                    <FileText className="h-5 w-5 text-slate-300" />
-                  </button>
-                ))}
-              </div>
+              <p className="mb-2 px-1 text-[11px] font-black uppercase tracking-widest text-slate-400">{marked.length > 1 ? `Your best writing in this unit · best of ${marked.length}` : 'Your writing in this unit'}</p>
+              <button type="button" onClick={() => onOpenEssay?.(best.id)}
+                className="flex w-full items-center gap-4 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-left transition hover:border-violet-300 dark:border-slate-800 dark:bg-slate-900">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-lg font-black text-white" style={{ background: markTone(markOf(best)).face }}>{best.report?.notMarked ? '–' : markOf(best)}</span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate font-black text-slate-800 dark:text-white">{best.prompt?.title}</span>
+                  <span className="text-sm font-semibold text-slate-500">{fmtDate(best.submittedAt)} · {best.wordCount} words</span>
+                </span>
+                <FileText className="h-5 w-5 text-slate-300" />
+              </button>
             </section>
           )}
         </div>

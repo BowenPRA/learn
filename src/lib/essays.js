@@ -12,6 +12,7 @@
 // common mistakes by rule, so the whole flow can be tried without the AI.
 import { DEMO } from './api.js'
 import { supabase } from './supabase.js'
+import { findUnit } from '../data/units.js'
 import { buildReport, measure, usableRevisions, words } from '../../supabase/functions/learn-grade-essay/marking.js'
 
 const DEMO_KEY = 'learn-demo-essays'
@@ -302,6 +303,46 @@ export async function noteEssay(id, { score = null, note = '', by = '' } = {}) {
 export function needsALook(e) {
   const f = e?.flags || {}
   return (f.tabAways >= 3) || f.pasteTries > 0 || f.bigInserts > 0 || f.addOns?.length > 0 || f.late || (e?.report?.classmateMatch >= 0.3) || !!e?.report?.notMarked || e?.status === 'error'
+}
+
+/* ---- what is shown ------------------------------------------------------ */
+
+/**
+ * False for writing from a task since taken off its unit (English 1's One paragraph,
+ * 20 November 2026). It stays in the database; nobody is shown it.
+ */
+export function onItsUnit(e) {
+  const [track, unit] = String(e?.unitKey || '').split('/')
+  const u = findUnit(track, unit)
+  return !u || u.tasks.some((t) => t.id === e.taskId && t.kind === 'writing')
+}
+
+// A real mark beats "not marked", which beats waiting to be marked; then the higher mark;
+// then the later piece.
+const rank = (e) => (e.status !== 'marked' ? 0 : e.report && !e.report.notMarked ? 2 : 1)
+const when = (e) => String(e.submittedAt || e.startedAt || '')
+const beats = (a, b) => (rank(a) - rank(b)) || (rank(a) === 2 ? markOf(a) - markOf(b) : 0) || when(a).localeCompare(when(b))
+
+/** The piece that counts out of one student's writing for one task (null for none). */
+export const bestOf = (list = []) => list.reduce((top, e) => (!top || beats(e, top) > 0 ? e : top), null)
+
+/**
+ * The writing students and teachers are shown (Bowen, 20 November 2026): of each student's
+ * marked writing for a unit's task only the best piece, so English 1's three prompts show
+ * as one; writing from a task taken off its unit not at all. Drafts and writing waiting to
+ * be marked stay, so they can be finished. Order is kept. Nothing is deleted.
+ */
+export function shownEssays(list = []) {
+  const best = new Map()
+  const keep = new Set()
+  for (const e of list) {
+    if (!onItsUnit(e)) continue
+    if (e.status !== 'marked') { keep.add(e); continue }
+    const k = `${e.studentId || ''}|${e.unitKey}|${e.taskId}`
+    if (!best.has(k) || beats(e, best.get(k)) > 0) best.set(k, e)
+  }
+  for (const e of best.values()) keep.add(e)
+  return list.filter((e) => keep.has(e))
 }
 
 /* ---- what the essays add up to ---------------------------------------- */
