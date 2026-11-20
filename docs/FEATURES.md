@@ -56,7 +56,7 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 
 ## 3. Classroom decks and the player
 
-- **Classroom page**: plays Mr Bowen's decks exactly as taught, after a PRA Learn sign-in. `classroom/main.jsx`, `classroom/index.html` · `/classroom/#/lesson/<course>/<slug>`
+- **Classroom page**: plays Mr Bowen's decks exactly as taught, to anyone with the link: no sign-in needed (games, plans and the Phone remote button need one). `classroom/main.jsx`, `classroom/index.html` · `/classroom/#/lesson/<course>/<slug>`
 - **Lesson list**: what can be opened and where it is listed, in teaching order. `src/data/classroomLessons.js`
 - **Hidden lesson**: `hidden: true` keeps a deck off every list; its address still opens it. `src/data/classroomLessons.js`
 - **Staff-only lesson**: `staffOnly: true` lists a deck for staff and never on a student's home. `src/data/classroomLessons.js`, `src/components/ClassroomLessons.jsx`
@@ -64,14 +64,14 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **Upper Secondary English class deck**: Unit 1 Complete Sentences, 16 slides for about 30 minutes, staff only; the class follows on the Unit 1 notes, and the plan says which notes slide goes with each part. `classroom/content/upper-english/U01/` · `/classroom/#/lesson/upper-english/U01`
 - **Lesson folder**: an index.js exporting meta, slides, plan, plus its files. `classroom/content/<course>/<slug>/`
 - **One lesson at a time**: lazy registry, each deck its own download. `classroom/content/registry.js`
-- **Viewer**: out, student, staff or other; only staff get plans and games. `classroom/viewer.js`
+- **Viewer**: out, student, staff or other; only staff get plans and games, and out gets no Phone remote button. `classroom/viewer.js`
 - **Deck player**: slides, reveals, arrow keys, toolbars, zoom. `classroom/src/components/Deck.jsx`, `classroom/src/components/DeckChrome.jsx`
 - **Slide layouts**: callout, compare, gallery, game, hero, showcase, split, stack, statement, steps. `classroom/src/components/layouts/`
 - **Widgets**: a slide's interactive React component, given `lang`. `classroom/src/components/WidgetRenderer.jsx`
 - **Project mode (display mode)**: full screen, no toolbars, type about 40% larger. `classroom/src/lib/useDisplayMode.js`
 - **Dark mode**: light/dark switch, kept in localStorage. `classroom/src/lib/useDarkMode.js`
 - **Languages EN / VN / FR / EN+FR**: twin fields `…Vn`, `…Fr`; `tr()` and `field()`. `classroom/src/lib/lang.js`
-- **Phone remote**: QR + 4-character room code; the phone turns slides, opens answers, presses buttons. `classroom/src/remote/DeckRemote.jsx`, `classroom/src/components/RemotePanel.jsx` · `/classroom/#/remote/<room>`
+- **Phone remote**: QR + 4-character room code; the phone turns slides, opens answers, presses buttons; the deck's button only for someone signed in. `classroom/src/remote/DeckRemote.jsx`, `classroom/src/components/RemotePanel.jsx` · `/classroom/#/remote/<room>`
 - **Remote transport**: BroadcastChannel on one laptop, Supabase realtime broadcast to a phone. `classroom/src/lib/remote/bus.js`, `classroom/src/lib/remote/room.js`, `classroom/src/lib/remote/client.js`
 - **Slide buttons on the phone**: answer box and widget buttons reachable from the remote. `classroom/src/lib/deckControls.js`
 - **Plan notes on the phone**: the plan cut up slide by slide; staff only. `classroom/src/remote/planNotes.js`

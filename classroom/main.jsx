@@ -3,11 +3,12 @@
 // classroom decks exactly as he teaches them, with every slide, widget, reveal and the
 // EN/FR switch. The deck player (src/) and the lessons (content/) came from
 // BowenPRA/classroom on 10 Nov 2026 and are edited here now (README.md). This file
-// asks for a PRA Learn sign-in, opens only the lessons listed in
-// src/data/classroomLessons.js, downloads one lesson's code at a time, and sends the
-// deck's Back (and Next on the last slide) to the PRA Learn home instead of the
-// classroom's course page. Staff also get the teacher's plan (#/plan/<course>/<slug>);
-// students never do.
+// opens only the lessons listed in src/data/classroomLessons.js, downloads one
+// lesson's code at a time, and sends the deck's Back (and Next on the last slide) to
+// the PRA Learn home instead of the classroom's course page. A deck needs no sign-in
+// (Bowen, 20 Nov 2026: a link to his slides works for anyone); the games, the
+// teacher's plan (#/plan/<course>/<slug>) and the plan's notes on the phone are for
+// staff only, and the Phone remote button for anyone signed in.
 import { StrictMode, Suspense, lazy, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { HashRouter, Route, Routes, useNavigate, useParams } from 'react-router-dom'
@@ -80,26 +81,34 @@ function useLesson(courseId, slug, enabled) {
   return [state.key === key ? state.value : null, () => setAttempt((n) => n + 1)]
 }
 
-/** A deck, for anyone signed in to PRA Learn (a student or staff, or demo mode).
+/** A deck, for anyone with the link: signed in or not (Bowen, 20 Nov 2026).
  *  A game opens for staff only; anyone else goes back to the PRA Learn home. */
 function LessonView() {
   const { courseId, slug } = useParams()
   const viewer = useViewer()
   const game = isGame(courseId, slug)
   const ok = canOpen(courseId, slug) && (!game || viewer === 'checking' || viewer === 'staff')
-  const [got, retry] = useLesson(courseId, slug, ok && viewer !== 'out' && viewer !== 'checking')
+  const [got, retry] = useLesson(courseId, slug, ok && viewer !== 'checking')
   // The browser tab names the lesson: "Tides · PRA Learn".
   const title = got?.lesson?.title || ''
   useEffect(() => { if (title) document.title = `${title} · PRA Learn` }, [title])
-  if (!ok || viewer === 'out' || (got && !got.failed && !got.lesson)) return <ToLearn />
+  if (!ok || (got && !got.failed && !got.lesson)) return <ToLearn />
   if (!got || got.failed) return <Waiting failed={Boolean(got?.failed)} onRetry={retry} />
   const { lesson } = got
   // A game that is its own page (Guess the Teacher): the whole window, none of the deck's bars.
   if (lesson.slides.length === 1 && lesson.slides[0].bare) return <BareGame slide={lesson.slides[0]} />
   // The deck as it is, never with the old Dashboard link. The teacher's plan (and
-  // its button) only for staff: it holds the answers.
+  // its button) only for staff: it holds the answers. The Phone remote button only
+  // for someone signed in: a visitor with a shared link has no use for it.
   const plan = viewer === 'staff' ? lesson.plan : null
-  return <Deck key={`${courseId}/${slug}`} lesson={{ ...lesson, plan, dashboard: null }} course={getCourse(courseId)} />
+  return (
+    <Deck
+      key={`${courseId}/${slug}`}
+      lesson={{ ...lesson, plan, dashboard: null }}
+      course={getCourse(courseId)}
+      remoteButton={viewer !== 'out'}
+    />
+  )
 }
 
 /** A one-slide game marked `bare`, filling the window, with its own Exit back to PRA Learn's home. */

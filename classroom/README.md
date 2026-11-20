@@ -21,7 +21,7 @@ Tailwind theme and never mix with PRA Learn's.
 | `content/registry.js` | Finds the lesson folders and loads one lesson's code when it is opened. |
 | `src/` | The deck player: `components/Deck.jsx`, layouts, chrome, the phone remote (`remote/`) and the teacher's plan page (`pages/Plan.jsx`). |
 | `tailwind.config.js` | The classroom's Tailwind theme. |
-| `index.html`, `main.jsx` | The page: a PRA Learn sign-in (or demo), only the lessons listed in `src/data/classroomLessons.js`, Back goes to the PRA Learn home, no old Dashboard link. |
+| `index.html`, `main.jsx` | The page: open to anyone with a deck's link, no sign-in needed; only the lessons listed in `src/data/classroomLessons.js`, Back goes to the PRA Learn home, no old Dashboard link. |
 | `viewer.js` | Who has the page open: a student, staff, or nobody signed in. |
 | `deck.css`, `tailwind.deck.js` | The classroom's `src/index.css` built with its theme, scanning this folder only. |
 | `SOURCE.json` | Where these files came from (BowenPRA/classroom 50586cc, 10 Nov 2026). |
@@ -72,6 +72,24 @@ A lesson's `plan` (timings, notes and the answer key) is for staff only.
 The plan is hidden on screen, not on the network: it is part of the lesson's code,
 so someone reading the downloaded JavaScript could still find it. Moving the plans
 out of the lesson's code would close that.
+
+## Who can open them
+
+Bowen, 20 November 2026: a link to his slides works for anyone. So a deck opens with
+no sign-in, as a student sees it, minus the Phone remote button. The rest still needs
+one:
+
+- **Games** (Jeopardy, Guess Who, Guess the Teacher's TV screen): staff only, because
+  each holds its answers. Guess the Teacher's phone page (`#/play/<room>`) stays open
+  to anyone, as before.
+- **The teacher's plan**: staff only (below).
+- **The Phone remote button**: anyone signed in. The phone page itself
+  (`#/remote/<room>`) needs no sign-in and shows the plan's notes to staff only.
+- **Units** (`/unit/`, the 7.1 unit included): a sign-in, as always, since they save
+  progress and XP.
+
+Science 1.1 and 1.2 show five Learner's Book crops (their `CREDITS.json` says not
+openly licensed); Bowen chose to open those decks too.
 
 ## Where people find them
 

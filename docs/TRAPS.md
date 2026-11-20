@@ -25,7 +25,9 @@ slug, class, unit, teacher, title and subtitle as in the deck's `meta`) and run
 `npm run check:lessons`, which also fails when a title in the list drifts from the deck.
 
 **`?demo` alone does not sign you in.** It puts PRA Learn in demo mode, but a fresh browser
-is still signed out and the deck redirects to the sign-in page. Fix: in a browser, press
+is still signed out: a deck opens (decks need no sign-in since 20 Nov 2026) with no plan
+button and no Phone remote button, and a game or a plan page redirects to the sign-in
+page. Fix: in a browser, press
 "Try as a student" or "Try as Mr. David" on the PRA Learn page first. The check scripts sign
 in by themselves: they set `sessionStorage['learn-demo-who']` (`src/lib/demo/backend.js`) to
 `teacher`, or `student` with `AS=student`. If the demo's sign-in changes, change the four

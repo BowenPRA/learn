@@ -24,7 +24,9 @@ const PREV_KEYS = new Set(['ArrowLeft', 'PageUp'])
 // The longest countdown the phone may set, in seconds.
 const TIMER_MAX = 60 * 60
 
-export default function Deck({ lesson, course }) {
+// `remoteButton` false: no Phone remote button in the toolbar or the dock (PRA
+// Learn: a visitor who is not signed in).
+export default function Deck({ lesson, course, remoteButton = true }) {
   const slides = lesson.slides || []
   const bilingual = course?.bilingual !== false
   const langs = deckLangs(course, lesson)
@@ -205,7 +207,7 @@ export default function Deck({ lesson, course }) {
   const nav = {
     index: currentIndex, total: slides.length, bilingual, langs, lang, setLang, picker,
     onManage: () => setPickerOpen(true), onPrev: handlePrev, onNext: handleNext,
-    remote: { on: remote.on, phones: remote.phones, onOpen: openRemote },
+    remote: remoteButton ? { on: remote.on, phones: remote.phones, onOpen: openRemote } : null,
   }
 
   return (

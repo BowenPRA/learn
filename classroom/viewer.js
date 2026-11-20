@@ -7,8 +7,10 @@
 //              or the demo teacher
 //   'other'    signed in, but neither (PRA Learn's own pages turn them away)
 //
-// The teacher's plan holds the answers, so only 'staff' gets it (the plan page,
-// the deck's plan button and the phone remote's notes). Asked once per page load.
+// Every deck opens for all four, 'out' included (Bowen, 20 Nov 2026), and 'out'
+// gets no Phone remote button. The teacher's plan holds the answers, so only
+// 'staff' gets it (the plan page, the deck's plan button and the phone remote's
+// notes), and only 'staff' opens a game. Asked once per page load.
 import { useEffect, useState } from 'react'
 import { api } from '../src/lib/api.js'
 
