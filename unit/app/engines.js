@@ -58,9 +58,9 @@ export const ENGINES = {
     pool: (u) => u.quads,
     props: usual,
   },
-  // Bus stop (short) division, column by column (the Dashboard's Year 7 Maths 3.2 task,
-  // brought over 20 November 2026). Maths 7.1 uses it for fractions as decimals, with
-  // worked examples to watch first and the times table written before dividing.
+  // Bus stop (short) division (the Dashboard's Year 7 Maths 3.2 task, brought over 20
+  // November 2026 and redesigned the same day): Maths 7.1's fractions as decimals, the
+  // whole bus stop open from the first problem, help only on request or after a mistake.
   BusStop: {
     nativeMax: 10,
     component: task('ShortDivision'),

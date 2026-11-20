@@ -84,11 +84,12 @@ export function PrevNote({ note }) {
  * The step card. steps: [{ key, label, state: 'todo' | 'now' | 'done' | 'shown' }];
  * n: the number of the step in hand; title + sub: what to do, in one line each;
  * msg: the task's message (split by msgParts); children: the work.
- * Show me (onShowMe) and Check (onCheck, checkLabel, checkDisabled) sit at the
- * foot; leave onCheck out for a step answered by tapping a choice.
+ * Hint (onHint, optional), Show me (onShowMe) and Check (onCheck, checkLabel,
+ * checkDisabled) sit at the foot; leave onCheck out for a step answered by tapping
+ * a choice.
  */
 export function StepPanel({
-  ink, lang, steps = [], n, title, sub, msg, children, onShowMe, onCheck, checkLabel, checkDisabled, compact = false, plain = false,
+  ink, lang, steps = [], n, title, sub, msg, children, onHint, onShowMe, onCheck, checkLabel, checkDisabled, compact = false, plain = false,
 }) {
   const { prev, now } = msgParts(msg, lang);
   const body = (
@@ -103,9 +104,9 @@ export function StepPanel({
       )}
       {children}
       {now && <Feedback tone={now.tone}>{now.text}</Feedback>}
-      {(onShowMe || onCheck) && (
+      {(onHint || onShowMe || onCheck) && (
         <div className="flex flex-wrap items-center justify-end gap-2">
-          {onShowMe && <HelpRow lang={lang} onShowMe={onShowMe} />}
+          {(onHint || onShowMe) && <HelpRow lang={lang} onHint={onHint} onShowMe={onShowMe} />}
           {onCheck && <CheckButton onClick={onCheck} disabled={checkDisabled} lang={lang} label={checkLabel} />}
         </div>
       )}

@@ -76,15 +76,22 @@ it ("From the classroom").
 Maths 7.1 (20 November 2026, built on the Workbook's Exercise 7.1 at Mr. Bowen's request;
 every number is new):
 
-- **Lesson** (`src/data/Y7_MATH/U07_1/notes.js`): 19 slides written for working alone, in
+- **Lesson** (`src/data/Y7_MATH/U07_1/notes.js`): 20 slides written for working alone, in
   the style of English 1's notes: 8 numbered "Write this down" boxes, red and green
   example strips for the two traps (adding to the top and the bottom; a big top read as a
-  big fraction), 13 questions, two "Try it in your notebook" slides with the answers
-  behind a button. It covers the Part 1 classroom deck (`U07_1a`) and what Part 2 will
-  teach: which is bigger, a common denominator, the division method, order of size. The
-  pictures are the classroom deck's own `diagrams.js`, imported; Cut Every Piece and
-  Slice by Slice are copies in the unit folder (`cut.jsx`, `slices.jsx`, with a plain
-  button in `ui.jsx`), since the unit's CSS only sees `unit/src`.
+  big fraction), 15 questions. Five are typed (Mr. Bowen, 20 November 2026: "some of the
+  slides should be questions for the students to fill in the answers"): the `fill`
+  activity (`src/components/notes/FillActivity.jsx`, `src/utils/fracFill.js`) shows
+  fraction sentences with boxes, such as `23/6 = [3] [5]/6` or `5/6 {>} 7/9`, marks them
+  with one Check, hints after a first mistake and then shows the answers; the validator
+  proves every line true. Slide 14 is the bus stop how-to ("give instructions how to do
+  the division towards the end"): his five steps on 3 ÷ 4 beside a numbered picture
+  (`busstopHow.js`), then the student's own 9 ÷ 4. It covers the Part 1 classroom deck
+  (`U07_1a`) and what Part 2 will teach: which is bigger, a common denominator, the
+  division method, order of size. The pictures are the classroom deck's own
+  `diagrams.js`, imported; Cut Every Piece and Slice by Slice are copies in the unit
+  folder (`cut.jsx`, `slices.jsx`, with a plain button in `ui.jsx`), since the unit's CSS
+  only sees `unit/src`.
 - **Mixed ↔ improper** (`content/Y7_MATH/U07_1/mixed.js`): Workbook Q4 both ways, 10
   problems built from their numbers: divide, the remainder, then the mixed number; or
   multiply, add, then the improper fraction.
@@ -93,15 +100,20 @@ every number is new):
   step of its own; the same whole number then needs a common denominator and an
   equivalent fraction for each part before the sign.
 - **Fractions to decimals** (engine `BusStop`, `src/tasks/ShortDivision.jsx`, the unit's
-  `shortDiv`): the Dashboard's Bus Stop task (Maths 3.2), copied 20 November 2026 with
-  `src/utils/shortDivExtras.js` and `src/components/math/ShortDivExtras.jsx`; the rest
-  it uses was already here and identical. Three item switches added for 7.1:
-  `fraction: true` (asked as "Write 13/8 as a decimal", with 13/8 = 13 ÷ 8 under it),
-  `watch: true` (a worked example, a column a press with a sentence for each, not
-  scored) and `table: 'always'` (the times table first for any divisor). Levels: Watch
-  me (3/4, 13/8), With help (the table first), On your own, and two that never stop,
-  rounded to 3 d.p. The whole fraction is divided (13 ÷ 8 = 1.625), not split into a
-  mixed number first as the Workbook does (Mr. Bowen, 20 November 2026).
+  `shortDiv`): the Dashboard's Bus Stop task (Maths 3.2), copied 20 November 2026 and
+  redesigned the same day (Mr. Bowen: "I don't like the initial intros as they will just
+  do spam clicks. it looks over scaffolded"). The worked examples, the times table stage
+  and the column-at-a-time guide are gone (with `shortDivExtras`). The whole bus stop is
+  open from the first problem, as on paper: the student types every digit and remainder,
+  presses +0 for a zero, and types the answer underneath (rounded, for a `dp` item). One
+  Check marks up to the first mistake, which turns red with a hint that never states the
+  digit; an empty box or a missing zero is pointed out without counting. Hint and Show
+  me only on request; a second wrong Check at a box fills that column in; a problem with
+  anything filled in pays half. `fraction: true` asks "Write 13/8 as a decimal", with
+  13/8 = 13 ÷ 8 under it. Three levels, 10 problems: the top smaller than the bottom,
+  bigger tops, and two that never stop, rounded to 3 d.p. The whole fraction is divided
+  (13 ÷ 8 = 1.625), not split into a mixed number first as the Workbook does (Mr. Bowen,
+  20 November 2026).
 - **Quiz**: 10 questions, two typed and one put in order; the questions are in English
   (the quiz has no French question text), every explanation has its French twin.
 

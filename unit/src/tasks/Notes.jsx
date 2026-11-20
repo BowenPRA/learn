@@ -167,6 +167,8 @@ const SIDE_ACTIVITIES = new Set(['predict', 'sort', 'order', 'estimate', 'hotspo
   'energychange',
   // @@SCI_U03_7_SIDE@@
   'energysplit',
+  // Maths 7.1: fraction sentences to fill in
+  'fill',
 ]);
 
 // The words around fixing mistakes (the results screen has its own, in NotesReview).

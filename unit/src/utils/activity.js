@@ -73,6 +73,10 @@ import { checkEnergyChangeActivity } from './energyChangeCheck.js';
 // energy-change diagram, count the joules. Proved by utils/energySplitCheck.js.
 import { checkEnergySplitActivity } from './energySplitCheck.js';
 
+// `fill` (Maths 7.1) — fraction sentences with boxes to type into: 23/6 = [3] [5]/6.
+// Read, marked and proved by utils/fracFill.js.
+import { checkFillActivity } from './fracFill.js';
+
 
 // The three maths types (plot / numberline / reflect) were added for the
 // Additional Mathematics decks: an equation is answered by CLICKING its key
@@ -153,6 +157,9 @@ export const ACTIVITY_TYPES = ['sort', 'order', 'estimate', 'hotspot', 'predict'
 
   // @@SCI_U03_7_ACT_TYPES@@
   'energysplit',
+
+  // Maths 7.1
+  'fill',
 
 ];
 
@@ -491,6 +498,9 @@ export function checkActivity(a, { bilingual = true } = {}) {
   // @@SCI_U03_7_ACT_CHECK@@
   if (a.type === 'energysplit') for (const p of checkEnergySplitActivity(a)) out.push(`energysplit ${p}`);
 
+  // Maths 7.1
+  if (a.type === 'fill') for (const p of checkFillActivity(a)) out.push(`fill ${p}`);
+
   return out;
 }
 
@@ -513,5 +523,5 @@ export function keepWhere(map, keep) {
 export function retryKeepsParts(activity) {
   if (!activity) return false;
   if (activity.type === 'formula') return activity.ask !== 'write';
-  return ['sort', 'order', 'plot', 'reflect', 'venn', 'terms', 'grid', 'flow', 'particles', 'line', 'busstop'].includes(activity.type);
+  return ['sort', 'order', 'plot', 'reflect', 'venn', 'terms', 'grid', 'flow', 'particles', 'line', 'busstop', 'fill'].includes(activity.type);
 }

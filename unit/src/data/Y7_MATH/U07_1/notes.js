@@ -13,14 +13,21 @@
 //   **bold** marks the mistake or the fix; " | tag" adds a label.
 // - Watch out (homework tone) only for a real trap; a tip is the quiet blue `tip`.
 // - The classroom's votes, whiteboards and standing game are questions here, each
-//   answer explained; its whiteboard sets are "Try it" slides with the answers behind
-//   a button. Nothing scrolls at 1366×768.
+//   answer explained. Nothing scrolls at 1366×768.
+// - Bowen, 20 November 2026: "some of the slides should be questions for the students
+//   to fill in the answers". Five are typed (`fill`, utils/fracFill.js): the two
+//   whiteboard sets (Fill the Box, Change These), 23/6 → mixed, 3 2/5 → improper, and
+//   5/6 or 7/9 over 18. The choices that are the point stay multiple choice.
+// - "give instructions how to do the division towards the end": slide 14 is his five
+//   steps on 3 ÷ 4 beside a numbered picture (busstopHow.js); slide 15 is the method to
+//   write down and the student's own bus stop.
 // English and French (meta.vietnamese: false). The diagrams are the classroom deck's
 // own (one source); the two steppers are copies in this folder (cut.jsx, slices.jsx).
 // Numbers: the deck's own, or new; none is a Workbook question.
 import { DIAGRAMS } from '../../../../../classroom/content/y7-math/U07_1a/diagrams.js';
 import { CutEveryPiece } from './cut.jsx';
 import { SliceBySlice } from './slices.jsx';
+import { BUSSTOP_HOW } from './busstopHow.js';
 
 const TEAL = '#0087a8';
 const PURPLE = '#5c2483';
@@ -177,19 +184,18 @@ const slides = [
     },
   },
 
-  // 6 ─ Try it: fill the box (the classroom's whiteboard set) ─────────────────
+  // 6 ─ Your turn: fill the box (the classroom's whiteboard set, typed) ────────
   {
     layout: 'split',
     accent: GREEN,
     icon: 'PenLine',
-    eyebrow: 'Try it in your notebook',
-    eyebrowFr: 'Essaie dans ton cahier',
+    eyebrow: 'Your turn',
+    eyebrowFr: 'À toi',
     title: 'Fill the Box',
     titleFr: 'Complète',
     ratio: 45,
-    inlineSvg: DIAGRAMS.FILL_BOX,
-    content: '**a** to **d**: write the missing number.\n**e** and **f**: write **=** or **≠**.\nThen check your answers.',
-    contentFr: '**a** à **d** : écris le nombre qui manque.\n**e** et **f** : écris **=** ou **≠**.\nPuis vérifie tes réponses.',
+    content: '**a** to **d**: type the missing number.\n**e** and **f**: tap **=** or **≠**.',
+    contentFr: '**a** à **d** : écris le nombre qui manque.\n**e** et **f** : touche **=** ou **≠**.',
     notes: [
       {
         tone: 'tip',
@@ -198,11 +204,15 @@ const slides = [
         textFr: '**=** se dit **is equal to** (est égal à). **≠** se dit **is not equal to** (n’est pas égal à).',
       },
     ],
-    reveal: {
-      label: 'Show the answers',
-      labelFr: 'Voir les réponses',
-      answer: '**a** 6, **b** 6, **c** 24, **d** 3 (÷ 4)\n**e** = (× 3)\n**f** ≠ (it adds 1)',
-      answerFr: '**a** 6, **b** 6, **c** 24, **d** 3 (÷ 4)\n**e** = (× 3)\n**f** ≠ (on ajoute 1)',
+    activity: {
+      id: 'act_fill_box',
+      type: 'fill',
+      prompt: 'Fill every box. Then press Check.',
+      promptFr: 'Remplis chaque case. Puis appuie sur Vérifier.',
+      lines: ['3/5 = [12]/20', '2/7 = [6]/21', '5/6 = 20/[24]', '12/16 = [3]/4', '3/4 {=} 9/12', '2/5 {≠} 3/6'],
+      split: 4,
+      explain: '**a** × 4, **b** × 3, **c** × 4, **d** ÷ 4: the top and the bottom by the same number. **e** is × 3 on both, so **=**. **f** adds 1 to both, so **≠**.',
+      explainFr: '**a** × 4, **b** × 3, **c** × 4, **d** ÷ 4 : le haut et le bas par le même nombre. **e**, c’est × 3 aux deux, donc **=**. **f** ajoute 1 aux deux, donc **≠**.',
     },
   },
 
@@ -279,18 +289,14 @@ const slides = [
         textFr: '**Impropre → mixte :** divise. Nombre entier = la réponse. En haut = le **reste (remainder)**. Le bas ne change pas.',
       },
     ],
-    check: {
-      id: 'chk_to_mixed',
-      q: 'Write $\\dfrac{23}{6}$ as a mixed number.',
-      qFr: 'Écris $\\dfrac{23}{6}$ en nombre mixte.',
-      options: [
-        { val: 'A', text: '$3\\dfrac{5}{6}$', textFr: '$3\\dfrac{5}{6}$' },
-        { val: 'B', text: '$5\\dfrac{3}{6}$', textFr: '$5\\dfrac{3}{6}$' },
-        { val: 'C', text: '$3\\dfrac{5}{23}$', textFr: '$3\\dfrac{5}{23}$' },
-      ],
-      correct: 'A',
-      expEn: '$23 \\div 6 = 3$ remainder $5$ (3 × 6 = 18, and 23 − 18 = 5). Whole number **3**, remainder **5** on top, bottom **6**: $3\\dfrac{5}{6}$. B swaps the answer and the remainder. C changes the bottom: it stays 6.',
-      expFr: '$23 \\div 6 = 3$ reste $5$ (3 × 6 = 18, et 23 − 18 = 5). Nombre entier **3**, reste **5** en haut, bas **6** : $3\\dfrac{5}{6}$. B échange la réponse et le reste. C change le bas : il reste 6.',
+    activity: {
+      id: 'act_to_mixed',
+      type: 'fill',
+      prompt: 'Write it as a mixed number.',
+      promptFr: 'Écris-la en nombre mixte.',
+      lines: ['23/6 = [3] [5]/6'],
+      explain: '$23 \\div 6 = 3$ remainder $5$ (3 × 6 = 18, and 23 − 18 = 5). Whole number **3**, remainder **5** on top, bottom **6**.',
+      explainFr: '$23 \\div 6 = 3$ reste $5$ (3 × 6 = 18, et 23 − 18 = 5). Nombre entier **3**, reste **5** en haut, bas **6**.',
     },
   },
 
@@ -318,39 +324,38 @@ const slides = [
         textFr: '**Mixte → impropre :** nombre entier × bas, puis + haut. Le bas ne change pas.',
       },
     ],
-    check: {
-      id: 'chk_to_improper',
-      q: 'Write $3\\dfrac{2}{5}$ as an improper fraction.',
-      qFr: 'Écris $3\\dfrac{2}{5}$ en fraction impropre.',
-      options: [
-        { val: 'A', text: '$\\dfrac{5}{5}$', textFr: '$\\dfrac{5}{5}$' },
-        { val: 'B', text: '$\\dfrac{6}{5}$', textFr: '$\\dfrac{6}{5}$' },
-        { val: 'C', text: '$\\dfrac{17}{5}$', textFr: '$\\dfrac{17}{5}$' },
-      ],
-      correct: 'C',
-      expEn: '$3 \\times 5 = 15$ fifths, and $15 + 2 = 17$: $\\dfrac{17}{5}$. A adds 3 + 2. B multiplies 3 × 2. Check: $17 \\div 5 = 3$ remainder $2$, back to $3\\dfrac{2}{5}$.',
-      expFr: '$3 \\times 5 = 15$ cinquièmes, et $15 + 2 = 17$ : $\\dfrac{17}{5}$. A fait 3 + 2. B fait 3 × 2. Vérifie : $17 \\div 5 = 3$ reste $2$, on retrouve $3\\dfrac{2}{5}$.',
+    activity: {
+      id: 'act_to_improper',
+      type: 'fill',
+      prompt: 'Write it as an improper fraction.',
+      promptFr: 'Écris-le en fraction impropre.',
+      lines: ['3 2/5 = [17]/5'],
+      explain: '$3 \\times 5 = 15$ fifths, and $15 + 2 = 17$. Check: $17 \\div 5 = 3$ remainder $2$, back to $3\\dfrac{2}{5}$.',
+      explainFr: '$3 \\times 5 = 15$ cinquièmes, et $15 + 2 = 17$. Vérifie : $17 \\div 5 = 3$ reste $2$, on retrouve $3\\dfrac{2}{5}$.',
     },
   },
 
-  // 11 ─ Try it: change these (the classroom's whiteboard set) ───────────────
+  // 11 ─ Your turn: change these (the classroom's whiteboard set, typed) ──────
   {
     layout: 'split',
     accent: GREEN,
     icon: 'PenLine',
-    eyebrow: 'Try it in your notebook',
-    eyebrowFr: 'Essaie dans ton cahier',
+    eyebrow: 'Your turn',
+    eyebrowFr: 'À toi',
     title: 'Change These',
     titleFr: 'Transforme-les',
     ratio: 45,
-    inlineSvg: DIAGRAMS.CHANGE_THESE,
-    content: '**a** to **d**: write as a **mixed number**.\n**e** to **g**: write as an **improper fraction**.\nThen check your answers.',
-    contentFr: '**a** à **d** : écris en **nombre mixte**.\n**e** à **g** : écris en **fraction impropre**.\nPuis vérifie tes réponses.',
-    reveal: {
-      label: 'Show the answers',
-      labelFr: 'Voir les réponses',
-      answer: '**a** $2\\dfrac{1}{4}$, **b** $2\\dfrac{3}{5}$, **c** $5\\dfrac{2}{3}$, **d** $2\\dfrac{3}{10}$\n**e** $\\dfrac{7}{2}$, **f** $\\dfrac{13}{5}$, **g** $\\dfrac{14}{3}$',
-      answerFr: '**a** $2\\dfrac{1}{4}$, **b** $2\\dfrac{3}{5}$, **c** $5\\dfrac{2}{3}$, **d** $2\\dfrac{3}{10}$\n**e** $\\dfrac{7}{2}$, **f** $\\dfrac{13}{5}$, **g** $\\dfrac{14}{3}$',
+    content: '**a** to **d**: write as a **mixed number**.\n**e** to **g**: write as an **improper fraction**.',
+    contentFr: '**a** à **d** : écris en **nombre mixte**.\n**e** à **g** : écris en **fraction impropre**.',
+    activity: {
+      id: 'act_change_these',
+      type: 'fill',
+      prompt: 'Fill every box. Then press Check.',
+      promptFr: 'Remplis chaque case. Puis appuie sur Vérifier.',
+      lines: ['9/4 = [2] [1]/4', '13/5 = [2] [3]/5', '17/3 = [5] [2]/3', '23/10 = [2] [3]/10', '3 1/2 = [7]/2', '2 3/5 = [13]/5', '4 2/3 = [14]/3'],
+      split: 4,
+      explain: '**a** to **d**: divide, and the remainder goes on top. **e** to **g**: multiply, then add the top: 3 × 2 + 1 = 7, 2 × 5 + 3 = 13, 4 × 3 + 2 = 14.',
+      explainFr: '**a** à **d** : divise, et le reste va en haut. **e** à **g** : multiplie, puis ajoute le haut : 3 × 2 + 1 = 7, 2 × 5 + 3 = 13, 4 × 3 + 2 = 14.',
     },
   },
 
@@ -413,33 +418,57 @@ const slides = [
         textFr: '**Dénominateur commun (common denominator) :** le même nombre en bas. Trouve-le dans les **deux** tables, puis compare les hauts.',
       },
     ],
-    check: {
-      id: 'chk_common',
-      q: 'Which is bigger: $\\dfrac{5}{6}$ or $\\dfrac{7}{9}$?',
-      qFr: 'Laquelle est la plus grande : $\\dfrac{5}{6}$ ou $\\dfrac{7}{9}$ ?',
-      options: [
-        { val: 'A', text: '$\\dfrac{5}{6}$', textFr: '$\\dfrac{5}{6}$' },
-        { val: 'B', text: '$\\dfrac{7}{9}$', textFr: '$\\dfrac{7}{9}$' },
-        { val: 'C', text: 'They are the same.', textFr: 'Elles sont égales.' },
+    activity: {
+      id: 'act_common',
+      type: 'fill',
+      prompt: 'Which is bigger? Use the same bottom, **18**. Then choose <, = or >.',
+      promptFr: 'Laquelle est la plus grande ? Prends le même bas, **18**. Puis choisis <, = ou >.',
+      lines: [
+        '5/6 = [15]/18',
+        '7/9 = [14]/18',
+        { q: '5/6 {>} 7/9', hint: 'Look at your answers to a and b. Same bottom, so compare the tops.', hintFr: 'Regarde tes réponses a et b. Même bas, donc compare les hauts.' },
       ],
-      correct: 'A',
-      expEn: '**18** is in the 6 and the 9 times tables. $\\dfrac{5}{6} = \\dfrac{15}{18}$ (× 3) and $\\dfrac{7}{9} = \\dfrac{14}{18}$ (× 2). 15 > 14, so $\\dfrac{5}{6}$ is bigger. Bigger numbers in $\\dfrac{7}{9}$ do not make it bigger.',
-      expFr: '**18** est dans la table de 6 et de 9. $\\dfrac{5}{6} = \\dfrac{15}{18}$ (× 3) et $\\dfrac{7}{9} = \\dfrac{14}{18}$ (× 2). 15 > 14, donc $\\dfrac{5}{6}$ est plus grande. Les grands nombres de $\\dfrac{7}{9}$ ne la rendent pas plus grande.',
+      split: 3,
+      explain: '**18** is in the 6 and the 9 times tables: × 3 and × 2. 15 > 14, so $\\dfrac{5}{6}$ is bigger. Bigger numbers in $\\dfrac{7}{9}$ do not make it bigger.',
+      explainFr: '**18** est dans la table de 6 et de 9 : × 3 et × 2. 15 > 14, donc $\\dfrac{5}{6}$ est plus grande. Les grands nombres de $\\dfrac{7}{9}$ ne la rendent pas plus grande.',
     },
   },
 
-  // 14 ─ A fraction as a decimal: the bus stop ───────────────────────────────
+  // 14 ─ How to divide on the bus stop (Bowen: "give instructions how to do the
+  // division towards the end"): his five steps on 3 ÷ 4, the picture numbered to match.
+  {
+    layout: 'steps',
+    icon: 'Divide',
+    accent: PURPLE,
+    eyebrow: 'Fraction → decimal',
+    eyebrowFr: 'Fraction → décimal',
+    title: 'How to Divide on the Bus Stop',
+    titleFr: 'Diviser en bus stop',
+    dense: true,
+    inlineSvg: BUSSTOP_HOW,
+    content: 'A fraction is a division: $\\dfrac{3}{4} = 3 \\div 4$.',
+    contentFr: 'Une fraction est une division : $\\dfrac{3}{4} = 3 \\div 4$.',
+    steps: [
+      { text: '**Divide** the top by the bottom. 4 goes into 3 **0** times, 3 left.', textFr: '**Divise** le haut par le bas. En 3, 4 va **0** fois, il reste 3.' },
+      { text: 'Out of digits? Write a **point** and add a **0**.', textFr: 'Plus de chiffres ? Écris un **point** et ajoute un **0**.' },
+      { text: 'Write the **remainder** small, in front of the next digit: ³0 is **30**. 30 ÷ 4 = 7, 2 left.', textFr: 'Écris le **reste** en petit, devant le chiffre suivant : ³0, c’est **30**. 30 ÷ 4 = 7, il reste 2.' },
+      { text: 'The **point** goes straight up into the answer.', textFr: 'Le **point** monte tout droit dans la réponse.' },
+      { text: 'Stop when **nothing is left**: ²0 is 20, and 20 ÷ 4 = 5, 0 left.', textFr: 'Arrête-toi quand **il ne reste rien** : ²0, c’est 20, et 20 ÷ 4 = 5, il reste 0.' },
+    ],
+  },
+
+  // 15 ─ Your turn on the bus stop, under the method to write down ───────────
   {
     layout: 'split',
     accent: PURPLE,
     icon: 'Divide',
-    eyebrow: 'Fraction → decimal',
-    eyebrowFr: 'Fraction → décimal',
+    eyebrow: 'Your turn',
+    eyebrowFr: 'À toi',
     title: 'Divide on the Bus Stop',
     titleFr: 'Divise en bus stop',
     ratio: 50,
-    content: 'A fraction is a division: $\\dfrac{9}{4} = 9 \\div 4$.\nOut of digits? Write a **point** and add a **0**. The point in the answer goes straight above it.',
-    contentFr: 'Une fraction est une division : $\\dfrac{9}{4} = 9 \\div 4$.\nPlus de chiffres ? Écris un **point** et ajoute un **0**. Le point de la réponse va juste au-dessus.',
+    content: 'Use the five steps. Stuck? Go back one slide.',
+    contentFr: 'Suis les cinq étapes. Bloqué ? Reviens à la page précédente.',
     notes: [
       {
         tone: 'write',
@@ -459,7 +488,7 @@ const slides = [
     },
   },
 
-  // 15 ─ Order of size, with decimals ────────────────────────────────────────
+  // 16 ─ Order of size, with decimals ────────────────────────────────────────
   {
     layout: 'split',
     accent: PURPLE,
@@ -495,7 +524,7 @@ const slides = [
     },
   },
 
-  // 16 ─ Word problem: the bánh chưng ────────────────────────────────────────
+  // 17 ─ Word problem: the bánh chưng ────────────────────────────────────────
   {
     layout: 'callout',
     accent: GREEN,
@@ -521,7 +550,7 @@ const slides = [
     },
   },
 
-  // 17 ─ Word problem: nine quarters of one pizza ─────────────────────────────
+  // 18 ─ Word problem: nine quarters of one pizza ─────────────────────────────
   {
     layout: 'callout',
     accent: GREEN,
@@ -547,7 +576,7 @@ const slides = [
     },
   },
 
-  // 18 ─ Checklist ───────────────────────────────────────────────────────────
+  // 19 ─ Checklist ───────────────────────────────────────────────────────────
   {
     layout: 'stack',
     variant: 'checklist',
@@ -569,7 +598,7 @@ const slides = [
     ],
   },
 
-  // 19 ─ Done ────────────────────────────────────────────────────────────────
+  // 20 ─ Done ────────────────────────────────────────────────────────────────
   {
     layout: 'hero',
     color: TEAL,

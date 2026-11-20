@@ -105,13 +105,14 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **Course page**: XP across a course's units, carry-on banner, unit cards, Arcade banner. `unit/app/CourseHome.jsx` · `/unit/#/<TRACK>`
 - **Task look**: each task's name, icon and colour from its kind. `unit/app/taskLook.js`, `unit/app/theme.js`
 - **Task kind notes (Lesson)**: self-study deck with scored checks. `unit/src/tasks/Notes.jsx`, `unit/src/components/notes/`
+- **Fill-in question (notes)**: fraction sentences with boxes to type into (23/6 = ☐ ☐/6) or a sign to tap (= ≠ < >); one Check, a hint on the first mistake, then the answers. Every line is proved true when checked. `unit/src/components/notes/FillActivity.jsx`, `unit/src/utils/fracFill.js`
 - **Task kind words (Key words)**: word cards with audio, then a vocab quiz. `unit/app/Words.jsx`
 - **Task kind engine**: interactive screens listed in ENGINES. `unit/app/engines.js`
 - **Tide Lab**: Science 3.4 river tide task. `unit/src/tasks/TideLab.jsx`
 - **Protractor**: drag and turn a protractor onto 8 angles, read and type the size. `unit/app/tasks/ProtractorTask.jsx`
 - **Quadrilaterals (QuadCheck)**: draw from a sketch, fourth angle, 360° check. `unit/src/tasks/ZeroLine.jsx`
-- **Bus Stop (short division)**: the Dashboard's Maths 3.2 task, a column at a time with hints and Show me; items may be fractions ("Write 13/8 as a decimal"), worked examples to watch a column a press (`watch`), or start with the times table (`table: 'always'`). Maths 7.1's Fractions to decimals (engine BusStop). `unit/src/tasks/ShortDivision.jsx`, `unit/src/utils/shortDivision.js`
-- **Maths 7.1 Ordering fractions**: lesson notes for working alone, Mixed ↔ improper and Which is bigger? (Workbook-style step sets), Fractions to decimals, quiz. `unit/src/data/Y7_MATH/U07_1/`, `unit/content/Y7_MATH/U07_1/` · `/unit/#/Y7_MATH/U07_1`
+- **Bus Stop (short division)**: the whole bus stop open from the first problem, as on paper: every digit and remainder typed, +0 to add a zero, the answer typed underneath (rounded for a `dp` item). One Check marks up to the first mistake, which gets a hint; Hint and Show me only on request; a problem filled in pays half. Items may be fractions ("Write 13/8 as a decimal"). Maths 7.1's Fractions to decimals (engine BusStop). `unit/src/tasks/ShortDivision.jsx`, `unit/src/utils/shortDivision.js`
+- **Maths 7.1 Ordering fractions**: lesson notes for working alone (five typed fill-in questions, a how-to for bus stop division), Mixed ↔ improper and Which is bigger? (Workbook-style step sets), Fractions to decimals, quiz. `unit/src/data/Y7_MATH/U07_1/`, `unit/content/Y7_MATH/U07_1/` · `/unit/#/Y7_MATH/U07_1`
 - **Task kind steps (Workbook)**: fresh Workbook-style problems on the step engine. `unit/app/Workbook.jsx`, `unit/content/<TRACK>/<UNIT>/`
 - **Task kind quiz**: end-of-unit quiz. `unit/src/tasks/Assessment.jsx`
 - **Task kind writing (Timed writing)**: prompt bank, 5-minute plan, 30+ minutes against the server's clock, paste blocked, leaving the page counted, AI mark /12, then the corrections. `unit/app/writing/WritingTask.jsx` · `/unit/#/<TRACK>/<UNIT>/writing`

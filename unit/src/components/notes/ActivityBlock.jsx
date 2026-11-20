@@ -68,6 +68,9 @@ import { EnergyChangeActivity } from './EnergyChangeActivity.jsx';
 // @@SCI_U03_7_ACT_IMPORT@@
 import { EnergySplitActivity } from './EnergySplitActivity.jsx';
 
+// Maths 7.1
+import { FillActivity } from './FillActivity.jsx';
+
 
 /**
  * An interactive activity on a Notes slide — the self-study replacement for
@@ -836,6 +839,9 @@ export default function ActivityBlock({ activity, lang = 'en', result, onResult,
 
     // @@SCI_U03_7_ACT_CASE@@
     case 'energysplit': body = <EnergySplitActivity {...common} />; break;
+
+    // Maths 7.1: fraction sentences with boxes to type into
+    case 'fill': body = <FillActivity {...common} />; break;
 
 
     default: body = <div className="text-rose-500 font-bold text-sm">Unknown activity type “{String(activity.type)}”.</div>;

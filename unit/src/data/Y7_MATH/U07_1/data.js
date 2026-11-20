@@ -2,8 +2,8 @@
 // Maths 7.1 Ordering fractions (Bowen, 20 November 2026: "base this a lot on the
 // workbook problems"). Five tasks (src/data/units.js): the lesson notes; Mixed ↔
 // improper and Which is bigger?, step sets in the Workbook's question types
-// (unit/content/Y7_MATH/U07_1/); Fractions to decimals, the Bus Stop task with worked
-// examples first; the quiz. Every number is new: no Workbook question is copied.
+// (unit/content/Y7_MATH/U07_1/); Fractions to decimals, the Bus Stop task on an open
+// board; the quiz. Every number is new: no Workbook question is copied.
 //
 // English and French only (meta.vietnamese: false), like the classroom deck.
 // Module properties written in full (`notes: notes,`), as in 5.3.
@@ -78,35 +78,35 @@ export const U07_1_DATA = {
   notes: notes,
   assessment: assessment,
 
-  // Fractions to decimals (the Bus Stop task, unit/src/tasks/ShortDivision.jsx). Bowen:
-  // "plenty of example instructions and scaffolding", and the whole fraction divided
-  // on the bus stop (13 ÷ 8), not split into a mixed number first.
-  //   1 Watch me      two worked examples, a column a press, nothing to type
-  //   2 With help     the times table written first, then a column at a time
-  //   3 On your own   a column at a time
-  //   4 Round it      decimals that never stop, to 3 decimal places
+  // Fractions to decimals (the Bus Stop task, unit/src/tasks/ShortDivision.jsx): the
+  // whole fraction divided on the bus stop (13 ÷ 8), not split into a mixed number
+  // first. Redesigned 20 November 2026 (Bowen: "I don't like the initial intros as they
+  // will just do spam clicks. it looks over scaffolded"): no worked examples to press
+  // through and no times table; the whole bus stop is open from the first problem, with
+  // help only on request or after a mistake. New ids (the first design's w1–r2 were
+  // live a few hours). The how-to is the notes' slide 14.
+  //   1 Tops smaller than the bottom   0.25, 0.625, 0.6, 0.875
+  //   2 Bigger tops                    1.75, 2.4, 1.625, 3.625
+  //   3 Decimals that never stop       rounded to 3 decimal places
   shortDiv: {
     title: 'Fractions to decimals',
     titleFr: 'Fractions en décimaux',
     levels: {
-      1: { en: 'Watch me', fr: 'Regarde-moi' },
-      2: { en: 'With help: the times table first', fr: 'Avec de l’aide : la table d’abord' },
-      3: { en: 'On your own', fr: 'Tout seul' },
-      4: { en: 'Decimals that never stop', fr: 'Des décimaux sans fin' },
+      1: { en: 'The top is smaller than the bottom', fr: 'Le haut est plus petit que le bas' },
+      2: { en: 'Bigger tops', fr: 'Des hauts plus grands' },
+      3: { en: 'Decimals that never stop', fr: 'Des décimaux sans fin' },
     },
     items: [
-      { id: 'w1', level: 1, fraction: true, watch: true, dividend: '3', divisor: 4 },
-      { id: 'w2', level: 1, fraction: true, watch: true, dividend: '13', divisor: 8 },
-      { id: 'h1', level: 2, fraction: true, table: 'always', dividend: '5', divisor: 8 },
-      { id: 'h2', level: 2, fraction: true, table: 'always', dividend: '7', divisor: 4 },
-      { id: 'h3', level: 2, fraction: true, table: 'always', dividend: '12', divisor: 5 },
-      { id: 'h4', level: 2, fraction: true, table: 'always', dividend: '21', divisor: 8 },
-      { id: 'o1', level: 3, fraction: true, dividend: '3', divisor: 5 },
-      { id: 'o2', level: 3, fraction: true, dividend: '17', divisor: 4 },
-      { id: 'o3', level: 3, fraction: true, dividend: '7', divisor: 8 },
-      { id: 'o4', level: 3, fraction: true, dividend: '29', divisor: 8 },
-      { id: 'r1', level: 4, fraction: true, dividend: '2', divisor: 3, dp: 3 },
-      { id: 'r2', level: 4, fraction: true, dividend: '10', divisor: 7, dp: 3 },
+      { id: 'd1', level: 1, fraction: true, dividend: '1', divisor: 4 },
+      { id: 'd2', level: 1, fraction: true, dividend: '5', divisor: 8 },
+      { id: 'd3', level: 1, fraction: true, dividend: '3', divisor: 5 },
+      { id: 'd4', level: 1, fraction: true, dividend: '7', divisor: 8 },
+      { id: 'd5', level: 2, fraction: true, dividend: '7', divisor: 4 },
+      { id: 'd6', level: 2, fraction: true, dividend: '12', divisor: 5 },
+      { id: 'd7', level: 2, fraction: true, dividend: '13', divisor: 8 },
+      { id: 'd8', level: 2, fraction: true, dividend: '29', divisor: 8 },
+      { id: 'd9', level: 3, fraction: true, dividend: '2', divisor: 3, dp: 3 },
+      { id: 'd10', level: 3, fraction: true, dividend: '10', divisor: 7, dp: 3 },
     ],
   },
 };
