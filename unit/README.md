@@ -71,7 +71,7 @@ it ("From the classroom").
 | Maths 5.3 Drawing Lines and Quadrilaterals | Lesson 25, Protractor 30, Workbook 25, Quadrilaterals 20 |
 | Science 5.2 Comparing Metals and Non-metals (`hidden`: no lesson yet) | Key words 20, Metal or non-metal? 20, Test it 15, Mystery substances 25, Quiz 20 |
 | Upper Secondary English 1 Complete Sentences | Lesson 15, Key words 10, Grammar edit 20, Find & Fix 15, Fix it your way 15, Quiz 15, Timed writing 30; finished only with the quiz and the timed writing done |
-| Maths 7.1 Ordering Fractions | Lesson 20, Mixed ↔ improper 20, Which is bigger? 20, Fractions to decimals 25, Quiz 15 |
+| Maths 7.1 Ordering Fractions | Lesson 25, Mixed ↔ improper 20, Which is bigger? 20, Fractions to decimals 25, Quiz 20 (110 on offer) |
 
 Maths 7.1 (20 November 2026, built on the Workbook's Exercise 7.1 at Mr. Bowen's request;
 every number is new):

@@ -93,17 +93,19 @@ export const UNITS = [
   {
     // Maths 7.1, built on the Workbook's Exercise 7.1 (Bowen, 20 November 2026): the
     // lesson notes, then one task for each kind of Workbook question, then the quiz.
+    // 110 XP on offer (Bowen, the same day: 5 more each for the notes and the quiz); the
+    // unit's XP still stops at 100.
     track: 'Y7_MATH', unit: 'U07_1', classKey: 'math:Year 7', label: '7.1', teacher: 'Mr. Bowen',
     title: 'Ordering Fractions', titleFr: 'Ordonner des fractions',
     subtitle: 'Mixed numbers and improper fractions, which fraction is bigger, and fractions as decimals by bus stop division.',
     subtitleFr: 'Nombres mixtes et fractions impropres, quelle fraction est la plus grande, et les fractions en nombres décimaux par la division en bus stop.',
     classroom: { course: 'y7-math', slug: 'U07_1a' },
     tasks: [
-      { id: 'lesson', kind: 'notes', xp: 20 },
+      { id: 'lesson', kind: 'notes', xp: 25 },
       { id: 'mixed', kind: 'steps', set: 'mixed', xp: 20, title: 'Mixed ↔ improper', titleFr: 'Mixte ↔ impropre', icon: 'ArrowLeftRight', tone: 'orange', note: '10 problems', noteFr: '10 problèmes' },
       { id: 'bigger', kind: 'steps', set: 'bigger', xp: 20, title: 'Which is bigger?', titleFr: 'Laquelle est la plus grande ?', icon: 'Scale', tone: 'violet', note: '10 problems', noteFr: '10 problèmes' },
       { id: 'decimals', kind: 'engine', engine: 'BusStop', xp: 25, title: 'Fractions to decimals', titleFr: 'Fractions en décimaux', icon: 'Divide', tone: 'sky', note: 'Bus stop', noteFr: 'Bus stop' },
-      { id: 'quiz', kind: 'quiz', xp: 15 },
+      { id: 'quiz', kind: 'quiz', xp: 20 },
     ],
   },
   {
