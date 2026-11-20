@@ -98,7 +98,7 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 
 ## 4. Units, XP, gold and the Arcade
 
-- **Units list and XP rules**: UNITS, task XP, 100 cap, done at 100 or 80 with quiz. `src/data/units.js`
+- **Units list and XP rules**: UNITS, task XP, 100 cap, done at 100 or 80 with quiz; a unit's `mustFinish` tasks (English: quiz and timed writing) must all be done. `src/data/units.js`
 - **What to do next**: half-done task, then first unopened, then most XP left. `src/data/units.js`
 - **Unit page**: subject banner, XP bar, Next button, task tiles under Learn / Practice / Quiz. `unit/app/UnitHome.jsx`, `unit/main.jsx` · `/unit/#/<TRACK>/<UNIT>`
 - **A task**: opens one task of a unit. `unit/main.jsx` · `/unit/#/<TRACK>/<UNIT>/<task>`
@@ -114,7 +114,7 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **Task kind quiz**: end-of-unit quiz. `unit/src/tasks/Assessment.jsx`
 - **Task kind writing (Timed writing)**: prompt bank, 5-minute plan, 30+ minutes against the server's clock, paste blocked, leaving the page counted, AI mark /12, then the corrections. `unit/app/writing/WritingTask.jsx` · `/unit/#/<TRACK>/<UNIT>/writing`
 - **No writing add-ons**: the essay, plan and correction boxes ask Grammarly, LanguageTool, spell check, autocorrect and Chrome's writing suggestions to stay out; one that works in the essay box anyway brings up a warning and a line on the report. `unit/app/writing/noAddOns.js`, `unit/app/writing/useAddOnWatch.js`
-- **Practice write (One paragraph)**: a shorter timed write on the same screen (`practice: true`, 10 minutes, 2-minute plan), marked and corrected the same way, left out of the marks-over-time line. `unit/app/writing/WritingTask.jsx` · `/unit/#/<TRACK>/<UNIT>/paragraph`
+- **Practice write (One paragraph)**: a shorter timed write on the same screen (`practice: true`, 10 minutes, 2-minute plan), marked and corrected the same way, left out of the marks-over-time line; no unit uses it since 20 November 2026. `unit/app/writing/WritingTask.jsx`
 - **Revision workshop (corrections)**: the student retypes each sentence the marker corrected. `unit/app/writing/RevisionWorkshop.jsx`, `unit/app/writing/revision.js`
 - **Sentence frames and plan**: frames and plan questions by kind of writing (story, description, explanation, argument, letter, summary, one paragraph); a prompt may give its own plan examples. `unit/app/writing/frames.js`, `unit/app/writing/Planner.jsx`
 - **Essay report**: mark, three parts, unit focus, next step, caps, flags, teacher note, mistakes marked in the text. `unit/app/writing/EssayReport.jsx`, `unit/app/writing/look.js`
@@ -224,7 +224,7 @@ Units (`src/data/units.js`), in order:
 - **Science 3.4 Tides**: Lesson 20, Key words 10, Tide Lab 30, Workbook 20, Quiz 20. `unit/src/data/Y7_SCI/U03_4/data.js`
 - **Maths 5.3 Drawing Lines and Quadrilaterals**: Lesson 25, Protractor 30, Workbook 25, Quadrilaterals 20. `unit/src/data/Y7_MATH/U05_3/data.js`
 - **Science 5.2 Comparing Metals and Non-metals** (hidden): Key words 20, Metal or non-metal? 20, Test it 15, Mystery 25, Quiz 20. `unit/src/data/Y7_SCI/U05_2/data.js`
-- **Upper Secondary English 1 Complete Sentences**: Lesson 10, Key words 5, Grammar edit 15, Find & Fix 10, Fix it your way 15, Quiz 10, One paragraph 10, Timed writing 35. `unit/src/data/UPPER_ENG/U01/data.js`
+- **Upper Secondary English 1 Complete Sentences**: Lesson 15, Key words 10, Grammar edit 20, Find & Fix 15, Fix it your way 15, Quiz 15, Timed writing 30; finished only with the quiz and the timed writing done. `unit/src/data/UPPER_ENG/U01/data.js`
 
 Lesson packs: one converted pack (Year 5 Maths, `packs/`) and three hand-made demo packs
 on negative numbers (`src/lib/demo/packY5Negatives.js`).

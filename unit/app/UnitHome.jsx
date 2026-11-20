@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react'
 import { Check, ChevronLeft, Coins, History, MonitorPlay, Moon, Play, Star, Sun, Trophy, Wrench } from 'lucide-react'
 import useDarkMode from '../src/hooks/useDarkMode.js'
 import { tr } from '../src/utils/lang.js'
-import { UNIT_DONE_XP, UNIT_XP, nextTaskOf, taskDone, taskTitle, taskXP, unitXP } from '../../src/data/units.js'
+import { UNIT_DONE_XP, UNIT_XP, mustFinishOf, nextTaskOf, taskDone, taskTitle, taskXP, unitXP } from '../../src/data/units.js'
 import { classroomHref } from '../../src/data/classroomLessons.js'
 import { themeOf } from './theme.js'
 import Pip from '../../src/components/Pip.jsx'
@@ -107,7 +107,10 @@ export default function UnitHome({ unit, records, notes = {}, fixes = {}, gold =
     : sum.done ? tr(lang, 'Unit finished', null, 'Unité terminée')
       : started ? tr(lang, 'Continue where you left off', null, 'Reprends où tu en étais')
         : tr(lang, 'New unit', null, 'Nouvelle unité')
-  const finishNote = quiz
+  const must = mustFinishOf(unit).map((t) => `the ${taskTitle(t, lang).toLowerCase()}`)
+  const finishNote = must.length
+    ? tr(lang, `Finished at ${UNIT_DONE_XP} XP with ${must.join(' and ')} done`, null, `Terminée à ${UNIT_DONE_XP} XP, ${must.join(' et ')} faits`)
+    : quiz
     ? tr(lang, `Finished at ${UNIT_DONE_XP} XP with the quiz done`, null, `Terminée à ${UNIT_DONE_XP} XP, quiz fait`)
     : tr(lang, `Finished at ${UNIT_DONE_XP} XP`, null, `Terminée à ${UNIT_DONE_XP} XP`)
 

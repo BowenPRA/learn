@@ -1,7 +1,9 @@
 // PRA Learn units, the way Mr. Bowen's Dashboard does them (Bowen, 10 November 2026):
 // a unit is a list of tasks chosen for that unit, each worth its own XP. The XP on
 // offer may add up to more than 100; a unit's XP stops at 100. Nothing is locked.
-// A unit is finished at 100 XP, or at 80 XP with its quiz done (when it has one).
+// A unit is finished at 100 XP, or at 80 XP with its quiz done (when it has one). A unit
+// that lists `mustFinish` (task ids) is finished only at 80 XP with every one of those done,
+// however much XP it holds (Upper Secondary English: the quiz and the timed writing).
 //
 // A task comes from one of these places (`kind`):
 //   notes   the self-study lesson deck with check questions (the unit's notes.js)
@@ -93,9 +95,11 @@ export const UNITS = [
     // Every unit ends with timed writing, marked by the AI and kept in My Writing (/unit/#/writing).
     track: 'UPPER_ENG', unit: 'U01', classKey: 'english:Upper Secondary', label: '1', teacher: 'Mr. Bowen',
     title: 'Complete Sentences',
-    subtitle: 'Fragments, run-ons and comma splices, and four ways to fix them. Then one paragraph and a 30-minute story.',
-    // 130 XP on offer (Bowen, 20 November 2026: keep the first XP for the original six
-    // tasks; more than 100 on offer is fine). A unit's XP still stops at 100.
+    subtitle: 'Fragments, run-ons and comma splices, and four ways to fix them. Then a 30-minute story.',
+    // 120 XP on offer (Bowen, 20 November 2026: the first XP for the original six tasks,
+    // more than 100 on offer is fine; One paragraph taken off). A unit's XP still stops at
+    // 100, and it is not finished until the quiz and the timed writing are both done.
+    mustFinish: ['quiz', 'writing'],
     tasks: [
       { id: 'lesson', kind: 'notes', xp: 15 },
       { id: 'words', kind: 'words', xp: 10 },
@@ -103,7 +107,6 @@ export const UNITS = [
       { id: 'findfix', kind: 'engine', engine: 'FindFix', xp: 15, title: 'Find & Fix', icon: 'Search', tone: 'orange' },
       { id: 'rewrite', kind: 'engine', engine: 'Rewrite', xp: 15, title: 'Fix it your way', icon: 'Wrench', tone: 'rose', note: '11 sentences' },
       { id: 'quiz', kind: 'quiz', xp: 15 },
-      { id: 'paragraph', kind: 'writing', writing: 'paragraph', xp: 10, title: 'One paragraph', note: '10 minutes' },
       { id: 'writing', kind: 'writing', xp: 30, note: '30 minutes' },
     ],
   },
@@ -119,6 +122,10 @@ export function taskXP(task, record) {
   return Math.round(best * task.xp)
 }
 
+/** The tasks a unit must have finished before it counts as finished (`mustFinish`), in order. */
+export const mustFinishOf = (unit) => (unit?.mustFinish || [])
+  .map((id) => (unit?.tasks || []).find((t) => t.id === id)).filter(Boolean)
+
 /** True once a task has been finished at least once. */
 export const taskDone = (record) => (record?.runs || 0) > 0
 
@@ -126,14 +133,18 @@ export const taskDone = (record) => (record?.runs || 0) > 0
  * A unit's XP from its records ({ [taskId]: record }):
  *   xp     the XP held, at most 100
  *   offer  the XP its tasks offer together (can be more than 100)
- *   done   100 XP, or 80 with the quiz finished (80 alone when the unit has no quiz)
+ *   done   100 XP, or 80 with the quiz finished (80 alone when the unit has no quiz); with
+ *          `unit.mustFinish`, 80 with every task it names finished, and nothing less
  */
 export function unitXP(unit, records = {}) {
   const tasks = unit?.tasks || []
   const raw = tasks.reduce((s, t) => s + taskXP(t, records?.[t.id]), 0)
   const xp = Math.min(raw, UNIT_XP)
   const quiz = tasks.find((t) => t.kind === 'quiz')
-  const done = xp >= UNIT_XP || (xp >= UNIT_DONE_XP && (!quiz || taskDone(records?.[quiz.id])))
+  const must = mustFinishOf(unit)
+  const done = must.length
+    ? xp >= UNIT_DONE_XP && must.every((t) => taskDone(records?.[t.id]))
+    : xp >= UNIT_XP || (xp >= UNIT_DONE_XP && (!quiz || taskDone(records?.[quiz.id])))
   return { xp, offer: tasks.reduce((s, t) => s + t.xp, 0), done }
 }
 

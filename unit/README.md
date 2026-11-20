@@ -13,6 +13,8 @@ out of the XP it is worth. Coming back from a task, the XP just won pops up ("+1
 - A task's XP is its best score times the XP it is worth.
 - The tasks may offer more than 100 XP between them; the unit's XP stops at 100.
 - A unit is finished at 100 XP, or at 80 XP with its quiz done (80 alone when it has no quiz).
+  A unit with `mustFinish: ['quiz', 'writing']` is finished only at 80 XP with each of those
+  tasks done, however much XP it holds (Upper Secondary English, from 20 November 2026).
 - Nothing is locked. There is no bonus XP. The one thing the AI marks is timed writing (below).
 
 The first version (6 November 2026) gave every unit the same five parts. That is gone;
@@ -68,7 +70,7 @@ it ("From the classroom").
 | Science 3.4 Tides | Lesson 20, Key words 10, Tide Lab 30, Workbook 20, Quiz 20 |
 | Maths 5.3 Drawing Lines and Quadrilaterals | Lesson 25, Protractor 30, Workbook 25, Quadrilaterals 20 |
 | Science 5.2 Comparing Metals and Non-metals (`hidden`: no lesson yet) | Key words 20, Metal or non-metal? 20, Test it 15, Mystery substances 25, Quiz 20 |
-| Upper Secondary English 1 Complete Sentences | Lesson 10, Key words 5, Grammar edit 15, Find & Fix 10, Fix it your way 15, Quiz 10, One paragraph 10, Timed writing 35 |
+| Upper Secondary English 1 Complete Sentences | Lesson 15, Key words 10, Grammar edit 20, Find & Fix 15, Fix it your way 15, Quiz 15, Timed writing 30; finished only with the quiz and the timed writing done |
 
 Maths 5.3:
 
@@ -156,7 +158,7 @@ With `practice: true` it may be shorter than 30 minutes (5 at the least), plans 
 minutes, tells the marker it is one paragraph (`rubric.js`; live only once
 `learn-grade-essay` is redeployed), and is left out of the marks-over-time line and the
 home card's latest mark (`essays.js` `markedOldestFirst`); its mistakes still count in
-"what keeps coming back". English 1 has one: 10 minutes, 60 words, one paragraph.
+"what keeps coming back". No unit has one since 20 November 2026 (Bowen took English 1's off).
 
 The English track is English only (15 November 2026): no `…Vn` twins, no language
 switch (`unit/main.jsx` gives `UPPER_ENG` English alone), and examples that do not lean on
