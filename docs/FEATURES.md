@@ -61,7 +61,7 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **Hidden lesson**: `hidden: true` keeps a deck off every list; its address still opens it. `src/data/classroomLessons.js`
 - **Staff-only lesson**: `staffOnly: true` lists a deck for staff and never on a student's home. `src/data/classroomLessons.js`, `src/components/ClassroomLessons.jsx`
 - **Courses**: `y7-math`, `y7-science`, `upper-english` (English only), `games`, with colours and unit names. `classroom/content/courses.js`
-- **Upper Secondary English class decks**: Unit 1 Complete Sentences and Unit 2 The Verb in Every Sentence, 16 slides each for about 30 minutes, staff only; the class follows on the unit's notes, and the plan says which notes slide goes with each part. `classroom/content/upper-english/U01/`, `classroom/content/upper-english/U02/` · `/classroom/#/lesson/upper-english/U01`, `/classroom/#/lesson/upper-english/U02`
+- **Upper Secondary English class decks**: Unit 1 Complete Sentences, Unit 2 The Verb in Every Sentence and Unit 3 Nouns and Articles, 16 slides each for about 30 minutes, staff only; the class follows on the unit's notes, and the plan says which notes slide goes with each part. `classroom/content/upper-english/U01/`, `classroom/content/upper-english/U02/`, `classroom/content/upper-english/U03/` · `/classroom/#/lesson/upper-english/U01`, `/classroom/#/lesson/upper-english/U02`, `/classroom/#/lesson/upper-english/U03`
 - **Lesson folder**: an index.js exporting meta, slides, plan, plus its files. `classroom/content/<course>/<slug>/`
 - **One lesson at a time**: lazy registry, each deck its own download. `classroom/content/registry.js`
 - **Viewer**: out, student, staff or other; only staff get plans and games, and out gets no Phone remote button. `classroom/viewer.js`
@@ -126,7 +126,7 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **Essay store**: save, hand in, mark, revise; demo marker and sample history. `src/lib/essays.js`
 - **Grammar edit**: choose the right word inside a passage (engine GrammarEdit). `unit/src/tasks/GrammarEdit.jsx`
 - **Find & Fix**: click the mistakes in a passage and type the fixes (engine FindFix); one mistake missed across the task still earns full marks. `unit/src/tasks/Proofread.jsx`, `unit/src/utils/proofread.js`
-- **Fix it your way**: type a new version of a faulty sentence (splice, run-on, fragment, two joining words, a missing or wrong verb); a rule checker, no AI, names each wrong join and accepts every correct one, and a contraction counts as its long form (engine Rewrite). `unit/app/tasks/RewriteTask.jsx`, `unit/app/tasks/rewrite.js`
+- **Fix it your way**: type a new version of a faulty sentence (splice, run-on, fragment, two joining words, a missing or wrong verb, a noun or article mistake); a rule checker, no AI, names each wrong join and accepts every correct one, and a contraction counts as its long form (engine Rewrite). `unit/app/tasks/RewriteTask.jsx`, `unit/app/tasks/rewrite.js`
 - **Reading**: a short non-fiction passage with questions on its meaning, words and build, on the quiz screen, untimed (engine Reading, the unit's `reading`); from English 2. `unit/app/engines.js`, `unit/src/data/UPPER_ENG/U02/reading.js`
 - **Fix N / Fix my mistakes**: redo only the wrong answers of a finished lesson. `unit/src/utils/notesReview.js`
 - **Unit data**: a unit's meta, notes, words, quiz and engine pools. `unit/src/data/<TRACK>/<UNIT>/data.js`
@@ -231,6 +231,7 @@ Units (`src/data/units.js`), in order:
 - **Science 5.2 Comparing Metals and Non-metals** (hidden): Key words 20, Metal or non-metal? 20, Test it 15, Mystery 25, Quiz 20. `unit/src/data/Y7_SCI/U05_2/data.js`
 - **Upper Secondary English 1 Complete Sentences**: Lesson 15, Key words 10, Grammar edit 20, Find & Fix 15, Fix it your way 15, Quiz 15, Timed writing 30; finished only with the quiz and the timed writing done. `unit/src/data/UPPER_ENG/U01/data.js`
 - **Upper Secondary English 2 The Verb in Every Sentence**: Lesson 15, Key words 10, Grammar edit 20, Find & Fix 15, Fix it your way 15, Reading 10, Quiz 15, Timed writing 30 (130 on offer); a quarter of the practice from Unit 1; finished only with the quiz and the timed writing done. `unit/src/data/UPPER_ENG/U02/data.js`
+- **Upper Secondary English 3 Nouns and Articles**: the same tasks and XP as English 2 (130 on offer); a quarter of the practice from Units 1 and 2; finished only with the quiz and the timed writing done. `unit/src/data/UPPER_ENG/U03/data.js`
 
 Lesson packs: one converted pack (Year 5 Maths, `packs/`) and three hand-made demo packs
 on negative numbers (`src/lib/demo/packY5Negatives.js`).

@@ -317,6 +317,12 @@ export const CLASSROOM_LESSONS = [
     title: 'The Verb in Every Sentence',
     subtitle: 'Be, present and past simple, the -s of he / she / it, and there is / there are',
   },
+  // Staff only, like Units 1 and 2 (Bowen, 21 November 2026).
+  {
+    course: 'upper-english', slug: 'U03', classKey: 'english:Upper Secondary', unit: '3', teacher: 'Mr. Bowen', staffOnly: true,
+    title: 'Nouns and Articles',
+    subtitle: 'One or more, count it or not, and a / an / the or nothing',
+  },
 ]
 
 // Games the teacher runs on the projector, from classroom/content/games/<slug>/.
@@ -383,6 +389,7 @@ export const CLASSROOM_UNIT_NAMES = {
   'upper-english': {
     1: ['Complete Sentences', 'Complete Sentences'],
     2: ['The Verb in Every Sentence', 'The Verb in Every Sentence'],
+    3: ['Nouns and Articles', 'Nouns and Articles'],
   },
 }
 

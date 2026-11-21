@@ -85,7 +85,7 @@ export const slides = [
   // 4. Where be goes missing
   {
     layout: 'split',
-    icon: 'Ban',
+    icon: 'CircleSlash',
     accent: ORANGE,
     title: 'Where Be Goes Missing',
     content: '**be** goes before a describing word, a place or a noun.',
@@ -131,7 +131,7 @@ export const slides = [
   // 7. Spelling the -s (a split, not a stack: the stack layout has no answer box)
   {
     layout: 'split',
-    icon: 'SpellCheck',
+    icon: 'PenTool',
     accent: NAVY,
     title: 'Spelling the -s',
     // Plain lines, not four cards: the cards and the answer box ran 114 px off at 1440×900.
@@ -154,7 +154,7 @@ export const slides = [
       {
         heading: 'he / she / it → does',
         accent: RED,
-        icon: 'Ban',
+        icon: 'CircleSlash',
         notes: [
           wrong('He **don’t** eat meat.'),
           right('He **doesn’t** eat meat.'),
@@ -191,7 +191,7 @@ export const slides = [
   // 10. Past simple
   {
     layout: 'split',
-    icon: 'Clock',
+    icon: 'Hourglass',
     accent: ROSE,
     eyebrow: 'Then: finished actions',
     title: 'Past Simple',
@@ -221,7 +221,7 @@ export const slides = [
   // 12. Didn't + base verb
   {
     layout: 'split',
-    icon: 'Ban',
+    icon: 'CircleSlash',
     accent: ROSE,
     title: 'Didn’t + Base Verb',
     content: '**didn’t** already says past.',

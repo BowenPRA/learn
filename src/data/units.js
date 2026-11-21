@@ -147,6 +147,25 @@ export const UNITS = [
       { id: 'writing', kind: 'writing', xp: 30, note: '30 minutes' },
     ],
   },
+  {
+    // Upper Secondary English Unit 3 (Bowen, 21 November 2026, plan and content approved
+    // first): nouns and articles. Unit 2's tasks and XP, 130 on offer. A quarter of the
+    // practice is from Units 1 and 2.
+    track: 'UPPER_ENG', unit: 'U03', classKey: 'english:Upper Secondary', label: '3', teacher: 'Mr. Bowen',
+    title: 'Nouns and Articles',
+    subtitle: 'One or more, count it or not, and a / an / the or nothing. Then a 30-minute explanation.',
+    mustFinish: ['quiz', 'writing'],
+    tasks: [
+      { id: 'lesson', kind: 'notes', xp: 15 },
+      { id: 'words', kind: 'words', xp: 10 },
+      { id: 'edit', kind: 'engine', engine: 'GrammarEdit', xp: 20, title: 'Grammar edit', icon: 'PenLine', tone: 'sky' },
+      { id: 'findfix', kind: 'engine', engine: 'FindFix', xp: 15, title: 'Find & Fix', icon: 'Search', tone: 'orange' },
+      { id: 'rewrite', kind: 'engine', engine: 'Rewrite', xp: 15, title: 'Fix it your way', icon: 'Wrench', tone: 'rose', note: '12 sentences' },
+      { id: 'reading', kind: 'engine', engine: 'Reading', xp: 10, title: 'Reading', icon: 'BookOpen', tone: 'teal', note: '6 questions' },
+      { id: 'quiz', kind: 'quiz', xp: 15 },
+      { id: 'writing', kind: 'writing', xp: 30, note: '30 minutes' },
+    ],
+  },
 ]
 
 export const unitKey = (u) => `${u.track}/${u.unit}`

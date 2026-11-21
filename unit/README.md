@@ -73,6 +73,7 @@ it ("From the classroom").
 | Upper Secondary English 1 Complete Sentences | Lesson 15, Key words 10, Grammar edit 20, Find & Fix 15, Fix it your way 15, Quiz 15, Timed writing 30; finished only with the quiz and the timed writing done |
 | Maths 7.1 Ordering Fractions | Lesson 25, Mixed ↔ improper 20, Which is bigger? 20, Fractions to decimals 25, Quiz 20 (110 on offer) |
 | Upper Secondary English 2 The Verb in Every Sentence | Lesson 15, Key words 10, Grammar edit 20, Find & Fix 15, Fix it your way 15, Reading 10, Quiz 15, Timed writing 30 (130 on offer); finished only with the quiz and the timed writing done |
+| Upper Secondary English 3 Nouns and Articles | the same tasks and XP as English 2 (130 on offer) |
 
 Maths 7.1 (20 November 2026, built on the Workbook's Exercise 7.1 at Mr. Bowen's request;
 every number is new):
@@ -169,6 +170,22 @@ simple, the -s of he / she / it, does / didn't + the base verb, "there is / ther
 - **Timed writing**: one prompt, `u2w1` "A place I know well" (description: what is
   there, a normal day, one visit).
 - **Class deck**: `classroom/content/upper-english/U02/`, 16 slides, staff only like Unit 1's.
+
+English 3, Nouns and Articles (21 November 2026, plan and content approved by Mr. Bowen
+first; `docs/UPPER-ENGLISH-PLAN.md`, Stage 1 item 3): plurals and irregular plurals, things
+you cannot count (information, advice), a or an by sound, a word in front of one countable
+thing, a then the, and no article for things in general. Built like English 2:
+
+- **A quarter from Units 1 and 2**: 5 of 20 Grammar edit blanks, 5 of 20 Find & Fix
+  mistakes, 3 of 12 Fix it your way sentences, 2 of 10 quiz questions.
+- **Fix it your way**: nine noun sentences (`kind: 'exact'`, `ask` "Fix the noun") and
+  three from Units 1 and 2.
+- **Reading**: Where Rain Comes From (the water cycle, about 210 words), six questions.
+- **Timed writing**: one prompt, `u3w1` "A meal I can make" (explanation), with its own
+  plan examples (`prompt.plan`, a cheese omelette) because the planner's own is a sandwich.
+- **Class deck**: `classroom/content/upper-english/U03/`, 16 slides, staff only. A class
+  deck icon must be one the deck player knows (`classroom/src/components/layouts/primitives.jsx`,
+  `ICONS`): any other shows as an "i".
 
 ## Timed writing and My Writing
 

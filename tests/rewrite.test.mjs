@@ -211,3 +211,61 @@ test('Unit 2: the Unit 1 sentences, and two joining words where English takes on
   no2('rv12', 'Although the tickets were expensive but the concert was full.', /both join/)
   no2('rv12', 'The tickets were expensive, so the concert was full.', /does not fit the meaning/)
 })
+
+// Unit 3 (21 November 2026): nine noun sentences and three from Units 1 and 2.
+import { U03_DATA } from '../unit/src/data/UPPER_ENG/U03/data.js'
+
+const item3 = (id) => U03_DATA.rewrite.find((r) => r.id === id)
+const ok3 = (id, text) => {
+  const r = checkRewrite(item3(id), text)
+  assert.equal(r.ok, true, `${id}: "${text}" should be right, got: ${r.hint}`)
+}
+const no3 = (id, text, hint) => {
+  const r = checkRewrite(item3(id), text)
+  assert.equal(r.ok, false, `${id}: "${text}" should be wrong`)
+  if (hint) assert.match(r.hint, hint, `${id}: "${text}"`)
+}
+
+test('Unit 3: every item passes its own answers, and a quarter comes from Units 1 and 2', () => {
+  assert.deepEqual(checkRewriteItems(U03_DATA.rewrite), [])
+  assert.equal(U03_DATA.rewrite.length, 12)
+  assert.equal(U03_DATA.rewrite.filter((r) => /Unit [12]/.test(r.label)).length, 3)
+  for (const r of U03_DATA.rewrite) assert.equal(checkRewrite(r, r.given).ok, false, `${r.id}: the faulty sentence passes`)
+})
+
+test('Unit 3: the noun sentences take every correct version, and name the near misses', () => {
+  ok3('nw1', 'Can you give me some information about the trip?')
+  ok3('nw1', 'Can you give me any information about the trip?')
+  no3('nw1', 'Can you give me an information about the trip?', /no -s/)
+  ok3('nw2', 'My grandfather gave me useful advice.')
+  ok3('nw2', 'My grandfather gave me a useful piece of advice.')
+  no3('nw2', 'My grandfather gave me some useful advices.', /no a, no -s/)
+  ok3('nw3', 'There are four children in the swimming pool.')
+  no3('nw3', 'There are four childs in the swimming pool.', /own plural/)
+  no3('nw3', 'There are four childrens in the swimming pool.', /own plural/)
+  ok3('nw4', 'My sister is a nurse.')
+  no3('nw4', 'My sister is an nurse.', /first sound/)
+  ok3('nw5', 'We bought a new sofa yesterday.')
+  ok3('nw5', 'We bought our new sofa yesterday.')
+  no3('nw5', 'We bought an new sofa yesterday.', /first sound/)
+  ok3('nw6', 'He is an honest man.')
+  no3('nw6', 'He is an honest man', /punctuation/i)
+  ok3('nw7', 'I do not have much money.')
+  ok3('nw7', "I don't have a lot of money.")
+  no3('nw7', "I don't have many moneys.", /much/)
+  ok3('nw8', 'The sun rises in the east.')
+  ok3('nw8', 'The Sun rises in the East.')
+  no3('nw8', 'A sun rises in the east.', /only one sun/)
+  ok3('nw9', 'We have three bus stops near our house.')
+  no3('nw9', 'We have three buses stop near our house.', /last word|Which word/)
+  ok3('nw10', "My best friend lives near the station.")
+  ok3('nw11', 'The shops were very busy today.')
+})
+
+test('Unit 3: the Unit 1 join', () => {
+  ok3('nw12', 'The bread was old, so we threw it away.')
+  ok3('nw12', 'Because the bread was old, we threw it away.')
+  ok3('nw12', 'The bread was old. We threw it away.')
+  no3('nw12', 'The bread was old, but we threw it away.', /does not fit the meaning/)
+  no3('nw12', 'Because the bread was old, so we threw it away.', /both join/)
+})

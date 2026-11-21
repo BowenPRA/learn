@@ -52,3 +52,14 @@ test('English 2 offers 130 XP with a reading task, and must finish the quiz and 
   assert.equal(unitXP(english2, all(english2, ['writing'])).done, false)
   assert.equal(unitXP(english2, all(english2, ['reading'])).done, true)
 })
+
+// Unit 3 (21 November 2026): the same tasks and XP as Unit 2.
+const english3 = UNITS.find((u) => u.track === 'UPPER_ENG' && u.unit === 'U03')
+
+test('English 3 offers 130 XP with a reading task, and must finish the quiz and the timed writing', () => {
+  assert.deepEqual(english3.tasks.map((t) => t.id), ['lesson', 'words', 'edit', 'findfix', 'rewrite', 'reading', 'quiz', 'writing'])
+  assert.equal(unitXP(english3, {}).offer, 130)
+  assert.deepEqual(mustFinishOf(english3).map((t) => t.id), ['quiz', 'writing'])
+  assert.equal(unitXP(english3, all(english3, ['writing'])).done, false)
+  assert.equal(unitXP(english3, all(english3, ['reading'])).done, true)
+})
