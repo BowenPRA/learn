@@ -22,11 +22,36 @@
 // a sign (= ≠ < >) or a sign box. A whole number followed straight by a fraction is
 // one mixed number. The validator fills every box with its answer and checks that the
 // sentence is true, so a wrong answer key cannot ship.
+//
+// A line can also be an equation to solve (Upper Secondary Maths, 21 November 2026):
+//       { solve: '3x + 7 = 22' }      shows the equation, then "x = [ ]"
+//       { solve: 'x/3 = 4', tex: '\\dfrac{x}{3} = 4' }   `tex` is how it is drawn
+// The answer is worked out from the equation (utils/linearEquation.js), never typed by
+// the author: a whole number, a negative or a fraction such as 5/2. The validator
+// refuses an equation with no single answer.
+import { parseEquation, sub, div, frEq, frText, fr, isZero } from './linearEquation.js';
 
 export const FILL_SIGNS = ['=', '≠', '<', '>'];
 const MAX_LINES = 8;
 
-const lineSrc = (line) => (typeof line === 'string' ? line : line?.q);
+const lineSrc = (line) => (typeof line === 'string' ? line : line?.q ?? line?.solve);
+
+/** The one answer of a linear equation, as an exact fraction; throws when there is not one. */
+export function solveLine(src) {
+  const eq = parseEquation(src);
+  if (eq.rel !== '=') throw new Error('a solve line needs an = sign');
+  const a = sub(eq.left.x, eq.right.x);
+  if (isZero(a)) throw new Error('the x terms cancel: no single answer');
+  return { eq, answer: div(sub(eq.right.c, eq.left.c), a) };
+}
+
+/** A typed answer as an exact fraction ("-3", "5/2", "−4", "2.5"), or null. */
+function typedValue(s) {
+  const t = String(s ?? '').trim().replace(/[−–]/g, '-').replace(/\s+/g, '').replace(/^[a-z]=/i, '');
+  const m = /^(-?\d{1,4}(?:\.\d{1,3})?)(?:\/(-?\d{1,4}))?$/.exec(t);
+  if (!m) return null;
+  try { return m[2] ? div(fr(Number(m[1])), fr(Number(m[2]))) : fr(Number(m[1])); } catch { return null; }
+}
 
 /** One number, or a number box: { box, value }. */
 function partOf(tok) {
@@ -110,10 +135,16 @@ export const signChoices = (answer) => (answer === '=' || answer === '≠' ? ['=
 export function fillModel(activity) {
   const src = activity?.lines || [];
   const lines = src.map((line, i) => {
+    const hint = typeof line === 'object' && line?.hint ? { en: line.hint, fr: line.hintFr || line.hint } : null;
+    if (line?.solve) {
+      const { eq, answer } = solveLine(line.solve);
+      return { solve: line.solve, eq, tex: line.tex || line.solve, v: eq.v, terms: [], boxes: [{ id: `${i}.0`, kind: 'sol', answer: frText(answer) }], hint };
+    }
     const terms = parseFillLine(lineSrc(line), i);
-    return { terms, boxes: boxesOf(terms), hint: typeof line === 'object' && line?.hint ? { en: line.hint, fr: line.hintFr || line.hint } : null };
+    return { terms, boxes: boxesOf(terms), hint };
   });
-  const split = Number.isInteger(activity?.split) ? activity.split : Math.ceil(lines.length / 2);
+  // Equations to solve are wide: one column unless the slide says otherwise.
+  const split = Number.isInteger(activity?.split) ? activity.split : lines.some((l) => l.solve) ? lines.length : Math.ceil(lines.length / 2);
   return { lines, boxes: lines.flatMap((l) => l.boxes), split };
 }
 
@@ -121,6 +152,10 @@ export function fillModel(activity) {
 export function boxOk(box, typed) {
   const s = String(typed ?? '').trim();
   if (box.kind === 'sign') return s === box.answer;
+  if (box.kind === 'sol') {
+    const got = typedValue(s);
+    return !!got && frEq(got, typedValue(box.answer));
+  }
   return /^\d{1,4}$/.test(s) && Number(s) === Number(box.answer);
 }
 
@@ -130,6 +165,23 @@ export function boxOk(box, typed) {
  */
 export function fillHint(line) {
   if (line.hint) return line.hint;
+  if (line.solve) {
+    // Worded from the equation's shape: x on both sides, a number added, a number in front.
+    const { left, right } = line.eq;
+    const both = !isZero(left.x) && !isZero(right.x);
+    const xSide = isZero(left.x) ? right : left;
+    const plus = !isZero(xSide.c);
+    const times = !frEq(xSide.x, fr(1));
+    const check = { en: ' Then put your answer back in to check.', fr: ' Puis remets ta réponse pour vérifier.' };
+    const h = both
+      ? { en: 'Take the smaller x term away from both sides first.', fr: 'Enlève d’abord le plus petit terme en x des deux côtés.' }
+      : plus && times
+        ? { en: 'Undo the + or − first, then the × or ÷. Do it to both sides.', fr: 'Défais d’abord le + ou le −, puis le × ou le ÷. Fais-le des deux côtés.' }
+        : plus
+          ? { en: 'Undo the + or − with the opposite, on both sides.', fr: 'Défais le + ou le − avec l’opération inverse, des deux côtés.' }
+          : { en: 'Undo the × or ÷ with the opposite, on both sides.', fr: 'Défais le × ou le ÷ avec l’opération inverse, des deux côtés.' };
+    return { en: h.en + check.en, fr: h.fr + check.fr };
+  }
   const vals = line.terms.filter((t) => t.kind === 'value');
   const sign = line.terms.find((t) => t.kind === 'sign');
   const frac = (t) => t.whole == null && t.top != null;
@@ -207,10 +259,14 @@ export function checkFillActivity(a) {
   if (src.length > MAX_LINES) out.push(`fill has ${src.length} lines — at most ${MAX_LINES} on a slide`);
   src.forEach((line, i) => {
     const at = `line ${i + 1} "${lineSrc(line)}"`;
+    if (typeof line === 'object' && line.hint && !line.hintFr) out.push(`${at}: hint needs hintFr`);
+    if (line?.solve) {
+      try { solveLine(line.solve); } catch (e) { out.push(`${at}: ${e.message}`); }
+      return;
+    }
     let terms;
     try { terms = parseFillLine(lineSrc(line), i); } catch (e) { out.push(`${at}: ${e.message}`); return; }
     if (!boxesOf(terms).length) out.push(`${at} has no box to fill`);
-    if (typeof line === 'object' && line.hint && !line.hintFr) out.push(`${at}: hint needs hintFr`);
     const vals = terms.filter((t) => t.kind === 'value');
     for (const v of vals) {
       if (v.bottom && v.bottom.value === 0) out.push(`${at}: a bottom of 0`);

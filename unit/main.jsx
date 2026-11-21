@@ -119,8 +119,9 @@ function UnitRoute() {
 
   const data = got.data
   // Year 7 is English and French; Upper Secondary English is English only (an English class,
-  // not one adapted for Vietnamese learners: Bowen, 15 November 2026).
-  const langs = langsFor(track === 'UPPER_ENG' ? { bilingual: false } : { bilingual: true, french: track.startsWith('Y7_') }, data)
+  // not one adapted for Vietnamese learners: Bowen, 15 November 2026), and so is Upper
+  // Secondary Maths (21 November 2026).
+  const langs = langsFor(track.startsWith('UPPER_') ? { bilingual: false } : { bilingual: true, french: track.startsWith('Y7_') }, data)
   const view = { ...u, groupLabel: className(u.classKey, 'en') }
   // What is in each task, in a word or two, for its tile.
   const count = (n, en, fr) => (n ? (lang === 'fr' ? `${n} ${fr}` : `${n} ${en}`) : '')

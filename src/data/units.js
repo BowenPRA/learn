@@ -166,6 +166,24 @@ export const UNITS = [
       { id: 'writing', kind: 'writing', xp: 30, note: '30 minutes' },
     ],
   },
+  {
+    // Upper Secondary Maths (freshman algebra), in English only (Bowen, 21 November 2026,
+    // plan approved first): solving equations, then formulas (Unit 2), then quadratics
+    // (Unit 3). 135 XP on offer; the unit stops at 100 and is finished at 100, or at 80
+    // with the quiz done.
+    track: 'UPPER_MATH', unit: 'U01', classKey: 'math:Upper Secondary', label: '1', teacher: 'Mr. Bowen',
+    title: 'Solving Equations',
+    subtitle: 'Do the same to both sides: one and two steps, brackets, like terms and x on both sides. Then check the answer.',
+    tasks: [
+      { id: 'lesson', kind: 'notes', xp: 15 },
+      { id: 'words', kind: 'words', xp: 10 },
+      { id: 'balance', kind: 'engine', engine: 'Balance', xp: 30, title: 'Balance', icon: 'Scale', tone: 'sky', note: '12 equations' },
+      { id: 'working', kind: 'steps', set: 'working', xp: 25, title: 'Show your working', icon: 'NotebookPen', tone: 'orange', note: '10 equations' },
+      { id: 'mistake', kind: 'steps', set: 'mistake', xp: 15, title: 'Find the mistake', icon: 'Search', tone: 'rose', note: '6 solutions' },
+      { id: 'story', kind: 'steps', set: 'story', xp: 20, title: 'Write the equation', icon: 'FileText', tone: 'violet', note: '6 problems' },
+      { id: 'quiz', kind: 'quiz', xp: 20 },
+    ],
+  },
 ]
 
 export const unitKey = (u) => `${u.track}/${u.unit}`

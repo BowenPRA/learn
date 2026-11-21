@@ -74,6 +74,7 @@ it ("From the classroom").
 | Maths 7.1 Ordering Fractions | Lesson 25, Mixed ↔ improper 20, Which is bigger? 20, Fractions to decimals 25, Quiz 20 (110 on offer) |
 | Upper Secondary English 2 The Verb in Every Sentence | Lesson 15, Key words 10, Grammar edit 20, Find & Fix 15, Fix it your way 15, Reading 10, Quiz 15, Timed writing 30 (130 on offer); finished only with the quiz and the timed writing done |
 | Upper Secondary English 3 Nouns and Articles | the same tasks and XP as English 2 (130 on offer) |
+| Upper Secondary Maths 1 Solving Equations | Lesson 15, Key words 10, Balance 30, Show your working 25, Find the mistake 15, Write the equation 20, Quiz 20 (135 on offer) |
 
 Maths 7.1 (20 November 2026, built on the Workbook's Exercise 7.1 at Mr. Bowen's request;
 every number is new):
@@ -186,6 +187,44 @@ thing, a then the, and no article for things in general. Built like English 2:
 - **Class deck**: `classroom/content/upper-english/U03/`, 16 slides, staff only. A class
   deck icon must be one the deck player knows (`classroom/src/components/layouts/primitives.jsx`,
   `ICONS`): any other shows as an "i".
+
+## Upper Secondary Maths
+
+A freshman algebra track for the Upper Secondary class (`UPPER_MATH`, class
+`math:Upper Secondary`), planned with Mr. Bowen on 21 November 2026: Unit 1 solving
+equations, Unit 2 formulas (moving letters around), Unit 3 quadratics (factoring, the
+vertex, graphing). Each unit offers about 135 XP and stops at 100; finished at 100, or at
+80 with the quiz done. English only, like the English track (`unit/main.jsx` gives every
+`UPPER_` track English alone; the course page and the key words show no language switch).
+A student sees the track by their level (Upper Secondary) and saves to it at once; the
+class page needs Maths for Upper Secondary on the teacher's row in The Current.
+
+It takes the best of the Dashboard's attempts (Acellus Algebra, GED Maths 1A–1C):
+the Balance task and its engine came over; Undo It (flow charts) and the inequality tasks
+did not.
+
+Maths 1, Solving Equations (21 November 2026, plan approved first):
+
+- **Lesson** (`src/data/UPPER_MATH/U01/notes.js`): 14 slides, 9 things to write down, 9
+  questions. The working is big aligned maths with each move beside its line. Four
+  questions are typed equations (`fill` with `solve` lines: the answer is worked out from
+  the equation, negatives and fractions included); five are multiple choice where the
+  choice is the point (the first step, is Mr Bowen right).
+- **Balance** (engine `Balance`, `src/tasks/EquationBalance.jsx`, the unit's `balance`): the
+  Dashboard's task with English only, a save after each equation (it opens at the first
+  one not solved), half marks after Show me, and `tidy` to show an equation as written
+  above its first line (`3(x + 2) = 21`, then `3x + 6 = 21`), since the engine multiplies
+  out brackets and collects like terms as it reads. 12 equations, one move up to a bracket
+  with x on both sides; every one solves in its target moves (`tests/upper-math.test.mjs`).
+- **Show your working** (`content/UPPER_MATH/U01/working.js`): 10 equations, each line typed
+  (multiply out, collect, move the x term, undo + or −, undo × or ÷); every slip is worked
+  out from the numbers and named, and a wrong answer at the practice and challenge levels
+  opens the line it came from.
+- **Find the mistake** (`mistake.js`): 6 of Mr Bowen's solutions with one wrong line, shown
+  as a table: find the line, write it correctly, finish the equation.
+- **Write the equation** (`story.js`): 6 short word problems: pick the equation (every
+  wrong one is a real misreading), one line, the answer.
+- **Quiz**: 10 questions, 3 typed.
 
 ## Timed writing and My Writing
 

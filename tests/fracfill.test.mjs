@@ -41,3 +41,28 @@ test('a hint never gives the answer', () => {
     assert.ok(h.fr)
   }
 })
+
+// Upper Secondary Maths Unit 1 (21 November 2026): an equation to solve, "x = [ ]".
+test('a solve line works out its own answer and marks negatives and fractions', () => {
+  const m = fillModel({ lines: [{ solve: '3x + 7 = 22' }, { solve: '2x + 9 = 1' }, { solve: '2x = 5' }, { solve: 'x/3 = 4', tex: '\dfrac{x}{3} = 4' }] })
+  assert.deepEqual(m.lines.map((l) => l.boxes[0].answer), ['5', '-4', '5/2', '12'])
+  assert.equal(m.split, 4, 'equations take one column')
+  assert.equal(m.lines[3].tex, '\dfrac{x}{3} = 4')
+  const ok = markFill(m, { '0.0': '5', '1.0': '−4', '2.0': '2.5', '3.0': '12' })
+  assert.equal(ok.firstBad, null)
+  assert.equal(markFill(m, { '0.0': '5', '1.0': '4', '2.0': '5/2', '3.0': '12' }).firstBad, 1)
+})
+
+test('the validator refuses a solve line with no single answer', () => {
+  assert.deepEqual(checkFillActivity({ lines: [{ solve: '4(x - 3) = 20' }, { solve: '10 - x = 4' }] }), [])
+  assert.match(checkFillActivity({ lines: [{ solve: '2x + 1 = 2x + 3' }] }).join(), /no single answer/)
+  assert.match(checkFillActivity({ lines: [{ solve: 'x + 1 < 4' }] }).join(), /needs an = sign/)
+})
+
+test('a solve hint names the move, never the answer', () => {
+  const hint = (solve) => fillHint(fillModel({ lines: [{ solve }] }).lines[0]).en
+  assert.match(hint('5x + 3 = 2x + 18'), /smaller x term/)
+  assert.match(hint('4x - 3 = 25'), /\+ or − first/)
+  assert.match(hint('6x = 42'), /× or ÷/)
+  assert.ok(!/\b7\b/.test(hint('6x = 42')))
+})

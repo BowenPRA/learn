@@ -102,16 +102,18 @@ are hash routes (`/#/...`), because GitHub Pages has no server rewrites.
 - **What to do next**: half-done task, then first unopened, then most XP left. `src/data/units.js`
 - **Unit page**: subject banner, XP bar, Next button, task tiles under Learn / Practice / Quiz. `unit/app/UnitHome.jsx`, `unit/main.jsx` · `/unit/#/<TRACK>/<UNIT>`
 - **A task**: opens one task of a unit. `unit/main.jsx` · `/unit/#/<TRACK>/<UNIT>/<task>`
-- **Course page**: XP across a course's units, carry-on banner, unit cards, Arcade banner. `unit/app/CourseHome.jsx` · `/unit/#/<TRACK>`
+- **Course page**: XP across a course's units, carry-on banner, unit cards, Arcade banner; an EN/FR switch except on the Upper Secondary tracks (English only). `unit/app/CourseHome.jsx` · `/unit/#/<TRACK>`
 - **Task look**: each task's name, icon and colour from its kind. `unit/app/taskLook.js`, `unit/app/theme.js`
 - **Task kind notes (Lesson)**: self-study deck with scored checks. `unit/src/tasks/Notes.jsx`, `unit/src/components/notes/`
-- **Fill-in question (notes)**: fraction sentences with boxes to type into (23/6 = ☐ ☐/6) or a sign to tap (= ≠ < >); one Check, a hint on the first mistake, then the answers. Every line is proved true when checked. `unit/src/components/notes/FillActivity.jsx`, `unit/src/utils/fracFill.js`
-- **Task kind words (Key words)**: word cards with audio, then a vocab quiz. `unit/app/Words.jsx`
+- **Fill-in question (notes)**: fraction sentences with boxes to type into (23/6 = ☐ ☐/6) or a sign to tap (= ≠ < >); one Check, a hint on the first mistake, then the answers. Every line is proved true when checked. A line can also be an equation to solve (`{ solve: '3x + 7 = 22' }` shows "x = ☐"): its answer, a negative or a fraction too, is worked out from the equation, and the hint names the move for its shape (Upper Secondary Maths 1). `unit/src/components/notes/FillActivity.jsx`, `unit/src/utils/fracFill.js`
+- **Task kind words (Key words)**: word cards with audio, then a vocab quiz; the EN/FR switch and "and French" only when the words have French. `unit/app/Words.jsx`
 - **Task kind engine**: interactive screens listed in ENGINES. `unit/app/engines.js`
 - **Tide Lab**: Science 3.4 river tide task. `unit/src/tasks/TideLab.jsx`
 - **Protractor**: drag and turn a protractor onto 8 angles, read and type the size. `unit/app/tasks/ProtractorTask.jsx`
 - **Quadrilaterals (QuadCheck)**: draw from a sketch, fourth angle, 360° check. `unit/src/tasks/ZeroLine.jsx`
 - **Bus Stop (short division)**: the whole bus stop open from the first problem, as on paper: every digit and remainder typed, +0 to add a zero, the answer typed underneath (rounded for a `dp` item). One Check marks up to the first mistake, which gets a hint; Hint and Show me only on request; a problem filled in pays half. Items may be fractions ("Write 13/8 as a decimal"). Maths 7.1's Fractions to decimals (engine BusStop). `unit/src/tasks/ShortDivision.jsx`, `unit/src/utils/shortDivision.js`
+- **Balance (solving equations)**: the Dashboard's Balance task: the equation on a beam, one move (+ − × ÷ a number or an x term) done to both sides at a time, the written working building up beside it; Undo, Reset, Show me (half marks); an item's `tidy` shows the equation as written (a bracket, like terms) above its first line. Saves after each equation and opens at the first one not solved. No answer key: the moves, target and hint come from the equation. Upper Secondary Maths 1 (engine Balance). `unit/src/tasks/EquationBalance.jsx`, `unit/src/components/math/LinearMath.jsx`, `unit/src/utils/linearEquation.js`
+- **Upper Secondary Maths 1 Solving Equations**: English only; lesson notes (14 slides, four typed equations to solve), Balance, Show your working (each line typed), Find the mistake (Mr Bowen's worked solutions), Write the equation (word problems), quiz. `unit/src/data/UPPER_MATH/U01/`, `unit/content/UPPER_MATH/U01/` · `/unit/#/UPPER_MATH/U01`
 - **Maths 7.1 Ordering fractions**: lesson notes for working alone (five typed fill-in questions, a how-to for bus stop division), Mixed ↔ improper and Which is bigger? (Workbook-style step sets), Fractions to decimals, quiz. `unit/src/data/Y7_MATH/U07_1/`, `unit/content/Y7_MATH/U07_1/` · `/unit/#/Y7_MATH/U07_1`
 - **Task kind steps (Workbook)**: fresh Workbook-style problems on the step engine. `unit/app/Workbook.jsx`, `unit/content/<TRACK>/<UNIT>/`
 - **Task kind quiz**: end-of-unit quiz. `unit/src/tasks/Assessment.jsx`
@@ -232,6 +234,7 @@ Units (`src/data/units.js`), in order:
 - **Upper Secondary English 1 Complete Sentences**: Lesson 15, Key words 10, Grammar edit 20, Find & Fix 15, Fix it your way 15, Quiz 15, Timed writing 30; finished only with the quiz and the timed writing done. `unit/src/data/UPPER_ENG/U01/data.js`
 - **Upper Secondary English 2 The Verb in Every Sentence**: Lesson 15, Key words 10, Grammar edit 20, Find & Fix 15, Fix it your way 15, Reading 10, Quiz 15, Timed writing 30 (130 on offer); a quarter of the practice from Unit 1; finished only with the quiz and the timed writing done. `unit/src/data/UPPER_ENG/U02/data.js`
 - **Upper Secondary English 3 Nouns and Articles**: the same tasks and XP as English 2 (130 on offer); a quarter of the practice from Units 1 and 2; finished only with the quiz and the timed writing done. `unit/src/data/UPPER_ENG/U03/data.js`
+- **Upper Secondary Maths 1 Solving Equations** (class `math:Upper Secondary`): Lesson 15, Key words 10, Balance 30, Show your working 25, Find the mistake 15, Write the equation 20, Quiz 20 (135 on offer); finished at 100, or 80 with the quiz done. `unit/src/data/UPPER_MATH/U01/data.js`
 
 Lesson packs: one converted pack (Year 5 Maths, `packs/`) and three hand-made demo packs
 on negative numbers (`src/lib/demo/packY5Negatives.js`).

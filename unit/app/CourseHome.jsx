@@ -82,9 +82,12 @@ export default function CourseHome({ track, onOpenUnit, onOpenTask, onArcade, on
           <span className="inline-flex shrink-0 items-center gap-1.5 rounded-xl border-2 border-amber-200 dark:border-amber-700/60 bg-amber-50 dark:bg-amber-900/20 px-2.5 py-1.5 text-xs sm:text-sm font-black tabular-nums text-amber-700 dark:text-amber-300">
             <Trophy className="h-4 w-4" strokeWidth={2.5} /> {total}<span className="font-bold opacity-60"><span className="hidden sm:inline">/ {units.length * UNIT_XP} </span>XP</span>
           </span>
-          <button type="button" onClick={() => setLang(lang === 'en' ? 'fr' : 'en')} className="inline-flex h-11 min-w-[44px] shrink-0 items-center justify-center rounded-xl border-2 border-slate-200 dark:border-slate-700 px-2.5 text-xs font-black uppercase tracking-widest text-slate-500 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
-            {lang === 'fr' ? 'FR' : 'EN'}
-          </button>
+          {/* The Upper Secondary tracks are English only (unit/main.jsx): no switch. */}
+          {!track.startsWith('UPPER_') && (
+            <button type="button" onClick={() => setLang(lang === 'en' ? 'fr' : 'en')} className="inline-flex h-11 min-w-[44px] shrink-0 items-center justify-center rounded-xl border-2 border-slate-200 dark:border-slate-700 px-2.5 text-xs font-black uppercase tracking-widest text-slate-500 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+              {lang === 'fr' ? 'FR' : 'EN'}
+            </button>
+          )}
           <button type="button" onClick={toggleDark} aria-label="Light or dark" className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
             {isDark ? <Sun className="h-5 w-5 text-amber-400" /> : <Moon className="h-5 w-5" />}
           </button>

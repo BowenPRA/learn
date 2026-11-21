@@ -82,6 +82,15 @@ export const ENGINES = {
     pool: (u) => u.rewrite || [],
     props: ({ pool, saved, onComplete, onProgress, onQuit }) => ({ pool, savedData: saved || {}, onComplete, onProgress, onQuit }),
   },
+  // Upper Secondary Maths (21 November 2026): the Dashboard's Balance task. Solve an
+  // equation on a beam, one move done to both sides at a time; the written working
+  // builds up beside it. The unit's `balance`: [{ id, equation, prompt?, tidy? }].
+  Balance: {
+    nativeMax: 10,
+    component: task('EquationBalance'),
+    pool: (u) => u.balance || [],
+    props: usual,
+  },
   // Upper Secondary English: find the mistakes in a passage and type the fixes.
   FindFix: {
     nativeMax: 10,

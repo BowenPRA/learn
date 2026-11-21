@@ -70,7 +70,7 @@ function Review({ words, track, unitId, sound, lang, onLang, onDone }) {
   }, [words.length])
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950">
-      <TopBar onQuit={onDone} quitLabel={tr(lang, 'Back', null, 'Retour')} modeTitle={tr(lang, 'Review the words', null, 'Revoir les mots')} current={i + 1} total={words.length} lang={lang} onLangToggle={onLang} />
+      <TopBar onQuit={onDone} quitLabel={tr(lang, 'Back', null, 'Retour')} modeTitle={tr(lang, 'Review the words', null, 'Revoir les mots')} current={i + 1} total={words.length} lang={onLang ? lang : undefined} onLangToggle={onLang} />
       <main className="flex-1 flex flex-col items-center justify-center p-4 sm:p-8">
         <div key={w.word} className="w-full max-w-2xl rounded-3xl border-2 border-b-4 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-10 shadow-sm animate-in fade-in zoom-in-95 duration-300">
           <div className="flex items-center justify-between gap-3">
@@ -275,8 +275,11 @@ export default function Words({ unit, track, unitId, task, record, onSave, onQui
   const toggleLang = () => setLang((l) => (l === 'en' ? 'fr' : 'en'))
   // A unit with no recordings (meta.audio: false) shows no Listen buttons.
   const sound = unit.meta?.audio !== false
+  // Words with no French (the Upper Secondary tracks) get no EN/FR switch and no "and French".
+  const french = words.some((w) => w.fr)
+  const onLang = french ? toggleLang : undefined
 
-  if (view === 'review') return <Review words={words} track={track} unitId={unitId} sound={sound} lang={lang} onLang={toggleLang} onDone={() => setView('menu')} />
+  if (view === 'review') return <Review words={words} track={track} unitId={unitId} sound={sound} lang={lang} onLang={onLang} onDone={() => setView('menu')} />
   if (view === 'quiz') {
     return (
       <Quiz key={run} words={words} track={track} unitId={unitId} sound={sound} lang={lang} timed={timed} onQuit={() => setView('menu')}
@@ -296,7 +299,7 @@ export default function Words({ unit, track, unitId, task, record, onSave, onQui
   const best = record?.best ? Math.round(record.best * words.length) : null
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950">
-      <TopBar onQuit={onQuit} quitLabel={tr(lang, 'Back', null, 'Retour')} modeTitle={tr(lang, 'Key words', null, 'Mots clés')} current={best ?? 0} total={words.length} lang={lang} onLangToggle={toggleLang} />
+      <TopBar onQuit={onQuit} quitLabel={tr(lang, 'Back', null, 'Retour')} modeTitle={tr(lang, 'Key words', null, 'Mots clés')} current={best ?? 0} total={words.length} lang={french ? lang : undefined} onLangToggle={onLang} />
       <main className="flex-1 flex flex-col items-center justify-center p-4 sm:p-8">
         <div className="w-full max-w-2xl text-center">
           <p className="text-sm font-black uppercase tracking-widest text-[#58a700]">{words.length} {tr(lang, 'words', null, 'mots')}</p>
@@ -309,7 +312,7 @@ export default function Words({ unit, track, unitId, task, record, onSave, onQui
               className="group rounded-3xl border-2 border-b-4 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 text-left transition-all hover:border-[#1cb0f6] active:translate-y-1 active:border-b-2">
               <BookOpen className="h-9 w-9 text-[#1cb0f6]" strokeWidth={2.4} />
               <p className="mt-3 text-xl font-black text-slate-800 dark:text-slate-100">{tr(lang, 'Review the words', null, 'Revoir les mots')}</p>
-              <p className="mt-1 font-semibold text-slate-500 dark:text-slate-400">{sound ? tr(lang, 'Meanings, examples and French. Listen to each one. No score.', null, 'Sens, exemples et français. Écoute chaque mot. Sans score.') : tr(lang, 'Meanings, examples and French. No score.', null, 'Sens, exemples et français. Sans score.')}</p>
+              <p className="mt-1 font-semibold text-slate-500 dark:text-slate-400">{tr(lang, `Meanings${french ? ', examples and French' : ' and examples'}.${sound ? ' Listen to each one.' : ''} No score.`, null, `Sens, exemples et français.${sound ? ' Écoute chaque mot.' : ''} Sans score.`)}</p>
             </button>
             <div className="rounded-3xl border-2 border-b-4 border-[#58a700] bg-[#58cc02] p-6 text-left text-white">
               <Trophy className="h-9 w-9" strokeWidth={2.4} />

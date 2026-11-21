@@ -39,13 +39,14 @@ const TONE = {
 };
 const INK = 'text-slate-800 dark:text-slate-100';
 
-function NumBox({ id, uid, value, tone, locked, onEdit, onEnter, label }) {
+// `free`: an equation's answer, which may be negative or a fraction (-3, 5/2).
+function NumBox({ id, uid, value, tone, locked, onEdit, onEnter, label, free }) {
   return (
     <input id={`${uid}-${id}`} value={value ?? ''} disabled={locked}
-      onChange={(e) => onEdit(id, e.target.value.replace(/[^\d]/g, '').slice(0, 4))}
+      onChange={(e) => onEdit(id, free ? e.target.value.replace(/[^\d\-−/.]/g, '').slice(0, 7) : e.target.value.replace(/[^\d]/g, '').slice(0, 4))}
       onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); onEnter(id); } }}
-      inputMode="numeric" autoComplete="off" spellCheck={false} placeholder="?" aria-label={label}
-      className={`w-12 h-10 sm:w-[3.25rem] px-1 rounded-xl border-2 border-b-[4px] text-center font-black text-xl placeholder:text-orange-300 dark:placeholder:text-orange-400/60 focus:outline-none disabled:opacity-100 ${TONE[tone]}`} />
+      inputMode={free ? 'text' : 'numeric'} autoComplete="off" spellCheck={false} placeholder="?" aria-label={label}
+      className={`${free ? 'w-20' : 'w-12 sm:w-[3.25rem]'} h-10 px-1 rounded-xl border-2 border-b-[4px] text-center font-black text-xl placeholder:text-orange-300 dark:placeholder:text-orange-400/60 focus:outline-none disabled:opacity-100 ${TONE[tone]}`} />
   );
 }
 
@@ -70,10 +71,19 @@ function Part({ part, big, box }) {
   return <span className={`font-black leading-none ${INK} ${big ? 'text-4xl' : 'text-2xl'}`}>{part.value}</span>;
 }
 
-function Line({ line, label, box, sign }) {
+function Line({ line, label, box, sign, parseText }) {
   return (
     <div className="flex items-center gap-2 py-0.5">
       {label && <span className="shrink-0 w-6 h-6 rounded-full bg-[#4a8b23] text-white text-xs font-black flex items-center justify-center">{label}</span>}
+      {line.solve && (
+        // An equation to solve: the equation, then "x = [ ]".
+        <div className={`flex items-center gap-2 flex-wrap font-black text-xl sm:text-2xl ${INK}`}>
+          <span>{parseText(`$${line.tex}$`)}</span>
+          <span className="px-1 text-slate-400">→</span>
+          <span>{parseText(`$${line.v} =$`)}</span>
+          {box(line.boxes[0])}
+        </div>
+      )}
       <div className="flex items-center gap-1.5 flex-wrap">
         {line.terms.map((t, k) => {
           if (t.kind === 'sign') return t.box ? <span key={k}>{sign(t)}</span> : <span key={k} className={`px-1 font-black text-2xl ${INK}`}>{t.sign}</span>;
@@ -105,7 +115,7 @@ export function FillActivity({ activity, lang, result, onResult, parseText, retr
   const [tries, setTries] = useState(result?.tries || 0);
   const [msg, setMsg] = useState(null);
   const checked = !!result?.done;
-  const order = model.boxes.filter((b) => b.kind === 'num').map((b) => b.id);
+  const order = model.boxes.filter((b) => b.kind !== 'sign').map((b) => b.id);
 
   const edit = (id, text) => {
     setEntries((e) => ({ ...e, [id]: text }));
@@ -125,7 +135,7 @@ export function FillActivity({ activity, lang, result, onResult, parseText, retr
     if (n >= 2) { onResult({ done: true, correct: false, entries, marks: mk, tries: n, why }); return; }
     setMsg({ tone: 'bad', ...why });
     const firstWrong = model.lines[firstBad].boxes.find((b) => mk[b.id] === 'bad');
-    if (firstWrong?.kind === 'num') document.getElementById(`${uid}-${firstWrong.id}`)?.focus();
+    if (firstWrong && firstWrong.kind !== 'sign') document.getElementById(`${uid}-${firstWrong.id}`)?.focus();
   };
   // Enter moves to the next open number box; on the last one it checks.
   const onEnter = (id) => {
@@ -142,7 +152,7 @@ export function FillActivity({ activity, lang, result, onResult, parseText, retr
   const valueOf = (id) => (checked ? boxAnswer(id) : entries[id]);
   const box = (p) => (
     <NumBox key={p.id} id={p.id} uid={uid} value={valueOf(p.id)} tone={toneOf(p.id)} locked={checked || marks[p.id] === 'good'}
-      onEdit={edit} onEnter={onEnter} label={t.box} />
+      onEdit={edit} onEnter={onEnter} label={t.box} free={p.kind === 'sol'} />
   );
   const sign = (s) => (
     <SignBox choices={signChoices(s.sign)} value={valueOf(s.id)} tone={toneOf(s.id)} locked={checked || marks[s.id] === 'good'}
@@ -160,7 +170,7 @@ export function FillActivity({ activity, lang, result, onResult, parseText, retr
       <div className={`grid gap-x-6 ${cols.length > 1 ? 'sm:grid-cols-2' : ''}`}>
         {cols.map((col, ci) => (
           <div key={ci} className="flex flex-col">
-            {col.map((line) => <Line key={at(line)} line={line} label={many ? letter(at(line)) : null} box={box} sign={sign} />)}
+            {col.map((line) => <Line key={at(line)} line={line} label={many ? letter(at(line)) : null} box={box} sign={sign} parseText={parseText} />)}
           </div>
         ))}
       </div>
