@@ -418,6 +418,9 @@ const passageParagraphs = (text) =>
 
 export default function Assessment(props) {
   const { onComplete, onQuit } = props;
+  // A screen that is not the unit quiz (the English reading task) names itself:
+  // `labels` = { mode, ready, blurb, start, leave }, in English. Unset, it is the quiz.
+  const L = props.labels || {};
 
   let extractedQuestions = [];
   let extractedTimeLimit = 0;
@@ -606,7 +609,7 @@ export default function Assessment(props) {
   // everywhere else in the app the same X now saves.
   const quitTest = () => {
     if (phase === 'testing') {
-      const ok = window.confirm(tr(lang,
+      const ok = window.confirm(L.leave || tr(lang,
         'Leave the quiz? This attempt will not be saved.',
         'Thoát bài đánh giá? Lần làm này sẽ không được lưu.',
         'Quitter le quiz ? Cette tentative ne sera pas enregistrée.'));
@@ -667,7 +670,7 @@ export default function Assessment(props) {
       <TopBar 
         onQuit={phase === 'review' ? finishAndExit : quitTest}
         quitLabel={phase === 'testing' ? 'Exit' : 'Save & Quit'}
-        modeTitle={phase === 'review' ? tr(lang, 'Results', 'Kết Quả', 'Résultats') : tr(lang, 'Assessment Module', 'Bài Đánh Giá', 'Évaluation')}
+        modeTitle={phase === 'review' ? tr(lang, 'Results', 'Kết Quả', 'Résultats') : (L.mode || tr(lang, 'Assessment Module', 'Bài Đánh Giá', 'Évaluation'))}
         current={phase === 'review' ? scoreData?.correctCount : (phase === 'testing' ? currentIdx + 1 : undefined)}
         total={phase === 'setup' ? undefined : totalQuestions}
         progress={phase === 'testing' ? ((currentIdx) / totalQuestions) * 100 : (phase === 'review' ? 100 : undefined)}
@@ -685,11 +688,11 @@ export default function Assessment(props) {
             </div>
             
             <h1 className="text-4xl sm:text-5xl font-black mb-4 tracking-tight drop-shadow-sm text-slate-800 dark:text-white">
-              {tr(lang, 'Module Ready', 'Sẵn Sàng Chưa?', 'On commence ?')}
+              {L.ready || tr(lang, 'Module Ready', 'Sẵn Sàng Chưa?', 'On commence ?')}
             </h1>
             
             <p className="text-lg sm:text-xl font-bold text-slate-500 dark:text-slate-400 mb-10 max-w-xl leading-relaxed">
-              {tr(lang,
+              {L.blurb || tr(lang,
                 'Test your knowledge on this module. Answer carefully and review your performance at the end.',
                 'Kiểm tra kiến thức của bạn. Trả lời cẩn thận và xem lại kết quả chi tiết ở cuối bài.',
                 'Teste tes connaissances. Réponds avec soin et revois tes résultats en détail à la fin.')}
@@ -735,7 +738,7 @@ export default function Assessment(props) {
                   className="px-12 py-4 bg-[#58CC02] border-[#46A802] text-white rounded-2xl font-black uppercase tracking-widest text-lg hover:bg-[#46A802] transition-all border-b-[6px] active:border-b-0 active:translate-y-[6px] shadow-sm flex items-center justify-center"
               >
                 <PlayCircle className="w-7 h-7 mr-3" />
-                {tr(lang, 'Start Assessment', 'Bắt Đầu', 'Commencer')}
+                {L.start || tr(lang, 'Start Assessment', 'Bắt Đầu', 'Commencer')}
               </button>
             </div>
           </div>

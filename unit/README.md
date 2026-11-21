@@ -72,6 +72,7 @@ it ("From the classroom").
 | Science 5.2 Comparing Metals and Non-metals (`hidden`: no lesson yet) | Key words 20, Metal or non-metal? 20, Test it 15, Mystery substances 25, Quiz 20 |
 | Upper Secondary English 1 Complete Sentences | Lesson 15, Key words 10, Grammar edit 20, Find & Fix 15, Fix it your way 15, Quiz 15, Timed writing 30; finished only with the quiz and the timed writing done |
 | Maths 7.1 Ordering Fractions | Lesson 25, Mixed ↔ improper 20, Which is bigger? 20, Fractions to decimals 25, Quiz 20 (110 on offer) |
+| Upper Secondary English 2 The Verb in Every Sentence | Lesson 15, Key words 10, Grammar edit 20, Find & Fix 15, Fix it your way 15, Reading 10, Quiz 15, Timed writing 30 (130 on offer); finished only with the quiz and the timed writing done |
 
 Maths 7.1 (20 November 2026, built on the Workbook's Exercise 7.1 at Mr. Bowen's request;
 every number is new):
@@ -133,8 +134,7 @@ Maths 5.3:
   from a sketch, measure its fourth angle, check the four add up to 360°; then a square
   and a quadrilateral on paper, which can be skipped.
 
-English 1 (the XP above are a proposal of 19 November 2026, not yet approved by Mr. Bowen;
-everything but the story adds up to 75, so the story is needed to reach 80):
+English 1 (XP set by Mr. Bowen on 20 November 2026, 120 on offer):
 
 - **Fix it your way** (`app/tasks/RewriteTask.jsx`, engine `Rewrite`, the unit's `rewrite`):
   11 faulty sentences (comma splices, run-ons, fragments, a missing verb). The box starts
@@ -147,6 +147,28 @@ everything but the story adds up to 75, so the story is needed to reach 80):
   why. Right first time 1, after a hint ½, after "Show me" 0. `tests/rewrite.test.mjs`.
 - **Quiz**: q8 is typed (a joining word that fits a contrast) and q9 a sort (fragment,
   run-on, comma splice; drag or tap). The other eight are multiple choice.
+
+English 2, The Verb in Every Sentence (21 November 2026, plan approved by Mr. Bowen first;
+`docs/UPPER-ENGLISH-PLAN.md`, Stage 1 item 2): "be" and leaving it out, the present and past
+simple, the -s of he / she / it, does / didn't + the base verb, "there is / there are".
+
+- **A quarter from Unit 1**: from Unit 2 on, about a quarter of each unit's practice comes
+  from earlier units (5 of 20 Grammar edit blanks, 5 of 25 Find & Fix mistakes, 3 of 12
+  Fix it your way sentences, 2 of 10 quiz questions). Each says so in a comment.
+- **Fix it your way**: nine verb sentences (`kind: 'exact'`: the right sentence or any in
+  `accept`; `ask` replaces the line over the box) and three Unit 1 joins, one of them
+  "Although …, but …", which the checker names ("both join the two ideas"). In every unit a
+  contraction counts as its long form (`longForm` in `app/tasks/rewrite.js`): "She's" =
+  "She is", "didn't" = "did not".
+- **Reading** (engine `Reading`, the unit's `reading.js`, shaped like `assessment`): one
+  passage written for PRA Learn (How Bees Make Honey, about 260 words) and six questions,
+  two each on what it says, its words and how it is built. Untimed (`timeLimit: 0`), 10 XP,
+  not needed to finish. It runs on the quiz screen, which takes `labels` for its own words.
+- **Quiz**: q7 and q8 are typed (a past form; "There are"), q9 a sort of four verb
+  mistakes; q5 and q10 are from Unit 1.
+- **Timed writing**: one prompt, `u2w1` "A place I know well" (description: what is
+  there, a normal day, one visit).
+- **Class deck**: `classroom/content/upper-english/U02/`, 16 slides, staff only like Unit 1's.
 
 ## Timed writing and My Writing
 

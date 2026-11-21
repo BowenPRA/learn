@@ -11,7 +11,8 @@
 // than the best one (`weak`, usually "and") is accepted with a note naming the better word.
 //
 // An item is { id, given, label, a, b, fanboys?, weak?, subs?, allow?, accept? } (a "join"),
-// or { id, kind: 'exact', given, label, right, accept?, hint? } (a missing verb).
+// or { id, kind: 'exact', given, label, right, accept?, hint?, ask? } (a missing or wrong verb).
+// A contraction is the same answer as its long form: "She's tired" = "She is tired" (longForm).
 //   a, b      the two ideas, as they appear in `given`, with no end punctuation
 //   fanboys   the joining words that fit the meaning with the ideas in this order, e.g. ['so'];
 //             with the ideas swapped, "so" and "for" swap too ("A, so B" = "B, for A")
@@ -22,6 +23,7 @@
 //   accept    whole sentences that are also right though the checker cannot see why
 //             (e.g. "The library opens at nine and closes at five.")
 //   hint      (exact items) what to say when the answer is neither right nor a near miss
+//   ask       (exact items) the instruction over the box, when the task's own does not fit
 import { tidy } from '../writing/revision.js'
 import { checkFix } from '../../src/utils/proofread.js'
 
@@ -37,6 +39,23 @@ const FLIP = { so: 'for', for: 'so' }
 
 const FIXES = ['stop', 'semi', 'fanboys', 'sub']
 const NAMES = { stop: 'a full stop', semi: 'a semicolon', fanboys: 'a comma and a joining word', sub: 'a word like because or although' }
+
+// Contractions opened into their long form, so a student is never marked wrong for one.
+// "'s" is opened only after a pronoun, "there" and the like, and always as "is": "my
+// brother's" is a possessive, and "he's worked" (has) goes in an item's `accept` if wanted.
+const LONG = [
+  [/\bcan not\b/gi, (m) => `${m[0]}annot`],
+  [/\b(c)an't\b/gi, '$1annot'],
+  [/\b(w)on't\b/gi, '$1ill not'],
+  [/\b([a-z]+)n't\b/gi, '$1 not'],
+  [/\b(I)'m\b/g, '$1 am'],
+  [/\b(he|she|it|there|that|what|who|where|here)'s\b/gi, '$1 is'],
+  [/\b(you|we|they)'re\b/gi, '$1 are'],
+  [/\b(I|you|he|she|it|we|they)'ll\b/gi, '$1 will'],
+  [/\b(I|you|we|they)'ve\b/gi, '$1 have'],
+]
+/** tidy(), with every contraction opened: "She didn't go." → "She did not go." */
+export const longForm = (s) => LONG.reduce((acc, [re, to]) => acc.replace(re, to), tidy(s))
 
 const cap = (w) => w.charAt(0).toUpperCase() + w.slice(1)
 const list = (words) => [...new Set(words)].map((w) => `"${w}"`).join(' or ')
@@ -59,15 +78,18 @@ function fitting(item, swapped) {
 export function checkRewrite(item, input) {
   if (item?.kind === 'exact') {
     const r = checkFix(input, { wrong: item.given, right: item.right, accept: item.accept })
-    return !r.ok && item.hint && /^Not quite/.test(r.hint) ? wrong(item.hint) : r
+    if (r.ok) return r
+    const long = longForm(input)
+    if (long && [item.right, ...(item.accept || [])].some((s) => longForm(s) === long)) return { ok: true, hint: '' }
+    return item.hint && /^Not quite/.test(r.hint) ? wrong(item.hint) : r
   }
 
-  const t = tidy(input)
+  const t = longForm(input)
   if (!t) return wrong('Type your new sentence.')
-  if ((item.accept || []).map(tidy).includes(t)) return right('other')
+  if ((item.accept || []).map(longForm).includes(t)) return right('other')
   const allow = item.allow || FIXES
-  const a = tidy(item.a)
-  const b = tidy(item.b)
+  const a = longForm(item.a)
+  const b = longForm(item.b)
   const low = t.toLowerCase()
   const ia = low.indexOf(a.toLowerCase())
   const ib = low.indexOf(b.toLowerCase())
@@ -171,6 +193,9 @@ export function checkRewrite(item, input) {
   if (SUBORDINATORS.includes(lead)) {
     if (mid === '') return wrong(`An idea that starts with "${lead}" needs a comma after it, before the main idea.`)
     if (mid === '.') return wrong(`"${pre} ..." cannot stand alone. That is a fragment. Join it to the other idea with a comma.`)
+    // "Although it rained, but we played": two joining words where English takes one.
+    const both = mid.match(/^,?\s?([a-z]+)$/)
+    if (both && FANBOYS.includes(both[1])) return wrong(`"${pre}" and "${both[1]}" both join the two ideas. Keep one of them, not both.`)
     if (mid !== ',') return wrong(`Put a comma after the idea that starts with "${lead}", then the main idea.`)
     return midCapital(first) || midCapital(second) || sub(lead, first.id, () => wants('sub', lead))
   }

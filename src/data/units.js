@@ -128,6 +128,25 @@ export const UNITS = [
       { id: 'writing', kind: 'writing', xp: 30, note: '30 minutes' },
     ],
   },
+  {
+    // Upper Secondary English Unit 2 (Bowen, 21 November 2026, plan approved first): the
+    // verb in every sentence. Unit 1's tasks and XP, and the first reading passage (10 XP,
+    // not needed to finish): 130 XP on offer. A quarter of the practice is from Unit 1.
+    track: 'UPPER_ENG', unit: 'U02', classKey: 'english:Upper Secondary', label: '2', teacher: 'Mr. Bowen',
+    title: 'The Verb in Every Sentence',
+    subtitle: 'Be, present and past simple, the -s of he / she / it, and there is / there are. Then a 30-minute description.',
+    mustFinish: ['quiz', 'writing'],
+    tasks: [
+      { id: 'lesson', kind: 'notes', xp: 15 },
+      { id: 'words', kind: 'words', xp: 10 },
+      { id: 'edit', kind: 'engine', engine: 'GrammarEdit', xp: 20, title: 'Grammar edit', icon: 'PenLine', tone: 'sky' },
+      { id: 'findfix', kind: 'engine', engine: 'FindFix', xp: 15, title: 'Find & Fix', icon: 'Search', tone: 'orange' },
+      { id: 'rewrite', kind: 'engine', engine: 'Rewrite', xp: 15, title: 'Fix it your way', icon: 'Wrench', tone: 'rose', note: '12 sentences' },
+      { id: 'reading', kind: 'engine', engine: 'Reading', xp: 10, title: 'Reading', icon: 'BookOpen', tone: 'teal', note: '6 questions' },
+      { id: 'quiz', kind: 'quiz', xp: 15 },
+      { id: 'writing', kind: 'writing', xp: 30, note: '30 minutes' },
+    ],
+  },
 ]
 
 export const unitKey = (u) => `${u.track}/${u.unit}`

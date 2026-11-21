@@ -131,3 +131,83 @@ test('a missing verb: the right sentences pass, the original and near misses do 
   no('rw11', 'A small shop on the corner of our street.', /still the original/i)
   no('rw11', 'A small shop in the corner of our street.', /There is/)
 })
+
+// Unit 2 (21 November 2026): nine verb sentences and three from Unit 1. Every correct
+// version a student is likely to type must pass; a contraction counts as its long form.
+import { U02_DATA } from '../unit/src/data/UPPER_ENG/U02/data.js'
+import { longForm } from '../unit/app/tasks/rewrite.js'
+
+const item2 = (id) => U02_DATA.rewrite.find((r) => r.id === id)
+const ok2 = (id, text) => {
+  const r = checkRewrite(item2(id), text)
+  assert.equal(r.ok, true, `${id}: "${text}" should be right, got: ${r.hint}`)
+}
+const no2 = (id, text, hint) => {
+  const r = checkRewrite(item2(id), text)
+  assert.equal(r.ok, false, `${id}: "${text}" should be wrong`)
+  if (hint) assert.match(r.hint, hint, `${id}: "${text}"`)
+}
+
+test('Unit 2: every item passes its own answers, and a quarter comes from Unit 1', () => {
+  assert.deepEqual(checkRewriteItems(U02_DATA.rewrite), [])
+  assert.equal(U02_DATA.rewrite.length, 12)
+  assert.equal(U02_DATA.rewrite.filter((r) => r.kind !== 'exact').length, 3)
+  for (const r of U02_DATA.rewrite) assert.equal(checkRewrite(r, r.given).ok, false, `${r.id}: the faulty sentence passes`)
+})
+
+test('a contraction is the same answer as its long form', () => {
+  assert.equal(longForm("She's not hungry."), 'She is not hungry.')
+  assert.equal(longForm('She isn’t hungry.'), 'She is not hungry.')
+  assert.equal(longForm("I can't come, and he won't."), 'I cannot come, and he will not.')
+  assert.equal(longForm("My brother's car is red."), "My brother's car is red.")
+  ok2('rv6', 'My brother does not like spicy food.')
+  ok2('rv6', 'My brother doesn’t like spicy food.')
+  ok2('rv9', 'The bus does not stop here at night.')
+  ok2('rv10', 'We did not see the sign.')
+  ok('rw1', "My phone battery died, so I couldn't call you.")
+})
+
+test('Unit 2: the verb sentences take every correct version, and name the near misses', () => {
+  ok2('rv1', 'My neighbours are very noisy at night.')
+  ok2('rv1', 'My neighbours were very noisy at night.')
+  no2('rv1', 'My neighbours is very noisy at night.', /they: are/)
+  no2('rv1', 'My neighbours are very noisy at night', /punctuation/i)
+  ok2('rv2', 'The museum opens at ten on Sundays.')
+  ok2('rv2', 'The museum is open at ten on Sundays.')
+  no2('rv2', 'The museum opened at ten on sundays.', /capital/i)
+  ok2('rv3', 'Last night, we watched a film at home.')
+  ok2('rv3', 'Last night we were watching a film at home.')
+  no2('rv3', 'Last night we watching a film at home.', /past/)
+  ok2('rv5', 'There are two shops and a bakery in our street.')
+  ok2('rv5', 'In our street, there are two shops and a bakery.')
+  ok2('rv5', 'Our street has two shops and a bakery.')
+  no2('rv5', 'In our street there is two shops and a bakery.', /there are/)
+  ok2('rv6', "My brother didn't like spicy food.")
+  no2('rv6', "My brother doesn't likes spicy food.", /base verb, with no -s/)
+  no2('rv6', "My brother not like spicy food.", /doesn't/)
+  ok2('rv7', 'Two years ago my family went to the mountains.')
+  ok2('rv7', 'Two years ago, my family went to the mountains.')
+  no2('rv7', 'Two years ago my family goed to the mountains.', /irregular/)
+  ok2('rv9', "The bus didn't stop here at night.")
+  no2('rv10', "We didn't seen the sign.", /base verb/)
+  ok2('rv11', 'Where does your sister work?')
+  ok2('rv11', 'Where is your sister working?')
+  no2('rv11', 'Where does your sister works?', /base verb/)
+})
+
+test('Unit 2: the Unit 1 sentences, and two joining words where English takes one', () => {
+  ok2('rv4', 'The supermarket was closed, so we bought bread at the corner shop.')
+  ok2('rv4', 'We bought bread at the corner shop because the supermarket was closed.')
+  ok2('rv4', 'The supermarket was closed. We bought bread at the corner shop.')
+  no2('rv4', 'The supermarket was closed, but we bought bread at the corner shop.', /does not fit the meaning/)
+  ok2('rv8', 'Because she had a cold, my sister stayed at home.')
+  no2('rv8', 'My sister stayed at home. She had a cold.', /drops "because"/)
+  ok2('rv12', 'Although the tickets were expensive, the concert was full.')
+  ok2('rv12', 'The tickets were expensive, but the concert was full.')
+  ok2('rv12', 'The tickets were expensive, yet the concert was full.')
+  ok2('rv12', 'The concert was full although the tickets were expensive.')
+  ok2('rv12', 'The tickets were expensive. However, the concert was full.')
+  no2('rv12', 'Although the tickets were expensive, but the concert was full.', /"Although" and "but" both join/)
+  no2('rv12', 'Although the tickets were expensive but the concert was full.', /both join/)
+  no2('rv12', 'The tickets were expensive, so the concert was full.', /does not fit the meaning/)
+})

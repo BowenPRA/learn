@@ -311,6 +311,12 @@ export const CLASSROOM_LESSONS = [
     title: 'Complete Sentences',
     subtitle: 'Fragments, run-ons and comma splices, and four ways to fix them',
   },
+  // Staff only, like Unit 1's (Bowen, 21 November 2026).
+  {
+    course: 'upper-english', slug: 'U02', classKey: 'english:Upper Secondary', unit: '2', teacher: 'Mr. Bowen', staffOnly: true,
+    title: 'The Verb in Every Sentence',
+    subtitle: 'Be, present and past simple, the -s of he / she / it, and there is / there are',
+  },
 ]
 
 // Games the teacher runs on the projector, from classroom/content/games/<slug>/.
@@ -376,6 +382,7 @@ export const CLASSROOM_UNIT_NAMES = {
   // English only: the same name on the Vietnamese page.
   'upper-english': {
     1: ['Complete Sentences', 'Complete Sentences'],
+    2: ['The Verb in Every Sentence', 'The Verb in Every Sentence'],
   },
 }
 

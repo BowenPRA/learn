@@ -89,4 +89,22 @@ export const ENGINES = {
     pool: (u) => u.proofread || [],
     props: usual,
   },
+  // Upper Secondary English, from Unit 2 (Bowen, 21 November 2026): a short non-fiction
+  // passage with questions on its meaning, its words and how it is built, on the quiz
+  // screen. The unit's `reading` is shaped like its `assessment`; `timeLimit: 0` is untimed.
+  Reading: {
+    nativeMax: 20,
+    component: task('Assessment'),
+    pool: () => [],
+    props: ({ unit, onComplete, onQuit }) => ({
+      unit: { ...unit, assessment: unit.reading, passages: [] }, onComplete, onQuit, bilingual: true,
+      labels: {
+        mode: 'Reading',
+        ready: 'Read, then answer',
+        blurb: 'The passage stays on the screen beside each question. Read it once all the way through before you start.',
+        start: 'Start',
+        leave: 'Leave the reading? Your answers will not be saved.',
+      },
+    }),
+  },
 }

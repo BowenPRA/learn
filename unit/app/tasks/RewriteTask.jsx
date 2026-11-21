@@ -67,7 +67,7 @@ function Item({ item, index, total, earned, onScore, onNext, isLast }) {
         </div>
 
         <div className="p-4 sm:p-6">
-          <p className="text-lg font-black text-slate-800 dark:text-slate-100 leading-snug">{ASK[kind]}</p>
+          <p className="text-lg font-black text-slate-800 dark:text-slate-100 leading-snug">{item.ask || ASK[kind]}</p>
           {kind === 'join' && (
             <ul aria-label="Four ways to fix it" className="mt-3 flex flex-wrap gap-2">
               {FOUR.map(([name, mark]) => (

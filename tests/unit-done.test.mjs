@@ -40,3 +40,15 @@ test('a unit without mustFinish keeps the old rule', () => {
   const noQuiz = all(other, [quiz.id])
   assert.equal(unitXP(other, noQuiz).done, unitXP(other, noQuiz).xp >= 100)
 })
+
+// Unit 2 (21 November 2026): Unit 1's tasks and XP, and a reading task that is not
+// needed to finish.
+const english2 = UNITS.find((u) => u.track === 'UPPER_ENG' && u.unit === 'U02')
+
+test('English 2 offers 130 XP with a reading task, and must finish the quiz and the timed writing', () => {
+  assert.deepEqual(english2.tasks.map((t) => t.id), ['lesson', 'words', 'edit', 'findfix', 'rewrite', 'reading', 'quiz', 'writing'])
+  assert.equal(unitXP(english2, {}).offer, 130)
+  assert.deepEqual(mustFinishOf(english2).map((t) => t.id), ['quiz', 'writing'])
+  assert.equal(unitXP(english2, all(english2, ['writing'])).done, false)
+  assert.equal(unitXP(english2, all(english2, ['reading'])).done, true)
+})
