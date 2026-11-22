@@ -638,7 +638,9 @@ export function diagnoseCell(outer, inner, typed) {
  * A whole typed expansion. `simplify` (default: whatever the item needs)
  * requires the like terms to be collected too.
  */
-export function diagnoseExpand(expr, typed, { simplify } = {}) {
+// `grid: false` words the two pointers without the expansion grid, for a lesson that
+// does not teach it (Upper Secondary Maths 1, 22 November 2026).
+export function diagnoseExpand(expr, typed, { simplify, grid = true } = {}) {
   const model = expandModel(expr);
   const mustCollect = simplify ?? model.needsCollect;
   const got = tryPoly(typed);
@@ -677,6 +679,8 @@ export function diagnoseExpand(expr, typed, { simplify } = {}) {
     const flipped = model.expandedTerms.reduce((p, u, j) => polyAdd(p, { [u.key]: j === i ? rNeg(u.coef) : u.coef }), {});
     return polyEq(got, flipped);
   });
+  if (signSlip && !grid) return { ok: false, code: 'sign', en: 'One sign is wrong. The sign in front of a term stays with it.', vn: 'Có một dấu bị sai. Dấu đứng trước hạng tử luôn đi cùng hạng tử đó.', fr: 'Un signe est faux. Le signe devant un terme reste avec lui.' };
+  if (!grid) return { ok: false, code: 'wrong', en: `Multiply every term inside by the number outside, keeping each sign${model.needsCollect ? ', then collect the like terms' : ''}.`, vn: `Nhân mọi hạng tử bên trong với số bên ngoài, giữ nguyên dấu${model.needsCollect ? ', rồi gộp các hạng tử đồng dạng' : ''}.`, fr: `Multiplie chaque terme à l'intérieur par le nombre à l'extérieur, en gardant chaque signe${model.needsCollect ? ', puis réduis les termes semblables' : ''}.` };
   if (signSlip) return { ok: false, code: 'sign', en: 'One sign is wrong. The sign in front of a term goes into its box with it.', vn: 'Có một dấu bị sai. Dấu đứng trước hạng tử đi vào ô cùng với hạng tử đó.', fr: 'Un signe est faux. Le signe devant un terme va dans sa case avec lui.' };
   // A pointer, not the answer: the student still has another go.
   return { ok: false, code: 'wrong', en: `Fill the grid one box at a time: multiply every term inside by the term outside, keeping each sign${model.needsCollect ? ', then collect the like terms' : ''}.`, vn: `Điền từng ô một: nhân mọi hạng tử bên trong với hạng tử bên ngoài, giữ nguyên dấu${model.needsCollect ? ', rồi gộp các hạng tử đồng dạng' : ''}.`, fr: `Remplis la grille une case à la fois : multiplie chaque terme à l'intérieur par le terme à l'extérieur, en gardant chaque signe${model.needsCollect ? ', puis réduis les termes semblables' : ''}.` };

@@ -224,7 +224,8 @@ export function AlgebraActivity({ activity, lang, result, onResult, parseText })
   const [msg, setMsg] = useState(null);
   const checked = !!result?.done;
 
-  const diagnose = (v) => (mode === 'simplify' ? diagnoseSimplify(activity.expr, v) : mode === 'expand' ? diagnoseExpand(activity.expr, v) : diagnoseSolve(model, v));
+  // `grid: false` on the activity: the hints do not mention the expansion grid.
+  const diagnose = (v) => (mode === 'simplify' ? diagnoseSimplify(activity.expr, v) : mode === 'expand' ? diagnoseExpand(activity.expr, v, { grid: activity.grid !== false }) : diagnoseSolve(model, v));
   const check = () => {
     if (checked || !typed.trim()) return;
     const d = diagnose(typed);

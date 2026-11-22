@@ -8,6 +8,8 @@ import assert from 'node:assert/strict'
 import { parseEquation, parSteps, suggestMove, applyMove, isSolved } from '../unit/src/utils/linearEquation.js'
 import { checkStepPractice } from '../unit/src/stepPractice/check.js'
 import { checkFillActivity } from '../unit/src/utils/fracFill.js'
+import { checkActivity } from '../unit/src/utils/activity.js'
+import { checkWorking } from '../unit/src/utils/working.js'
 import { U01_DATA } from '../unit/src/data/UPPER_MATH/U01/data.js'
 import working from '../unit/content/UPPER_MATH/U01/working.js'
 import mistake from '../unit/content/UPPER_MATH/U01/mistake.js'
@@ -32,12 +34,19 @@ test('the three step sets pass their checker (warnings only)', () => {
   }
 })
 
-test('the lesson: every typed question proves, the counts are on the title slide', () => {
+test('the lesson: every question and every worked example proves, the counts are on the title slide', () => {
   const fills = U01_DATA.notes.filter((s) => s.activity?.type === 'fill')
   assert.equal(fills.length, 4)
   for (const s of fills) assert.deepEqual(checkFillActivity(s.activity), [], s.title)
+  for (const s of U01_DATA.notes.filter((x) => x.activity)) assert.deepEqual(checkActivity(s.activity, { bilingual: false }), [], s.title)
+  // 22 November 2026: every worked example is a notebook working that ends with x on its own
+  const works = U01_DATA.notes.filter((s) => s.layout === 'work' && s.work)
+  assert.equal(works.length, 6)
+  for (const s of works) assert.deepEqual(checkWorking(s.work), [], s.title)
+  assert.equal(U01_DATA.notes.length, 16)
   assert.ok(U01_DATA.notes.every((s) => !/\$[^$]*\$[^$]*\$/.test(s.title || '')), 'no stray $ in titles')
-  assert.match(U01_DATA.notes[0].chips[1].text, /^9 questions/)
+  assert.match(U01_DATA.notes[0].chips[0].text, /^9 things/)
+  assert.match(U01_DATA.notes[0].chips[1].text, /^11 questions/)
 })
 
 test('the unit offers 135 XP and stops at 100', () => {

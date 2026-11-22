@@ -2,20 +2,33 @@
 // Upper Secondary Maths Unit 1 — Solving Equations, the self-study lesson (Bowen,
 // 21 November 2026: an algebra track on solving equations, "not too overwhelming").
 // One idea runs through it: an equation is a balance, so whatever you do to one side
-// you do to the other. Then the order: brackets, like terms, x on both sides, undo
-// + or −, undo × or ÷, check.
+// you do to the other. Then grouping: x terms with x terms, numbers with numbers.
+//
+// Reworked 22 November 2026 (Bowen: "the -9 under the +9 and 14 respectively … talk
+// about grouping with like terms, constants with constants … add more polish"; plan and
+// mock-up approved first). Every worked example is now a `work` slide
+// (layouts/WorkLayout.jsx, components/math/NotebookWorking.jsx): the move written under
+// the term it undoes on both sides, x terms blue and numbers amber (the Balance chips'
+// colours), the words for each move in the margin, one step at a time, then the check.
+// New slide 8, Two Kinds of Terms, with the Year 7 sort; slide 9 groups like terms in
+// coloured boxes and ends with a typed "collect the like terms"; brackets became two
+// slides (arrows from the number outside to each term and a typed "expand"; then solving
+// from the bracket); x on both sides is told as grouping.
+// 16 slides (was 14): a save made on the old deck starts the notes again; the best
+// score stays.
 //
 // Taken from the best of the Dashboard's algebra units: GED Maths 1A and 1B (the
-// golden rule, inverse operations, always check) and the Acellus Algebra balance.
+// golden rule, inverse operations, always check), the Acellus Algebra balance and the
+// Year 7 algebra activities (terms, algebra).
 //
 // How it reads (the English Unit 1 and Maths 7.1 rules):
 // - One orange "Write this down" box per slide at most, numbered by `numbered()`.
 // - A line starting ✗ or ✓ is a worked example and gets a red or green strip.
-// - Four questions are typed (`fill` with `solve` lines, utils/fracFill.js): the answer
-//   is worked out from the equation, so the key cannot be wrong. Five are multiple
-//   choice, where the choice is the point (which step first, is it right).
-// - Nothing scrolls at 1366×768. English only, like the whole Upper Secondary track.
-// - Every equation is new; none is a book question.
+// - Typed questions: four `fill` slides with `solve` lines (utils/fracFill.js) and two
+//   `algebra` ones (collect, expand); the sort is `terms`. Every answer is worked out,
+//   never typed by the author. Four are multiple choice, where the choice is the point.
+// - Nothing scrolls at 1366×768 with every step shown. English only, like the whole
+//   Upper Secondary track. Every equation is new; none is a book question.
 
 const ORANGE = '#c2410c';
 const TEAL = '#0087a8';
@@ -33,7 +46,7 @@ const slides = [
     eyebrow: 'Unit 1',
     title: 'Solving Equations',
     compact: true,
-    objective: 'Solve an equation by doing the same to both sides: one step, two steps, brackets, and x on both sides. Then check the answer.',
+    objective: 'Solve an equation by doing the same to both sides: one step, two steps, like terms, brackets, and x on both sides. Then check the answer.',
     card: {
       icon: 'Scale',
       badge: 'The big idea',
@@ -67,14 +80,14 @@ const slides = [
 
   // 3 ─ Same to both sides ──────────────────────────────────────────────────
   {
-    layout: 'split',
+    layout: 'work',
     accent: TEAL,
     icon: 'Scale',
     title: 'Do the Same to Both Sides',
-    content: 'Take 9 away from **both** sides.\n$$\\begin{aligned} x + 9 &= 14 \\\\ x + 9 - 9 &= 14 - 9 \\\\ x &= 5 \\end{aligned}$$',
+    content: 'Take 9 away from **both** sides: one side alone breaks the balance. Press **Next step**.',
+    work: { eq: 'x + 9 = 14', moves: ['-9'] },
     notes: [
-      { tone: 'write', text: 'Do the **same** thing to **both sides**. The equation stays balanced.' },
-      { tone: 'tip', badge: false, text: 'Take 9 from one side only and the two sides are no longer equal.' },
+      { tone: 'write', text: 'Do the **same** thing to **both sides**. Write the move under each side.' },
     ],
   },
 
@@ -105,11 +118,11 @@ const slides = [
 
   // 5 ─ Two steps ───────────────────────────────────────────────────────────
   {
-    layout: 'split',
+    layout: 'work',
     accent: ORANGE,
     icon: 'Milestone',
     title: 'Two Steps',
-    content: 'Undo the $+ 7$ first. Then undo the $\\times 3$.\n$$\\begin{aligned} 3x + 7 &= 22 &&\\text{subtract 7} \\\\ 3x &= 15 &&\\text{divide by 3} \\\\ x &= 5 \\end{aligned}$$',
+    work: { eq: '3x + 7 = 22', moves: ['-7', '/3'] },
     notes: [
       { tone: 'write', text: 'Two steps: undo the $+$ or $-$ **first**. Then undo the $\\times$ or $\\div$.' },
     ],
@@ -134,7 +147,7 @@ const slides = [
     eyebrow: 'Your turn',
     title: 'Two Steps',
     ratio: 40,
-    content: 'Solve each one in your notebook.\nThen type $x$.',
+    content: 'Solve each one in your notebook.\nWrite each move under both sides.\nThen type $x$.',
     notes: [
       { tone: 'tip', badge: false, text: 'An answer can be **negative**. Type the minus sign: $-2$.' },
     ],
@@ -175,40 +188,75 @@ const slides = [
     },
   },
 
-  // 8 ─ Like terms ──────────────────────────────────────────────────────────
+  // 8 ─ Two kinds of terms, then the sort ──────────────────────────────────
   {
-    layout: 'split',
+    layout: 'work',
     accent: PURPLE,
-    icon: 'Layers',
-    title: 'Tidy Each Side First',
-    content: 'Tidy the left side. Then solve.\n$$\\begin{aligned} 5x + 2x - 3 &= 18 \\\\ 7x - 3 &= 18 \\\\ 7x &= 21 \\\\ x &= 3 \\end{aligned}$$',
+    icon: 'Shapes',
+    title: 'Two Kinds of Terms',
+    content: 'Every term is an **x term** (it has an $x$) or a **number** (a constant, no letter). The sign in front belongs to the term.',
+    groups: { expr: '4x - 5 + 9 - x', sums: false },
     notes: [
-      { tone: 'write', text: '**Like terms** have the same letter. Add them first: $5x + 2x = 7x$.' },
+      { tone: 'write', text: '**Like terms** are the same kind. Group **x terms** with x terms and **numbers** with numbers.' },
     ],
-    check: {
-      id: 'chk_like_terms',
-      q: 'Tidy the left side of $4x + 3 + 2x = 27$.',
-      options: [
-        { val: 'A', text: '$6x + 3$' },
-        { val: 'B', text: '$9x$' },
-        { val: 'C', text: '$4x + 5$' },
-      ],
-      correct: 'A',
-      expEn: '$4x$ and $2x$ are like terms: $6x$. The 3 has no $x$, so it stays on its own. Then $6x + 3 = 27$ gives $x = 4$.',
+    activity: {
+      id: 'act_sort_terms',
+      type: 'terms',
+      prompt: 'Put each term in its basket. Keep its sign.',
+      expr: '5x + 7 - 3x + 2 + x',
+      explain: 'x terms: $5x - 3x + x = 3x$. Numbers: $7 + 2 = 9$.',
     },
   },
 
-  // 9 ─ Brackets ────────────────────────────────────────────────────────────
+  // 9 ─ Group like terms, then solve ───────────────────────────────────────
   {
-    layout: 'split',
+    layout: 'work',
+    accent: PURPLE,
+    icon: 'Layers',
+    title: 'Group Like Terms',
+    content: 'Collect the **x terms**. Collect the **numbers**. Then solve.',
+    groups: { expr: '5x + 7 + 2x - 3', chips: false },
+    work: { eq: '7x + 4 = 25', written: '5x + 7 + 2x - 3 = 25', writtenSay: 'group like terms', moves: ['-4', '/7'] },
+    activity: {
+      id: 'act_collect',
+      type: 'algebra',
+      mode: 'simplify',
+      prompt: 'Group the like terms. Type the shorter expression.',
+      expr: '6x + 5 - 2x + 1',
+      explain: 'x terms: $6x - 2x = 4x$. Numbers: $5 + 1 = 6$. So $6x + 5 - 2x + 1 = 4x + 6$.',
+    },
+  },
+
+  // 10 ─ Brackets: multiply out ───────────────────────────────────────────
+  {
+    layout: 'work',
     accent: PURPLE,
     icon: 'Brackets',
-    title: 'Brackets: Multiply Out First',
-    ratio: 45,
-    content: '✗ $3(x + 4) = 3x + 4$ | the 4 needs × 3 too\n$$\\begin{aligned} 3(x + 4) &= 27 &&\\text{multiply out} \\\\ 3x + 12 &= 27 &&\\text{subtract 12} \\\\ 3x &= 15 &&\\text{divide by 3} \\\\ x &= 5 \\end{aligned}$$',
+    title: 'Brackets: Multiply Out',
+    content: '$3(x + 4)$ means 3 lots of $x + 4$. Follow the arrows.',
+    expand: [{ a: 3, b: 4 }, { a: 5, b: -2 }],
     notes: [
       { tone: 'write', text: '**Expand**: the number outside multiplies **every** term inside the bracket.' },
     ],
+    activity: {
+      id: 'act_expand',
+      type: 'algebra',
+      mode: 'expand',
+      grid: false,
+      prompt: 'Multiply out the bracket. Type the answer.',
+      expr: '4(x - 3)',
+      explain: '$4 \\times x = 4x$ and $4 \\times (-3) = -12$. So $4(x - 3) = 4x - 12$.',
+    },
+  },
+
+  // 11 ─ Solve with a bracket ──────────────────────────────────────────────
+  {
+    layout: 'work',
+    accent: PURPLE,
+    icon: 'Brackets',
+    title: 'Solve With a Bracket',
+    content: 'Multiply out first. Then solve as before.',
+    work: { eq: '3x + 12 = 27', written: '3(x + 4) = 27', writtenSay: 'multiply out the bracket', moves: ['-12', '/3'] },
     activity: {
       id: 'act_brackets',
       type: 'fill',
@@ -222,15 +270,15 @@ const slides = [
     },
   },
 
-  // 10 ─ x on both sides ───────────────────────────────────────────────────
+  // 12 ─ x on both sides, told as grouping ─────────────────────────────────
   {
-    layout: 'split',
+    layout: 'work',
     accent: BLUE,
     icon: 'ArrowLeftRight',
     title: 'x on Both Sides',
-    content: 'Here the smaller $x$ term is $2x$.\n$$\\begin{aligned} 5x + 3 &= 2x + 18 &&\\text{subtract } 2x \\\\ 3x + 3 &= 18 &&\\text{subtract 3} \\\\ 3x &= 15 &&\\text{divide by 3} \\\\ x &= 5 \\end{aligned}$$',
+    work: { eq: '5x + 3 = 2x + 18', moves: ['-2x', '-3', '/3'], say: ['x terms to the left', 'numbers to the right', 'divide both sides by 3'] },
     notes: [
-      { tone: 'write', text: '$x$ on both sides: take away the **smaller** $x$ term first. Then solve as before.' },
+      { tone: 'write', text: 'Group again: **x terms** on one side, **numbers** on the other.' },
     ],
     check: {
       id: 'chk_both_sides',
@@ -241,21 +289,18 @@ const slides = [
         { val: 'C', text: 'Add 2 to the left side.' },
       ],
       correct: 'A',
-      expEn: '$3x$ is the smaller $x$ term. Take it from both sides: $4x - 2 = 10$, so $4x = 12$ and $x = 3$. B turns every term into a fraction. C changes one side only.',
+      expEn: '$3x$ is the smaller x term. Take it from both sides: $4x - 2 = 10$, so $4x = 12$ and $x = 3$. B turns every term into a fraction. C changes one side only.',
     },
   },
 
-  // 11 ─ Negatives ─────────────────────────────────────────────────────────
+  // 13 ─ Negatives ─────────────────────────────────────────────────────────
   {
-    layout: 'split',
+    layout: 'work',
     accent: RED,
     icon: 'Minus',
     title: 'When x Has a Minus',
-    ratio: 45,
-    content: 'Subtract 4, then divide by $-1$.\n$$\\begin{aligned} 4 - x &= 9 \\\\ -x &= 5 \\\\ x &= -5 \\end{aligned}$$\nCheck: $4 - (-5) = 9$ ✓',
-    notes: [
-      { tone: 'tip', badge: 'In Balance', icon: 'Scale', text: 'To divide by $-1$, pick 1 and press **±**.' },
-    ],
+    content: '$-x$ is $-1 \\times x$, so the last move is $\\div (-1)$.',
+    work: { eq: '-x + 4 = 9', written: '4 - x = 9', writtenSay: 'the same, with the x term first', moves: ['-4', '/-1'] },
     activity: {
       id: 'act_negatives',
       type: 'fill',
@@ -269,30 +314,27 @@ const slides = [
     },
   },
 
-  // 12 ─ Watch out ─────────────────────────────────────────────────────────
+  // 14 ─ Watch out ─────────────────────────────────────────────────────────
   {
     layout: 'split',
     accent: RED,
     icon: 'AlertTriangle',
     title: 'Watch Out',
-    content: '✗ $3x + 6 = 21$ → $x + 6 = 7$ | divided one term\n✓ $3x + 6 = 21$ → $3x = 15$ → $x = 5$ | undo the + 6 first\n✗ $x - 4 = 10$ → $x = 6$ | wrong way\n✓ $x - 4 = 10$ → $x = 14$ | add 4',
-    notes: [
-      { tone: 'homework', text: 'Divide **every** term, not just one. Undo $-$ with $+$. Do it to **both** sides, every time.' },
-    ],
+    content: '✗ $3x + 6 = 21$ → $x + 6 = 7$ | divided one term\n✓ $3x + 6 = 21$ → $3x = 15$ → $x = 5$ | undo the + 6 first\n✗ $x - 4 = 10$ → $x = 6$ | wrong way\n✓ $x - 4 = 10$ → $x = 14$ | add 4\n✗ $4x + 2x = 6x^2$ | add like terms\n✓ $4x + 2x = 6x$ | still x terms',
   },
 
-  // 13 ─ The method ────────────────────────────────────────────────────────
+  // 15 ─ The method ────────────────────────────────────────────────────────
   {
     layout: 'statement',
     accent: ORANGE,
     title: 'Every Equation, in Order',
     text: 'Five steps, in this order.',
     notes: [
-      { tone: 'write', text: '**1.** Brackets? Multiply them out.\n**2.** Like terms? Collect them on each side.\n**3.** $x$ on both sides? Take away the smaller $x$ term.\n**4.** Undo the $+$ or $-$. Then undo the $\\times$ or $\\div$.\n**5.** Check: put your answer back in.' },
+      { tone: 'write', text: '**1.** Brackets? Multiply them out.\n**2.** Like terms? Group x terms with x terms, numbers with numbers.\n**3.** $x$ on both sides? Take away the smaller x term.\n**4.** Undo the $+$ or $-$. Then undo the $\\times$ or $\\div$.\n**5.** Check: put your answer back in.' },
     ],
   },
 
-  // 14 ─ Done ──────────────────────────────────────────────────────────────
+  // 16 ─ Done ──────────────────────────────────────────────────────────────
   {
     layout: 'hero',
     color: GREEN,

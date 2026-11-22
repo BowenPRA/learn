@@ -262,7 +262,7 @@ export function toHex(value, fallback = '#0087a8') {
 // in index.jsx so that file can export only its component and stay fast-refresh
 // clean. Notes.jsx branches on isLayout() to decide whether a slide is a layout.
 export const LAYOUT_NAMES = [
-  'hero', 'statement', 'split', 'showcase', 'compare', 'stack', 'steps', 'callout', 'gallery',
+  'hero', 'statement', 'split', 'showcase', 'compare', 'stack', 'steps', 'callout', 'gallery', 'work',
 ];
 
 /** True when `name` is a renderable layout. */

@@ -16,6 +16,7 @@ import StackLayout from './StackLayout.jsx';
 import StepsLayout from './StepsLayout.jsx';
 import CalloutLayout from './CalloutLayout.jsx';
 import GalleryLayout from './GalleryLayout.jsx';
+import WorkLayout from './WorkLayout.jsx';
 
 // isLayout / LAYOUT_NAMES live in helpers.jsx so this file exports only a
 // component (fast-refresh clean); import them from there.
@@ -36,6 +37,7 @@ export function SlideLayout({ name, slide, ctx }) {
     case 'steps': return <StepsLayout slide={slide} ctx={ctx} />;
     case 'callout': return <CalloutLayout slide={slide} ctx={ctx} />;
     case 'gallery': return <GalleryLayout slide={slide} ctx={ctx} />;
+    case 'work': return <WorkLayout slide={slide} ctx={ctx} />;
     default: return null;
   }
 }

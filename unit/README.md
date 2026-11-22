@@ -205,11 +205,21 @@ did not.
 
 Maths 1, Solving Equations (21 November 2026, plan approved first):
 
-- **Lesson** (`src/data/UPPER_MATH/U01/notes.js`): 14 slides, 9 things to write down, 9
-  questions. The working is big aligned maths with each move beside its line. Four
-  questions are typed equations (`fill` with `solve` lines: the answer is worked out from
-  the equation, negatives and fractions included); five are multiple choice where the
-  choice is the point (the first step, is Mr Bowen right).
+- **Lesson** (`src/data/UPPER_MATH/U01/notes.js`): 16 slides, 9 things to write down, 11
+  questions. Reworked 22 November 2026 (Mr. Bowen: "the -9 under the +9 and 14
+  respectively … talk about grouping with like terms, constants with constants"; plan and
+  mock-up approved first): every worked example is a `work` slide
+  (`src/components/notes/layouts/WorkLayout.jsx`, `src/components/math/NotebookWorking.jsx`,
+  `src/utils/working.js`): the move under the term it undoes on both sides, x terms blue
+  and numbers amber like the Balance chips, the words for each move in the margin, one step
+  at a time, then the check. Two Kinds of Terms (coloured chips and the Year 7 `terms`
+  sort), Group Like Terms (x terms and numbers collected in two boxes, then a typed
+  `algebra` simplify), brackets in two slides (arrows from the number outside to each
+  term and a typed expand, worded without the Year 7 grid by `grid: false`; then solving
+  from the bracket), x on both sides told as grouping. Four `fill` slides with `solve`
+  lines; four multiple choice where the choice is the point. A save made on the 14-slide
+  deck starts the notes again; the best score stays. Every slide fits 1366×768 with every
+  step shown.
 - **Balance** (engine `Balance`, `src/tasks/EquationBalance.jsx`, the unit's `balance`): the
   Dashboard's task with English only, a save after each equation (it opens at the first
   one not solved), half marks after Show me, and `tidy` to show an equation as written
