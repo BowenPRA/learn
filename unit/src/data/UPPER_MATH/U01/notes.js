@@ -63,7 +63,7 @@ const slides = [
     text: '$3x + 7 = 22$',
     sub: 'The left side **equals** the right side. Find the number $x$ that makes it true.',
     notes: [
-      { tone: 'write', text: '**Equation**: two sides with $=$ between them. **Solve**: find the number the letter stands for.' },
+      { tone: 'write', head: 'Equation', text: 'Two sides with $=$ between them. To **solve** is to find $x$.', eg: '$3x + 7 = 22$, so $x = 5$' },
     ],
     check: {
       id: 'chk_which_x',
@@ -87,7 +87,7 @@ const slides = [
     content: 'Take 9 away from **both** sides: one side alone breaks the balance. Press **Next step**.',
     work: { eq: 'x + 9 = 14', moves: ['-9'] },
     notes: [
-      { tone: 'write', text: 'Do the **same** thing to **both sides**. Write the move under each side.' },
+      { tone: 'write', head: 'The golden rule', text: 'Do the **same** thing to **both sides**.', eg: '$x + 9 = 14$, take 9 from both sides: $x = 5$' },
     ],
   },
 
@@ -100,7 +100,7 @@ const slides = [
     ratio: 45,
     content: '$$\\begin{aligned} x + 6 &= 10 &&\\text{subtract 6} && x = 4 \\\\ x - 3 &= 8 &&\\text{add 3} && x = 11 \\\\ 4x &= 20 &&\\text{divide by 4} && x = 5 \\\\ \\dfrac{x}{2} &= 7 &&\\text{multiply by 2} && x = 14 \\end{aligned}$$',
     notes: [
-      { tone: 'write', text: '**Inverse operations** undo each other: $+$ and $-$, $\\times$ and $\\div$.' },
+      { tone: 'write', head: 'Inverse operations', text: 'They undo each other: $+$ and $-$, $\\times$ and $\\div$.', eg: '$4x = 20$, divide by 4: $x = 5$' },
     ],
     activity: {
       id: 'act_one_step',
@@ -124,7 +124,7 @@ const slides = [
     title: 'Two Steps',
     work: { eq: '3x + 7 = 22', moves: ['-7', '/3'] },
     notes: [
-      { tone: 'write', text: 'Two steps: undo the $+$ or $-$ **first**. Then undo the $\\times$ or $\\div$.' },
+      { tone: 'write', head: 'Two-step equations', text: 'Undo the $+$ or $-$ **first**. Then undo the $\\times$ or $\\div$.', eg: '$3x + 7 = 22$, then $3x = 15$, then $x = 5$' },
     ],
     check: {
       id: 'chk_first_step',
@@ -174,7 +174,7 @@ const slides = [
     text: 'Put it back in.',
     sub: '$3x + 7 = 22$ and $x = 5$: $3(5) + 7 = 15 + 7 = 22$ ✓',
     notes: [
-      { tone: 'write', text: '**Check**: put your answer into the **first** equation. Both sides must be the same.' },
+      { tone: 'write', head: 'Check your answer', text: 'Put it back into the **first** equation. Both sides must match.', eg: '$x = 5$: $3(5) + 7 = 22$ ✓' },
     ],
     check: {
       id: 'chk_is_he_right',
@@ -197,7 +197,7 @@ const slides = [
     content: 'Every term is an **x term** (it has an $x$) or a **number** (a constant, no letter). The sign in front belongs to the term.',
     groups: { expr: '4x - 5 + 9 - x', sums: false },
     notes: [
-      { tone: 'write', text: '**Like terms** are the same kind. Group **x terms** with x terms and **numbers** with numbers.' },
+      { tone: 'write', head: 'Like terms', text: 'Group **x terms** with x terms and **numbers** with numbers.', eg: '$5x + 7 + 2x - 3 = 7x + 4$' },
     ],
     activity: {
       id: 'act_sort_terms',
@@ -236,7 +236,7 @@ const slides = [
     content: '$3(x + 4)$ means 3 lots of $x + 4$. Follow the arrows.',
     expand: [{ a: 3, b: 4 }, { a: 5, b: -2 }],
     notes: [
-      { tone: 'write', text: '**Expand**: the number outside multiplies **every** term inside the bracket.' },
+      { tone: 'write', head: 'Expand a bracket', text: 'The number outside multiplies **every** term inside.', eg: '$3(x + 4) = 3x + 12$' },
     ],
     activity: {
       id: 'act_expand',
@@ -278,7 +278,7 @@ const slides = [
     title: 'x on Both Sides',
     work: { eq: '5x + 3 = 2x + 18', moves: ['-2x', '-3', '/3'], say: ['x terms to the left', 'numbers to the right', 'divide both sides by 3'] },
     notes: [
-      { tone: 'write', text: 'Group again: **x terms** on one side, **numbers** on the other.' },
+      { tone: 'write', head: 'x on both sides', text: '**x terms** to one side, **numbers** to the other.', eg: '$5x + 3 = 2x + 18$ → $3x + 3 = 18$' },
     ],
     check: {
       id: 'chk_both_sides',
@@ -325,12 +325,13 @@ const slides = [
 
   // 15 ─ The method ────────────────────────────────────────────────────────
   {
-    layout: 'statement',
+    layout: 'split',
     accent: ORANGE,
+    icon: 'ListChecks',
     title: 'Every Equation, in Order',
-    text: 'Five steps, in this order.',
+    content: 'Use these five steps on every equation.',
     notes: [
-      { tone: 'write', text: '**1.** Brackets? Multiply them out.\n**2.** Like terms? Group x terms with x terms, numbers with numbers.\n**3.** $x$ on both sides? Take away the smaller x term.\n**4.** Undo the $+$ or $-$. Then undo the $\\times$ or $\\div$.\n**5.** Check: put your answer back in.' },
+      { tone: 'write', big: true, head: 'Solving an equation', text: '**1.** Multiply out brackets.\n**2.** Group like terms on each side.\n**3.** Move the smaller x term.\n**4.** Undo $+$ or $-$, then $\\times$ or $\\div$.\n**5.** Check your answer.' },
     ],
   },
 

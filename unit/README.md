@@ -217,7 +217,10 @@ Maths 1, Solving Equations (21 November 2026, plan approved first):
   `algebra` simplify), brackets in two slides (arrows from the number outside to each
   term and a typed expand, worded without the Year 7 grid by `grid: false`; then solving
   from the bracket), x on both sides told as grouping. Four `fill` slides with `solve`
-  lines; four multiple choice where the choice is the point. A save made on the 14-slide
+  lines; four multiple choice where the choice is the point. The nine "Write this down"
+  boxes are notebook entries (Mr. Bowen, the same day: "better for my students to put in
+  their notebook"): a heading to copy, one rule and an "e.g." line, on ruled paper (a
+  note's `head`, `eg`, `big`). A save made on the 14-slide
   deck starts the notes again; the best score stays. Every slide fits 1366×768 with every
   step shown.
 - **Balance** (engine `Balance`, `src/tasks/EquationBalance.jsx`, the unit's `balance`): the

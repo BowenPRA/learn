@@ -126,6 +126,40 @@ export function Note({ note, lang = 'en', isDisplayMode = false }) {
   const iconName = note.icon || tone.icon;
   const lines = String(text || '').split('\n').filter((l) => l.trim());
 
+  // A "Write this down" note with a `head` is drawn as a notebook entry (Upper Secondary
+  // Maths 1, 22 November 2026: "better for my students to put in their notebook"): the
+  // heading to copy as a title, the rule, and an example (`eg`), on ruled paper with a
+  // margin. Notes without a head are drawn as before.
+  if (note.head) {
+    const head = field(note, 'head', lang);
+    const eg = String(field(note, 'eg', lang) || '').split('\n').filter((l) => l.trim());
+    // `big`: a slide whose entry is the whole point (a method to copy) gets bigger writing.
+    const size = isDisplayMode ? 'text-[clamp(1.05rem,1.7vw,1.55rem)]' : note.big ? 'text-lg sm:text-xl lg:text-[1.4rem]' : 'text-[15px] sm:text-base lg:text-[17px]';
+    return (
+      <div className={`overflow-hidden rounded-xl border-2 ${tone.border} shadow-sm`}>
+        {showBadge && (
+          <div className={`flex items-center gap-2 text-white font-black uppercase tracking-[0.15em] ${isDisplayMode ? 'text-[clamp(0.7rem,1vw,1rem)] px-4 py-2' : 'text-[10px] sm:text-[11px] px-3.5 py-1'}`}
+            style={{ backgroundColor: tone.accent }}>
+            <Ic name={iconName} className={isDisplayMode ? 'w-4 h-4' : 'w-3.5 h-3.5'} strokeWidth={3} />
+            {badgeText}
+          </div>
+        )}
+        <div className={`relative bg-[#fffdf6] dark:bg-slate-900 text-slate-800 dark:text-slate-100 ${size} leading-[1.75em] py-[0.15em] pr-4 pl-[3.2em]`}
+          style={{ backgroundImage: 'repeating-linear-gradient(to bottom, transparent 0, transparent calc(1.75em - 1px), rgba(100,116,139,0.22) calc(1.75em - 1px), rgba(100,116,139,0.22) 1.75em)', backgroundPositionY: '0.15em' }}>
+          <span aria-hidden className="absolute top-0 bottom-0 left-[2.4em] w-[2px] bg-rose-300/80 dark:bg-rose-500/40" />
+          <p className="font-black underline decoration-2 underline-offset-[0.2em]" style={{ textDecorationColor: tone.accent }}>{parseInlineText(head)}</p>
+          {lines.map((line, i) => <p key={i} className="font-semibold">{parseInlineText(line, { strongClass: tone.strong })}</p>)}
+          {eg.map((line, i) => (
+            <p key={`eg${i}`} className="font-semibold text-slate-600 dark:text-slate-300">
+              {i === 0 && <span className="mr-2 font-black italic" style={{ color: tone.accent }}>e.g.</span>}
+              {parseInlineText(line)}
+            </p>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`overflow-hidden rounded-xl border-2 ${tone.border} shadow-sm`}>
       {showBadge && (
