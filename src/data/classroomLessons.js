@@ -304,6 +304,11 @@ export const CLASSROOM_LESSONS = [
     title: 'Metals and Non-metals',
     subtitle: 'Test, name and use: what metals can do, how non-metals are different, and the right material for a job',
   },
+  {
+    course: 'y7-science', slug: 'U05_2', classKey: 'science:Year 7', unit: '5.2', teacher: 'Mr. Bowen',
+    title: 'Comparing Metals and Non-metals',
+    subtitle: 'Compare, test and use clues: the two sides of the table, a test circuit, the odd ones out, and melting and boiling points',
+  },
   // Upper Secondary English: Mr Bowen's class deck for each unit's notes (20 Nov 2026).
   // Staff only (Bowen: no new task for students; they follow on the unit's notes).
   {
