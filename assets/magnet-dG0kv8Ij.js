@@ -1,0 +1,1 @@
+var e=`/assets/magnet-D_MfuNRO.jpg`;export{e as t};
